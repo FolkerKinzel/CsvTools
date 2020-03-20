@@ -70,7 +70,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     {
         private CsvRecord? Record { get; set; }
 
-        private PropertyCollection DynProps { get; } = new PropertyCollection();
+        private readonly PropertyCollection _dynProps = new PropertyCollection();
 
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(property));
             }
 
-            this.DynProps.Add(property);
+            this._dynProps.Add(property);
         }
 
 
@@ -150,7 +150,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <returns>True, wenn die gesuchte <see cref="CsvProperty"/> in der Auflistung enthalten war
         /// und entfernt werden konnte.</returns>
         public bool RemoveProperty(string? propertyName)
-            => propertyName is null ? false : DynProps.Remove(propertyName);
+            => propertyName is null ? false : _dynProps.Remove(propertyName);
 
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <param name="index">Der nullbasierte Index, an dem die <see cref="CsvProperty"/> entfernt werden soll.</param>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
         /// größer oder gleich <see cref="Count"/>.</exception>
-        public void RemovePropertyAt(int index) => DynProps.RemoveAt(index);
+        public void RemovePropertyAt(int index) => _dynProps.RemoveAt(index);
 
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
 
 
-            DynProps.Insert(index, property);
+            _dynProps.Insert(index, property);
         }
 
 
@@ -204,7 +204,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(property));
             }
 
-            DynProps[index] = property;
+            _dynProps[index] = property;
         }
 
 
@@ -231,8 +231,8 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             if (HasProperty(propertyName))
             {
-                int index = DynProps.IndexOf(DynProps[propertyName]);
-                DynProps[index] = property;
+                int index = _dynProps.IndexOf(_dynProps[propertyName]);
+                _dynProps[index] = property;
             }
             else
             {
@@ -255,33 +255,42 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(propertyName));
             }
 
-            return DynProps.Contains(propertyName);
+            return _dynProps.Contains(propertyName);
         }
+
+
+        ///// <summary>
+        ///// Gibt ein Array zurück, dass die <see cref="CsvProperty.PropertyName"/>-Eigenschaft der
+        ///// im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte und ihren Datentyp
+        ///// (<see cref="ICsvTypeConverter.Type"/>)
+        ///// enthält. Die Reihenfolge entspricht der Reihenfolge, in der die <see cref="CsvProperty"/>-Objekte
+        ///// im <see cref="CsvRecordWrapper"/> beim Aufruf der Methode registriert waren.
+        ///// </summary>
+        ///// <returns>Ein Array, dass die <see cref="CsvProperty.PropertyName"/>-Eigenschaft der
+        ///// im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte und ihren Datentyp
+        ///// enthält.</returns>
+        //public KeyValuePair<string, Type>[] GetProperties()
+        //{
+        //    int count = DynProps.Count;
+        //    var arr = new KeyValuePair<string, Type>[count];
+
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        CsvProperty prop = DynProps[i];
+        //        arr[i] = new KeyValuePair<string, Type>(prop.PropertyName, prop.Converter.Type);
+        //    }
+
+        //    return arr;
+        //}
 
 
         /// <summary>
-        /// Gibt ein Array zurück, dass die <see cref="CsvProperty.PropertyName"/>-Eigenschaft der
-        /// im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte und ihren Datentyp
-        /// (<see cref="ICsvTypeConverter.Type"/>)
-        /// enthält. Die Reihenfolge entspricht der Reihenfolge, in der die <see cref="CsvProperty"/>-Objekte
-        /// im <see cref="CsvRecordWrapper"/> beim Aufruf der Methode registriert waren.
+        /// Gibt eine Kopie der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte 
+        /// als Array zurück.
         /// </summary>
-        /// <returns>Ein Array, dass die <see cref="CsvProperty.PropertyName"/>-Eigenschaft der
-        /// im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte und ihren Datentyp
-        /// enthält.</returns>
-        public KeyValuePair<string, Type>[] GetProperties()
-        {
-            int count = DynProps.Count;
-            var arr = new KeyValuePair<string, Type>[count];
-
-            for (int i = 0; i < count; i++)
-            {
-                CsvProperty prop = DynProps[i];
-                arr[i] = new KeyValuePair<string, Type>(prop.PropertyName, prop.Converter.Type);
-            }
-
-            return arr;
-        }
+        /// <returns>Ein Array, dass eine Kopie der im <see cref="CsvRecordWrapper"/> registrierten 
+        /// <see cref="CsvProperty"/>-Objekte darstellt.</returns>
+        public CsvProperty[] GetProperties() => this._dynProps.ToArray();
 
 
         /// <summary>
@@ -313,7 +322,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
 
 
-            if (this.DynProps.TryGetValue(binder.Name, out CsvProperty? prop))
+            if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
             {
                 prop.SetValue(this.Record, value);
                 return true;
@@ -351,7 +360,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
 
 
-            if (this.DynProps.TryGetValue(binder.Name, out CsvProperty? prop))
+            if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
             {
                 result = prop.GetValue(this.Record);
                 return true;
@@ -381,7 +390,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Gibt die Anzahl der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte
         /// zurück.
         /// </summary>
-        public int Count => DynProps.Count;
+        public int Count => _dynProps.Count;
 
         /// <summary>
         /// Gibt an, ob das <see cref="CsvRecordWrapper"/>-Objekt schreibgeschützt ist. (Immer false.)
@@ -413,7 +422,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                     throw new InvalidOperationException(Res.NoCsvRecord);
                 }
 
-                return DynProps[index].GetValue(this.Record);
+                return _dynProps[index].GetValue(this.Record);
             }
             set
             {
@@ -422,7 +431,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                     throw new InvalidOperationException(Res.NoCsvRecord);
                 }
 
-                 DynProps[index].SetValue(this.Record, value);
+                 _dynProps[index].SetValue(this.Record, value);
             }
         }
 
@@ -458,7 +467,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                     throw new ArgumentNullException(nameof(propertyName));
                 }
 
-                if (this.DynProps.TryGetValue(propertyName, out CsvProperty? prop))
+                if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
                 {
                     return prop.GetValue(this.Record);
                 }
@@ -481,7 +490,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 }
 
 
-                if (this.DynProps.TryGetValue(propertyName, out CsvProperty? prop))
+                if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
                 {
                     prop.SetValue(this.Record, value);
                 }

@@ -67,8 +67,8 @@ namespace ExampleRunner
 
             var prop2 = new CsvProperty("Spalte2", new string[] { "Col2", "nichtda", "col2" }, converter);
 
-            wrapper.RegisterProperty(prop1);
-            wrapper.RegisterProperty(prop2);
+            wrapper.AddProperty(prop1);
+            wrapper.AddProperty(prop2);
 
             //wrapper.UnregisterProperty(prop1.PropertyName);
 

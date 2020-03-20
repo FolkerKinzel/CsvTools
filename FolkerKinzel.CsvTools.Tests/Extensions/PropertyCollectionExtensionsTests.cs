@@ -9,7 +9,7 @@ using FolkerKinzel.CsvTools.Helpers.Converters;
 
 namespace FolkerKinzel.CsvTools.Extensions.Tests
 {
-#if NET45
+#if !NET45
     class TestCollection : KeyedCollection<string, CsvProperty>
     {
         protected override string GetKeyForItem(CsvProperty item)

@@ -15,12 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExampleRunner", "ExampleRun
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools", "FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj", "{110B2723-F0A2-4CE0-B4E2-87A157C484BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvToolsTests", "FolkerKinzel.CsvToolsTests\FolkerKinzel.CsvToolsTests.csproj", "{D548C7C2-642F-4211-B3CA-79E7E0945EA1}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{564D4E32-42E9-42B8-A4B2-8B5BD653E289}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools.Tests", "FolkerKinzel.CsvTools.Tests\FolkerKinzel.CsvTools.Tests.csproj", "{A688E97D-48BD-41FF-A3CB-40F316EE7C82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +39,10 @@ Global
 		{110B2723-F0A2-4CE0-B4E2-87A157C484BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{110B2723-F0A2-4CE0-B4E2-87A157C484BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{110B2723-F0A2-4CE0-B4E2-87A157C484BC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D548C7C2-642F-4211-B3CA-79E7E0945EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D548C7C2-642F-4211-B3CA-79E7E0945EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D548C7C2-642F-4211-B3CA-79E7E0945EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D548C7C2-642F-4211-B3CA-79E7E0945EA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A688E97D-48BD-41FF-A3CB-40F316EE7C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A688E97D-48BD-41FF-A3CB-40F316EE7C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A688E97D-48BD-41FF-A3CB-40F316EE7C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A688E97D-48BD-41FF-A3CB-40F316EE7C82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
