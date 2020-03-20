@@ -17,6 +17,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     {
         private ColumnAliasesLookup? _lookup;
 
+
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvProperty"/>-Objekt.
         /// </summary>
