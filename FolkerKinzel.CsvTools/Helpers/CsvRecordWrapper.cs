@@ -259,31 +259,6 @@ namespace FolkerKinzel.CsvTools.Helpers
         }
 
 
-        ///// <summary>
-        ///// Gibt ein Array zurück, dass die <see cref="CsvProperty.PropertyName"/>-Eigenschaft der
-        ///// im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte und ihren Datentyp
-        ///// (<see cref="ICsvTypeConverter.Type"/>)
-        ///// enthält. Die Reihenfolge entspricht der Reihenfolge, in der die <see cref="CsvProperty"/>-Objekte
-        ///// im <see cref="CsvRecordWrapper"/> beim Aufruf der Methode registriert waren.
-        ///// </summary>
-        ///// <returns>Ein Array, dass die <see cref="CsvProperty.PropertyName"/>-Eigenschaft der
-        ///// im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte und ihren Datentyp
-        ///// enthält.</returns>
-        //public KeyValuePair<string, Type>[] GetProperties()
-        //{
-        //    int count = DynProps.Count;
-        //    var arr = new KeyValuePair<string, Type>[count];
-
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        CsvProperty prop = DynProps[i];
-        //        arr[i] = new KeyValuePair<string, Type>(prop.PropertyName, prop.Converter.Type);
-        //    }
-
-        //    return arr;
-        //}
-
-
         /// <summary>
         /// Gibt eine Kopie der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte 
         /// als Array zurück.
