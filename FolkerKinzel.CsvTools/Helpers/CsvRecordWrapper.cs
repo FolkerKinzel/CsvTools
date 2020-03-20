@@ -68,7 +68,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
     public sealed class CsvRecordWrapper : DynamicObject, IList<object?>
     {
-        private CsvRecord? Record { get; set; }
+        private CsvRecord? _record;
 
         private readonly PropertyCollection _dynProps = new PropertyCollection();
 
@@ -119,7 +119,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(record));
             }
 
-            this.Record = record;
+            this._record = record;
         }
 
 
@@ -316,7 +316,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(binder));
             }
 
-            if (this.Record is null)
+            if (this._record is null)
             {
                 throw new InvalidOperationException(Res.NoCsvRecord);
             }
@@ -324,7 +324,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
             {
-                prop.SetValue(this.Record, value);
+                prop.SetValue(this._record, value);
                 return true;
             }
 
@@ -354,7 +354,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(binder));
             }
 
-            if (this.Record is null)
+            if (this._record is null)
             {
                 throw new InvalidOperationException(Res.NoCsvRecord);
             }
@@ -362,7 +362,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
             {
-                result = prop.GetValue(this.Record);
+                result = prop.GetValue(this._record);
                 return true;
             }
 
@@ -378,12 +378,12 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
         public void Clear()
         {
-            if (this.Record is null)
+            if (this._record is null)
             {
                 throw new InvalidOperationException(Res.NoCsvRecord);
             }
 
-            Record.Clear();
+            _record.Clear();
         }
 
         /// <summary>
@@ -417,21 +417,21 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             get
             {
-                if (this.Record is null)
+                if (this._record is null)
                 {
                     throw new InvalidOperationException(Res.NoCsvRecord);
                 }
 
-                return _dynProps[index].GetValue(this.Record);
+                return _dynProps[index].GetValue(this._record);
             }
             set
             {
-                if (this.Record is null)
+                if (this._record is null)
                 {
                     throw new InvalidOperationException(Res.NoCsvRecord);
                 }
 
-                 _dynProps[index].SetValue(this.Record, value);
+                 _dynProps[index].SetValue(this._record, value);
             }
         }
 
@@ -457,7 +457,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             get
             {
-                if (this.Record is null)
+                if (this._record is null)
                 {
                     throw new InvalidOperationException(Res.NoCsvRecord);
                 }
@@ -469,7 +469,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                 if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
                 {
-                    return prop.GetValue(this.Record);
+                    return prop.GetValue(this._record);
                 }
                 else
                 {
@@ -479,7 +479,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             set
             {
-                if (this.Record is null)
+                if (this._record is null)
                 {
                     throw new InvalidOperationException(Res.NoCsvRecord);
                 }
@@ -492,7 +492,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                 if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
                 {
-                    prop.SetValue(this.Record, value);
+                    prop.SetValue(this._record, value);
                 }
                 else
                 {
