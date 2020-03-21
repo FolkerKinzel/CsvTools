@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using FolkerKinzel.CsvTools;
 using FolkerKinzel.CsvTools.Helpers;
 using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.Helpers.Converters.Internals;
 
 namespace ExampleRunner
 {
