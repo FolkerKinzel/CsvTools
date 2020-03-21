@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
 {
     /// <summary>
     /// Ein <see cref="ICsvTypeConverter"/>-Objekt, das zur Umwandlung ganzzahliger Datentypen in hexadezimale Darstellung und

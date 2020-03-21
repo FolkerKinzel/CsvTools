@@ -5,14 +5,14 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung
     /// von Enums.
     /// </summary>
     /// <typeparam name="TEnum">Typ einer beliebigen Enum.</typeparam>
-    public class EnumConverter<TEnum> : ICsvTypeConverter where TEnum: struct, Enum
+    internal class EnumConverter<TEnum> : ICsvTypeConverter where TEnum: struct, Enum
     {
         private readonly Converter<string?, object?> _parser;
         private readonly Converter<object?, string?> _toStringConverter;
@@ -34,7 +34,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// </para>
         /// <para>
         /// Diese Überladung des Konstruktors ist wesentlich performanter als
-        /// <see cref="TimeSpanConverter.TimeSpanConverter(string, bool, bool, IFormatProvider, bool, TimeSpanStyles, bool)"/>, bietet
+        /// <see cref="EnumConverter(string?, bool, bool, bool, bool)"/>, bietet
         /// aber weniger Einstellmöglichkeiten: Bei der <see cref="string"/>-Ausgabe wird das Standardformat "D" verwendet, das die kürzeste 
         /// Repräsentation des Enum-Werts ausgibt (also i.d.R den Zahlenwert). Beim Parsen kommt
         /// <see cref="Enum.Parse(Type, string, bool)"/> zum Einsatz.

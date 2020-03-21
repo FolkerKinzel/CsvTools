@@ -3,6 +3,7 @@ using FolkerKinzel.CsvTools.Helpers.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FolkerKinzel.CsvTools.Helpers.Converters.Internals;
 
 namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
 {

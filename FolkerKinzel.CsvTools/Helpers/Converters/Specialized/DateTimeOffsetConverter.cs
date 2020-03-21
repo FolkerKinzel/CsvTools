@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung
@@ -38,7 +38,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <see cref="DateTimeOffset.Parse(string, IFormatProvider, DateTimeStyles)"/> zum Einsatz. Der <see cref="DateTimeStyles"/>-Wert ist so
         /// eingestellt, dass Leerraum ignoriert wird (<see cref="DateTimeStyles.AllowWhiteSpaces"/>).
         /// </para></remarks>
-        public DateTimeOffsetConverter(
+        internal DateTimeOffsetConverter(
             bool nullable = false,
             bool maybeDBNull = false,
             IFormatProvider? provider = null,
@@ -137,6 +137,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <exception cref="ArgumentNullException"><paramref name="format"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring - oder - <paramref name="styles"/> 
         /// enthält das Flag <see cref="DateTimeStyles.NoCurrentDateDefault"/>.</exception>
+        /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe das Standardformat "O" verwendet wird, sollten Sie das <see cref="DateTimeOffsetConverter"/>
+        /// über die Methode <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren: Das ist 
+        /// wesentlich performanter.</remarks>
         public DateTimeOffsetConverter(
             string format,
             bool nullable = false,

@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
 {
     /// <summary>
     /// Übernimmt Konvertierungsvorgänge für den Datentyp <see cref="string"/>. Führt eine Typüberprüfung durch und kann Nullable-Strings in
     /// Non-Nullable-Strings umwandeln. (Akzeptiert auch DBNull.Value als Eingabe.)
     /// </summary>
-    public sealed class StringConverter : ICsvTypeConverter
+    internal sealed class StringConverter : ICsvTypeConverter
     {
         /// <summary>
         /// Initialisiert ein neues <see cref="StringConverter"/>-Objekt.
@@ -52,7 +52,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
 
 
         /// <summary>
-        /// Gibt <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="string"/>, <c>null</c> oder DBNull.Value ist.
+        /// Gibt <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="string"/>, <c>null</c> oder <see cref="DBNull.Value"/> ist.
         /// </summary>
         /// <param name="value">Ein <see cref="string"/>, <c>null</c> oder DBNull.Value.</param>
         /// <returns><paramref name="value"/>, wenn <paramref name="value"/> ein <see cref="string"/> oder <c>null</c> ist.</returns>

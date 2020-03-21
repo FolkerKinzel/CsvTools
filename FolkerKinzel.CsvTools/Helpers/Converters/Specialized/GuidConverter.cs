@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung
@@ -36,7 +36,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <see cref="Guid.Parse(string)"/> zum Einsatz.
         /// </para>
         /// </remarks>
-        public GuidConverter(
+        internal GuidConverter(
             bool nullable = false,
             bool maybeDBNull = false,
             bool throwOnParseErrors = false)
@@ -121,6 +121,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
+        /// <remarks>Wenn lediglich das <see cref="Guid"/>-Standardformat "D" ausgegeben werden soll, sollte ein <see cref="GuidConverter"/> mit 
+        /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> erzeugt werden: Das ist wesentlich performanter!</remarks>
         public GuidConverter(
             string format,
             bool nullable = false,

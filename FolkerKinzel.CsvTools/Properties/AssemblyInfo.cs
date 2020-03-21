@@ -5,7 +5,7 @@ using System;
 
 [assembly: CLSCompliant(true)]
 
-[assembly: InternalsVisibleTo("FolkerKinzel.CsvToolsTests")]
+[assembly: InternalsVisibleTo("FolkerKinzel.CsvTools.Tests")]
 [assembly:InternalsVisibleTo("ExampleRunner")]
 
 // Durch Festlegen von ComVisible auf "false" werden die Typen in dieser Assembly unsichtbar 

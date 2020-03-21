@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FolkerKinzel.CsvTools.Helpers.Converters.Internals;
+using FolkerKinzel.CsvTools.Helpers.Converters.Specialized;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -65,21 +67,48 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <typeparam name="TEnum">Ein beliebiger Enum-Typ.</typeparam>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
-        /// <param name="maybeDBNull">Wenn true, wird DBNull.Value als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
         /// misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="ICsvTypeConverter.FallbackValue"/> zurück.</param>
-        /// <param name="ignoreCase">Wenn true, wird die Groß- und Kleinschreibung von Enum-Bezeichnern beim Parsen ignoriert.</param>
+        /// <param name="ignoreCase">Wenn <c>true</c>, wird die Groß- und Kleinschreibung von Enum-Bezeichnern beim Parsen ignoriert.</param>
         /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung von Enum-Datentypen.</returns>
-        public static EnumConverter<TEnum> CreateEnumConverter<TEnum>(
+        public static ICsvTypeConverter CreateEnumConverter<TEnum>(
             bool nullable = false,
             bool maybeDBNull = false,
             bool throwOnParseErrors = false,
             bool ignoreCase = true) where TEnum: struct, Enum
         {
             return new EnumConverter<TEnum>(nullable, maybeDBNull, throwOnParseErrors, ignoreCase);
+        }
+
+
+        /// <summary>
+        /// Initialisiert ein <see cref="ICsvTypeConverter"/>-Objekt, das einen Enum-Typ in seine
+        /// Zahlendarstellung wandeln und aus dieser sowie auch aus Wort-Darstellungen der Enum-Bezeichner wieder parsen kann.
+        /// </summary>
+        /// <typeparam name="TEnum">Ein beliebiger Enum-Typ.</typeparam>
+        /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <typeparamref name="TEnum"/> verwendet wird.</param>
+        /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
+        /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
+        /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
+        /// misslingt,
+        /// anderenfalls gibt sie in diesem Fall <see cref="ICsvTypeConverter.FallbackValue"/> zurück.</param>
+        /// <param name="ignoreCase">Wenn <c>true</c>, wird die Groß- und Kleinschreibung von Enum-Bezeichnern beim Parsen ignoriert.</param>
+        /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring für Enum-Datentypen.</exception>
+        public static ICsvTypeConverter CreateEnumConverter<TEnum>(
+            string? format,
+            bool nullable = false,
+            bool maybeDBNull = false,
+            bool throwOnParseErrors = false,
+            bool ignoreCase = true) where TEnum : struct, Enum
+        {
+            return new EnumConverter<TEnum>(format, nullable, maybeDBNull, throwOnParseErrors, ignoreCase);
         }
 
 

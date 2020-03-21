@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung
@@ -37,7 +37,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// aber weniger Einstellmöglichkeiten: Bei der <see cref="string"/>-Ausgabe wird das Standardformat "g" verwendet. Beim Parsen kommt
         /// <see cref="TimeSpan.Parse(string, IFormatProvider)"/> zum Einsatz.
         /// </para></remarks>
-        public TimeSpanConverter(
+        internal TimeSpanConverter(
             bool nullable = false,
             bool maybeDBNull = false,
             IFormatProvider? provider = null,
@@ -130,6 +130,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <param name="parseExact">Wenn true, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
+        /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe wird das <see cref="TimeSpan"/>-Standardformat "g" verwendet wird,
+        /// sollten Sie aus Performancegründen das <see cref="TimeSpanConverter"/>-Objekt mit der Methode 
+        /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren.</remarks>
         public TimeSpanConverter(
             string? format,
             bool nullable = false,

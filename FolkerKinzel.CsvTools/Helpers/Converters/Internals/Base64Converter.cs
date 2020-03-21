@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung
     /// von Byte-Arrays. (Akzeptiert auch <c>null</c> und DBNull.Value als Eingabe.)
     /// </summary>
-    public class Base64Converter : ICsvTypeConverter
+    internal class Base64Converter : ICsvTypeConverter
     {
         /// <summary>
         /// Initialisiert ein <see cref="Base64Converter"/>-Objekt.
@@ -55,19 +55,19 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
 
         /// <summary>
         /// Gibt die Base64-Zeichenfolgendarstellung von <paramref name="value"/> zurück, wenn <paramref name="value"/> ein Byte-Array
-        /// ist. Wenn <paramref name="value"/>&#160;<c>null</c> oder DBNull.Value ist, gibt die Methode
+        /// ist. Wenn <paramref name="value"/>&#160;<c>null</c> oder <see cref="DBNull.Value"/> ist, gibt die Methode
         /// <c>null</c> zurück.
         /// </summary>
         /// <param name="value">Ein Byte-Array oder <c>null</c> oder DBNull.Value.</param>
         /// <returns>Eine Base64-Zeichenfolgendarstellung von <paramref name="value"/> oder null.</returns>
-        /// <exception cref="InvalidCastException"><paramref name="value"/> ist weder null noch DBNull.Value
+        /// <exception cref="InvalidCastException"><paramref name="value"/> ist weder <c>null</c> noch <see cref="DBNull.Value"/>
         /// noch ein Byte-Array.</exception>
         public string? ConvertToString(object? value) 
             => (value is null || Convert.IsDBNull(value)) ? null : Convert.ToBase64String((byte[])value, Base64FormattingOptions.None);
 
 
         /// <summary>
-        /// Parst einen Base64-codierten <see cref="string"/> als Byte-Array.
+        /// Parst einen Base64-codierten <see cref="string"/> als <see cref="byte"/>-Array.
         /// </summary>
         /// <param name="value">Ein Base64-codierter <see cref="string"/> oder <c>null</c>.</param>
         /// <returns>Ein Byte-Array oder <c>null</c>, wenn <paramref name="value"/><c>null</c> war, oder wenn beim Parsen ein Fehler

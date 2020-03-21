@@ -5,7 +5,7 @@ using System.Text;
 namespace FolkerKinzel.CsvTools.Helpers.Converters
 {
     /// <summary>
-    /// Wandelt <c>null</c> und DBNull.Value in einen <c>null</c>-<see cref="string"/> um und führt dabei
+    /// Wandelt <c>null</c> und <see cref="DBNull.Value"/> in einen <c>null</c>-<see cref="string"/> um und führt dabei
     /// eine Typüberprüfung durch. Gibt beim Parsen immer <c>null</c> zurück.
     /// </summary>
     public class NullConverter : ICsvTypeConverter
