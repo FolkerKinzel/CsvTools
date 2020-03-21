@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using FolkerKinzel.CsvTools.Helpers.Converters.Internals;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals.Tests
 {
     [TestClass()]
     public class StringConverterTests
@@ -13,7 +13,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
         [TestMethod()]
         public void StringConverterTest()
         {
-            var conv = new StringConverter(false);
+            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, false);
 
             Assert.IsNotNull(conv.FallbackValue);
             Assert.AreEqual(typeof(string), conv.Type);
@@ -23,11 +23,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
         [TestMethod()]
         public void ParseTest()
         {
-            var conv = new StringConverter();
+            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, true);
 
             Assert.IsNull(conv.Parse(null));
 
-            conv = new StringConverter(false);
+            conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, false);
 
             Assert.IsNotNull(conv.Parse(null));
 
@@ -40,7 +40,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
         [TestMethod()]
         public void ConvertToStringTest()
         {
-            var conv = new StringConverter();
+            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, true, true);
 
             Assert.IsNull(conv.ConvertToString(DBNull.Value));
 
@@ -55,7 +55,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
         [TestMethod()]
         public void ConvertToStringTest_ThrowOnInvalidType()
         {
-            var conv = new StringConverter();
+            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
 
             conv.ConvertToString(4711);
 

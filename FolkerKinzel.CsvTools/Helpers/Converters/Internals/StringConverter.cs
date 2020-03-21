@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
         /// Aus Gründen der Konsistenz sollten Sie diesen Konstruktor nicht direkt aufrufen, sondern die Methode
         /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider, bool)"/> verwenden.
         /// </remarks>
-        public StringConverter(bool allowNull = true)
+        public StringConverter(bool allowNull)
         {
             this.FallbackValue = allowNull ? null : string.Empty;
         }

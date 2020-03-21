@@ -4,13 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
 {
     [TestClass()]
-    public class HexConverterTests
+    public class TimeSpanConverterTests
     {
         [TestMethod()]
-        public void HexConverterTest()
+        public void TimeSpanConverterTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ParseTest()
         {
             Assert.Fail();
         }

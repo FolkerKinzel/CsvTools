@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
 {
     [TestClass()]
-    public class DateTimeOffsetConverterTests
+    public class GuidConverterTests
     {
         [TestMethod()]
-        public void DateTimeOffsetConverterTest()
+        public void GuidConverterTest()
         {
             Assert.Fail();
         }

@@ -41,10 +41,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
         /// </para>
         /// </remarks>
         public EnumConverter(
-            bool nullable = false,
-            bool maybeDBNull = false,
-            bool throwOnParseErrors = false,
-            bool ignoreCase = true)
+            bool nullable,
+            bool maybeDBNull,
+            bool throwOnParseErrors,
+            bool ignoreCase)
         {
             const string format = "D";
             this.ThrowsOnParseErrors = throwOnParseErrors;
@@ -133,10 +133,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
         public EnumConverter(
             string? format,
-            bool nullable = false,
-            bool maybeDBNull = false,
-            bool throwOnParseErrors = false,
-            bool ignoreCase = true)
+            bool nullable,
+            bool maybeDBNull,
+            bool throwOnParseErrors,
+            bool ignoreCase)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
 

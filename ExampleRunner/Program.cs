@@ -62,7 +62,7 @@ namespace ExampleRunner
 
             var wrapper = new CsvRecordWrapper();
 
-            var converter = new StringConverter();
+            var converter = CsvConverterFactory.CreateConverter(CsvTypeCode.String, true);
 
             var prop1 = new CsvProperty("Spalte1", new string[] { "Spa?te1", "co*1" }, converter);
 

@@ -21,7 +21,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
         /// Aus Gründen der Konsistenz sollten Sie diesen Konstruktor nicht direkt aufrufen, sondern die Methode
         /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider, bool)"/> verwenden.
         /// </remarks>
-        public Base64Converter(bool allowNull = true, bool throwOnParseErrors = false)
+        public Base64Converter(bool allowNull, bool throwOnParseErrors)
         {
 #if NET40
             FallbackValue = allowNull ? null : new byte[0];

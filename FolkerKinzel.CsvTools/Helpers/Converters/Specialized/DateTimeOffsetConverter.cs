@@ -39,10 +39,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// eingestellt, dass Leerraum ignoriert wird (<see cref="DateTimeStyles.AllowWhiteSpaces"/>).
         /// </para></remarks>
         internal DateTimeOffsetConverter(
-            bool nullable = false,
-            bool maybeDBNull = false,
-            IFormatProvider? provider = null,
-            bool throwOnParseErrors = false)
+            bool nullable,
+            bool maybeDBNull,
+            IFormatProvider? provider,
+            bool throwOnParseErrors)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
 

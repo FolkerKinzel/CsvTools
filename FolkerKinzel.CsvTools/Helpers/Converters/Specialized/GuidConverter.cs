@@ -37,9 +37,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </para>
         /// </remarks>
         internal GuidConverter(
-            bool nullable = false,
-            bool maybeDBNull = false,
-            bool throwOnParseErrors = false)
+            bool nullable,
+            bool maybeDBNull,
+            bool throwOnParseErrors)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
             this.Type = nullable ? typeof(Guid?) : typeof(Guid);

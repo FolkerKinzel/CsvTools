@@ -4,25 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals.Tests
 {
     [TestClass()]
-    public class Base64ConverterTests
+    public class HexConverterTests
     {
         [TestMethod()]
-        public void Base64ConverterTest()
+        public void HexConverterTest()
         {
             Assert.Fail();
         }
 
         [TestMethod()]
         public void ConvertToStringTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void ParseTest()
         {
             Assert.Fail();
         }

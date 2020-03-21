@@ -4,25 +4,25 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals.Tests
 {
     [TestClass()]
-    public class TimeSpanConverterTests
+    public class NumberConverterTests
     {
         [TestMethod()]
-        public void TimeSpanConverterTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void ParseTest()
+        public void EnumConverterTest()
         {
             Assert.Fail();
         }
 
         [TestMethod()]
         public void ConvertToStringTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void ParseTest()
         {
             Assert.Fail();
         }

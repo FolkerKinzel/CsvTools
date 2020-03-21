@@ -38,10 +38,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <see cref="TimeSpan.Parse(string, IFormatProvider)"/> zum Einsatz.
         /// </para></remarks>
         internal TimeSpanConverter(
-            bool nullable = false,
-            bool maybeDBNull = false,
-            IFormatProvider? provider = null,
-            bool throwOnParseErrors = false)
+            bool nullable,
+            bool maybeDBNull,
+            IFormatProvider? provider,
+            bool throwOnParseErrors)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
             provider ??= CultureInfo.InvariantCulture;
