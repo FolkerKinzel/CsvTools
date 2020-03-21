@@ -137,7 +137,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <exception cref="ArgumentNullException"><paramref name="format"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring - oder - <paramref name="styles"/> 
         /// enthält das Flag <see cref="DateTimeStyles.NoCurrentDateDefault"/>.</exception>
-        /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe das Standardformat "O" verwendet wird, sollten Sie das <see cref="DateTimeOffsetConverter"/>
+        /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe das Standardformat "O" verwendet wird, sollten Sie das <see cref="DateTimeOffsetConverter"/>-Objekt
         /// über die Methode <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren: Das ist 
         /// wesentlich performanter.</remarks>
         public DateTimeOffsetConverter(
