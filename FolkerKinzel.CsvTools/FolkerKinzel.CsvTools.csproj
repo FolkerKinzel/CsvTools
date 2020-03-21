@@ -16,15 +16,16 @@
     <Version>1.0.0-alpha</Version>
 
     <PackageTags>csv</PackageTags>
-    <Description>The package contains classes to read and write CSV-Files.</Description>
+    <Description>.NET-library to read and write CSV-files.</Description>
 
     <Authors>Folker Kinzel</Authors>
     <Copyright>Copyright © 2020 Folker Kinzel</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageIcon>Logo.png</PackageIcon>
-    <RepositoryUrl>https://github.com/FolkerKinzel/FolkerKinzel.CsvTools.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/FolkerKinzel/CsvTools.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/FolkerKinzel/CsvTools</PackageProjectUrl>
   </PropertyGroup>
 
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
