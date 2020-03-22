@@ -1,23 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;net40</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
-
-    <FileVersion>1.3.0.0</FileVersion>
+    <FileVersion>1.3.9.0</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-
-
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>1.0.0-alpha</Version>
-
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV-files.</Description>
-
     <Authors>Folker Kinzel</Authors>
     <Copyright>Copyright © 2020 Folker Kinzel</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -27,18 +21,13 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/FolkerKinzel/CsvTools</PackageProjectUrl>
   </PropertyGroup>
-
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
     <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
   </PropertyGroup>
-  
-  
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  
-  
   <ItemGroup>
     <Compile Remove="Exceptions\**" />
     <EmbeddedResource Remove="Exceptions\**" />
@@ -48,7 +37,6 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-  
   <ItemGroup>
     <Compile Remove="CsvHelper_alt.cs" />
     <Compile Remove="CsvIO - Reader.cs" />
@@ -88,14 +76,11 @@
       <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
-
   <!-- Conditionally obtain references for the .NET Framework 4.0 target -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
     <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Release copy /v /b /y &quot;$(OutDir)$(ProjectName).xml&quot; &quot;$(OutDir)de/$(ProjectName).xml&quot;" />
+    <Exec Command="if $(ConfigurationName) == Release copy /v /b /y &quot;$(OutDir)$(ProjectName).xml&quot; &quot;$(OutDir)de/$(ProjectName).xml&quot;&#xD;&#xA;if $(ConfigurationName) == Release if '$(TargetFramework)' == 'netstandard2.1' $(SolutionDir)IncVersion.exe $(ProjectDir)$(ProjectFileName)" />
   </Target>
-
 </Project>
