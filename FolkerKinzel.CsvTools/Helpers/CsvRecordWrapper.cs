@@ -74,20 +74,20 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
-        /// Initialisiert ein neues <see cref="CsvRecordWrapper"/>-Objekt. (Verwenden Sie diesen Konstruktor nur beim Lesen von
-        /// CSV-Dateien!)
+        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt zum Lesen einer CSV-Datei. Vor dem Zugriff auf die Eigenschaften muss die
+        /// Methode <see cref="SetRecord(CsvRecord)"/> aufgerufen werden!
         /// </summary>
         /// <remarks>
         /// <note type="important">
         /// Bei Verwendung dieses Konstruktors müssen Sie die Methode <see cref="CsvRecordWrapper.SetRecord(CsvRecord)"/> aufrufen, bevor Sie auf
-        /// Eigenschaften von <see cref="CsvRecordWrapper"/> zugreifen!
+        /// Eigenschaften von <see cref="CsvRecordWrapper"/> zugreifen können. Verwenden Sie diesen Konstruktor nur zum Lesen einer CSV-Datei!
         /// </note>
         /// </remarks>
         public CsvRecordWrapper() { }
 
 
         /// <summary>
-        /// Initialisiert ein neues <see cref="CsvRecordWrapper"/>-Objekt und weist diesem <paramref name="record"/> zu.
+        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt und weist diesem <paramref name="record"/> zu.
         /// </summary>
         /// <remarks>
         /// Beim Lesen einer CSV-Datei mit <see cref="CsvReader"/> steht ein <see cref="CsvRecord"/>-Objekt erst nach der 
@@ -260,12 +260,9 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
-        /// Gibt eine Kopie der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte 
-        /// als Array zurück.
+        /// Die registrierten <see cref="CsvProperty"/>-Objekte als Sammlung, die mit einem Iterator durchlaufen werden kann.
         /// </summary>
-        /// <returns>Ein Array, dass eine Kopie der im <see cref="CsvRecordWrapper"/> registrierten 
-        /// <see cref="CsvProperty"/>-Objekte darstellt.</returns>
-        public CsvProperty[] GetProperties() => this._dynProps.ToArray();
+        public IEnumerable<CsvProperty> Properties => this._dynProps;
 
 
         /// <summary>

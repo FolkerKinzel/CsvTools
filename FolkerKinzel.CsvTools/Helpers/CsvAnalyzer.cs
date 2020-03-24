@@ -18,8 +18,11 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         public const int AnalyzedLinesMinCount = 5;
 
+       
+
         /// <summary>
-        /// Initialisiert ein <see cref="CsvAnalyzer"/>-Objekt und führt eine Analyse auf <paramref name="fileName"/> aus.
+        /// Analysiert die CSV-Datei, auf die <paramref name="fileName"/> verweist, und füllt die Eigenschaften des <see cref="CsvAnalyzer"/>-Objekts mit den
+        /// Ergebnissen der Analyse.
         /// </summary>
         /// <param name="fileName">Dateipfad der CSV-Datei.</param>
         /// <param name="analyzedLinesCount">Höchstanzahl der in der CSV-Datei zu analysierenden Zeilen. Der Mindestwert
@@ -33,7 +36,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Parameter für das Lesen der Datei zu finden. Das Ergebnis der Analyse ist also immer nur eine Schätzung, deren
         /// Treffsicherheit mit der Zahl der analysierten Zeilen steigt.</para>
         /// <para>Die Analyse ist zeitaufwändig, da auf die CSV-Datei lesend zugegriffen werden muss.</para></remarks>
-        public CsvAnalyzer(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount)
+        public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount)
         {
             if (analyzedLinesCount < AnalyzedLinesMinCount) analyzedLinesCount = AnalyzedLinesMinCount;
             
@@ -255,16 +258,16 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <summary>
         /// Das Feldtrennzeichen der CSV-Datei.
         /// </summary>
-        public char FieldSeparatorChar { get; }
+        public char FieldSeparatorChar { get; private set; } = ',';
 
         /// <summary>
         /// Optionen für das Lesen der CSV-Datei.
         /// </summary>
-        public CsvOptions Options { get; }
+        public CsvOptions Options { get; private set; } = CsvOptions.Default;
 
         /// <summary>
         /// True, wenn die CSV-Datei eine Kopfzeile hat.
         /// </summary>
-        public bool HasHeader { get; }
+        public bool HasHeader { get; private set; } = true;
     }//class
 }
