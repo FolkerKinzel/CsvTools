@@ -3,9 +3,9 @@ using FolkerKinzel.CsvTools.Helpers.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using FolkerKinzel.CsvTools.Helpers.Converters.Internals;
+using FolkerKinzel.CsvTools.Helpers.Converters.Intls;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
 {
     [TestClass()]
     public class StringConverterTests

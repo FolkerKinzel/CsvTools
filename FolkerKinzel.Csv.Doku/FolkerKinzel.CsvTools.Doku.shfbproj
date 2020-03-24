@@ -42,18 +42,22 @@
     <HelpTitle>Folker Kinzel - Software</HelpTitle>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <RootNamespaceContainer>False</RootNamespaceContainer>
-    <NamespaceGrouping>False</NamespaceGrouping>
-    <MaximumGroupParts>2</MaximumGroupParts>
+    <NamespaceGrouping>True</NamespaceGrouping>
+    <MaximumGroupParts>4</MaximumGroupParts>
     <Preliminary>False</Preliminary>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <NamespaceSummaries>
-      <NamespaceSummaryItem name="(global)" isDocumented="False">Enthält Klassen zum Lesen und Schreiben von CSV-Dateien.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.Csv" isDocumented="False">Enthält Klassen zum Lesen und Schreiben von Csv-Dateien.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Der Namespace enthält Klassen zum Lesen und Schreiben von CSV-Dateien.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Der Namespace enthält Erweiterungsmethoden, die bei der Arbeit mit CSV-Dateien hilfreich sind.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Der Namespace enthält Klassen, die das Lesen und Schreiben von CSV-Dateien komfortabler machen.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Der Namespace enthält das Interface ICsvTypeConverter, das von der Klasse CsvWrapper verwendet wird, um Typkonvertierungen durchzuführen, sowie zahlreiche Klassen, die konkrete Implementierungen dieses Interfaces darstellen bzw. zur Verfügung stellen.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="(global)" isDocumented="False">Enthält Datentyp-Konverter, die von der Klasse CsvProperty verwendet werden, um gemeinsam mit der Klasse CsvRecordWrapper typsicher auf CSV-Daten zugreifen zu können.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Klassen zum Lesen und Schreiben von CSV-Dateien.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Erweiterungsmethoden, die bei der Arbeit mit CSV-Dateien hilfreich sind.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Klassen, die den Zugriff auf CSV-Daten erleichtern.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Klassen, die Typumwandlungen durchführen.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers (Group)" isGroup="True" isDocumented="True">Klassen, die den Zugriff auf CSV-Daten erleichtern.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters (Group)" isGroup="True" isDocumented="True">Klassen, die Typumwandlungen durchführen.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters.Specialized" isDocumented="True">Veröffentlicht einige konkrete Implementierungen des Interfaces ICsvTypeConverter, um die Konvertierung an spezielle Umstände anpassen zu können. (Für gewöhnliche Aufgaben sollten Sie ICsvTypeConverter-Objekte mit der Klasse CsvConverterFactory initialisieren.)</NamespaceSummaryItem>
     </NamespaceSummaries>
+    <NamingMethod>Guid</NamingMethod>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -75,15 +79,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Content" />
-    <Folder Include="Content\VersionHistory" />
     <Folder Include="icons" />
     <Folder Include="media" />
+    <Folder Include="VersionHistory\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\VersionHistory\v1.3.0.0.aml" />
-    <None Include="Content\VersionHistory\v1.0.0.0.aml" />
-    <None Include="Content\VersionHistory\VersionHistory.aml" />
     <None Include="Content\Welcome.aml" />
+    <None Include="VersionHistory\v1.0.0.0.aml" />
+    <None Include="VersionHistory\v1.3.0.0.aml" />
+    <None Include="VersionHistory\VersionHistory.aml" />
   </ItemGroup>
   <ItemGroup>
     <ContentLayout Include="ContentLayout.content" />

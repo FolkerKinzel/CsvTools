@@ -1,4 +1,4 @@
-﻿using FolkerKinzel.CsvTools.Helpers.Converters.Internals;
+﻿using FolkerKinzel.CsvTools.Helpers.Converters.Intls;
 using FolkerKinzel.CsvTools.Helpers.Converters.Specialized;
 using System;
 using System.Collections.Generic;

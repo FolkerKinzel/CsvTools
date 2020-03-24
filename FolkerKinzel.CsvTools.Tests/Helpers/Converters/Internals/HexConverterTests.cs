@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
 {
     [TestClass()]
     public class HexConverterTests

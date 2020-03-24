@@ -88,7 +88,7 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Erzeugt eine String-Repräsentation des <see cref="InvalidCsvException"/>-Objekts.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Eine String-Repräsentation des <see cref="InvalidCsvException"/>-Objekts.</returns>
         public override string ToString()
         {
             return base.ToString() + $" ({nameof(CsvLineNumber)}: {CsvLineNumber}, {nameof(CsvCharIndex)}: {CsvCharIndex})";

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 {
     /// <summary>
     /// Generische Klasse, die Konvertierungsvorgänge für Datentypen übernimmt,

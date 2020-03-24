@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Internals
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 {
     /// <summary>
     /// Übernimmt Konvertierungsvorgänge für den Datentyp <see cref="string"/>. Führt eine Typüberprüfung durch und kann Nullable-Strings in
