@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Topics>
-  <Topic id="aa71424c-320f-4750-94c5-1b35fe659df3" visible="True" isDefault="true" isSelected="true" title="Welcome to the FolkerKinzel.CsvTools.dll">
+  <Topic id="aa71424c-320f-4750-94c5-1b35fe659df3" visible="True" isDefault="true" title="Welcome to the FolkerKinzel.CsvTools.dll">
     <HelpKeywords>
       <HelpKeyword index="K" term="Welcome" />
     </HelpKeywords>
@@ -9,14 +9,9 @@
     <HelpKeywords>
       <HelpKeyword index="K" term="version, history" />
     </HelpKeywords>
-    <Topic id="cd972ec1-d5c4-4b5f-ba1a-9c2a24ea046a" visible="True" title="Version 1.0.0.0">
+    <Topic id="cd972ec1-d5c4-4b5f-ba1a-9c2a24ea046a" visible="True" isSelected="true" title="Version 1.0.0.0">
       <HelpKeywords>
         <HelpKeyword index="K" term="version, 1.0.0.0" />
-      </HelpKeywords>
-    </Topic>
-    <Topic id="00ce7838-358e-465c-b58d-1fe70bb2f6c8" visible="True" title="Version 1.3.0.0">
-      <HelpKeywords>
-        <HelpKeyword index="K" term="version, 1.3.0.0" />
       </HelpKeywords>
     </Topic>
   </Topic>

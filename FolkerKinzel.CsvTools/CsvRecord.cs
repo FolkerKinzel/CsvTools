@@ -506,7 +506,7 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Erstellt eine <see cref="String"/>-Repräsentation des <see cref="CsvRecord"/>-Objekts. (Gut für's Debugging.)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Eine <see cref="String"/>-Repräsentation des <see cref="CsvRecord"/>-Objekts.</returns>
         public override string ToString()
         {
             if (this.Count == 0)

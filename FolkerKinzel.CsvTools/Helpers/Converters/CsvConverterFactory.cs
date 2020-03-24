@@ -74,7 +74,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="ICsvTypeConverter.FallbackValue"/> zurück.</param>
         /// <param name="ignoreCase">Wenn <c>true</c>, wird die Groß- und Kleinschreibung von Enum-Bezeichnern beim Parsen ignoriert.</param>
-        /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung von Enum-Datentypen.</returns>
+        /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung des Enum-Datentyps <typeparamref name="TEnum"/>.</returns>
         public static ICsvTypeConverter CreateEnumConverter<TEnum>(
             bool nullable = false,
             bool maybeDBNull = false,
@@ -99,6 +99,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
         /// misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="ICsvTypeConverter.FallbackValue"/> zurück.</param>
+        /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung des Enum-Datentyps <typeparamref name="TEnum"/>.</returns>
         /// <param name="ignoreCase">Wenn <c>true</c>, wird die Groß- und Kleinschreibung von Enum-Bezeichnern beim Parsen ignoriert.</param>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring für Enum-Datentypen.</exception>
         public static ICsvTypeConverter CreateEnumConverter<TEnum>(
@@ -125,7 +126,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
         /// misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="ICsvTypeConverter.FallbackValue"/> zurück.</param>
-        /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung des gewünschten Datentyps in hexadezimale Darstellung und umgekehrt.</returns>
+        /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung des gewünschten ganzzahligen Datentyps in hexadezimale Darstellung und umgekehrt.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> benennt keinen ganzzahligen Datentyp. (Unterstützt werden
         /// <see cref="CsvTypeCode.Byte"/>, <see cref="CsvTypeCode.UInt16"/>, <see cref=" CsvTypeCode.UInt32"/>, <see cref="CsvTypeCode.UInt64"/>,
         /// <see cref="CsvTypeCode.SByte"/>, <see cref="CsvTypeCode.Int16"/>, <see cref=" CsvTypeCode.Int32"/> und <see cref="CsvTypeCode.Int64"/>.)
