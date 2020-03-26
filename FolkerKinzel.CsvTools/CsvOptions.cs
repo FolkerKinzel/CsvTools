@@ -73,6 +73,15 @@ namespace FolkerKinzel.CsvTools
         /// Standardeinstellung. Dies ist ein kombinierter Wert, der <see cref="CsvReader"/> zum Werfen einer <see cref="InvalidCsvException"/> zwingt,
         /// wenn die zu lesende Datei nicht dem Standard RFC 4180 entspricht. (Abweichende Spaltentrennzeichen und Zeilenwechselzeichen werden immer toleriert.)
         /// </summary>
-        Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines
+        Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines,
+
+
+        /// <summary>
+        /// Wenn das Flag gesetzt wird, wird beim Lesen der CSV-Datei für jede Datenzeile dasselbe <see cref="CsvRecord"/>-Objekt verwendet (gefüllt mit neuen Daten).
+        /// Das bringt bei sehr großen
+        /// CSV-Dateien leichte Performancevorteile, macht es aber unmöglich, auf <see cref="CsvReader.Read"/> eine
+        /// Linq-Abfrage durchzuführen.
+        /// </summary>
+        DisableCaching = 1 << 5
     }
 }

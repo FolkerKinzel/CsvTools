@@ -25,7 +25,6 @@ namespace FolkerKinzel.CsvTools
         private readonly CsvStringReader _reader;
         private readonly CsvOptions _options;
         private readonly bool _hasHeaderRow;
-        private readonly bool _disableCaching;
         private bool _firstRun = true;
 
         #region ctors
@@ -39,27 +38,21 @@ namespace FolkerKinzel.CsvTools
         /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
         /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c>, um diese automatisch
         /// bestimmen zu lassen.</param>
-        /// <param name="disableCaching">Wenn <c>true</c>, wird beim Durchlaufen der Enumeration, die die Methode <see cref="Read"/>
-        /// zurückgibt, immer dasselbe <see cref="CsvRecord"/>-Objekt zurückgegeben (gefüllt mit neuen Daten). Das kann bei sehr großen
-        /// CSV-Dateien leichte Performancevorteile bringen, macht es aber unmöglich, auf dem Rückgabewert von <see cref="Read"/> eine
-        /// Linq-Abfrage durchzuführen.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
         public CsvReader(
             string fileName,
-            char fieldSeparator = ',',
             bool hasHeaderRow = true,
             CsvOptions options = CsvOptions.Default,
             Encoding? enc = null,
-            bool disableCaching = false)
+            char fieldSeparator = ',')
         {
             StreamReader streamReader = InitializeStreamReader(fileName, enc);
 
             this._reader = new CsvStringReader(streamReader, fieldSeparator, (_options & CsvOptions.ThrowOnEmptyLines) != CsvOptions.ThrowOnEmptyLines);
             this._options = options;
             this._hasHeaderRow = hasHeaderRow;
-            this._disableCaching = disableCaching;
         }
 
 
@@ -77,10 +70,9 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="reader"/> ist <c>null</c>.</exception>
         public CsvReader(
             TextReader reader,
-            char fieldSeparator = ',',
             bool hasHeaderRow = true,
             CsvOptions options = CsvOptions.Default,
-            bool disableCaching = false)
+            char fieldSeparator = ',')
         {
             if (reader is null)
             {
@@ -90,13 +82,12 @@ namespace FolkerKinzel.CsvTools
             this._reader = new CsvStringReader(reader, fieldSeparator, (_options & CsvOptions.ThrowOnEmptyLines) != CsvOptions.ThrowOnEmptyLines);
             this._options = options;
             this._hasHeaderRow = hasHeaderRow;
-            this._disableCaching = disableCaching;
         }
 
         #endregion
 
 
-        #region public methods
+        #region public Methods
 
         /// <summary>
         /// Gibt ein <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>-Objekt zurück, mit dem über die Datensätze der CSV-Datei
@@ -175,7 +166,7 @@ namespace FolkerKinzel.CsvTools
                 }
                 else
                 {
-                    if (_disableCaching)
+                    if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
                     {
                         clone ??= new CsvRecord(record);
                     }
@@ -240,7 +231,7 @@ namespace FolkerKinzel.CsvTools
                         throw new InvalidCsvException("Too few fields in a record.", reader.LineNumber, reader.LineIndex);
                     }
 
-                    if (_disableCaching)
+                    if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
                     {
                         for (int i = dataIndex; i < clone.Count; i++)
                         {
