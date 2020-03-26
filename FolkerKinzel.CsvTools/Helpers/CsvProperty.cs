@@ -3,6 +3,7 @@ using FolkerKinzel.CsvTools.Resources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -95,16 +96,42 @@ namespace FolkerKinzel.CsvTools.Helpers
         public ICsvTypeConverter Converter { get; }
 
 
-        internal object? GetValue(CsvRecord record)
+        /// <summary>
+        /// Extrahiert mit Hilfe von <see cref="Converter"/> Daten eines bestimmten Typs aus einer Spalte von <see cref="CsvRecord"/>.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"><paramref name="record"/> ist null.</exception>
+        /// <exception cref="InvalidCastException"><see cref="ICsvTypeConverter.ThrowsOnParseErrors"/> war <c>true</c> und der Wert konnte
+        /// nicht erfolgreich aus <paramref name="record"/> gelesen werden.</exception>
+        internal object? GetValue(CsvRecord? record)
         {
+            Debug.Assert(record != null);
+            
             ColumnAliasesLookup lookup = GetLookup(record);
 
-            return lookup.Aliases.Count == 0 ? Converter.FallbackValue : Converter.Parse(record[lookup.Aliases[0]]);
+            try
+            {
+                return lookup.Aliases.Count == 0 ? Converter.FallbackValue : Converter.Parse(record[lookup.Aliases[0]]);
+            }
+            catch(Exception e)
+            {
+                throw new InvalidCastException(e.Message, e);
+            }
         }
 
 
-        internal void SetValue(CsvRecord record, object? value)
+        /// <summary>
+        /// Speichert mit Hilfe von <see cref="Converter"/> Daten eines bestimmten Typs als <see cref="string"/> in einer Spalte von <see cref="CsvRecord"/>.
+        /// </summary>
+        /// <param name="record"></param>
+        /// <param name="value"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="record"/> ist null.</exception>
+        /// <exception cref="InvalidCastException"><paramref name="value"/> entsprach nicht dem Datentyp den <see cref="Converter"/> umwandeln kann.</exception>
+        internal void SetValue(CsvRecord? record, object? value)
         {
+            Debug.Assert(record != null);
+
             ColumnAliasesLookup lookup = GetLookup(record);
 
             string? s = Converter.ConvertToString(value);

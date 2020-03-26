@@ -28,13 +28,12 @@ namespace FolkerKinzel.CsvTools
         private const string DefaultKeyName = "Column";
 #if NET40
         private static readonly string?[] DefaultArr = new string?[0];
-        private readonly string?[] _arr = DefaultArr;
+        private readonly string?[] _values = DefaultArr;
 #else
-        private readonly string?[] _arr = Array.Empty<string?>();
+        private readonly string?[] _values = Array.Empty<string?>();
 #endif
 
-        private readonly Dictionary<string, int> _dic;
-        private readonly int _count;
+        private readonly Dictionary<string, int> _lookupDictionary;
         private readonly ReadOnlyCollection<string> _keys;
 
         #endregion
@@ -52,11 +51,9 @@ namespace FolkerKinzel.CsvTools
 #endif
         internal CsvRecord(CsvRecord source)
         {
-            _dic = source._dic;
+            _lookupDictionary = source._lookupDictionary;
             _keys = source._keys;
-            _count = source._count;
-            this.Identifier = source.Identifier;
-            _arr = new string?[_count];
+            _values = new string?[Count];
         }
 
 
@@ -74,26 +71,25 @@ namespace FolkerKinzel.CsvTools
                 caseSensitive ?
                 StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
 
-            this._dic = new Dictionary<string, int>(columnsCount, comparer);
-            this._count = columnsCount;
-            this.Identifier = _dic.GetHashCode();
+            this._lookupDictionary = new Dictionary<string, int>(columnsCount, comparer);
+            
 
-            var keyArr = new string[_count];
+            var keyArr = new string[columnsCount];
 
 
-            for (int i = 0; i < _count; i++)
+            for (int i = 0; i < columnsCount; i++)
             {
                 string keyName = DefaultKeyName + (i + 1).ToString(CultureInfo.InvariantCulture);
 
                 keyArr[i] = keyName;
-                this._dic.Add(keyName, i);
+                this._lookupDictionary.Add(keyName, i);
             }
 
             this._keys = new ReadOnlyCollection<string>(keyArr);
 
             if (initArr)
             {
-                _arr = new string?[_count];
+                _values = new string?[columnsCount];
             }
         }
 
@@ -120,20 +116,18 @@ namespace FolkerKinzel.CsvTools
                 caseSensitive ?
                 StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
 
-            this._dic = new Dictionary<string, int>(keys.Length, comparer);
-            this._count = keys.Length;
-            this.Identifier = _dic.GetHashCode();
+            this._lookupDictionary = new Dictionary<string, int>(keys.Length, comparer);
 
             int defaultNameCounter = 0;
 
-            for (int i = 0; i < _count; i++)
+            for (int i = 0; i < keys.Length; i++)
             {
                 string? key = keys[i];
 
                 if (key is null)
                 {
                     key = GetDefaultName();
-                    _dic.Add(key, i);
+                    _lookupDictionary.Add(key, i);
                     keys[i] = key;
                     continue;
                 }
@@ -143,21 +137,21 @@ namespace FolkerKinzel.CsvTools
                     key = key.Trim();
                 }
 
-                if (!throwException && _dic.ContainsKey(key))
+                if (!throwException && _lookupDictionary.ContainsKey(key))
                 {
                     key = MakeUnique(key);
                 }
 
-                _dic.Add(key, i);
+                _lookupDictionary.Add(key, i);
                 keys[i] = key;
 
             }
 
-            _keys = new ReadOnlyCollection<string>(keys!);
+            this._keys = new ReadOnlyCollection<string>(keys!);
 
             if (initArr)
             {
-                _arr = new string?[_count];
+                _values = new string?[Count];
             }
 
 
@@ -171,7 +165,7 @@ namespace FolkerKinzel.CsvTools
                 do
                 {
                     key = DefaultKeyName + (++defaultNameCounter).ToString(CultureInfo.InvariantCulture);
-                } while (_dic.ContainsKey(key));
+                } while (_lookupDictionary.ContainsKey(key));
 
                 return key;
             }
@@ -186,7 +180,7 @@ namespace FolkerKinzel.CsvTools
                 do
                 {
                     unique = key + (++cnt).ToString(CultureInfo.InvariantCulture);
-                } while (_dic.ContainsKey(unique));
+                } while (_lookupDictionary.ContainsKey(unique));
 
                 return unique;
             }
@@ -206,8 +200,8 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="Count"/>.</exception>
         public string? this[int index]
         {
-            get => _arr[index];
-            set => _arr[index] = value;
+            get => _values[index];
+            set => _values[index] = value;
         }
 
         /// <summary>
@@ -219,49 +213,36 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
         public string? this[string key]
         {
-            get => _arr[_dic[key]];
-            set => _arr[_dic[key]] = value;
+            get => _values[_lookupDictionary[key]];
+            set => _values[_lookupDictionary[key]] = value;
         }
 
 
         /// <summary>
         /// Gibt die Anzahl der Spalten in <see cref="CsvRecord"/> zurück.
         /// </summary>
-        public int Count => _count;
+        public int Count => _keys.Count;
 
         /// <summary>
         /// Gibt true zurück, wenn <see cref="Count"/> 0 ist oder wenn alle
         /// Felder den Wert <c>null</c> haben.
         /// </summary>
-        public bool IsEmpty => _count == 0 || _arr.All(x => x is null);
+        public bool IsEmpty => Count == 0 || _values.All(x => x is null);
 
-        ///// <summary>
-        ///// Gibt an, ob <see cref="CsvRecord"/> schreibgeschützt ist. (Immer false.)
-        ///// </summary>
-        //bool ICollection<string?>.IsReadOnly => false;
-
-
-        ///// <summary>
-        ///// Gibt an, ob <see cref="CsvRecord"/> schreibgeschützt ist. (Immer false.)
-        ///// </summary>
-        //bool ICollection<KeyValuePair<string, string?>>.IsReadOnly => false;
+        
 
         /// <summary>
         /// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück.
         /// </summary>
         public ReadOnlyCollection<string> Keys => _keys;
 
-        ///// <summary>
-        ///// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück. Die 
-        ///// Collection ist readonly.
-        ///// </summary>
-        //ICollection<string> IDictionary<string, string?>.Keys => Keys;
+        
 
         /// <summary>
         /// Gibt die in <see cref="CsvRecord"/> gespeicherten Daten als Collection zurück. Die 
         /// Werte können verändert werden.
         /// </summary>
-        public ICollection<string?> Values => _arr;
+        public IList<string?> Values => _values;
 
 
         /// <summary>
@@ -272,7 +253,7 @@ namespace FolkerKinzel.CsvTools
         public Dictionary<string, string?> ToDictionary()
         {
 #if NET40
-            var dic = new Dictionary<string, string?>(this.Count, this._dic.Comparer);
+            var dic = new Dictionary<string, string?>(this.Count, this._lookupDictionary.Comparer);
 
             foreach (var kvp in this)
             {
@@ -281,27 +262,30 @@ namespace FolkerKinzel.CsvTools
 
             return dic;
 #else
-            return new Dictionary<string, string?>(this, this._dic.Comparer);
+            return new Dictionary<string, string?>(this, this._lookupDictionary.Comparer);
 #endif
         }
 
         /// <summary>
         /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zu selben CSV-Datei
-        /// gehören, identisch ist.
+        /// gehören, identisch ist. (Wird von <see cref="CsvProperty"/> verwendet, um festzustellen,
+        /// ob das aktuelle <see cref="CsvRecord"/>-Objekt zur selben CSV-Datei gehört, mit der das
+        /// Alias-Lookup erstellt wurde.)
         /// </summary>
-        internal int Identifier { get; }
+        internal int Identifier => _lookupDictionary.GetHashCode();
+
 
         /// <summary>
         /// Der zur Auswahl der Schlüssel verwendete Comparer.
         /// </summary>
-        internal IEqualityComparer<string> Comparer => _dic.Comparer;
+        internal IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
 #endregion
 
         /// <summary>
         /// Setzt alle Datenfelder von <see cref="CsvRecord"/> auf <c>null</c>.
         /// </summary>
-        public void Clear() => Array.Clear(_arr, 0, _arr.Length);
+        public void Clear() => Array.Clear(_values, 0, _values.Length);
 
         /// <summary>
         /// Ruft den dem angegebenen Schlüssel zugeordneten Wert ab.
@@ -314,9 +298,9 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
         public bool TryGetValue(string key, out string? value)
         {
-            if (_dic.TryGetValue(key, out int index))
+            if (_lookupDictionary.TryGetValue(key, out int index))
             {
-                value = _arr[index];
+                value = _values[index];
                 return true;
             }
             else
@@ -348,44 +332,21 @@ namespace FolkerKinzel.CsvTools
 
             foreach (string? item in data)
             {
-                if (dataIndex >= _arr.Length)
+                if (dataIndex >= _values.Length)
                 {
                     throw new ArgumentOutOfRangeException(nameof(data));
                 }
 
-                _arr[dataIndex++] = item;
+                _values[dataIndex++] = item;
             }
 
-            for (int i = dataIndex; i < _arr.Length; i++)
+            for (int i = dataIndex; i < _values.Length; i++)
             {
-                _arr[i] = null;
+                _values[i] = null;
             }
         }
 
-        //public void Fill(IEnumerable<object?> data)
-        //{
-        //    if (data is null)
-        //    {
-        //        throw new ArgumentNullException(nameof(data));
-        //    }
-
-        //    int dataIndex = 0;
-
-        //    foreach (object? item in data)
-        //    {
-        //        if (dataIndex >= _arr.Length)
-        //        {
-        //            throw new ArgumentOutOfRangeException(nameof(data));
-        //        }
-
-        //        _arr[dataIndex++] = ObjectToStringConverter.ConvertToString(item);
-        //    }
-
-        //    for (int i = dataIndex; i < _arr.Length; i++)
-        //    {
-        //        _arr[i] = null;
-        //    }
-        //}
+        
 
 
         /// <summary>
@@ -393,7 +354,7 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         /// <param name="item">Der zu suchende <see cref="string"/>.</param>
         /// <returns>True, wenn <paramref name="item"/> den Inhalt einer Datenspalte in <see cref="CsvRecord"/> darstellt.</returns>
-        public bool Contains(string? item) => Array.IndexOf(_arr, item) >= 0;
+        public bool Contains(string? item) => Array.IndexOf(_values, item) >= 0;
 
 
         /// <summary>
@@ -409,16 +370,7 @@ namespace FolkerKinzel.CsvTools
         public bool Contains(string key, string? value) => this[key] == value;
 
 
-        ///// <summary>
-        ///// Untersucht, ob der Inhalt der Datenspalte mit dem Namen <see cref="KeyValuePair{TKey, TValue}.Key"/>&#160;<see cref="KeyValuePair{TKey, TValue}.Value"/>
-        ///// entspricht.
-        ///// </summary>
-        ///// <param name="item">Ein <see cref="KeyValuePair{TKey, TValue}"/>, das den Namen der zu überprüfenden Datenspalte und den zu vergleichenden Wert
-        ///// enthält.</param>
-        ///// <returns>True, wenn der Inhalt der Datenspalte mit dem Namen <see cref="KeyValuePair{TKey, TValue}.Key"/>&#160;<see cref="KeyValuePair{TKey, TValue}.Value"/>
-        ///// entspricht.</returns>
-        ///// <exception cref="KeyNotFoundException">Der mit <see cref="KeyValuePair{TKey, TValue}.Key"/> angegebene Schlüssel existiert nicht.</exception>
-        //bool ICollection<KeyValuePair<string, string?>>.Contains(KeyValuePair<string, string?> item) => Contains(item.Key, item.Value);
+        
 
 
         /// <summary>
@@ -427,7 +379,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="key">Der zu suchende Schlüssel ("Spaltenname").</param>
         /// <returns>True, wenn <paramref name="key"/> zu den Spaltennamen des <see cref="CsvRecord"/>-Objekts gehört.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
-        public bool ContainsKey(string key) => _dic.ContainsKey(key);
+        public bool ContainsKey(string key) => _lookupDictionary.ContainsKey(key);
 
 
         /// <summary>
@@ -441,7 +393,7 @@ namespace FolkerKinzel.CsvTools
         /// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende
         /// des Zielarrays.</exception>
         /// <exception cref="ArgumentException"><paramref name="array"/> ist mehrdimensional.</exception>
-        public void CopyTo(string?[] array, int arrayIndex) => _arr.CopyTo(array, arrayIndex);
+        public void CopyTo(string?[] array, int arrayIndex) => _values.CopyTo(array, arrayIndex);
 
 
         /// <summary>
@@ -465,7 +417,7 @@ namespace FolkerKinzel.CsvTools
 
             for (int i = 0; i < _keys.Count; i++)
             {
-                array[arrayIndex + i] = new KeyValuePair<string, string?>(_keys[i], _arr[i]);
+                array[arrayIndex + i] = new KeyValuePair<string, string?>(_keys[i], _values[i]);
             }
         }
 
@@ -477,7 +429,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="item">Der zu suchende <see cref="string"/> oder <c>null</c>.</param>
         /// <returns>Der nullbasierte Index des ersten Vorkommens von <paramref name="item"/> unter den gespeicherten Daten
         /// oder -1, wenn <paramref name="item"/> dort nicht existiert.</returns>
-        public int IndexOf(string? item) => Array.IndexOf(_arr, item);
+        public int IndexOf(string? item) => Array.IndexOf(_values, item);
 
 
         /// <summary>
@@ -488,16 +440,11 @@ namespace FolkerKinzel.CsvTools
         /// <param name="key">Der Spaltenname, für den überprüft werden soll, auf welchen Index von <see cref="CsvRecord"/> er verweist.</param>
         /// <returns>Der Index der Datenspalte in <see cref="CsvRecord"/>, auf die der Spaltenname <paramref name="key"/> verweist oder
         /// -1, wenn <paramref name="key"/> kein Spaltenname ist.</returns>
-        public int IndexOfKey(string? key) => key != null && _dic.TryGetValue(key, out int i) ? i : -1;
+        public int IndexOfKey(string? key) => key != null && _lookupDictionary.TryGetValue(key, out int i) ? i : -1;
 
 
 
-        ///// <summary>
-        ///// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;string?&gt;</see> zurück, mit dem die Felder des <see cref="CsvRecord"/>-Objekts
-        ///// durchlaufen werden.
-        ///// </summary>
-        ///// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;string?&gt;</see>.</returns>
-        //IEnumerator<string?> IEnumerable<string?>.GetEnumerator() => ((IList<string?>)_arr).GetEnumerator();
+        
 
 
         /// <summary>
@@ -516,10 +463,12 @@ namespace FolkerKinzel.CsvTools
         /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see>.</returns>
         public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
         {
-            foreach (var key in _keys)
+
+            for (int i = 0; i < Count; i++)
             {
-                yield return new KeyValuePair<string, string?>(key, _arr[_dic[key]]);
+                yield return new KeyValuePair<string, string?>(Keys[i], Values[i]);
             }
+            
         }
 
 
@@ -552,66 +501,7 @@ namespace FolkerKinzel.CsvTools
         }
 
 
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="item">-</param>
-        ///// <returns>-</returns>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //bool ICollection<string?>.Remove(string? item) => throw new NotSupportedException();
-
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="key">-</param>
-        ///// <returns>-</returns>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //bool IDictionary<string, string?>.Remove(string key) => throw new NotSupportedException();
-
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="item">-</param>
-        ///// <returns>-</returns>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //bool ICollection<KeyValuePair<string, string?>>.Remove(KeyValuePair<string, string?> item) => throw new NotSupportedException();
-
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="index">-</param>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //void IList<string?>.RemoveAt(int index) => throw new NotSupportedException();
-
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="item">-</param>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //void ICollection<string?>.Add(string? item) => throw new NotSupportedException();
-
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="key">-</param>
-        ///// <param name="value">-</param>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //void IDictionary<string, string?>.Add(string key, string? value) => throw new NotSupportedException();
-
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="item">-</param>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //void ICollection<KeyValuePair<string, string?>>.Add(KeyValuePair<string, string?> item) => throw new NotSupportedException();
-
-        ///// <summary>
-        ///// Not Supported.
-        ///// </summary>
-        ///// <param name="index">-</param>
-        ///// <param name="item">-</param>
-        ///// <exception cref="NotSupportedException">Not Supported.</exception>
-        //void IList<string?>.Insert(int index, string? item) => throw new NotSupportedException();
+        
 
 
 

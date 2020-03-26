@@ -75,7 +75,7 @@ namespace ExampleRunner
 
             //wrapper.ReplaceProperty("Spalte2", prop1);
 
-            wrapper.SetRecord(writer.Record);
+            wrapper.Record = writer.Record;
 
 
             //wrapper.RegisterProperty(prop1);

@@ -31,7 +31,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// müssen Anzahl und Reihenfolge der im <see cref="CsvRecordWrapper"/>-Objekt registrierten <see cref="CsvProperty"/>-Objekte nicht
     /// mit den Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts übereinstimmen.
     /// </para>
-    /// <para>Mit den folgenden Methoden kann auch nachträglich auf die Reihenfolge der registrierten Eigenschaften Einfluss genommen werden:</para>
+    /// <para>Mit den folgenden Methoden kann jederzeit auf die Reihenfolge der registrierten Eigenschaften Einfluss genommen werden:</para>
     /// <list type="bullet">
     /// <item><see cref="InsertProperty(int, CsvProperty)"/></item>
     /// <item><see cref="ReplaceProperty(string, CsvProperty)"/></item>
@@ -39,7 +39,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// <item><see cref="RemoveProperty(string)"/></item>
     /// <item><see cref="RemovePropertyAt(int)"/></item>
     /// </list>
-    /// <para>Mit <see cref="HasProperty(string)"/> können Sie überprüfen, ob ein <see cref="CsvProperty"/>-Objekt mit dem angegebenen Namen
+    /// <para>Mit <see cref="ContainsProperty(string)"/> können Sie überprüfen, ob ein <see cref="CsvProperty"/>-Objekt mit dem angegebenen Namen
     /// bereits registriert ist.</para>
     /// <para>
     /// Auf die Indexer <see cref="this[int]"/> und <see cref="this[string]"/> kann zwar auch zugegriffen werden, wenn die 
@@ -49,78 +49,49 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// <para>Wenn die <see cref="CsvRecordWrapper"/>-Instanz einer Variablen zugewiesen ist, die mit dem Schlüsselwort <c>dynamic</c>
     /// deklariert wurde, übernimmt die Runtime die notwendigen Casts. Überdies ist es dann möglich, die registrierten 
     /// <see cref="CsvProperty"/>-Objekte wie normale Eigenschaften über ihren Namen anzusprechen (<see cref="CsvProperty.PropertyName"/>).
-    /// Der Nachteil ist, dass Visual Studio auf dynamischen Variablen keinerlei "Intellisense" bieten kann.
+    /// Der Nachteil ist, dass Visual Studio auf dynamischen Variablen keinerlei "IntelliSense" bieten kann.
     /// </para>
     /// <para>Wenn eine CSV-Datei mit <see cref="CsvWriter"/> geschrieben wird, ist es möglich den Konstruktor <see cref="CsvRecordWrapper(CsvRecord)"/>
     /// zu verwenden, da das <see cref="CsvRecord"/>-Objekt, das es mit Daten zu füllen gilt, bereits vor dem ersten Schreibvorgang zur Verfügung
-    /// steht. Weitere Zuweisungen mit <see cref="SetRecord(CsvRecord)"/> sind nicht notwendig, da <see cref="CsvWriter"/> immer dasselbe
+    /// steht. Weitere Zuweisungen von <see cref="Record"/> sind nicht notwendig, da <see cref="CsvWriter"/> immer dasselbe
     /// <see cref="CsvRecord"/>-Objekt verwendet.
     /// </para>
     /// <para>
     /// Beim Lesen einer CSV-Datei mit <see cref="CsvReader"/> verhält es sich anders: Ein <see cref="CsvRecord"/>-Objekt steht erst nach der 
     /// ersten Iteration des Readers zur Verfügung. Deshalb kann nur der Konstruktor <see cref="CsvRecordWrapper()"/> benutzt werden und dem
-    /// <see cref="CsvRecordWrapper"/>-Objekt muss bei jeder Iteration des Readers zuerst das aktuelle <see cref="CsvRecord"/>-Objekt mit der 
-    /// Methode <see cref="SetRecord(CsvRecord)"/> zugewiesen
+    /// <see cref="CsvRecordWrapper"/>-Objekt muss bei jeder Iteration des Readers zuerst das aktuelle <see cref="CsvRecord"/>-Objekt zugewiesen
     /// werden, bevor auf die Eigenschaften des <see cref="CsvRecordWrapper"/>-Objekts zugegriffen wird, denn <see cref="CsvReader"/> gibt
     /// bei jeder Iteration ein neues <see cref="CsvRecord"/>-Objekt zurück.
     /// </para>
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
-    public sealed class CsvRecordWrapper : DynamicObject, IList<object?>
+    public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<string, object?>>
     {
-        private CsvRecord? _record;
-
         private readonly PropertyCollection _dynProps = new PropertyCollection();
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt zum Lesen einer CSV-Datei. Vor dem Zugriff auf die Eigenschaften muss die
-        /// Methode <see cref="SetRecord(CsvRecord)"/> aufgerufen werden!
+        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt zum Lesen einer CSV-Datei. Vor dem Zugriff auf die Eigenschaften muss <see cref="Record"/>
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen werden.
         /// </summary>
-        /// <remarks>
-        /// <note type="important">
-        /// Bei Verwendung dieses Konstruktors müssen Sie die Methode <see cref="CsvRecordWrapper.SetRecord(CsvRecord)"/> aufrufen, bevor Sie auf
-        /// Eigenschaften von <see cref="CsvRecordWrapper"/> zugreifen können. Verwenden Sie diesen Konstruktor nur zum Lesen einer CSV-Datei!
-        /// </note>
-        /// </remarks>
         public CsvRecordWrapper() { }
 
 
         /// <summary>
         /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt und weist diesem <paramref name="record"/> zu.
         /// </summary>
-        /// <remarks>
-        /// Beim Lesen einer CSV-Datei mit <see cref="CsvReader"/> steht ein <see cref="CsvRecord"/>-Objekt erst nach der 
-        /// ersten Iteration des Readers zur Verfügung. Deshalb kann nur der Konstruktor <see cref="CsvRecordWrapper()"/> benutzt werden und dem
-        /// <see cref="CsvRecordWrapper"/>-Objekt muss bei jeder Iteration des Readers zuerst das aktuelle <see cref="CsvRecord"/>-Objekt 
-        /// mit der Methode <see cref="SetRecord(CsvRecord)"/> zugewiesen
-        /// werden, bevor auf die Eigenschaften des <see cref="CsvRecordWrapper"/>-Objekts zugegriffen wird, denn <see cref="CsvReader"/> gibt
-        /// bei jeder Iteration ein neues <see cref="CsvRecord"/>-Objekt zurück.
-        /// </remarks>
         /// <param name="record">Das <see cref="CsvRecord"/>-Objekt, auf dessen Daten <see cref="CsvRecordWrapper"/> zugreift.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="record"/> ist <c>null</c>.</exception>
         public CsvRecordWrapper(CsvRecord record)
         {
-            this.SetRecord(record);
+            this.Record = record;
         }
 
 
         /// <summary>
-        /// Weist dem <see cref="CsvRecordWrapper"/> ein <see cref="CsvRecord"/>-Objekt zu, 
-        /// auf dessen Daten es zugreift.
+        /// Das <see cref="CsvRecord"/>-Objekt, 
+        /// auf dessen Daten <see cref="CsvRecordWrapper"/> zugreift.
         /// </summary>
-        /// <param name="record">Das <see cref="CsvRecord"/>-Objekt, dessen Daten vom 
-        /// <see cref="CsvRecordWrapper"/> gelesen oder manipuliert werden.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="record"/> ist <c>null</c>.</exception>
-        public void SetRecord(CsvRecord record)
-        {
-            if (record is null)
-            {
-                throw new ArgumentNullException(nameof(record));
-            }
-
-            this._record = record;
-        }
+        public CsvRecord? Record { get; set; }
 
 
         /// <summary>
@@ -227,9 +198,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(property));
             }
 
-            
-
-            if (HasProperty(propertyName))
+            if (ContainsProperty(propertyName))
             {
                 int index = _dynProps.IndexOf(_dynProps[propertyName]);
                 _dynProps[index] = property;
@@ -248,9 +217,9 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <see cref="CsvProperty"/>.</param>
         /// <returns>True, wenn ein <see cref="CsvProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
         /// angegebenen Namen registriert ist.</returns>
-        public bool HasProperty(string propertyName)
+        public bool ContainsProperty(string propertyName)
         {
-            if(propertyName is null)
+            if (propertyName is null)
             {
                 throw new ArgumentNullException(nameof(propertyName));
             }
@@ -258,11 +227,6 @@ namespace FolkerKinzel.CsvTools.Helpers
             return _dynProps.Contains(propertyName);
         }
 
-
-        /// <summary>
-        /// Die registrierten <see cref="CsvProperty"/>-Objekte als Sammlung, die mit einem Iterator durchlaufen werden kann.
-        /// </summary>
-        public IEnumerable<CsvProperty> Properties => this._dynProps;
 
 
         /// <summary>
@@ -275,12 +239,11 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// im <see cref="CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
         /// wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
-        /// <exception cref="InvalidOperationException">Es wurde auf eine dynamische Eigenschaft des 
-        /// <see cref="CsvRecordWrapper"/>-Objekts zugegriffen, bevor diesem ein <see cref="CsvRecord"/>-Objekt 
-        /// zugewiesen wurde.</exception>
         /// <exception cref="InvalidCastException"><paramref name="value"/> ist nicht vom Datentyp der registrierten
         /// Property.</exception>
         /// <exception cref="Exception">Es wurde versucht, auf eine nicht registrierte Property zuzugreifen.</exception>
+        ///  <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
             if (binder is null)
@@ -288,15 +251,14 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(binder));
             }
 
-            if (this._record is null)
+            if (Record is null)
             {
-                throw new InvalidOperationException(Res.NoCsvRecord);
+                throw new InvalidOperationException(Res.CsvRecordIsNull);
             }
-
 
             if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
             {
-                prop.SetValue(this._record, value);
+                prop.SetValue(this.Record, value);
                 return true;
             }
 
@@ -313,12 +275,11 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// im <see cref="CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
         /// wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
-        /// <exception cref="InvalidOperationException">Es wurde auf eine dynamische Eigenschaft des 
-        /// <see cref="CsvRecordWrapper"/>-Objekts zugegriffen, bevor diesem ein <see cref="CsvRecord"/>-Objekt
-        /// zugewiesen wurde.</exception>
         /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.</exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public override bool TryGetMember(GetMemberBinder binder, out object? result)
         {
             if (binder is null)
@@ -326,15 +287,14 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(binder));
             }
 
-            if (this._record is null)
+            if (Record is null)
             {
-                throw new InvalidOperationException(Res.NoCsvRecord);
+                throw new InvalidOperationException(Res.CsvRecordIsNull);
             }
-
 
             if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
             {
-                result = prop.GetValue(this._record);
+                result = prop.GetValue(Record);
                 return true;
             }
 
@@ -343,20 +303,21 @@ namespace FolkerKinzel.CsvTools.Helpers
         }
 
 
-        /// <summary>
-        /// Setzt sämtliche Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">Die Methode wurde aufgerufen, bevor dem <see cref="CsvRecordWrapper"/>
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
-        public void Clear()
-        {
-            if (this._record is null)
-            {
-                throw new InvalidOperationException(Res.NoCsvRecord);
-            }
-
-            _record.Clear();
-        }
+        ///// <summary>
+        ///// Setzt sämtliche Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.
+        ///// </summary>
+        ///// <exception cref="InvalidOperationException"><see cref="Record"/> ist beim Aufruf der Methode <c>null</c>.</exception>
+        //public void Clear()
+        //{
+        //    if (Record is null)
+        //    { 
+        //        throw new InvalidOperationException("Record is null."); 
+        //    }
+        //    else
+        //    { 
+        //        Record.Clear(); 
+        //    }; 
+        //}
 
         /// <summary>
         /// Gibt die Anzahl der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte
@@ -364,10 +325,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         public int Count => _dynProps.Count;
 
-        /// <summary>
-        /// Gibt an, ob das <see cref="CsvRecordWrapper"/>-Objekt schreibgeschützt ist. (Immer false.)
-        /// </summary>
-        bool ICollection<object?>.IsReadOnly => false;
+
 
 
         /// <summary>
@@ -379,33 +337,45 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <returns>Rückgabewert der bei <paramref name="index"/> registrierten <see cref="CsvProperty"/>.</returns>
         /// <exception cref = "InvalidOperationException" > Der Indexer wurde aufgerufen, bevor dem <see cref= "CsvRecordWrapper" />
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="Count"/>.</exception>
-        /// <exception cref="InvalidCastException">Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
-        /// diesem Index registrierten Property entspricht.</exception>
-        /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para></para>
+        /// <paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="Count"/>.</exception>
+        /// <exception cref="InvalidCastException">
+        /// <para>
+        /// Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
+        /// diesem Index registrierten Property entspricht
+        /// </para>
+        /// <para>- oder -</para>
+        /// <para>
+        /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
-        /// Ausnahme wirft.</exception>
+        /// Ausnahme wirft.
+        /// </para></exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public object? this[int index]
         {
             get
             {
-                if (this._record is null)
+                if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.NoCsvRecord);
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
                 }
 
-                return _dynProps[index].GetValue(this._record);
+                return _dynProps[index].GetValue(this.Record);
             }
+
             set
             {
-                if (this._record is null)
+                if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.NoCsvRecord);
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
                 }
 
-                 _dynProps[index].SetValue(this._record, value);
+                _dynProps[index].SetValue(this.Record, value);
             }
         }
+
 
         /// <summary>
         /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
@@ -415,23 +385,29 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Vergleich erfolgt case-sensitiv.</param>
         /// <returns>Rückgabewert der registrierten <see cref="CsvProperty"/>, deren Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/>
         /// entspricht. Der Vergleich ist case-sensitiv.</returns>
-        /// <exception cref = "InvalidOperationException" > Der Indexer wurde aufgerufen, bevor dem <see cref= "CsvRecordWrapper"/> ein <see cref="CsvRecord"/>-Objekt
-        /// zugewiesen wurde.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Es wurde unter den bei <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Eigenschaften kein
         /// <see cref="CsvProperty"/>-Objekt gefunden, dessen Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/> entspricht.</exception>
-        /// <exception cref="InvalidCastException">Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
-        /// diesem Index registrierten Property entspricht.</exception>
-        /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// <exception cref="InvalidCastException">
+        /// <para>
+        /// Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
+        /// diesem Index registrierten Property entspricht
+        /// </para>
+        /// <para>- oder -</para>
+        /// <para>
+        /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
-        /// Ausnahme wirft.</exception>
+        /// Ausnahme wirft.
+        /// </para></exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public object? this[string propertyName]
         {
             get
             {
-                if (this._record is null)
+                if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.NoCsvRecord);
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
                 }
 
                 if (propertyName is null)
@@ -441,7 +417,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                 if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
                 {
-                    return prop.GetValue(this._record);
+                    return prop.GetValue(this.Record);
                 }
                 else
                 {
@@ -451,9 +427,9 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             set
             {
-                if (this._record is null)
+                if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.NoCsvRecord);
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
                 }
 
                 if (propertyName is null)
@@ -464,7 +440,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                 if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
                 {
-                    prop.SetValue(this._record, value);
+                    prop.SetValue(this.Record, value);
                 }
                 else
                 {
@@ -475,22 +451,28 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
-        /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;object?&gt;</see> zurück, mit dem die Rückgabewerte der 
-        /// dynamisch implementierten Eigenschaften durchlaufen werden können. Die Reihenfolge
+        /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, object?&gt;&gt;</see> zurück, mit dem die Rückgabewerte der 
+        /// dynamisch implementierten Eigenschaften durchlaufen werden. Die Reihenfolge
         /// entspricht der Reihenfolge, in der die
         /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
         /// </summary>
-        /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;object?&gt;</see>.</returns>
-        /// <exception cref="InvalidOperationException">Die Methode wurde aufgerufen, bevor dem <see cref="CsvRecordWrapper"/>
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
-        /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, object?&gt;&gt;</see>.</returns>
+        /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.</exception>
-        public IEnumerator<object?> GetEnumerator()
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
+        public IEnumerator<KeyValuePair<string, object?>> GetEnumerator()
         {
-            for (int i = 0; i < this.Count; i++)
+            if (Record is null)
             {
-                yield return this[i];
+                throw new InvalidOperationException(Res.CsvRecordIsNull);
+            }
+
+
+            foreach (var prop in this._dynProps)
+            {
+                yield return new KeyValuePair<string, object?>(prop.PropertyName, prop.GetValue(Record));
             }
         }
 
@@ -502,114 +484,10 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
         /// </summary>
         /// <returns>Ein <see cref="IEnumerator"/>.</returns>
-        /// <exception cref="InvalidOperationException">Die Methode wurde aufgerufen, bevor dem <see cref="CsvRecordWrapper"/>
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
         /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.</exception>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-
-        /// <summary>
-        /// Gibt den nullbasierten Index des ersten Vorkommens von <paramref name="item"/> unter den Rückgabewerten
-        /// der im <see cref="CsvRecordWrapper"/>-Wrapper registrierten dynamischen Eigenschaften zurück oder
-        /// -1, wenn <paramref name="item"/> nicht gefunden wurde.
-        /// </summary>
-        /// <param name="item">Das Objekt, dessen Index ermittelt wird.</param>
-        /// <returns>Der nullbasierte Index, an dem <paramref name="item"/> unter den Rückgabewerten
-        /// der im <see cref="CsvRecordWrapper"/>-Wrapper registrierten dynamischen Eigenschaften gefunden wurde
-        /// oder -1, wenn <paramref name="item"/> nicht gefunden wurde.</returns>
-        /// <exception cref="InvalidOperationException">Die Methode wurde aufgerufen, bevor dem <see cref="CsvRecordWrapper"/>
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
-        public int IndexOf(object? item)
-        {
-            for (int i = 0; i < Count; i++)
-            {
-                if (this[i] == item)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-
-        /// <summary>
-        /// Untersucht, ob <paramref name="item"/> unter den Rückgabewerten
-        /// der im <see cref="CsvRecordWrapper"/>-Wrapper registrierten dynamischen Eigenschaften existiert.
-        /// </summary>
-        /// <param name="item">Das Objekt, dessen Vorhandensein überprüft wird.</param>
-        /// <returns>True, wenn <paramref name="item"/> unter den Rückgabewerten
-        /// der im <see cref="CsvRecordWrapper"/>-Wrapper registrierten dynamischen Eigenschaften gefunden wurde.</returns>
-        /// <exception cref="InvalidOperationException">Die Methode wurde aufgerufen, bevor dem <see cref="CsvRecordWrapper"/>
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
-        public bool Contains(object? item) => IndexOf(item) != -1;
-
-
-        /// <summary>
-        /// Kopiert die Rückgabewerte
-        /// der im <see cref="CsvRecordWrapper"/>-Wrapper registrierten dynamischen Eigenschaften in ein <see cref="object"/>-Array,
-        /// beginnend bei <paramref name="arrayIndex"/>.
-        /// </summary>
-        /// <param name="array">Ein <see cref="object"/>-Array, in das hineinkopiert wird.</param>
-        /// <param name="arrayIndex">Der nullbasierte Index in <paramref name="array"/>, an dem der 
-        /// Kopiervorgang startet.</param>
-        /// <exception cref="InvalidOperationException">Die Methode wurde aufgerufen, bevor dem <see cref="CsvRecordWrapper"/>
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> ist kleiner als 0 oder die Anzahl der zu 
-        /// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende des Zielarrays.</exception>
-        public void CopyTo(object?[] array, int arrayIndex)
-        {
-            if(array is null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
-
-            for (int i = 0; i < Count; i++)
-            {
-                array[arrayIndex + i] = this[i];
-            }
-        }
-
-
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="index">-</param>
-        /// <param name="item">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void IList<object?>.Insert(int index, object? item) => throw new NotSupportedException();
-
-
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="index">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void IList<object?>.RemoveAt(int index) => throw new NotSupportedException();
-
-
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="item">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void ICollection<object?>.Add(object? item) => throw new NotSupportedException();
-
-
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="item">-</param>
-        /// <returns>-</returns>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        bool ICollection<object?>.Remove(object? item) => throw new NotSupportedException();
-
-
-
-
 
 
         /// ////////////////////////////////////////////////////////////////////////

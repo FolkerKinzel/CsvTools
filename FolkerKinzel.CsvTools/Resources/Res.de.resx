@@ -120,16 +120,16 @@
   <data name="BadIdentifier" xml:space="preserve">
     <value>Der Bezeichner ist nicht wohlgefomt.</value>
   </data>
+  <data name="CsvRecordIsNull" xml:space="preserve">
+    <value>CsvRecordWrapper.Record ist NULL.</value>
+  </data>
   <data name="DataTypeNotSupported" xml:space="preserve">
     <value>Der Datentyp des Konverters wird nicht unterstützt.</value>
   </data>
   <data name="InvalidCastNullToValueType" xml:space="preserve">
     <value>NULL kann nicht in einen Werttyp umgewandelt werden.</value>
   </data>
-  <data name="NoCsvRecord" xml:space="preserve">
-    <value>Es ist kein CsvRecord-Objekt zugewiesen. Rufen Sie zuerst 'CsvRecordWrapper.SetRecord(CsvRecord)' auf!</value>
-  </data>
-  <data name="NoNoCurrentDateDafault" xml:space="preserve">
+  <data name="NoCurrentDateDafault" xml:space="preserve">
     <value>Das Flag 'DateTimeStyles.NoCurrentDateDefault' wird nicht unterstützt.</value>
   </data>
   <data name="NotTwice" xml:space="preserve">

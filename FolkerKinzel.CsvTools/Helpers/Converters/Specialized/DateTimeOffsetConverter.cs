@@ -174,7 +174,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
             if ((styles & DateTimeStyles.NoCurrentDateDefault) == DateTimeStyles.NoCurrentDateDefault)
             {
-                throw new ArgumentException(Res.NoNoCurrentDateDafault, nameof(styles));
+                throw new ArgumentException(Res.NoCurrentDateDafault, nameof(styles));
             }
 
 

@@ -47,15 +47,14 @@
     <Preliminary>False</Preliminary>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <NamespaceSummaries>
-      <NamespaceSummaryItem name="(global)" isDocumented="False">Enthält Datentyp-Konverter, die von der Klasse CsvProperty verwendet werden, um gemeinsam mit der Klasse CsvRecordWrapper typsicher auf CSV-Daten zugreifen zu können.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Klassen zum Lesen und Schreiben von CSV-Dateien.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Erweiterungsmethoden, die bei der Arbeit mit CSV-Dateien hilfreich sind.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Klassen, die den Zugriff auf CSV-Daten erleichtern.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Klassen, die Typumwandlungen durchführen.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers (Group)" isGroup="True" isDocumented="True">Klassen, die den Zugriff auf CSV-Daten erleichtern.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters (Group)" isGroup="True" isDocumented="True">Klassen, die Typumwandlungen durchführen.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters.Specialized" isDocumented="True">Veröffentlicht einige konkrete Implementierungen des Interfaces ICsvTypeConverter, um die Konvertierung an spezielle Umstände anpassen zu können. (Für gewöhnliche Aufgaben sollten Sie ICsvTypeConverter-Objekte mit der Klasse CsvConverterFactory initialisieren.)</NamespaceSummaryItem>
-    </NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" />
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Klassen zum Lesen und Schreiben von CSV-Dateien.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Erweiterungsmethoden, die bei der Arbeit mit CSV-Dateien hilfreich sind.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Klassen, die den Zugriff auf CSV-Daten erleichtern.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Klassen, die Typumwandlungen durchführen.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers (Group)" isGroup="True" isDocumented="True">Klassen, die den Zugriff auf CSV-Daten erleichtern.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters (Group)" isGroup="True" isDocumented="True">Klassen, die Typumwandlungen durchführen.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters.Specialized" isDocumented="True">Veröffentlicht einige konkrete Implementierungen des Interfaces ICsvTypeConverter, um die Konvertierung an spezielle Umstände anpassen zu können. (Für gewöhnliche Aufgaben sollten Sie ICsvTypeConverter-Objekte mit der Klasse CsvConverterFactory initialisieren.)</NamespaceSummaryItem></NamespaceSummaries>
     <NamingMethod>Guid</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CopyrightText>Copyright &amp;#169%3b 2020 Folker Kinzel</CopyrightText>
