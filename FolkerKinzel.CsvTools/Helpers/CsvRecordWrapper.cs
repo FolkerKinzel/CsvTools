@@ -39,7 +39,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// <item><see cref="RemoveProperty(string)"/></item>
     /// <item><see cref="RemovePropertyAt(int)"/></item>
     /// </list>
-    /// <para>Mit <see cref="ContainsProperty(string)"/> können Sie überprüfen, ob ein <see cref="CsvProperty"/>-Objekt mit dem angegebenen Namen
+    /// <para>Mit <see cref="Contains(string)"/> können Sie überprüfen, ob ein <see cref="CsvProperty"/>-Objekt mit dem angegebenen Namen
     /// bereits registriert ist.</para>
     /// <para>
     /// Auf die Indexer <see cref="this[int]"/> und <see cref="this[string]"/> kann zwar auch zugegriffen werden, wenn die 
@@ -100,7 +100,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <param name="property">Die anzufügende <see cref="CsvProperty"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="property"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvProperty"/> mit demselben
-        /// <see cref="CsvProperty.PropertyName"/> enthalten.</exception>
+        /// <see cref="CsvProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
         public void AddProperty(CsvProperty property)
         {
             if (property is null)
@@ -143,7 +143,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
         /// größer als <see cref="Count"/>.</exception>
         /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvProperty"/> mit demselben
-        /// <see cref="CsvProperty.PropertyName"/> enthalten.</exception>
+        /// <see cref="CsvProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
         public void InsertProperty(int index, CsvProperty property)
         {
             if (property is null)
@@ -167,7 +167,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
         /// größer oder gleich <see cref="Count"/>.</exception>
         /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvProperty"/> mit demselben
-        /// <see cref="CsvProperty.PropertyName"/> enthalten.</exception>
+        /// <see cref="CsvProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
         public void ReplacePropertyAt(int index, CsvProperty property)
         {
             if (property is null)
@@ -190,7 +190,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="ArgumentException">Es ist keine Eigenschaft unter der Bezeichnung <paramref name="propertyName"/>
         /// registriert - oder - in der Auflistung der registrierten Eigenschaften befindet sich bereits ein 
         /// <see cref="CsvProperty"/>-Objekt dessen <see cref="CsvProperty.PropertyName"/>-Eigenschaft identisch
-        /// mit der von <paramref name="property"/> ist.</exception>
+        /// mit der von <paramref name="property"/> ist. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
         public void ReplaceProperty(string propertyName, CsvProperty property)
         {
             if (property is null)
@@ -198,7 +198,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 throw new ArgumentNullException(nameof(property));
             }
 
-            if (ContainsProperty(propertyName))
+            if (Contains(propertyName))
             {
                 int index = _dynProps.IndexOf(_dynProps[propertyName]);
                 _dynProps[index] = property;
@@ -217,7 +217,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <see cref="CsvProperty"/>.</param>
         /// <returns>True, wenn ein <see cref="CsvProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
         /// angegebenen Namen registriert ist.</returns>
-        public bool ContainsProperty(string propertyName)
+        public bool Contains(string propertyName)
         {
             if (propertyName is null)
             {
@@ -242,7 +242,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="InvalidCastException"><paramref name="value"/> ist nicht vom Datentyp der registrierten
         /// Property.</exception>
         /// <exception cref="Exception">Es wurde versucht, auf eine nicht registrierte Property zuzugreifen.</exception>
-        ///  <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        ///  <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
@@ -278,7 +278,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.</exception>
-        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public override bool TryGetMember(GetMemberBinder binder, out object? result)
         {
@@ -351,7 +351,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.
         /// </para></exception>
-        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public object? this[int index]
         {
@@ -399,7 +399,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.
         /// </para></exception>
-        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public object? this[string propertyName]
         {
@@ -451,6 +451,24 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
+        /// Gibt eine Kopie der in <see cref="CsvRecordWrapper"/> gespeicherten Eigenschaftsnamen zurück.
+        /// </summary>
+        public IList<string> Keys => _dynProps.Select(x => x.PropertyName).ToArray();
+
+
+
+        /// <summary>
+        /// Gibt eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten zurück.
+        /// </summary>
+        /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+        /// Ausnahme wirft.</exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
+        public IList<object?> Values => this.Select(x => x.Value).ToArray();
+
+
+        /// <summary>
         /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, object?&gt;&gt;</see> zurück, mit dem die Rückgabewerte der 
         /// dynamisch implementierten Eigenschaften durchlaufen werden. Die Reihenfolge
         /// entspricht der Reihenfolge, in der die
@@ -460,7 +478,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.</exception>
-        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen ohne dass diesem
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         public IEnumerator<KeyValuePair<string, object?>> GetEnumerator()
         {
@@ -484,9 +502,11 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
         /// </summary>
         /// <returns>Ein <see cref="IEnumerator"/>.</returns>
-        /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
         /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
         /// Ausnahme wirft.</exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 

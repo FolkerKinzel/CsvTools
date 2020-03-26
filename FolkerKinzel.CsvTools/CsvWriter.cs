@@ -186,7 +186,8 @@ namespace FolkerKinzel.CsvTools
 
         /// <summary>
         /// Der in die Datei zu schreibende Datensatz. Füllen Sie das <see cref="CsvRecord"/>-Objekt mit Daten und rufen Sie
-        /// anschließend <see cref="WriteRecord"/> auf, um diese Daten in die Datei zu schreiben.
+        /// anschließend <see cref="WriteRecord"/> auf, um diese Daten in die Datei zu schreiben. <see cref="CsvWriter"/> leert
+        /// <see cref="Record"/> nach jedem Schreibvorgang.
         /// </summary>
         public CsvRecord Record { get; }
 

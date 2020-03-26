@@ -43,33 +43,29 @@ namespace FolkerKinzel.CsvTools.Tests
         }
 
 
-        //[TestMethod()]
-        //public void CsvReaderTest2()
-        //{
-            
+        [TestMethod()]
+        public void CsvReaderTest2()
+        { 
 
-            
+            foreach (var file in Directory.GetFiles(Path.Combine(Directory.GetParent(TestContext.TestRunDirectory).FullName, "Maxl")).Where(x => StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(x), ".CSV")))
+            {
+                var Reader = new CsvReader(file, options: CsvOptions.None);
 
+                foreach (var record in Reader.Read())
+                {
+                    StringBuilder sb = new StringBuilder();
 
-        //    foreach(var file in Directory.GetFiles(Path.Combine(Directory.GetParent(TestContext.TestRunDirectory).FullName, "Maxl")).Where(x => StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(x), ".CSV")))
-        //    {
-        //        var Reader = new CsvReader(file, options: CsvOptions.None);
+                    foreach (var item in record)
+                    {
+                        sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
+                    }
 
-        //        foreach (var record in Reader.Read())
-        //        {
-        //            StringBuilder sb = new StringBuilder();
+                    File.WriteAllText(file + ".txt", sb.ToString());
 
-        //            foreach (var item in record)
-        //            {
-        //                sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
-        //            }
-
-        //            File.WriteAllText(file + ".txt", sb.ToString());
-
-        //            break;
-        //        }
-        //    }
-        //}
+                    break;
+                }
+            }
+        }
 
     }
 }

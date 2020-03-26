@@ -205,11 +205,11 @@ namespace FolkerKinzel.CsvTools
         }
 
         /// <summary>
-        /// Ruft den Wert ab, der dem angegebenen Schlüssel zugeordnet ist, oder legt diesen fest.
+        /// Ruft den Wert ab, der dem angegebenen Spaltennamen der CSV-Datei zugeordnet ist, oder legt diesen fest.
         /// </summary>
-        /// <param name="key">Der Schlüssel des abzurufenden oder festzulegenden Werts.</param>
+        /// <param name="key">Der Spaltenname der CSV-Datei.</param>
         /// <returns>Der dem angegebenen Schlüssel zugeordnete Wert.</returns>
-        /// <exception cref="KeyNotFoundException">Der mit <paramref name="key"/> angegebene Schlüssel existiert nicht.</exception>
+        /// <exception cref="KeyNotFoundException">Der mit <paramref name="key"/> angegebene Spaltenname existiert nicht.</exception>
         /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
         public string? this[string key]
         {
@@ -236,10 +236,10 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         public ReadOnlyCollection<string> Keys => _keys;
 
-        
+
 
         /// <summary>
-        /// Gibt die in <see cref="CsvRecord"/> gespeicherten Daten als Collection zurück. Die 
+        /// Gibt die <see cref="String"/>-Collection der in <see cref="CsvRecord"/> gespeicherten Daten zurück. Die 
         /// Werte können verändert werden.
         /// </summary>
         public IList<string?> Values => _values;
@@ -349,25 +349,25 @@ namespace FolkerKinzel.CsvTools
         
 
 
-        /// <summary>
-        /// Untersucht, ob der <see cref="string"/>&#160;<paramref name="item"/> den Inhalt einer Datenspalte in <see cref="CsvRecord"/> darstellt.
-        /// </summary>
-        /// <param name="item">Der zu suchende <see cref="string"/>.</param>
-        /// <returns>True, wenn <paramref name="item"/> den Inhalt einer Datenspalte in <see cref="CsvRecord"/> darstellt.</returns>
-        public bool Contains(string? item) => Array.IndexOf(_values, item) >= 0;
+        ///// <summary>
+        ///// Untersucht, ob der <see cref="string"/>&#160;<paramref name="item"/> den Inhalt einer Datenspalte in <see cref="CsvRecord"/> darstellt.
+        ///// </summary>
+        ///// <param name="item">Der zu suchende <see cref="string"/>.</param>
+        ///// <returns>True, wenn <paramref name="item"/> den Inhalt einer Datenspalte in <see cref="CsvRecord"/> darstellt.</returns>
+        //public bool Contains(string? item) => Array.IndexOf(_values, item) >= 0;
 
 
-        /// <summary>
-        /// Untersucht, ob der Inhalt der Datenspalte mit dem Namen von <paramref name="key"/> dem Wert von <paramref name="value"/>
-        /// entspricht.
-        /// </summary>
-        /// <param name="key">Der Spaltenname der zu vergelichenden Datenspalte.</param>
-        /// <param name="value">Der zu vergleichende <see cref="string"/>.</param>
-        /// <returns>True, wenn der Inhalt der Datenspalte mit dem Namen von <paramref name="key"/> dem Wert von <paramref name="value"/>
-        /// entspricht.</returns>
-        /// <exception cref="KeyNotFoundException">Der mit <paramref name="key"/> angegebene Schlüssel existiert nicht.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
-        public bool Contains(string key, string? value) => this[key] == value;
+        ///// <summary>
+        ///// Untersucht, ob der Inhalt der Datenspalte mit dem Namen von <paramref name="key"/> dem Wert von <paramref name="value"/>
+        ///// entspricht.
+        ///// </summary>
+        ///// <param name="key">Der Spaltenname der zu vergelichenden Datenspalte.</param>
+        ///// <param name="value">Der zu vergleichende <see cref="string"/>.</param>
+        ///// <returns>True, wenn der Inhalt der Datenspalte mit dem Namen von <paramref name="key"/> dem Wert von <paramref name="value"/>
+        ///// entspricht.</returns>
+        ///// <exception cref="KeyNotFoundException">Der mit <paramref name="key"/> angegebene Schlüssel existiert nicht.</exception>
+        ///// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
+        //public bool Contains(string key, string? value) => this[key] == value;
 
 
         
@@ -382,54 +382,54 @@ namespace FolkerKinzel.CsvTools
         public bool ContainsKey(string key) => _lookupDictionary.ContainsKey(key);
 
 
-        /// <summary>
-        /// Kopiert den Inhalt sämtlicher Spalten des <see cref="CsvRecord"/>-Objekts in ein <see cref="string"/>-Array,
-        /// beginnend bei dem nullbasierten Index <paramref name="arrayIndex"/>.
-        /// </summary>
-        /// <param name="array">Das Array, in das hineinkopiert wird.</param>
-        /// <param name="arrayIndex">Der Index in <paramref name="array"/>, bei dem der Kopiervorgang startet.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> ist kleiner als 0 oder die Anzahl der zu 
-        /// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende
-        /// des Zielarrays.</exception>
-        /// <exception cref="ArgumentException"><paramref name="array"/> ist mehrdimensional.</exception>
-        public void CopyTo(string?[] array, int arrayIndex) => _values.CopyTo(array, arrayIndex);
+        ///// <summary>
+        ///// Kopiert den Inhalt sämtlicher Spalten des <see cref="CsvRecord"/>-Objekts in ein <see cref="string"/>-Array,
+        ///// beginnend bei dem nullbasierten Index <paramref name="arrayIndex"/>.
+        ///// </summary>
+        ///// <param name="array">Das Array, in das hineinkopiert wird.</param>
+        ///// <param name="arrayIndex">Der Index in <paramref name="array"/>, bei dem der Kopiervorgang startet.</param>
+        ///// <exception cref="ArgumentNullException"><paramref name="array"/> ist <c>null</c>.</exception>
+        ///// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> ist kleiner als 0 oder die Anzahl der zu 
+        ///// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende
+        ///// des Zielarrays.</exception>
+        ///// <exception cref="ArgumentException"><paramref name="array"/> ist mehrdimensional.</exception>
+        //public void CopyTo(string?[] array, int arrayIndex) => _values.CopyTo(array, arrayIndex);
 
 
-        /// <summary>
-        /// Kopiert den Inhalt sämtlicher Spalten des <see cref="CsvRecord"/>-Objekts in ein <see cref="KeyValuePair{TKey, TValue}"/>-Array,
-        /// beginnend bei dem nullbasierten Index <paramref name="arrayIndex"/>. Ein <see cref="KeyValuePair{TKey, TValue}"/> enthält dabei
-        /// den Spaltennamen als <see cref="KeyValuePair{TKey, TValue}.Key"/> und den Inhalt der Spalte als <see cref="KeyValuePair{TKey, TValue}.Value"/>.
-        /// </summary>
-        /// <param name="array">Das Array, in das hineinkopiert wird.</param>
-        /// <param name="arrayIndex">Der Index in <paramref name="array"/>, bei dem der Kopiervorgang startet.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="array"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> ist kleiner als 0 oder die Anzahl der zu 
-        /// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende
-        /// des Zielarrays.</exception>
-        public void CopyTo(KeyValuePair<string, string?>[] array, int arrayIndex)
-        {
-            if (array is null)
-            {
-                throw new ArgumentNullException(nameof(array));
-            }
+        ///// <summary>
+        ///// Kopiert den Inhalt sämtlicher Spalten des <see cref="CsvRecord"/>-Objekts in ein <see cref="KeyValuePair{TKey, TValue}"/>-Array,
+        ///// beginnend bei dem nullbasierten Index <paramref name="arrayIndex"/>. Ein <see cref="KeyValuePair{TKey, TValue}"/> enthält dabei
+        ///// den Spaltennamen als <see cref="KeyValuePair{TKey, TValue}.Key"/> und den Inhalt der Spalte als <see cref="KeyValuePair{TKey, TValue}.Value"/>.
+        ///// </summary>
+        ///// <param name="array">Das Array, in das hineinkopiert wird.</param>
+        ///// <param name="arrayIndex">Der Index in <paramref name="array"/>, bei dem der Kopiervorgang startet.</param>
+        ///// <exception cref="ArgumentNullException"><paramref name="array"/> ist <c>null</c>.</exception>
+        ///// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> ist kleiner als 0 oder die Anzahl der zu 
+        ///// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende
+        ///// des Zielarrays.</exception>
+        //public void CopyTo(KeyValuePair<string, string?>[] array, int arrayIndex)
+        //{
+        //    if (array is null)
+        //    {
+        //        throw new ArgumentNullException(nameof(array));
+        //    }
 
 
-            for (int i = 0; i < _keys.Count; i++)
-            {
-                array[arrayIndex + i] = new KeyValuePair<string, string?>(_keys[i], _values[i]);
-            }
-        }
+        //    for (int i = 0; i < _keys.Count; i++)
+        //    {
+        //        array[arrayIndex + i] = new KeyValuePair<string, string?>(_keys[i], _values[i]);
+        //    }
+        //}
 
-        /// <summary>
-        /// Gibt den nullbasierten Index des ersten Vorkommens von <paramref name="item"/> unter 
-        /// den in <see cref="CsvRecord"/> gespeicherten Daten zurück oder -1, wenn <paramref name="item"/>
-        /// dort nicht gefunden wird.
-        /// </summary>
-        /// <param name="item">Der zu suchende <see cref="string"/> oder <c>null</c>.</param>
-        /// <returns>Der nullbasierte Index des ersten Vorkommens von <paramref name="item"/> unter den gespeicherten Daten
-        /// oder -1, wenn <paramref name="item"/> dort nicht existiert.</returns>
-        public int IndexOf(string? item) => Array.IndexOf(_values, item);
+        ///// <summary>
+        ///// Gibt den nullbasierten Index des ersten Vorkommens von <paramref name="item"/> unter 
+        ///// den in <see cref="CsvRecord"/> gespeicherten Daten zurück oder -1, wenn <paramref name="item"/>
+        ///// dort nicht gefunden wird.
+        ///// </summary>
+        ///// <param name="item">Der zu suchende <see cref="string"/> oder <c>null</c>.</param>
+        ///// <returns>Der nullbasierte Index des ersten Vorkommens von <paramref name="item"/> unter den gespeicherten Daten
+        ///// oder -1, wenn <paramref name="item"/> dort nicht existiert.</returns>
+        //public int IndexOf(string? item) => Array.IndexOf(_values, item);
 
 
         /// <summary>

@@ -13,8 +13,8 @@ namespace FolkerKinzel.CsvTools
 {
     /// <summary>
     /// Bietet schreibgeschützten Vorwärtszugriff auf die Datensätze einer CSV-Datei. (Das bedeutet, dass der <see cref="CsvReader"/> die Datei nur einmal vorwärts
-    /// lesen kann.) Da die Ergebnisse zwischengespeichert werden können, ist es möglich, eine Linq-Abfrage auf der CSV-Datei
-    /// auszuführen.
+    /// lesen kann.) Da die Ergebnisse zwischengespeichert werden, ist es möglich, eine Linq-Abfrage auf der CSV-Datei
+    /// auszuführen. Wenn Linq nicht benötigt wird, kann das Caching über <see cref="CsvOptions.DisableCaching"/> deaktiviert werden.
     /// </summary>
     /// <remarks>Die Methode <see cref="Read"/> gibt einen <see cref="IEnumerator{T}"/> zurück, mit dem Sie über die Datensätze der CSV-Datei iterieren
     /// können, die in Form von <see cref="CsvRecord"/>-Objekten zurückgegeben werden. Die Klasse <see cref="Helpers.CsvRecordWrapper"/> bietet die
@@ -36,8 +36,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="fieldSeparator">Das Feldtrennzeichen, das in der CSV-Datei Verwendung findet.</param>
         /// <param name="hasHeaderRow">True, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
         /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
-        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c>, um diese automatisch
-        /// bestimmen zu lassen.</param>
+        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
@@ -248,8 +247,7 @@ namespace FolkerKinzel.CsvTools
         /// Initialisiert einen <see cref="StreamReader"/>.
         /// </summary>
         /// <param name="fileName">Dateipfad.</param>
-        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c>, um diese automatisch
-        /// bestimmen zu lassen.</param>
+        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <returns>Ein <see cref="StreamReader"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
