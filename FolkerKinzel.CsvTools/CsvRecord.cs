@@ -21,7 +21,7 @@ namespace FolkerKinzel.CsvTools
     /// einer <see cref="DataTable"/> gemappt werden und es können damit auch Typkonvertierungen durchgeführt werden.
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
-    public sealed class CsvRecord : IList<string?>, IDictionary<string, string?>, IEnumerable<KeyValuePair<string, string?>>
+    public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     {
         #region fields
 
@@ -235,27 +235,27 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         public bool IsEmpty => _count == 0 || _arr.All(x => x is null);
 
-        /// <summary>
-        /// Gibt an, ob <see cref="CsvRecord"/> schreibgeschützt ist. (Immer false.)
-        /// </summary>
-        bool ICollection<string?>.IsReadOnly => false;
+        ///// <summary>
+        ///// Gibt an, ob <see cref="CsvRecord"/> schreibgeschützt ist. (Immer false.)
+        ///// </summary>
+        //bool ICollection<string?>.IsReadOnly => false;
 
 
-        /// <summary>
-        /// Gibt an, ob <see cref="CsvRecord"/> schreibgeschützt ist. (Immer false.)
-        /// </summary>
-        bool ICollection<KeyValuePair<string, string?>>.IsReadOnly => false;
+        ///// <summary>
+        ///// Gibt an, ob <see cref="CsvRecord"/> schreibgeschützt ist. (Immer false.)
+        ///// </summary>
+        //bool ICollection<KeyValuePair<string, string?>>.IsReadOnly => false;
 
         /// <summary>
         /// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück.
         /// </summary>
         public ReadOnlyCollection<string> Keys => _keys;
 
-        /// <summary>
-        /// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück. Die 
-        /// Collection ist readonly.
-        /// </summary>
-        ICollection<string> IDictionary<string, string?>.Keys => Keys;
+        ///// <summary>
+        ///// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück. Die 
+        ///// Collection ist readonly.
+        ///// </summary>
+        //ICollection<string> IDictionary<string, string?>.Keys => Keys;
 
         /// <summary>
         /// Gibt die in <see cref="CsvRecord"/> gespeicherten Daten als Collection zurück. Die 
@@ -264,14 +264,26 @@ namespace FolkerKinzel.CsvTools
         public ICollection<string?> Values => _arr;
 
 
-        ///// <summary>
-        ///// Gibt eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see> zurück.
-        ///// </summary>
-        ///// <returns>Eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see>.</returns>
-        //public Dictionary<string, string?> ToDictionary()
-        //{
-        //    return new Dictionary<string, string?>(this);
-        //}
+        /// <summary>
+        /// Gibt eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see> zurück, das
+        /// für den Schlüsselvergleich denselben <see cref="StringComparer"/> verwendet, mit dem <see cref="CsvRecord"/> erstellt wurde.
+        /// </summary>
+        /// <returns>Eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see>.</returns>
+        public Dictionary<string, string?> ToDictionary()
+        {
+#if NET40
+            var dic = new Dictionary<string, string?>(this.Count, this._dic.Comparer);
+
+            foreach (var kvp in this)
+            {
+                dic.Add(kvp.Key, kvp.Value);
+            }
+
+            return dic;
+#else
+            return new Dictionary<string, string?>(this, this._dic.Comparer);
+#endif
+        }
 
         /// <summary>
         /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zu selben CSV-Datei
@@ -284,7 +296,7 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         internal IEqualityComparer<string> Comparer => _dic.Comparer;
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Setzt alle Datenfelder von <see cref="CsvRecord"/> auf <c>null</c>.
@@ -397,16 +409,16 @@ namespace FolkerKinzel.CsvTools
         public bool Contains(string key, string? value) => this[key] == value;
 
 
-        /// <summary>
-        /// Untersucht, ob der Inhalt der Datenspalte mit dem Namen <see cref="KeyValuePair{TKey, TValue}.Key"/>&#160;<see cref="KeyValuePair{TKey, TValue}.Value"/>
-        /// entspricht.
-        /// </summary>
-        /// <param name="item">Ein <see cref="KeyValuePair{TKey, TValue}"/>, das den Namen der zu überprüfenden Datenspalte und den zu vergleichenden Wert
-        /// enthält.</param>
-        /// <returns>True, wenn der Inhalt der Datenspalte mit dem Namen <see cref="KeyValuePair{TKey, TValue}.Key"/>&#160;<see cref="KeyValuePair{TKey, TValue}.Value"/>
-        /// entspricht.</returns>
-        /// <exception cref="KeyNotFoundException">Der mit <see cref="KeyValuePair{TKey, TValue}.Key"/> angegebene Schlüssel existiert nicht.</exception>
-        bool ICollection<KeyValuePair<string, string?>>.Contains(KeyValuePair<string, string?> item) => Contains(item.Key, item.Value);
+        ///// <summary>
+        ///// Untersucht, ob der Inhalt der Datenspalte mit dem Namen <see cref="KeyValuePair{TKey, TValue}.Key"/>&#160;<see cref="KeyValuePair{TKey, TValue}.Value"/>
+        ///// entspricht.
+        ///// </summary>
+        ///// <param name="item">Ein <see cref="KeyValuePair{TKey, TValue}"/>, das den Namen der zu überprüfenden Datenspalte und den zu vergleichenden Wert
+        ///// enthält.</param>
+        ///// <returns>True, wenn der Inhalt der Datenspalte mit dem Namen <see cref="KeyValuePair{TKey, TValue}.Key"/>&#160;<see cref="KeyValuePair{TKey, TValue}.Value"/>
+        ///// entspricht.</returns>
+        ///// <exception cref="KeyNotFoundException">Der mit <see cref="KeyValuePair{TKey, TValue}.Key"/> angegebene Schlüssel existiert nicht.</exception>
+        //bool ICollection<KeyValuePair<string, string?>>.Contains(KeyValuePair<string, string?> item) => Contains(item.Key, item.Value);
 
 
         /// <summary>
@@ -480,12 +492,12 @@ namespace FolkerKinzel.CsvTools
 
 
 
-        /// <summary>
-        /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;string?&gt;</see> zurück, mit dem die Felder des <see cref="CsvRecord"/>-Objekts
-        /// durchlaufen werden.
-        /// </summary>
-        /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;string?&gt;</see>.</returns>
-        IEnumerator<string?> IEnumerable<string?>.GetEnumerator() => ((IList<string?>)_arr).GetEnumerator();
+        ///// <summary>
+        ///// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;string?&gt;</see> zurück, mit dem die Felder des <see cref="CsvRecord"/>-Objekts
+        ///// durchlaufen werden.
+        ///// </summary>
+        ///// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;string?&gt;</see>.</returns>
+        //IEnumerator<string?> IEnumerable<string?>.GetEnumerator() => ((IList<string?>)_arr).GetEnumerator();
 
 
         /// <summary>
@@ -540,66 +552,66 @@ namespace FolkerKinzel.CsvTools
         }
 
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="item">-</param>
-        /// <returns>-</returns>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        bool ICollection<string?>.Remove(string? item) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="item">-</param>
+        ///// <returns>-</returns>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //bool ICollection<string?>.Remove(string? item) => throw new NotSupportedException();
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="key">-</param>
-        /// <returns>-</returns>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        bool IDictionary<string, string?>.Remove(string key) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="key">-</param>
+        ///// <returns>-</returns>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //bool IDictionary<string, string?>.Remove(string key) => throw new NotSupportedException();
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="item">-</param>
-        /// <returns>-</returns>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        bool ICollection<KeyValuePair<string, string?>>.Remove(KeyValuePair<string, string?> item) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="item">-</param>
+        ///// <returns>-</returns>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //bool ICollection<KeyValuePair<string, string?>>.Remove(KeyValuePair<string, string?> item) => throw new NotSupportedException();
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="index">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void IList<string?>.RemoveAt(int index) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="index">-</param>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //void IList<string?>.RemoveAt(int index) => throw new NotSupportedException();
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="item">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void ICollection<string?>.Add(string? item) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="item">-</param>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //void ICollection<string?>.Add(string? item) => throw new NotSupportedException();
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="key">-</param>
-        /// <param name="value">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void IDictionary<string, string?>.Add(string key, string? value) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="key">-</param>
+        ///// <param name="value">-</param>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //void IDictionary<string, string?>.Add(string key, string? value) => throw new NotSupportedException();
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="item">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void ICollection<KeyValuePair<string, string?>>.Add(KeyValuePair<string, string?> item) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="item">-</param>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //void ICollection<KeyValuePair<string, string?>>.Add(KeyValuePair<string, string?> item) => throw new NotSupportedException();
 
-        /// <summary>
-        /// Not Supported.
-        /// </summary>
-        /// <param name="index">-</param>
-        /// <param name="item">-</param>
-        /// <exception cref="NotSupportedException">Not Supported.</exception>
-        void IList<string?>.Insert(int index, string? item) => throw new NotSupportedException();
+        ///// <summary>
+        ///// Not Supported.
+        ///// </summary>
+        ///// <param name="index">-</param>
+        ///// <param name="item">-</param>
+        ///// <exception cref="NotSupportedException">Not Supported.</exception>
+        //void IList<string?>.Insert(int index, string? item) => throw new NotSupportedException();
 
 
 
