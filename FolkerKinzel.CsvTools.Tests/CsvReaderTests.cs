@@ -4,12 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Linq;
+using System.Collections;
 
 namespace FolkerKinzel.CsvTools.Tests
 {
     [TestClass()]
     public class CsvReaderTests
     {
+#pragma warning disable CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+        public TestContext TestContext { get; set; }
+#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+
         [TestMethod()]
         public void CsvReaderTest()
         {
@@ -35,5 +41,37 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             Assert.Fail();
         }
+
+
+        [TestMethod()]
+        public void CsvReaderTest2()
+        {
+            
+
+            
+
+
+            foreach(var file in Directory.GetFiles(Path.Combine(Directory.GetParent(TestContext.TestRunDirectory).FullName, "Maxl")).Where(x => StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(x), ".CSV")))
+            {
+                var Reader = new CsvReader(file);
+
+                foreach (var record in Reader.Read())
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    foreach (var item in record)
+                    {
+                        sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
+                    }
+
+                    File.WriteAllText(file + ".txt", sb.ToString());
+
+                    break;
+                }
+            }
+        }
     }
+
+
+
 }

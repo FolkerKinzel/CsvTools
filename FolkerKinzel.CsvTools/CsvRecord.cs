@@ -21,7 +21,7 @@ namespace FolkerKinzel.CsvTools
     /// einer <see cref="DataTable"/> gemappt werden und es können damit auch Typkonvertierungen durchgeführt werden.
     /// </remarks>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
-    public sealed class CsvRecord : IList<string?>, IDictionary<string, string?>
+    public sealed class CsvRecord : IList<string?>, IDictionary<string, string?>, IEnumerable<KeyValuePair<string, string?>>
     {
         #region fields
 
@@ -263,6 +263,16 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         public ICollection<string?> Values => _arr;
 
+
+        ///// <summary>
+        ///// Gibt eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see> zurück.
+        ///// </summary>
+        ///// <returns>Eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see>.</returns>
+        //public Dictionary<string, string?> ToDictionary()
+        //{
+        //    return new Dictionary<string, string?>(this);
+        //}
+
         /// <summary>
         /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zu selben CSV-Datei
         /// gehören, identisch ist.
@@ -475,24 +485,24 @@ namespace FolkerKinzel.CsvTools
         /// durchlaufen werden.
         /// </summary>
         /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;string?&gt;</see>.</returns>
-        public IEnumerator<string?> GetEnumerator() => ((IList<string?>)_arr).GetEnumerator();
+        IEnumerator<string?> IEnumerable<string?>.GetEnumerator() => ((IList<string?>)_arr).GetEnumerator();
 
 
         /// <summary>
-        /// Gibt einen <see cref="IEnumerator"/> zurück, mit dem die Felder des <see cref="CsvRecord"/>-Objekts
-        /// durchlaufen werden.
+        /// Gibt einen <see cref="IEnumerator"/> zurück, mit dem das <see cref="CsvRecord"/>-Objekt
+        /// durchlaufen wird.
         /// </summary>
         /// <returns>Ein <see cref="IEnumerator"/>.</returns>
-        IEnumerator IEnumerable.GetEnumerator() => _arr.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
         /// <summary>
-        /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see> zurück, mit dem die Felder des 
-        /// <see cref="CsvRecord"/>-Objekts durchlaufen werden. Ein <see cref="KeyValuePair{TKey, TValue}"/> enthält dabei
+        /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see> zurück, mit das 
+        /// <see cref="CsvRecord"/>-Objekts durchlaufen wird. Ein <see cref="KeyValuePair{TKey, TValue}"/> enthält dabei
         /// den Spaltennamen als <see cref="KeyValuePair{TKey, TValue}.Key"/> und den Inhalt der Spalte als <see cref="KeyValuePair{TKey, TValue}.Value"/>.
         /// </summary>
         /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see>.</returns>
-        IEnumerator<KeyValuePair<string, string?>> IEnumerable<KeyValuePair<string, string?>>.GetEnumerator()
+        public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
         {
             foreach (var key in _keys)
             {
