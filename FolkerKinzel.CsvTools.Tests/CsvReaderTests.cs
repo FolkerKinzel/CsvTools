@@ -45,11 +45,13 @@ namespace FolkerKinzel.CsvTools.Tests
 
         [TestMethod()]
         public void CsvReaderTest2()
-        { 
+        {
+            string outDir = Path.Combine(TestContext.TestRunResultsDirectory, "CsvFilesAnalyzed");
+            Directory.CreateDirectory(outDir);
 
-            foreach (var file in Directory.GetFiles(Path.Combine(Directory.GetParent(TestContext.TestRunDirectory).FullName, "Maxl")).Where(x => StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(x), ".CSV")))
+            foreach (var file in TestFiles.GetAll().Where(x => StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(x), ".CSV")))
             {
-                var Reader = new CsvReader(file, options: CsvOptions.None);
+                using var Reader = new CsvReader(file, options: CsvOptions.None);
 
                 foreach (var record in Reader.Read())
                 {
@@ -60,7 +62,7 @@ namespace FolkerKinzel.CsvTools.Tests
                         sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
                     }
 
-                    File.WriteAllText(file + ".txt", sb.ToString());
+                    File.WriteAllText(Path.Combine(outDir, Path.GetFileName(file) + ".txt"), sb.ToString());
 
                     break;
                 }
