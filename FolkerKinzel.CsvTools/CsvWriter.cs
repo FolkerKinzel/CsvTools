@@ -1,10 +1,6 @@
 ﻿using FolkerKinzel.CsvTools.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace FolkerKinzel.CsvTools
@@ -44,7 +40,7 @@ namespace FolkerKinzel.CsvTools
         /// beachten, dass der Vergleich nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
         /// gewählt wurde.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-        /// <param name="enc">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
+        /// <param name="textEncoding">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM. (<see cref="Encoding.UTF8"/>)</param>
         /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
@@ -55,10 +51,10 @@ namespace FolkerKinzel.CsvTools
         /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</para></exception>
         /// <exception cref="IOException">E/A-Fehler.</exception>
         public CsvWriter(
-            string fileName, string[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? enc = null, char fieldSeparator = ',')
+            string fileName, string[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
              : this(columnNames, fieldSeparator, options)
         {
-            _writer = InitStreamWriter(fileName, enc);
+            _writer = InitStreamWriter(fileName, textEncoding);
         }
 
         /// <summary>
@@ -67,17 +63,17 @@ namespace FolkerKinzel.CsvTools
         /// <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
         /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-        /// <param name="enc">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
+        /// <param name="textEncoding">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
         /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">E/A-Fehler.</exception>
         public CsvWriter(
-            string fileName, int columnsCount, CsvOptions options = CsvOptions.Default, Encoding? enc = null, char fieldSeparator = ',')
+            string fileName, int columnsCount, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
              : this(columnsCount, fieldSeparator, options)
         {
-            _writer = InitStreamWriter(fileName, enc);
+            _writer = InitStreamWriter(fileName, textEncoding);
         }
 
         /// <summary>
@@ -317,16 +313,16 @@ namespace FolkerKinzel.CsvTools
         /// dem Namen der zu schreibenden Datei.
         /// </summary>
         /// <param name="fileName">Dateipfad.</param>
-        /// <param name="enc">Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
+        /// <param name="textEncoding">Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
         /// <returns><see cref="StreamWriter"/></returns>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">E/A-Fehler.</exception>
-        private static StreamWriter InitStreamWriter(string fileName, Encoding? enc)
+        private static StreamWriter InitStreamWriter(string fileName, Encoding? textEncoding)
         {
             try
             {
-                return new StreamWriter(fileName, false, enc ?? Encoding.UTF8) // UTF-8-Encoding mit BOM
+                return new StreamWriter(fileName, false, textEncoding ?? Encoding.UTF8) // UTF-8-Encoding mit BOM
                 {
                     NewLine = CsvWriter.NewLine
                 };

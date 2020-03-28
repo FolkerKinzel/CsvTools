@@ -1,9 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FolkerKinzel.CsvTools.Helpers.Converters;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using FolkerKinzel.CsvTools.Helpers.Converters.Intls;
 
 namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
 {

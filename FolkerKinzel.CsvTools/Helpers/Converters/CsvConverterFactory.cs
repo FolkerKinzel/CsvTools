@@ -1,9 +1,7 @@
 ﻿using FolkerKinzel.CsvTools.Helpers.Converters.Intls;
 using FolkerKinzel.CsvTools.Helpers.Converters.Specialized;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 
 namespace FolkerKinzel.CsvTools.Helpers.Converters
 {

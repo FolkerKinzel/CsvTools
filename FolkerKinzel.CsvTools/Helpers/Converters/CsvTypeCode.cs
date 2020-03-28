@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+﻿namespace FolkerKinzel.CsvTools.Helpers.Converters
 {
     /// <summary>
     /// Benannte Konstanten, um den Datentyp eines <see cref="ICsvTypeConverter"/>-Objekts auszuwählen.

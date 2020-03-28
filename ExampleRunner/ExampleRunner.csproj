@@ -7,6 +7,9 @@
     <FileVersion>1.0.5.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

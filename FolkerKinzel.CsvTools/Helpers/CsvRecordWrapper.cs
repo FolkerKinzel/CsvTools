@@ -1,5 +1,4 @@
 ﻿using FolkerKinzel.CsvTools.Extensions;
-using FolkerKinzel.CsvTools.Helpers;
 using FolkerKinzel.CsvTools.Helpers.Converters;
 using FolkerKinzel.CsvTools.Resources;
 using System;
@@ -8,8 +7,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace FolkerKinzel.CsvTools.Helpers
 {

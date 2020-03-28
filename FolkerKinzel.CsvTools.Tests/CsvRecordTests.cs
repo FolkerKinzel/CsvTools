@@ -1,8 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FolkerKinzel.CsvTools;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace FolkerKinzel.CsvTools.Tests
 {

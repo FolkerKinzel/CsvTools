@@ -29,7 +29,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// ist <see cref="AnalyzedLinesMinCount"/>. Wenn die Datei weniger Zeilen hat als <paramref name="analyzedLinesCount"/>
         /// wird sie komplett analysiert. (Sie können <see cref="int.MaxValue"/> angeben, um in jedem Fall die gesamte Datei zu
         /// analysieren.)</param>
-        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
+        /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
@@ -37,13 +37,13 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Parameter für das Lesen der Datei zu finden. Das Ergebnis der Analyse ist also immer nur eine Schätzung, deren
         /// Treffsicherheit mit der Zahl der analysierten Zeilen steigt.</para>
         /// <para>Die Analyse ist zeitaufwändig, da auf die CSV-Datei lesend zugegriffen werden muss.</para></remarks>
-        public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount, Encoding? enc = null)
+        public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount, Encoding? textEncoding = null)
         {
             if (analyzedLinesCount < AnalyzedLinesMinCount) analyzedLinesCount = AnalyzedLinesMinCount;
             
             
             // Suche Feldtrennzeichen:
-            using (var reader = CsvReader.InitializeStreamReader(fileName, enc))
+            using (var reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
             {
                 bool firstLine = true;
 
@@ -152,7 +152,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             }//using
 
-            using (var reader = CsvReader.InitializeStreamReader(fileName, enc))
+            using (var reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
             {
                 bool firstLine = true;
 

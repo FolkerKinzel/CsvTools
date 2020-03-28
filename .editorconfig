@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# CA1825: Vermeiden Sie Arrayzuordnungen mit einer Länge von null.
+dotnet_diagnostic.CA1825.severity = none
+
+# CA1707: Bezeichner dürfen keine Unterstriche enthalten
+dotnet_diagnostic.CA1707.severity = none
+
+# CA1303: Literale nicht als lokalisierte Parameter übergeben
+dotnet_diagnostic.CA1303.severity = none

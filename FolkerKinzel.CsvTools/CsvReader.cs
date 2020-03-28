@@ -1,9 +1,7 @@
 ﻿using FolkerKinzel.CsvTools.Resources;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -36,7 +34,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="fieldSeparator">Das Feldtrennzeichen, das in der CSV-Datei Verwendung findet.</param>
         /// <param name="hasHeaderRow">True, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
         /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
-        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
+        /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
@@ -44,10 +42,10 @@ namespace FolkerKinzel.CsvTools
             string fileName,
             bool hasHeaderRow = true,
             CsvOptions options = CsvOptions.Default,
-            Encoding? enc = null,
+            Encoding? textEncoding = null,
             char fieldSeparator = ',')
         {
-            StreamReader streamReader = InitializeStreamReader(fileName, enc);
+            StreamReader streamReader = InitializeStreamReader(fileName, textEncoding);
 
             this._reader = new CsvStringReader(streamReader, fieldSeparator, (_options & CsvOptions.ThrowOnEmptyLines) != CsvOptions.ThrowOnEmptyLines);
             this._options = options;
@@ -247,16 +245,16 @@ namespace FolkerKinzel.CsvTools
         /// Initialisiert einen <see cref="StreamReader"/>.
         /// </summary>
         /// <param name="fileName">Dateipfad.</param>
-        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
+        /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <returns>Ein <see cref="StreamReader"/>.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
-        internal static StreamReader InitializeStreamReader(string fileName, Encoding? enc)
+        internal static StreamReader InitializeStreamReader(string fileName, Encoding? textEncoding)
         {
             try
             {
-                return new StreamReader(fileName, enc ?? Encoding.UTF8, true);
+                return new StreamReader(fileName, textEncoding ?? Encoding.UTF8, true);
             }
             catch (ArgumentNullException)
             {
