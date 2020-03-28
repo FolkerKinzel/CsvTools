@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         public const int AnalyzedLinesMinCount = 5;
 
-       
+
 
         /// <summary>
         /// Analysiert die CSV-Datei, auf die <paramref name="fileName"/> verweist, und füllt die Eigenschaften des <see cref="CsvAnalyzer"/>-Objekts mit den
@@ -29,6 +29,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// ist <see cref="AnalyzedLinesMinCount"/>. Wenn die Datei weniger Zeilen hat als <paramref name="analyzedLinesCount"/>
         /// wird sie komplett analysiert. (Sie können <see cref="int.MaxValue"/> angeben, um in jedem Fall die gesamte Datei zu
         /// analysieren.)</param>
+        /// <param name="enc">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
@@ -36,15 +37,13 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Parameter für das Lesen der Datei zu finden. Das Ergebnis der Analyse ist also immer nur eine Schätzung, deren
         /// Treffsicherheit mit der Zahl der analysierten Zeilen steigt.</para>
         /// <para>Die Analyse ist zeitaufwändig, da auf die CSV-Datei lesend zugegriffen werden muss.</para></remarks>
-        public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount)
+        public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount, Encoding? enc = null)
         {
             if (analyzedLinesCount < AnalyzedLinesMinCount) analyzedLinesCount = AnalyzedLinesMinCount;
             
-            this.Options = CsvOptions.Default;
-            this.HasHeader = true;
-
+            
             // Suche Feldtrennzeichen:
-            using (var reader = CsvReader.InitializeStreamReader(fileName, null))
+            using (var reader = CsvReader.InitializeStreamReader(fileName, enc))
             {
                 bool firstLine = true;
 
@@ -132,7 +131,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                     }
                 }//for
 
-                this.FieldSeparatorChar = sepChars[0];
+                this.FieldSeparator = sepChars[0];
 
                 int sameOcc = sameOccurrence[0];
                 int probability = firstLineOccurrence[0] * (1 + sameOcc * sameOcc * sameOcc);
@@ -146,21 +145,21 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                     if(newProbability > probability)
                     {
-                        this.FieldSeparatorChar = sepChars[sepCharIndex];
+                        this.FieldSeparator = sepChars[sepCharIndex];
                         probability = newProbability;
                     }
                 }
 
             }//using
 
-            using (var reader = CsvReader.InitializeStreamReader(fileName, null))
+            using (var reader = CsvReader.InitializeStreamReader(fileName, enc))
             {
                 bool firstLine = true;
 
                 int firstLineCount = 0;
                 int currentLineCount = 0;
 
-                using var csvStringReader = new CsvStringReader(reader, FieldSeparatorChar, !Options.IsSet(CsvOptions.ThrowOnEmptyLines));
+                using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.IsSet(CsvOptions.ThrowOnEmptyLines));
 
                 foreach (var row in csvStringReader)
                 {
@@ -170,21 +169,22 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                         List<string> firstLineFields = new List<string>();
 
+                        bool hasHeader = true;
                         bool hasMaybeNoHeader = false;
 
                         foreach (string? s in row)
                         {
                             firstLineCount++;
                       
-                            if(HasHeader)
+                            if(hasHeader)
                             {
-                                // Nach RFC 4180 darf das letzte Feld einer Datenzeile keinen hinter sich kein
+                                // Nach RFC 4180 darf das letzte Feld einer Datenzeile hinter sich kein
                                 // FieldSeparatorChar mehr haben: "The last field in the
                                 // record must not be followed by a comma."
                                 // Schlechte Implementierungen - wie Thunderbird - halten sich aber nicht daran.
                                 if (hasMaybeNoHeader)
                                 {
-                                    this.HasHeader = false;
+                                    hasHeader = false;
                                     this.Options = this.Options.Unset(CsvOptions.TrimColumns);
                                 }
 
@@ -205,10 +205,13 @@ namespace FolkerKinzel.CsvTools.Helpers
                             }
                         }//foreach
 
-                        
+                        if(hasHeader)
+                        {
+                            this.ColumnNames = firstLineFields;
+                        }
 
                         // Prüfe, ob sich zwei Spaltennamen nur durch Groß- und Kleinschreibung unterscheiden:
-                        if(this.HasHeader)
+                        if(hasHeader)
                         {
                             // estimatedLength unterscheidet sich von firstLineCount, wenn nach dem letzten Feld
                             // ein FieldSeparatorChar stand (s.o.)
@@ -255,19 +258,24 @@ namespace FolkerKinzel.CsvTools.Helpers
 
         }//ctor
 
+
         /// <summary>
         /// Das Feldtrennzeichen der CSV-Datei.
         /// </summary>
-        public char FieldSeparatorChar { get; private set; } = ',';
+        public char FieldSeparator { get; private set; } = ',';
 
         /// <summary>
         /// Optionen für das Lesen der CSV-Datei.
         /// </summary>
         public CsvOptions Options { get; private set; } = CsvOptions.Default;
 
+
         /// <summary>
         /// True, wenn die CSV-Datei eine Kopfzeile hat.
         /// </summary>
-        public bool HasHeader { get; private set; } = true;
+        public bool HasHeader => ColumnNames != null;
+
+
+        public IList<string>? ColumnNames { get; private set; }
     }//class
 }
