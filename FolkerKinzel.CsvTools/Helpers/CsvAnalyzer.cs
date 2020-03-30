@@ -39,16 +39,22 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <para>Die Analyse ist zeitaufwändig, da auf die CSV-Datei lesend zugegriffen werden muss.</para></remarks>
         public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount, Encoding? textEncoding = null)
         {
+            
+
             if (analyzedLinesCount < AnalyzedLinesMinCount) analyzedLinesCount = AnalyzedLinesMinCount;
             
             
             // Suche Feldtrennzeichen:
             using (var reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
             {
+                const int COMMA_INDEX = 0;
+                const int SEMICOLON_INDEX = 1;
+                const int HASH_INDEX = 2;
+
                 bool firstLine = true;
 
 #if NET40
-                char[] sepChars = new char[] { ',', ';', '\t', ' ', '#' };
+                char[] sepChars = new char[] { ',', ';', '#',  '\t', ' '};
 
                 int sepCharsLength = sepChars.Length;
 
@@ -56,7 +62,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 int[] sameOccurrence = new int[sepCharsLength];
                 int[] currentLineOccurrence = new int[sepCharsLength];
 #else
-                ReadOnlySpan<char> sepChars = stackalloc[] { ',', ';', '\t', ' ', '#' };
+                ReadOnlySpan<char> sepChars = stackalloc[] { ',', ';', '#', '\t', ' ' };
                 int sepCharsLength = sepChars.Length;
                 Span<int> firstLineOccurrence = stackalloc int[sepCharsLength];
                 Span<int> sameOccurrence = stackalloc int[sepCharsLength];
@@ -95,6 +101,18 @@ namespace FolkerKinzel.CsvTools.Helpers
                                     firstLineOccurrence[sepCharIndex]++;
                                 }
                             }
+                        }
+
+                        // wenn in der Kopfzeile Komma, Semikolon oder Raute auftauchen, werden Tabulator und Leerzeichen nicht mehr ausgewertet
+                        if (firstLineOccurrence[COMMA_INDEX] != 0 || firstLineOccurrence[SEMICOLON_INDEX] != 0 || firstLineOccurrence[HASH_INDEX] != 0)
+                        {
+                            // lösche Whitespace-Werte
+                            for (int j = 3; j < sepCharsLength; j++)
+                            {
+                                firstLineOccurrence[j] = 0;
+                            }
+
+                            sepCharsLength = 3;
                         }
 
                         continue;

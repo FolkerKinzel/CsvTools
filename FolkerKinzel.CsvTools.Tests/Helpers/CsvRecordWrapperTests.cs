@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FolkerKinzel.CsvTools.Helpers;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Helpers.Tests
 {
@@ -11,35 +12,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             Assert.Fail();
         }
 
-        [TestMethod()]
-        public void CsvRecordWrapperTest1()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void SetRecordTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void RegisterPropertyTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void UnregisterPropertyTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void UnregisterPropertyAtTest()
-        {
-            Assert.Fail();
-        }
+
+
+
 
         [TestMethod()]
         public void InsertPropertyTest()
@@ -53,23 +32,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             Assert.Fail();
         }
 
+
         [TestMethod()]
         public void ReplacePropertyTest()
         {
             Assert.Fail();
         }
 
-        [TestMethod()]
-        public void HasPropertyTest()
-        {
-            Assert.Fail();
-        }
 
-        [TestMethod()]
-        public void GetPropertiesTest()
-        {
-            Assert.Fail();
-        }
+
 
         [TestMethod()]
         public void TrySetMemberTest()
@@ -83,11 +54,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             Assert.Fail();
         }
 
-        [TestMethod()]
-        public void ClearTest()
-        {
-            Assert.Fail();
-        }
+
 
         [TestMethod()]
         public void GetEnumeratorTest()
@@ -98,17 +65,43 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
         [TestMethod()]
         public void IndexOfTest()
         {
-            Assert.Fail();
+            var wrapper = new CsvRecordWrapper();
+
+            wrapper.AddProperty(new CsvProperty("Hallo", new string[] { "Hallo" }, Converters.CsvConverterFactory.CreateConverter(Converters.CsvTypeCode.String, true)));
+
+            Assert.AreEqual(0, wrapper.IndexOf("Hallo"));
+            Assert.AreEqual(-1, wrapper.IndexOf("Wolli"));
+            Assert.AreEqual(-1, wrapper.IndexOf(null));
+            Assert.AreEqual(-1, wrapper.IndexOf(string.Empty));
         }
 
         [TestMethod()]
         public void ContainsTest()
         {
+            var wrapper = new CsvRecordWrapper();
+
+            wrapper.AddProperty(new CsvProperty("Hallo", new string[] { "Hallo" }, Converters.CsvConverterFactory.CreateConverter(Converters.CsvTypeCode.String, true)));
+
+            Assert.IsTrue(wrapper.Contains("Hallo"));
+            Assert.IsFalse(wrapper.Contains("Wolli"));
+            Assert.IsFalse(wrapper.Contains(null));
+            Assert.IsFalse(wrapper.Contains(string.Empty));
+        }
+
+        [TestMethod()]
+        public void AddPropertyTest()
+        {
             Assert.Fail();
         }
 
         [TestMethod()]
-        public void CopyToTest()
+        public void RemovePropertyTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void RemovePropertyAtTest()
         {
             Assert.Fail();
         }

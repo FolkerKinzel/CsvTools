@@ -214,15 +214,17 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <see cref="CsvProperty"/>.</param>
         /// <returns>True, wenn ein <see cref="CsvProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
         /// angegebenen Namen registriert ist.</returns>
-        public bool Contains(string propertyName)
-        {
-            if (propertyName is null)
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+        public bool Contains(string? propertyName) => propertyName is null ? false : _dynProps.Contains(propertyName);
 
-            return _dynProps.Contains(propertyName);
-        }
+
+        /// <summary>
+        /// Gibt den Index der Eigenschaft zurück, die den Eigenschaftsnamen (<see cref="CsvProperty.PropertyName"/>) der 
+        /// <paramref name="propertyName"/> entspricht oder -1, wenn eine solche Eigenschaft nicht in <see cref="CsvRecordWrapper"/> registriert ist.
+        /// </summary>
+        /// <param name="propertyName">Der Eigenschaftsname der zu suchenden <see cref="CsvProperty"/>.</param>
+        /// <returns>Der Index der Eigenschaft, die <paramref name="propertyName"/> als Eigenschaftsnamen (<see cref="CsvProperty.PropertyName"/>) hat
+        /// oder -1, wenn eine solche Eigenschaft nicht in <see cref="CsvRecordWrapper"/> registriert ist.</returns>
+        public int IndexOf(string? propertyName) => propertyName is null ? -1 : _dynProps.Contains(propertyName) ? _dynProps.IndexOf(_dynProps[propertyName]) : -1;
 
 
 
