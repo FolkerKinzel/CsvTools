@@ -4,7 +4,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung
-    /// von Byte-Arrays. (Akzeptiert auch <c>null</c> und DBNull.Value als Eingabe.)
+    /// von Byte-Arrays. (Akzeptiert auch <c>null</c> und <see cref="DBNull.Value"/> als Eingabe.)
     /// </summary>
     internal class Base64Converter : ICsvTypeConverter
     {
@@ -56,7 +56,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// ist. Wenn <paramref name="value"/>&#160;<c>null</c> oder <see cref="DBNull.Value"/> ist, gibt die Methode
         /// <c>null</c> zurück.
         /// </summary>
-        /// <param name="value">Ein Byte-Array oder <c>null</c> oder DBNull.Value.</param>
+        /// <param name="value">Ein Byte-Array oder <c>null</c> oder <see cref="DBNull.Value"/>.</param>
         /// <returns>Eine Base64-Zeichenfolgendarstellung von <paramref name="value"/> oder null.</returns>
         /// <exception cref="InvalidCastException"><paramref name="value"/> ist weder <c>null</c> noch <see cref="DBNull.Value"/>
         /// noch ein Byte-Array.</exception>

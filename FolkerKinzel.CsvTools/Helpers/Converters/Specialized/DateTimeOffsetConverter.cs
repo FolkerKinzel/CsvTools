@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTimeOffset&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="DateTimeOffset"/>.</param>
-        /// <param name="maybeDBNull">Wenn true, wird DBNull.Value als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
@@ -122,7 +122,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Wenn die Option <paramref name="parseExact"/> gewählt ist, wird dieser Formatstring auch für das Parsen verwendet.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTimeOffset&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="DateTimeOffset"/>.</param>
-        /// <param name="maybeDBNull">Wenn true, wird DBNull.Value als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>

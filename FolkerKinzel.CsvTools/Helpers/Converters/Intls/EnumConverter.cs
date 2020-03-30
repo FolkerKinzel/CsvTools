@@ -19,7 +19,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}"/> akzeptiert und zurückgegeben,
         /// sonst <typeparamref name="TEnum"/>.</param>
-        /// <param name="maybeDBNull">Wenn true, wird DBNull.Value als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
@@ -122,7 +122,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <typeparamref name="TEnum"/> verwendet wird.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}"/> akzeptiert und zurückgegeben,
         /// sonst <typeparamref name="TEnum"/>.</param>
-        /// <param name="maybeDBNull">Wenn true, wird DBNull.Value als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>

@@ -17,7 +17,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <param name="type">Der Datentyp des Konverters.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
-        /// <param name="maybeDBNull">Wenn true, wird DBNull.Value als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
         /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
@@ -118,7 +118,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <param name="type">Konstante für einen ganzzahligen Datentyp.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
-        /// <param name="maybeDBNull">Wenn true, wird DBNull.Value als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
