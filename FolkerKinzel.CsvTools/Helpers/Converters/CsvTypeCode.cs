@@ -84,7 +84,12 @@
         TimeSpan,
 
         /// <summary>
-        /// <see cref="DateTime"/>
+        /// <see cref="DateTime"/>: Nur der Datumsteil wird verarbeitet. (Entspricht Formatstring "d".)
+        /// </summary>
+        Date,
+
+        /// <summary>
+        /// <see cref="DateTime"/>: Datum und Uhrzeit (Formatstring "s".)
         /// </summary>
         DateTime,
 

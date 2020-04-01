@@ -22,7 +22,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
         /// <para>
@@ -125,7 +125,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <param name="styles">Ein Wert der <see cref="TimeSpanStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
         /// nur ausgewertet, wenn <paramref name="parseExact"/> true ist.</param>
-        /// <param name="parseExact">Wenn true, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
+        /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
         /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe wird das <see cref="TimeSpan"/>-Standardformat "g" verwendet wird,

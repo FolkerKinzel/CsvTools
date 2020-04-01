@@ -7,6 +7,23 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
     public class DateTimeOffsetConverterTests
     {
         [TestMethod()]
+        public void DateTimeOffsetConverterTest0()
+        {
+            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset);
+
+            var dt = new DateTime(1972, 01, 31);
+
+            string? s = conv.ConvertToString(new DateTimeOffset(dt));
+
+            Assert.IsNotNull(s);
+
+            var dto = (DateTimeOffset)conv.Parse(s)!;
+
+            Assert.AreEqual(dt, dto.DateTime);
+        }
+
+
+        [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
         public void DateTimeOffsetConverterTest1()
         {

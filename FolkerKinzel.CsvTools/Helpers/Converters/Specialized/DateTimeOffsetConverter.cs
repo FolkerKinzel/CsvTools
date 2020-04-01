@@ -18,11 +18,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTimeOffset&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="DateTimeOffset"/>.</param>
-        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
         /// <para>
@@ -51,7 +51,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
 
             const string format = "O";
-            const DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces;
+            const DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
 
             if (nullable)
             {
@@ -126,11 +126,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param> 
         /// <param name="styles">Ein Wert der <see cref="DateTimeStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
         /// nur ausgewertet, wenn <paramref name="parseExact"/> true ist.</param>
-        /// <param name="parseExact">Wenn true, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
+        /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>
         /// <exception cref="ArgumentNullException"><paramref name="format"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring - oder - <paramref name="styles"/> 
@@ -144,7 +144,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             bool maybeDBNull = false,
             IFormatProvider? provider = null,
             bool throwOnParseErrors = false,
-            DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces,
+            DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind,
             bool parseExact = false)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;

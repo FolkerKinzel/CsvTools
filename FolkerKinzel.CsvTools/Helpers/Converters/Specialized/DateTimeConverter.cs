@@ -6,7 +6,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung
-    /// des <see cref="DateTimeOffset"/>-Datentyps.
+    /// des <see cref="DateTime"/>-Datentyps.
     /// </summary>
     public sealed class DateTimeConverter : ICsvTypeConverter
     {
@@ -126,7 +126,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param> 
         /// <param name="styles">Ein Wert der <see cref="DateTimeStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
         /// nur ausgewertet, wenn <paramref name="parseExact"/> true ist.</param>
@@ -138,7 +138,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// über die Methode <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren: Das ist 
         /// wesentlich performanter.</remarks>
         public DateTimeConverter(
-            string format,
+            string? format = null,
             bool nullable = false,
             bool maybeDBNull = false,
             IFormatProvider? provider = null,
