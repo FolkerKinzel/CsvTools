@@ -26,8 +26,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
         /// <para>
-        /// Sie sollten diesen Konstruktor nicht direkt aufrufen, sondern über 
-        /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider, bool)"/> (für Konsistenz in Ihrem Code).
+        /// Sie können diesen Konstruktor nicht direkt aufrufen, sondern über 
+        /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider, bool)"/>.
         /// </para>
         /// <para>
         /// Diese Überladung des Konstruktors ist wesentlich performanter als

@@ -13,106 +13,116 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         private readonly Converter<string?, object?> _parser;
         private readonly Converter<object?, string?> _toStringConverter;
 
-        ///// <summary>
-        ///// Initialisiert ein <see cref="DateTimeOffsetConverter"/>-Objekt.
-        ///// </summary>
-        ///// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTimeOffset&gt;</see> akzeptiert und zurückgegeben,
-        ///// sonst <see cref="DateTimeOffset"/>.</param>
-        ///// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
-        ///// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        ///// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
-        ///// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
-        ///// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
-        ///// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
-        ///// <remarks>
-        ///// <para>
-        ///// Sie sollten diesen Konstruktor nicht direkt aufrufen, sondern über 
-        ///// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider, bool)"/> (für Konsistenz in Ihrem Code).
-        ///// </para>
-        ///// <para>
-        ///// Diese Überladung des Konstruktors ist wesentlich performanter als
-        ///// <see cref="DateTimeOffsetConverter.DateTimeOffsetConverter(string, bool, bool, IFormatProvider, bool, DateTimeStyles, bool)"/>, bietet
-        ///// aber weniger Einstellmöglichkeiten: Bei der <see cref="string"/>-Ausgabe wird das Standardformat "O" verwendet. Beim Parsen kommt
-        ///// <see cref="DateTimeOffset.Parse(string, IFormatProvider, DateTimeStyles)"/> zum Einsatz. Der <see cref="DateTimeStyles"/>-Wert ist so
-        ///// eingestellt, dass Leerraum ignoriert wird (<see cref="DateTimeStyles.AllowWhiteSpaces"/>).
-        ///// </para></remarks>
-        //internal DateTimeConverter(
-        //    bool nullable,
-        //    bool maybeDBNull,
-        //    IFormatProvider? provider,
-        //    bool throwOnParseErrors)
-        //{
-        //    this.ThrowsOnParseErrors = throwOnParseErrors;
 
-        //    provider ??= CultureInfo.InvariantCulture;
+        /// <summary>
+        /// Initialisiert ein <see cref="DateTimeConverter"/>-Objekt.
+        /// </summary>
+        /// <param name="isDate">Wenn <c>true</c>, wird nur der Datumsteil gelesen und ausgegeben.</param>
+        /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see> akzeptiert und zurückgegeben,
+        /// sonst <see cref="DateTime"/>.</param>
+        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// Rückgabewert von <see cref="FallbackValue"/>.</param>
+        /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+        /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param> 
+        /// <param name="styles">Ein Wert der <see cref="DateTimeStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
+        /// nur ausgewertet, wenn <paramref name="parseExact"/> true ist.</param>
+        /// <param name="parseExact">Wenn true, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
+        /// Formatstring entsprechen.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="format"/> ist <c>null</c>.</exception>
+        /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
+        /// <remarks>
+        /// <para>
+        /// Sie können diesen Konstruktor nicht direkt aufrufen, sondern über 
+        /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider, bool)"/>.
+        /// </para>
+        /// <para>
+        /// Diese Überladung des Konstruktors ist wesentlich performanter als
+        /// <see cref="DateTimeOffsetConverter.DateTimeConverter(string, bool, bool, IFormatProvider, bool, DateTimeStyles, bool)"/>, bietet
+        /// aber weniger Einstellmöglichkeiten. Beim Parsen kommt
+        /// <see cref="DateTimeOffset.Parse(string, IFormatProvider, DateTimeStyles)"/> zum Einsatz. Der <see cref="DateTimeStyles"/>-Wert ist so
+        /// eingestellt, dass Leerraum ignoriert wird (<see cref="DateTimeStyles.AllowWhiteSpaces"/>).
+        /// </para></remarks>
+        internal DateTimeConverter(
+            bool isDate,
+            bool nullable,
+            bool maybeDBNull,
+            IFormatProvider? provider,
+            bool throwOnParseErrors)
+        {
+            this.ThrowsOnParseErrors = throwOnParseErrors;
 
-        //    Type = nullable ? typeof(DateTimeOffset?) : typeof(DateTimeOffset);
-        //    FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(DateTimeOffset?) : default(DateTimeOffset));
+            provider ??= CultureInfo.InvariantCulture;
 
+            Type = nullable ? typeof(DateTime?) : typeof(DateTime);
+            FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(DateTime?) : default(DateTime));
 
-        //    const string format = "O";
-        //    const DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces;
-
-        //    if (nullable)
-        //    {
-        //        _toStringConverter = new Converter<object?, string?>(
-        //            o =>
-        //            {
-        //                if (o is null) return null;
-        //                if (Convert.IsDBNull(o) && maybeDBNull) return null;
-
-        //                return ((DateTimeOffset)o).ToString(format, provider);
-        //            });
+            string format = isDate ? "d" : "s";
+            DateTimeStyles styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
 
 
-        //        _parser = new Converter<string?, object?>(
-        //            s =>
-        //            {
-        //                if (s is null) return null;
+            if (nullable)
+            {
+                _toStringConverter = new Converter<object?, string?>(
+                    o =>
+                    {
+                        if (o is null) return null;
+                        if (Convert.IsDBNull(o) && maybeDBNull) return null;
 
-        //                try
-        //                {
-        //                    return DateTimeOffset.Parse(s, provider, styles);
-        //                }
-        //                catch
-        //                {
-        //                    if (throwOnParseErrors) throw;
+                        return ((DateTime)o).ToString(format, provider);
+                    });
 
-        //                    return FallbackValue;
-        //                }
-        //            });
-        //    }
-        //    else
-        //    {
-        //        _toStringConverter = new Converter<object?, string?>(
-        //        o =>
-        //        {
-        //            if (Convert.IsDBNull(o) && maybeDBNull) return null;
 
-        //            if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                _parser = new Converter<string?, object?>(
+                    s =>
+                    {
+                        if (s is null) return null;
 
-        //            return ((DateTimeOffset)o).ToString(format, provider);
-        //        });
+                        try
+                        {
+                            return DateTime.Parse(s, provider, styles);
+                        }
+                        catch
+                        {
+                            if (throwOnParseErrors) throw;
 
-        //        _parser = new Converter<string?, object?>(
-        //            s =>
-        //            {
-        //                if (s is null) return FallbackValue;
+                            return FallbackValue;
+                        }
+                    });
 
-        //                try
-        //                {
-        //                    return DateTimeOffset.Parse(s, provider, styles);
-        //                }
-        //                catch
-        //                {
-        //                    if (throwOnParseErrors) throw;
+            }
+            else
+            {
+                _toStringConverter = new Converter<object?, string?>(
+                o =>
+                {
+                    if (Convert.IsDBNull(o) && maybeDBNull) return null;
 
-        //                    return FallbackValue;
-        //                }
-        //            });
-        //    }
+                    if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
 
-        //}
+                    return ((DateTime)o).ToString(format, provider);
+                });
+
+                _parser = new Converter<string?, object?>(
+                    s =>
+                    {
+                        if (s is null) return FallbackValue;
+
+                        try
+                        {
+                            return DateTime.Parse(s, provider, styles);
+                        }
+                        catch
+                        {
+                            if (throwOnParseErrors) throw;
+
+                            return FallbackValue;
+                        }
+                    });
+            }
+        }
+
 
 
         /// <summary>
@@ -134,11 +144,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Formatstring entsprechen.</param>
         /// <exception cref="ArgumentNullException"><paramref name="format"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
-        /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe das Standardformat "O" verwendet wird, sollten Sie das <see cref="DateTimeConverter"/>-Objekt
+        /// <remarks>Wenn kein spezielles Format gefprdert ist, sollten Sie das <see cref="DateTimeConverter"/>-Objekt
         /// über die Methode <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren: Das ist 
         /// wesentlich performanter.</remarks>
         public DateTimeConverter(
-            string? format = null,
+            string? format,
             bool nullable = false,
             bool maybeDBNull = false,
             IFormatProvider? provider = null,
