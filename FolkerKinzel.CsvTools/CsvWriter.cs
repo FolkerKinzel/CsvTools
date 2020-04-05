@@ -204,7 +204,7 @@ namespace FolkerKinzel.CsvTools
 
             if (!_isHeaderRowWritten)
             {
-                var columns = Record.Keys;
+                var columns = Record.ColumnNames;
 
                 for (int i = 0; i < recordLength - 1; i++)
                 {

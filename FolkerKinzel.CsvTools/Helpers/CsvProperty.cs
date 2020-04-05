@@ -24,11 +24,10 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für Bezeichner
         /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
-        /// <param name="csvColumnAliases">Spaltennamen der CSV-Datei, auf die <see cref="CsvProperty"/> zugreifen kann. Beim lesenden
-        /// Zugriff auf <see cref="CsvProperty"/> wird das Ergebnis der ersten Übereinstimmung eines strings aus <paramref name="csvColumnAliases"/>
-        /// mit einem Spaltennamen der CSV-Datei zurückgegeben, bei Setzen des Wertes von <see cref="CsvProperty"/> werden hingegen alle
-        /// Spalten von <see cref="CsvRecord"/>, die eine Übereinstimmung mit <paramref name="csvColumnAliases"/> haben, auf den neuen Wert
-        /// gesetzt. Die Alias-Strings dürfen die Wildcard-Zeichen * und ? enthalten.</param>
+        /// <param name="csvColumnAliases">Spaltennamen der CSV-Datei, auf die <see cref="CsvProperty"/> zugreifen kann. Für den
+        /// Zugriff auf <see cref="CsvProperty"/> wird der erste Alias verwendet, der eine Übereinstimmung 
+        /// mit einem Spaltennamen der CSV-Datei hat. Die Alias-Strings dürfen die Wildcard-Zeichen * und ? enthalten. Wenn ein 
+        /// Wildcard-Alias mit mehreren Spalten der CSV-Datei eine Übereinstimmung hat, wird die Spalte mit dem niedrigsten Index referenziert.</param>
         /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
         /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="csvColumnAliases"/> oder 
         /// <paramref name="converter"/> ist <c>null</c>.</exception>
@@ -108,11 +107,11 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             Debug.Assert(record != null);
             
-            ColumnAliasesLookup lookup = GetLookup(record);
+            string? columnName = GetColumnName(record);
 
             try
             {
-                return lookup.Aliases.Count == 0 ? Converter.FallbackValue : Converter.Parse(record[lookup.Aliases[0]]);
+                return columnName is null ? Converter.FallbackValue : Converter.Parse(record[columnName]);
             }
             catch(Exception e)
             {
@@ -132,26 +131,25 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             Debug.Assert(record != null);
 
-            ColumnAliasesLookup lookup = GetLookup(record);
+            string? columnName = GetColumnName(record);
 
-            string? s = Converter.ConvertToString(value);
-            var aliases = lookup.Aliases;
-
-            for (int i = 0; i < aliases.Count; i++)
+            if (columnName != null)
             {
-                record[aliases[i]] = s;
+                string? s = Converter.ConvertToString(value);
+                record[columnName] = s;
             }
+            
         }
 
 
-        private ColumnAliasesLookup GetLookup(CsvRecord record)
+        private string? GetColumnName(CsvRecord record)
         {
             if (this._lookup is null || record.Identifier != _lookup.CsvRecordIdentifier)
             {
                 this._lookup = new ColumnAliasesLookup(record, this.CsvColumnAliases);
             }
 
-            return _lookup;
+            return _lookup.ColumnName;
         }
 
 
@@ -161,14 +159,14 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             public int CsvRecordIdentifier { get; }
 
-            public List<string> Aliases { get; } = new List<string>();
+            public string? ColumnName { get; private set; }
 
             public ColumnAliasesLookup(CsvRecord record, ReadOnlyCollection<string> aliases)
             {
                 this.CsvRecordIdentifier = record.Identifier;
 
                 var comparer = record.Comparer;
-                var keys = record.Keys;
+                var columnNames = record.ColumnNames;
 
                 //this.Aliases = aliases.Intersect(record.Keys, comparer).Distinct(comparer).ToList();
 
@@ -178,34 +176,69 @@ namespace FolkerKinzel.CsvTools.Helpers
                     string alias = aliases[i];
 
                     if (alias is null) continue;
-                    
-                    if (HasWildcard(alias)) continue;
 
-                    for (int j = 0; j < keys.Count; j++)
+                    if (HasWildcard(alias))
                     {
-                        string key = keys[j];
+                        Regex regex = InitRegex(comparer, alias);
 
-                        if (comparer.Equals(key, alias)) // Es kann in keys keine 2 strings geben, auf die das zutrifft.
+                        for (int k = 0; k < columnNames.Count; k++) // Die Wildcard könnte auf alle keys passen.
                         {
-                            if (!Aliases.Contains(key, comparer))
-                            {
-                                Aliases.Add(key);
-                            }
+                            string columnName = columnNames[k];
 
-                            break; 
+                            try
+                            {
+                                if (regex.IsMatch(columnName))
+                                {
+                                    this.ColumnName = columnName;
+                                    return;
+                                }
+                            }
+                            catch(TimeoutException)
+                            {
+#if !NET40
+                                Debug.WriteLine(nameof(RegexMatchTimeoutException));
+#endif
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < columnNames.Count; j++)
+                        {
+                            string columnName = columnNames[j];
+
+                            if (comparer.Equals(columnName, alias)) // Es kann in columnNames keine 2 Strings geben, auf die das zutrifft.
+                            {
+                                this.ColumnName = columnName;
+                                return;
+                            }
                         }
                     }
                 }
 
-                bool HasWildcard(string alias)
+                static bool HasWildcard(string alias)
                 {
+                    // Suche Wildcardzeichen im alias
                     for (int j = 0; j < alias.Length; j++)
                     {
                         char c = alias[j];
 
-                        // Wildcard behandeln:
                         if (c == '*' || c == '?')
                         {
+                            return true;
+                        }
+                    }//for
+
+                    return false; // keine Wildcard-Zeichen
+                }//HasWildcard
+
+            }//ctor ColumnAliasesLookup
+
+
+
+
+            private static Regex InitRegex(IEqualityComparer<string> comparer, string alias)
+            {
 #if NET40
                             string pattern = "^" +
                                 Regex
@@ -213,40 +246,27 @@ namespace FolkerKinzel.CsvTools.Helpers
                                 .Replace("\\?", ".")
                                 .Replace("\\*", ".*?") + "$";
 #else
-                            string pattern = "^" +
-                                Regex
-                                .Escape(alias)
-                                .Replace("\\?", ".", StringComparison.Ordinal)
-                                .Replace("\\*", ".*?", StringComparison.Ordinal) + "$";
+                string pattern = "^" +
+                    Regex
+                    .Escape(alias)
+                    .Replace("\\?", ".", StringComparison.Ordinal)
+                    .Replace("\\*", ".*?", StringComparison.Ordinal) + "$";
 #endif
 
-                            RegexOptions options = comparer.Equals(StringComparer.OrdinalIgnoreCase) ?
-                                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline :
-                                                          RegexOptions.CultureInvariant | RegexOptions.Singleline;
+                RegexOptions options = comparer.Equals(StringComparer.OrdinalIgnoreCase) ?
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline :
+                                              RegexOptions.CultureInvariant | RegexOptions.Singleline;
 
-                            // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
-                            // verwendet.
-                            var regex = new Regex(pattern, options);
 
-                            for (int k = 0; k < keys.Count; k++) // Die Wildcard könnte auf alle keys passen.
-                            {
-                                string key = keys[k];
+#if NET40
+                return new Regex(pattern, options);
+#else
+                // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
+                // verwendet.
+                return new Regex(pattern, options, TimeSpan.FromSeconds(1));
+#endif
 
-                                if (regex.IsMatch(key) && !Aliases.Contains(key, comparer))
-                                {
-                                    Aliases.Add(key);
-                                }
-                            }
-
-                            return true;
-                        }
-                    }//for
-
-                    return false;
-                }//HasWildcard
-
-            }//ctor ColumnAliasesLookup
-
+            }
         }//class ColumnAliasesLookup
 
 

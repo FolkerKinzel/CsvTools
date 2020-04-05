@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -34,7 +35,7 @@ namespace FolkerKinzel.CsvTools
 #endif
 
         private readonly Dictionary<string, int> _lookupDictionary;
-        private readonly ReadOnlyCollection<string> _keys;
+        private readonly ReadOnlyCollection<string> _columnNames;
 
         #endregion
 
@@ -52,7 +53,7 @@ namespace FolkerKinzel.CsvTools
         internal CsvRecord(CsvRecord source)
         {
             _lookupDictionary = source._lookupDictionary;
-            _keys = source._keys;
+            _columnNames = source._columnNames;
             _values = new string?[Count];
         }
 
@@ -85,7 +86,7 @@ namespace FolkerKinzel.CsvTools
                 this._lookupDictionary.Add(keyName, i);
             }
 
-            this._keys = new ReadOnlyCollection<string>(keyArr);
+            this._columnNames = new ReadOnlyCollection<string>(keyArr);
 
             if (initArr)
             {
@@ -147,7 +148,7 @@ namespace FolkerKinzel.CsvTools
 
             }
 
-            this._keys = new ReadOnlyCollection<string>(keys!);
+            this._columnNames = new ReadOnlyCollection<string>(keys!);
 
             if (initArr)
             {
@@ -193,9 +194,9 @@ namespace FolkerKinzel.CsvTools
         #region Properties
 
         /// <summary>
-        /// Ruft das Element am angegebenen Index ab oder legt dieses fest.
+        /// Ruft den Wert der Spalte der CSV-Datei, die sich am angegebenen Index befindet, ab oder legt diesen fest.
         /// </summary>
-        /// <param name="index">Der nullbasierte Index des abzurufenden oder festzulegenden Elements.</param>
+        /// <param name="index">Der nullbasierte Index der Spalte der CSV-Datei, deren Wert abgerufen oder festgelegt wird.</param>
         /// <returns>Das Element am angegebenen Index.</returns>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="Count"/>.</exception>
         public string? this[int index]
@@ -207,21 +208,21 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Ruft den Wert ab, der dem angegebenen Spaltennamen der CSV-Datei zugeordnet ist, oder legt diesen fest.
         /// </summary>
-        /// <param name="key">Der Spaltenname der CSV-Datei.</param>
+        /// <param name="columnName">Der Spaltenname der CSV-Datei.</param>
         /// <returns>Der dem angegebenen Schlüssel zugeordnete Wert.</returns>
-        /// <exception cref="KeyNotFoundException">Der mit <paramref name="key"/> angegebene Spaltenname existiert nicht.</exception>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
-        public string? this[string key]
+        /// <exception cref="KeyNotFoundException">Der mit <paramref name="columnName"/> angegebene Spaltenname existiert nicht.</exception>
+        /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
+        public string? this[string columnName]
         {
-            get => _values[_lookupDictionary[key]];
-            set => _values[_lookupDictionary[key]] = value;
+            get => _values[_lookupDictionary[columnName]];
+            set => _values[_lookupDictionary[columnName]] = value;
         }
 
 
         /// <summary>
         /// Gibt die Anzahl der Spalten in <see cref="CsvRecord"/> zurück.
         /// </summary>
-        public int Count => _keys.Count;
+        public int Count => _columnNames.Count;
 
         /// <summary>
         /// Gibt true zurück, wenn <see cref="Count"/> 0 ist oder wenn alle
@@ -234,7 +235,7 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück.
         /// </summary>
-        public ReadOnlyCollection<string> Keys => _keys;
+        public ReadOnlyCollection<string> ColumnNames => _columnNames;
 
 
 
@@ -287,18 +288,25 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         public void Clear() => Array.Clear(_values, 0, _values.Length);
 
+
+
         /// <summary>
-        /// Ruft den dem angegebenen Schlüssel zugeordneten Wert ab.
+        /// Ruft den dem angegebenen Spaltennamen der CSV-Datei zugeordneten Wert ab.
         /// </summary>
-        /// <param name="key">Der Schlüssel des abzurufenden Werts.</param>
-        /// <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem angegebenen Schlüssel 
+        /// <param name="columnName">Der Name der Spalte der CSV-Datei, deren Wert abgerufen wird.</param>
+        /// <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem mit  <paramref name="columnName"/> angegebenen Spaltennamen
         /// zugeordnet ist, wenn der Schlüssel gefunden wurde, oder andernfalls <c>null</c>. Dieser Parameter wird nicht
         /// initialisiert übergeben.</param>
-        /// <returns>True, wenn ein Schlüssel mit dem Wert von <paramref name="key"/> enthalten ist.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
-        public bool TryGetValue(string key, out string? value)
+        /// <returns>True, wenn ein Spaltenname mit dem Wert von <paramref name="columnName"/> enthalten ist.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
+        public bool TryGetValue(string columnName, out string? value)
         {
-            if (_lookupDictionary.TryGetValue(key, out int index))
+            if(columnName is null)
+            {
+                throw new ArgumentNullException(columnName);
+            }
+
+            if (_lookupDictionary.TryGetValue(columnName, out int index))
             {
                 value = _values[index];
                 return true;
@@ -346,101 +354,36 @@ namespace FolkerKinzel.CsvTools
             }
         }
 
-        
-
-
-        ///// <summary>
-        ///// Untersucht, ob der <see cref="string"/>&#160;<paramref name="item"/> den Inhalt einer Datenspalte in <see cref="CsvRecord"/> darstellt.
-        ///// </summary>
-        ///// <param name="item">Der zu suchende <see cref="string"/>.</param>
-        ///// <returns>True, wenn <paramref name="item"/> den Inhalt einer Datenspalte in <see cref="CsvRecord"/> darstellt.</returns>
-        //public bool Contains(string? item) => Array.IndexOf(_values, item) >= 0;
-
-
-        ///// <summary>
-        ///// Untersucht, ob der Inhalt der Datenspalte mit dem Namen von <paramref name="key"/> dem Wert von <paramref name="value"/>
-        ///// entspricht.
-        ///// </summary>
-        ///// <param name="key">Der Spaltenname der zu vergelichenden Datenspalte.</param>
-        ///// <param name="value">Der zu vergleichende <see cref="string"/>.</param>
-        ///// <returns>True, wenn der Inhalt der Datenspalte mit dem Namen von <paramref name="key"/> dem Wert von <paramref name="value"/>
-        ///// entspricht.</returns>
-        ///// <exception cref="KeyNotFoundException">Der mit <paramref name="key"/> angegebene Schlüssel existiert nicht.</exception>
-        ///// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
-        //public bool Contains(string key, string? value) => this[key] == value;
-
-
-        
 
 
         /// <summary>
-        /// Bestimmt, ob das <see cref="CsvRecord"/>-Objekt den angegebenen Schlüssel (Spaltenname) enthält.
+        /// Bestimmt, ob das <see cref="CsvRecord"/>-Objekt eine Spalte mit dem angegebenen Spaltennamen enthält.
         /// </summary>
-        /// <param name="key">Der zu suchende Schlüssel ("Spaltenname").</param>
-        /// <returns>True, wenn <paramref name="key"/> zu den Spaltennamen des <see cref="CsvRecord"/>-Objekts gehört.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="key"/> ist <c>null</c>.</exception>
-        public bool ContainsKey(string key) => _lookupDictionary.ContainsKey(key);
+        /// <param name="columnName">Der Spaltenname der zu suchenden Spalte der CSV-Datei.</param>
+        /// <returns>True, wenn <paramref name="columnName"/> zu den Spaltennamen des <see cref="CsvRecord"/>-Objekts gehört.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
+        public bool ContainsColumn(string columnName)
+        {
+            if(columnName is null)
+            {
+                throw new ArgumentNullException(nameof(columnName));
+            }
+
+            return _lookupDictionary.ContainsKey(columnName);
+        }
 
 
-        ///// <summary>
-        ///// Kopiert den Inhalt sämtlicher Spalten des <see cref="CsvRecord"/>-Objekts in ein <see cref="string"/>-Array,
-        ///// beginnend bei dem nullbasierten Index <paramref name="arrayIndex"/>.
-        ///// </summary>
-        ///// <param name="array">Das Array, in das hineinkopiert wird.</param>
-        ///// <param name="arrayIndex">Der Index in <paramref name="array"/>, bei dem der Kopiervorgang startet.</param>
-        ///// <exception cref="ArgumentNullException"><paramref name="array"/> ist <c>null</c>.</exception>
-        ///// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> ist kleiner als 0 oder die Anzahl der zu 
-        ///// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende
-        ///// des Zielarrays.</exception>
-        ///// <exception cref="ArgumentException"><paramref name="array"/> ist mehrdimensional.</exception>
-        //public void CopyTo(string?[] array, int arrayIndex) => _values.CopyTo(array, arrayIndex);
 
-
-        ///// <summary>
-        ///// Kopiert den Inhalt sämtlicher Spalten des <see cref="CsvRecord"/>-Objekts in ein <see cref="KeyValuePair{TKey, TValue}"/>-Array,
-        ///// beginnend bei dem nullbasierten Index <paramref name="arrayIndex"/>. Ein <see cref="KeyValuePair{TKey, TValue}"/> enthält dabei
-        ///// den Spaltennamen als <see cref="KeyValuePair{TKey, TValue}.Key"/> und den Inhalt der Spalte als <see cref="KeyValuePair{TKey, TValue}.Value"/>.
-        ///// </summary>
-        ///// <param name="array">Das Array, in das hineinkopiert wird.</param>
-        ///// <param name="arrayIndex">Der Index in <paramref name="array"/>, bei dem der Kopiervorgang startet.</param>
-        ///// <exception cref="ArgumentNullException"><paramref name="array"/> ist <c>null</c>.</exception>
-        ///// <exception cref="ArgumentOutOfRangeException"><paramref name="arrayIndex"/> ist kleiner als 0 oder die Anzahl der zu 
-        ///// kopierenden Elemente ist größer als die verfügbare Anzahl der Elemente von <paramref name="arrayIndex"/> bis zum Ende
-        ///// des Zielarrays.</exception>
-        //public void CopyTo(KeyValuePair<string, string?>[] array, int arrayIndex)
-        //{
-        //    if (array is null)
-        //    {
-        //        throw new ArgumentNullException(nameof(array));
-        //    }
-
-
-        //    for (int i = 0; i < _keys.Count; i++)
-        //    {
-        //        array[arrayIndex + i] = new KeyValuePair<string, string?>(_keys[i], _values[i]);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Gibt den nullbasierten Index des ersten Vorkommens von <paramref name="item"/> unter 
-        ///// den in <see cref="CsvRecord"/> gespeicherten Daten zurück oder -1, wenn <paramref name="item"/>
-        ///// dort nicht gefunden wird.
-        ///// </summary>
-        ///// <param name="item">Der zu suchende <see cref="string"/> oder <c>null</c>.</param>
-        ///// <returns>Der nullbasierte Index des ersten Vorkommens von <paramref name="item"/> unter den gespeicherten Daten
-        ///// oder -1, wenn <paramref name="item"/> dort nicht existiert.</returns>
-        //public int IndexOf(string? item) => Array.IndexOf(_values, item);
 
 
         /// <summary>
-        /// Gibt den nullbasierten Index zurück, auf den der Spaltenname <paramref name="key"/> verweist
-        /// oder -1, wenn <paramref name="key"/> nicht zu den in <see cref="CsvRecord"/> registrierten
-        /// Spaltennamen gehört (die i.d.R. den Spaltennamen der CSV-Datei entsprechen).
+        /// Gibt den nullbasierten Index der Spalte der CSV-Datei zurück, die den angegebenen Spaltennamen hat,
+        /// oder -1, wenn <paramref name="columnName"/> nicht zu den Spaltennamen der CSV-Datei gehört.
         /// </summary>
-        /// <param name="key">Der Spaltenname, für den überprüft werden soll, auf welchen Index von <see cref="CsvRecord"/> er verweist.</param>
-        /// <returns>Der Index der Datenspalte in <see cref="CsvRecord"/>, auf die der Spaltenname <paramref name="key"/> verweist oder
-        /// -1, wenn <paramref name="key"/> kein Spaltenname ist.</returns>
-        public int IndexOfKey(string? key) => key != null && _lookupDictionary.TryGetValue(key, out int i) ? i : -1;
+        /// <param name="columnName">Der Spaltenname, für den überprüft werden soll, auf welchen Index von <see cref="CsvRecord"/> er verweist.</param>
+        /// <returns>Der nullbasierte Index der Spalte der CSV-Datei mit dem Spaltennamen <paramref name="columnName"/>
+        /// oder -1, wenn <paramref name="columnName"/> nicht zu den Spaltennamen der CSV-Datei gehört.</returns>
+        public int IndexOfColumn(string? columnName) => columnName != null && _lookupDictionary.TryGetValue(columnName, out int i) ? i : -1;
 
 
 
@@ -466,7 +409,7 @@ namespace FolkerKinzel.CsvTools
 
             for (int i = 0; i < Count; i++)
             {
-                yield return new KeyValuePair<string, string?>(Keys[i], Values[i]);
+                yield return new KeyValuePair<string, string?>(ColumnNames[i], Values[i]);
             }
             
         }
@@ -487,7 +430,7 @@ namespace FolkerKinzel.CsvTools
 
             StringBuilder sb = new StringBuilder();
 
-            foreach (var key in _keys)
+            foreach (var key in _columnNames)
             {
                 sb.Append(key).Append(": ").Append(this[key] ?? "<null>").Append(", ");
             }

@@ -66,6 +66,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     {
         private readonly PropertyCollection _dynProps = new PropertyCollection();
 
+        #region ctors
 
         /// <summary>
         /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt zum Lesen einer CSV-Datei. Vor dem Zugriff auf die Eigenschaften muss <see cref="Record"/>
@@ -83,12 +84,168 @@ namespace FolkerKinzel.CsvTools.Helpers
             this.Record = record;
         }
 
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Das <see cref="CsvRecord"/>-Objekt, 
         /// auf dessen Daten <see cref="CsvRecordWrapper"/> zugreift.
         /// </summary>
         public CsvRecord? Record { get; set; }
+
+
+        /// <summary>
+        /// Gibt die Anzahl der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte
+        /// zurück.
+        /// </summary>
+        public int Count => _dynProps.Count;
+
+
+        /// <summary>
+        /// Gibt eine Kopie der in <see cref="CsvRecordWrapper"/> registrierten Eigenschaftsnamen zurück.
+        /// </summary>
+        public IList<string> PropertyNames => _dynProps.Select(x => x.PropertyName).ToArray();
+
+
+        /// <summary>
+        /// Gibt eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten zurück.
+        /// </summary>
+        /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+        /// Ausnahme wirft.</exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
+        public IList<object?> Values => this.Select(x => x.Value).ToArray();
+
+
+
+        /// <summary>
+        /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
+        /// über einen nullbasierten Index. Der Index entspricht der Reihenfolge, in der die
+        /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
+        /// </summary>
+        /// <param name="index">Nullbasierter Index der registrierten <see cref="CsvProperty"/>-Objekte.</param>
+        /// <returns>Rückgabewert der bei <paramref name="index"/> registrierten <see cref="CsvProperty"/>.</returns>
+        /// <exception cref = "InvalidOperationException" > Der Indexer wurde aufgerufen, bevor dem <see cref= "CsvRecordWrapper" />
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <para></para>
+        /// <paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="Count"/>.</exception>
+        /// <exception cref="InvalidCastException">
+        /// <para>
+        /// Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
+        /// diesem Index registrierten Property entspricht
+        /// </para>
+        /// <para>- oder -</para>
+        /// <para>
+        /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+        /// Ausnahme wirft.
+        /// </para></exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
+        public object? this[int index]
+        {
+            get
+            {
+                if (Record is null)
+                {
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                }
+
+                return _dynProps[index].GetValue(this.Record);
+            }
+
+            set
+            {
+                if (Record is null)
+                {
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                }
+
+                _dynProps[index].SetValue(this.Record, value);
+            }
+        }
+
+
+        /// <summary>
+        /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
+        /// über den Wert der Eigenschaft <see cref="CsvProperty.PropertyName"/>.
+        /// </summary>
+        /// <param name="propertyName">Name der registrierten Eigenschaft. (Entspricht <see cref="CsvProperty.PropertyName"/>. Der
+        /// Vergleich erfolgt case-sensitiv.</param>
+        /// <returns>Rückgabewert der registrierten <see cref="CsvProperty"/>, deren Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/>
+        /// entspricht. Der Vergleich ist case-sensitiv.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> ist <c>null</c>.</exception>
+        /// <exception cref="ArgumentException">Es wurde unter den bei <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Eigenschaften kein
+        /// <see cref="CsvProperty"/>-Objekt gefunden, dessen Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/> entspricht.</exception>
+        /// <exception cref="InvalidCastException">
+        /// <para>
+        /// Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
+        /// diesem Index registrierten Property entspricht
+        /// </para>
+        /// <para>- oder -</para>
+        /// <para>
+        /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
+        /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+        /// Ausnahme wirft.
+        /// </para></exception>
+        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
+        public object? this[string propertyName]
+        {
+            get
+            {
+                if (Record is null)
+                {
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                }
+
+                if (propertyName is null)
+                {
+                    throw new ArgumentNullException(nameof(propertyName));
+                }
+
+                if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
+                {
+                    return prop.GetValue(this.Record);
+                }
+                else
+                {
+                    throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
+                }
+            }
+
+            set
+            {
+                if (Record is null)
+                {
+                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                }
+
+                if (propertyName is null)
+                {
+                    throw new ArgumentNullException(nameof(propertyName));
+                }
+
+
+                if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
+                {
+                    prop.SetValue(this.Record, value);
+                }
+                else
+                {
+                    throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
+                }
+            }
+        }
+
+
+        
+
+
+        #endregion
 
 
         /// <summary>
@@ -303,168 +460,20 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         ///// <summary>
-        ///// Setzt sämtliche Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.
+        ///// Setzt den Wert sämtlicher Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.
         ///// </summary>
         ///// <exception cref="InvalidOperationException"><see cref="Record"/> ist beim Aufruf der Methode <c>null</c>.</exception>
         //public void Clear()
         //{
         //    if (Record is null)
-        //    { 
-        //        throw new InvalidOperationException("Record is null."); 
+        //    {
+        //        throw new InvalidOperationException("Record is null.");
         //    }
         //    else
-        //    { 
-        //        Record.Clear(); 
-        //    }; 
+        //    {
+        //        Record.Clear();
+        //    };
         //}
-
-        /// <summary>
-        /// Gibt die Anzahl der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte
-        /// zurück.
-        /// </summary>
-        public int Count => _dynProps.Count;
-
-
-
-
-        /// <summary>
-        /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
-        /// über einen nullbasierten Index. Der Index entspricht der Reihenfolge, in der die
-        /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
-        /// </summary>
-        /// <param name="index">Nullbasierter Index der registrierten <see cref="CsvProperty"/>-Objekte.</param>
-        /// <returns>Rückgabewert der bei <paramref name="index"/> registrierten <see cref="CsvProperty"/>.</returns>
-        /// <exception cref = "InvalidOperationException" > Der Indexer wurde aufgerufen, bevor dem <see cref= "CsvRecordWrapper" />
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">
-        /// <para></para>
-        /// <paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="Count"/>.</exception>
-        /// <exception cref="InvalidCastException">
-        /// <para>
-        /// Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
-        /// diesem Index registrierten Property entspricht
-        /// </para>
-        /// <para>- oder -</para>
-        /// <para>
-        /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-        /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
-        /// Ausnahme wirft.
-        /// </para></exception>
-        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
-        public object? this[int index]
-        {
-            get
-            {
-                if (Record is null)
-                {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
-                }
-
-                return _dynProps[index].GetValue(this.Record);
-            }
-
-            set
-            {
-                if (Record is null)
-                {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
-                }
-
-                _dynProps[index].SetValue(this.Record, value);
-            }
-        }
-
-
-        /// <summary>
-        /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
-        /// über den Wert der Eigenschaft <see cref="CsvProperty.PropertyName"/>.
-        /// </summary>
-        /// <param name="propertyName">Name der registrierten Eigenschaft. (Entspricht <see cref="CsvProperty.PropertyName"/>. Der
-        /// Vergleich erfolgt case-sensitiv.</param>
-        /// <returns>Rückgabewert der registrierten <see cref="CsvProperty"/>, deren Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/>
-        /// entspricht. Der Vergleich ist case-sensitiv.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentException">Es wurde unter den bei <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Eigenschaften kein
-        /// <see cref="CsvProperty"/>-Objekt gefunden, dessen Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/> entspricht.</exception>
-        /// <exception cref="InvalidCastException">
-        /// <para>
-        /// Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
-        /// diesem Index registrierten Property entspricht
-        /// </para>
-        /// <para>- oder -</para>
-        /// <para>
-        /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-        /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
-        /// Ausnahme wirft.
-        /// </para></exception>
-        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
-        public object? this[string propertyName]
-        {
-            get
-            {
-                if (Record is null)
-                {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
-                }
-
-                if (propertyName is null)
-                {
-                    throw new ArgumentNullException(nameof(propertyName));
-                }
-
-                if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
-                {
-                    return prop.GetValue(this.Record);
-                }
-                else
-                {
-                    throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
-                }
-            }
-
-            set
-            {
-                if (Record is null)
-                {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
-                }
-
-                if (propertyName is null)
-                {
-                    throw new ArgumentNullException(nameof(propertyName));
-                }
-
-
-                if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
-                {
-                    prop.SetValue(this.Record, value);
-                }
-                else
-                {
-                    throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// Gibt eine Kopie der in <see cref="CsvRecordWrapper"/> gespeicherten Eigenschaftsnamen zurück.
-        /// </summary>
-        public IList<string> Keys => _dynProps.Select(x => x.PropertyName).ToArray();
-
-
-
-        /// <summary>
-        /// Gibt eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten zurück.
-        /// </summary>
-        /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-        /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
-        /// Ausnahme wirft.</exception>
-        /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
-        public IList<object?> Values => this.Select(x => x.Value).ToArray();
 
 
         /// <summary>
