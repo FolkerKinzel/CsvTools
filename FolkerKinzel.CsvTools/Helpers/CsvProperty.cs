@@ -16,7 +16,13 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// </summary>
     public sealed class CsvProperty
     {
+        /// <summary>
+        /// Maximale Zeit (in Millisekunden) die für das Auflösen eines Spaltennamen-Aliases aufgewendet werden kann.
+        /// </summary>
+        public const int MaxWildcardTimeout = 500;
+
         private ColumnAliasesLookup? _lookup;
+        private readonly int _wildcardTimeout;
 
 
         /// <summary>
@@ -24,17 +30,23 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für Bezeichner
         /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
-        /// <param name="csvColumnAliases">Spaltennamen der CSV-Datei, auf die <see cref="CsvProperty"/> zugreifen kann. Für den
+        /// <param name="columnNameAliases">Spaltennamen der CSV-Datei, auf die <see cref="CsvProperty"/> zugreifen kann. Für den
         /// Zugriff auf <see cref="CsvProperty"/> wird der erste Alias verwendet, der eine Übereinstimmung 
         /// mit einem Spaltennamen der CSV-Datei hat. Die Alias-Strings dürfen die Wildcard-Zeichen * und ? enthalten. Wenn ein 
         /// Wildcard-Alias mit mehreren Spalten der CSV-Datei eine Übereinstimmung hat, wird die Spalte mit dem niedrigsten Index referenziert.</param>
         /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="csvColumnAliases"/> oder 
+        /// <param name="wildcardTimeout">Timeout-Wert in Millisekunden. Wenn ein Alias in <paramref name="columnNameAliases"/> ein
+        /// Wildcard-Zeichen enthält, wird innerhalb
+        /// dieses Timeouts versucht, den Alias aufzulösen. Gelingt dies nicht, reagiert <see cref="CsvProperty"/> so, als hätte sie
+        /// kein Ziel in den Spalten der CSV-Datei. (In .Net-Framework 4.0 wird kein Timeout angewendet.)</param>
+        /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="columnNameAliases"/> oder 
         /// <paramref name="converter"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
         /// ASCII-Zeichen).</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 1 oder größer als
+        /// <see cref="MaxWildcardTimeout"/>.</exception>
         public CsvProperty(
-            string propertyName, IEnumerable<string> csvColumnAliases, ICsvTypeConverter converter)
+            string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10)
         {
             if (propertyName is null)
             {
@@ -47,9 +59,9 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
 
 
-            if (csvColumnAliases is null)
+            if (columnNameAliases is null)
             {
-                throw new ArgumentNullException(nameof(csvColumnAliases));
+                throw new ArgumentNullException(nameof(columnNameAliases));
             }
 
 
@@ -60,9 +72,17 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
 
 
+            if(wildcardTimeout > MaxWildcardTimeout || wildcardTimeout < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(wildcardTimeout));
+            }
+            
+
+
             this.PropertyName = propertyName;
-            this.CsvColumnAliases = new ReadOnlyCollection<string>(csvColumnAliases.Where(x => x != null).ToArray());
+            this.ColumnNameAliases = new ReadOnlyCollection<string>(columnNameAliases.Where(x => x != null).ToArray());
             this.Converter = converter;
+            this._wildcardTimeout = wildcardTimeout;
         }
 
 
@@ -73,8 +93,8 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
-        /// Sammlung von alternativen Spaltennamen einer CSV-Datei, die <see cref="CsvRecordWrapper"/> für den Zugriff auf
-        /// <see cref="CsvRecord"/> verwendet.
+        /// Sammlung von alternativen Spaltennamen der CSV-Datei, die <see cref="CsvRecordWrapper"/> für den Zugriff auf
+        /// auf eine Spalte von <see cref="CsvRecord"/> verwendet.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -86,7 +106,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Da beim Setzen des Wertes von <see cref="CsvProperty"/> alle Aliase berücksichtigt werden, empfiehlt es sich nicht, mehreren
         /// <see cref="CsvRecord"/>-Objekten denselben Alias zuzuweisen.</para>
         /// </remarks>
-        public ReadOnlyCollection<string> CsvColumnAliases { get; }
+        public ReadOnlyCollection<string> ColumnNameAliases { get; }
 
 
         /// <summary>
@@ -146,7 +166,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             if (this._lookup is null || record.Identifier != _lookup.CsvRecordIdentifier)
             {
-                this._lookup = new ColumnAliasesLookup(record, this.CsvColumnAliases);
+                this._lookup = new ColumnAliasesLookup(record, this.ColumnNameAliases, this._wildcardTimeout);
             }
 
             return _lookup.ColumnName;
@@ -161,7 +181,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             public string? ColumnName { get; private set; }
 
-            public ColumnAliasesLookup(CsvRecord record, ReadOnlyCollection<string> aliases)
+            public ColumnAliasesLookup(CsvRecord record, ReadOnlyCollection<string> aliases, int wildcardTimeout)
             {
                 this.CsvRecordIdentifier = record.Identifier;
 
@@ -179,7 +199,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                     if (HasWildcard(alias))
                     {
-                        Regex regex = InitRegex(comparer, alias);
+                        Regex regex = InitRegex(comparer, alias, wildcardTimeout);
 
                         for (int k = 0; k < columnNames.Count; k++) // Die Wildcard könnte auf alle keys passen.
                         {
@@ -237,7 +257,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
 
-            private static Regex InitRegex(IEqualityComparer<string> comparer, string alias)
+            private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
             {
 #if NET40
                             string pattern = "^" +
@@ -263,7 +283,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 #else
                 // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
                 // verwendet.
-                return new Regex(pattern, options, TimeSpan.FromSeconds(1));
+                return new Regex(pattern, options, TimeSpan.FromMilliseconds(wildcardTimeout));
 #endif
 
             }
