@@ -256,15 +256,14 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
 
-
             private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
             {
 #if NET40
-                            string pattern = "^" +
-                                Regex
-                                .Escape(alias)
-                                .Replace("\\?", ".")
-                                .Replace("\\*", ".*?") + "$";
+                string pattern = "^" +
+                    Regex
+                    .Escape(alias)
+                    .Replace("\\?", ".")
+                    .Replace("\\*", ".*?") + "$";
 #else
                 string pattern = "^" +
                     Regex
@@ -288,7 +287,6 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             }
         }//class ColumnAliasesLookup
-
 
     }
 }

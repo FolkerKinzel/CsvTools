@@ -19,7 +19,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
         /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
-        /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+        /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
@@ -32,27 +32,27 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
             CsvTypeCode type,
             bool nullable = false,
             bool maybeDBNull = false,
-            IFormatProvider? provider = null,
+            IFormatProvider? formatProvider = null,
             bool throwOnParseErrors = false) => type switch
             {
-                CsvTypeCode.Boolean => new NumberConverter<bool>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Byte => new NumberConverter<byte>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Char => new NumberConverter<char>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Date => new DateTimeConverter(true, nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.DateTime => new DateTimeConverter(false, nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Decimal => new NumberConverter<decimal>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Double => new NumberConverter<double>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Int16 => new NumberConverter<short>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Int32 => new NumberConverter<int>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Int64  => new NumberConverter<long>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.SByte => new NumberConverter<sbyte>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.Single => new NumberConverter<float>(nullable, maybeDBNull, provider, throwOnParseErrors),
+                CsvTypeCode.Boolean => new NumberConverter<bool>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Byte => new NumberConverter<byte>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Char => new NumberConverter<char>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Date => new DateTimeConverter(true, nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.DateTime => new DateTimeConverter(false, nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Decimal => new NumberConverter<decimal>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Double => new NumberConverter<double>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Int16 => new NumberConverter<short>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Int32 => new NumberConverter<int>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Int64  => new NumberConverter<long>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.SByte => new NumberConverter<sbyte>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.Single => new NumberConverter<float>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.String => new StringConverter(nullable),
-                CsvTypeCode.UInt16 => new NumberConverter<ushort>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.UInt32 => new NumberConverter<uint>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.UInt64 => new NumberConverter<ulong>(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.DateTimeOffset => new DateTimeOffsetConverter(nullable, maybeDBNull, provider, throwOnParseErrors),
-                CsvTypeCode.TimeSpan => new TimeSpanConverter(nullable, maybeDBNull, provider, throwOnParseErrors),
+                CsvTypeCode.UInt16 => new NumberConverter<ushort>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.UInt32 => new NumberConverter<uint>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.UInt64 => new NumberConverter<ulong>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.DateTimeOffset => new DateTimeOffsetConverter(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
+                CsvTypeCode.TimeSpan => new TimeSpanConverter(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.ByteArray => new Base64Converter(nullable, throwOnParseErrors),
                 CsvTypeCode.Guid => new GuidConverter(nullable, maybeDBNull, throwOnParseErrors),
                 _ => throw new ArgumentOutOfRangeException(nameof(type))

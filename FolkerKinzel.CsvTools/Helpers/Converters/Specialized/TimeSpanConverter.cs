@@ -20,7 +20,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// sonst <see cref="TimeSpan"/>.</param>
         /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+        /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
@@ -38,11 +38,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         internal TimeSpanConverter(
             bool nullable,
             bool maybeDBNull,
-            IFormatProvider? provider,
+            IFormatProvider? formatProvider,
             bool throwOnParseErrors)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
-            provider ??= CultureInfo.InvariantCulture;
+            formatProvider ??= CultureInfo.InvariantCulture;
 
             this.Type = nullable ? typeof(TimeSpan?) : typeof(TimeSpan);
             this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(TimeSpan?) : default(TimeSpan));
@@ -58,7 +58,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                     if (o is null) return null;
                     if (Convert.IsDBNull(o) && maybeDBNull) return null;
 
-                    return ((TimeSpan)o).ToString(format, provider);
+                    return ((TimeSpan)o).ToString(format, formatProvider);
                 });
 
                 _parser = new Converter<string?, object?>(
@@ -68,7 +68,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                     try
                     {
-                        return TimeSpan.Parse(s, provider);
+                        return TimeSpan.Parse(s, formatProvider);
                     }
                     catch
                     {
@@ -86,7 +86,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                     if (Convert.IsDBNull(o) && maybeDBNull) return null;
                     if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
 
-                    return ((TimeSpan)o).ToString(format, provider);
+                    return ((TimeSpan)o).ToString(format, formatProvider);
                 });
 
                 
@@ -97,7 +97,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                     try
                     {
-                        return TimeSpan.Parse(s, provider);
+                        return TimeSpan.Parse(s, formatProvider);
                     }
                     catch
                     {
@@ -119,7 +119,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// sonst <see cref="TimeSpan"/>.</param>
         /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+        /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
@@ -135,13 +135,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             string? format,
             bool nullable = false,
             bool maybeDBNull = false,
-            IFormatProvider? provider = null,
+            IFormatProvider? formatProvider = null,
             bool throwOnParseErrors = false,
             TimeSpanStyles styles = TimeSpanStyles.None,
             bool parseExact = false)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
-            provider ??= CultureInfo.InvariantCulture;
+            formatProvider ??= CultureInfo.InvariantCulture;
 
             this.Type = nullable ? typeof(TimeSpan?) : typeof(TimeSpan);
             this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(TimeSpan?) : default(TimeSpan));
@@ -149,7 +149,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
             try
             {
-                _ = TimeSpan.Zero.ToString(format, provider);
+                _ = TimeSpan.Zero.ToString(format, formatProvider);
             }
             catch (FormatException e)
             {
@@ -167,7 +167,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                     if (o is null) return null;
                     if (Convert.IsDBNull(o) && maybeDBNull) return null;
 
-                    return ((TimeSpan)o).ToString(format, provider);
+                    return ((TimeSpan)o).ToString(format, formatProvider);
                 });
 
 
@@ -180,7 +180,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                         try
                         {
-                            return TimeSpan.ParseExact(s, format, provider, styles);
+                            return TimeSpan.ParseExact(s, format, formatProvider, styles);
                         }
                         catch
                         {
@@ -199,7 +199,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                        try
                        {
-                           return TimeSpan.Parse(s, provider);
+                           return TimeSpan.Parse(s, formatProvider);
                        }
                        catch
                        {
@@ -218,7 +218,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                     if (Convert.IsDBNull(o) && maybeDBNull) return null;
                     if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
 
-                    return ((TimeSpan)o).ToString(format, provider);
+                    return ((TimeSpan)o).ToString(format, formatProvider);
                 });
 
                 if (parseExact)
@@ -230,7 +230,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                         try
                         {
-                            return TimeSpan.ParseExact(s, format, provider, styles);
+                            return TimeSpan.ParseExact(s, format, formatProvider, styles);
                         }
                         catch
                         {
@@ -249,7 +249,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                         try
                         {
-                            return TimeSpan.Parse(s, provider);
+                            return TimeSpan.Parse(s, formatProvider);
                         }
                         catch
                         {

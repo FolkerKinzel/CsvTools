@@ -22,20 +22,20 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <typeparamref name="T"/>.</param>
         /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+        /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         public NumberConverter(
             bool nullable,
             bool maybeDBNull,
-            IFormatProvider? provider,
+            IFormatProvider? formatProvider,
             bool throwOnParseErrors)
         {
             this.Type = nullable ? typeof(T?) : typeof(T);
             this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(T?) : default(T));
 
-            provider ??= CultureInfo.InvariantCulture;
+            formatProvider ??= CultureInfo.InvariantCulture;
             this.ThrowsOnParseErrors = throwOnParseErrors;
 
 
@@ -49,7 +49,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
                     try
                     {
-                        return Convert.ToString((T)o, provider);
+                        return Convert.ToString((T)o, formatProvider);
                     }
                     catch (Exception e)
                     {
@@ -68,7 +68,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
                         try
                         {
-                            return Convert.ChangeType(s, typeof(T), provider);
+                            return Convert.ChangeType(s, typeof(T), formatProvider);
                         }
                         catch
                         {
@@ -91,7 +91,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
                     try
                     {
-                        return Convert.ToString((T)o, provider);
+                        return Convert.ToString((T)o, formatProvider);
                     }
                     catch(Exception e)
                     {
@@ -106,7 +106,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                         if (s is null) return FallbackValue;
                         try
                         {
-                            return Convert.ChangeType(s, typeof(T), provider);
+                            return Convert.ChangeType(s, typeof(T), formatProvider);
                         }
                         catch
                         {

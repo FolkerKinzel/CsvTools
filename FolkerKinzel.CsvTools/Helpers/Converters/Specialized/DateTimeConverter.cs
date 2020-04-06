@@ -22,7 +22,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// sonst <see cref="DateTime"/>.</param>
         /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+        /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param> 
@@ -48,12 +48,12 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             bool isDate,
             bool nullable,
             bool maybeDBNull,
-            IFormatProvider? provider,
+            IFormatProvider? formatProvider,
             bool throwOnParseErrors)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
 
-            provider ??= CultureInfo.InvariantCulture;
+            formatProvider ??= CultureInfo.InvariantCulture;
 
             Type = nullable ? typeof(DateTime?) : typeof(DateTime);
             FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(DateTime?) : default(DateTime));
@@ -70,7 +70,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                         if (o is null) return null;
                         if (Convert.IsDBNull(o) && maybeDBNull) return null;
 
-                        return ((DateTime)o).ToString(format, provider);
+                        return ((DateTime)o).ToString(format, formatProvider);
                     });
 
 
@@ -81,7 +81,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                         try
                         {
-                            return DateTime.Parse(s, provider, styles);
+                            return DateTime.Parse(s, formatProvider, styles);
                         }
                         catch
                         {
@@ -101,7 +101,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                     if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
 
-                    return ((DateTime)o).ToString(format, provider);
+                    return ((DateTime)o).ToString(format, formatProvider);
                 });
 
                 _parser = new Converter<string?, object?>(
@@ -111,7 +111,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                         try
                         {
-                            return DateTime.Parse(s, provider, styles);
+                            return DateTime.Parse(s, formatProvider, styles);
                         }
                         catch
                         {
@@ -134,7 +134,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// sonst <see cref="DateTime"/>.</param>
         /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="provider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+        /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param> 
@@ -151,14 +151,14 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             string? format,
             bool nullable = false,
             bool maybeDBNull = false,
-            IFormatProvider? provider = null,
+            IFormatProvider? formatProvider = null,
             bool throwOnParseErrors = false,
             DateTimeStyles styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind,
             bool parseExact = false)
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
 
-            provider ??= CultureInfo.InvariantCulture;
+            formatProvider ??= CultureInfo.InvariantCulture;
 
             Type = nullable ? typeof(DateTime?) : typeof(DateTime);
             FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(DateTime?) : default(DateTime));
@@ -171,7 +171,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
             try
             {
-                _ = DateTime.Now.ToString(format, provider);
+                _ = DateTime.Now.ToString(format, formatProvider);
             }
             catch (FormatException e)
             {
@@ -194,7 +194,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                         if (o is null) return null;
                         if (Convert.IsDBNull(o) && maybeDBNull) return null;
 
-                        return ((DateTime)o).ToString(format, provider);
+                        return ((DateTime)o).ToString(format, formatProvider);
                     });
 
 
@@ -207,7 +207,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                             try
                             {
-                                return DateTime.ParseExact(s, format, provider, styles);
+                                return DateTime.ParseExact(s, format, formatProvider, styles);
                             }
                             catch
                             {
@@ -227,7 +227,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                             try
                             {
-                                return DateTime.Parse(s, provider, styles);
+                                return DateTime.Parse(s, formatProvider, styles);
                             }
                             catch
                             {
@@ -247,7 +247,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                     if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
 
-                    return ((DateTime)o).ToString(format, provider);
+                    return ((DateTime)o).ToString(format, formatProvider);
                 });
 
 
@@ -261,7 +261,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                             try
                             {
-                                return DateTime.ParseExact(s, format, provider, styles);
+                                return DateTime.ParseExact(s, format, formatProvider, styles);
                             }
                             catch
                             {
@@ -280,7 +280,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                             try
                             {
-                                return DateTime.Parse(s, provider, styles);
+                                return DateTime.Parse(s, formatProvider, styles);
                             }
                             catch
                             {
