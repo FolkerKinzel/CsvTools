@@ -53,7 +53,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
 
 
         /// <summary>
-        /// True gibt an, dass das <see cref="ICsvTypeConverter"/>-Objekt eine Ausnahme wirft, wenn <see cref="Parse(string)"/>
+        /// <c>true</c> gibt an, dass das <see cref="ICsvTypeConverter"/>-Objekt eine Ausnahme wirft, wenn <see cref="Parse(string)"/>
         /// scheitert. Anderenfalls wird in diesem Fall <see cref="FallbackValue"/> zurückgegeben.
         /// </summary>
         bool ThrowsOnParseErrors { get; }

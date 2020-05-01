@@ -20,7 +20,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// sonst <see cref="Guid"/>.</param>
         /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
         /// <para>
@@ -216,7 +216,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         public Type Type { get; }
 
         /// <summary>
-        /// True gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
+        /// <c>true</c> gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
         /// scheitert. Anderenfalls wird in diesem Fall <see cref="FallbackValue"/> zurückgegeben.
         /// </summary>
         public bool ThrowsOnParseErrors { get; }

@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
+using System.Globalization;
 using System.Linq;
 
 namespace FolkerKinzel.CsvTools.Helpers
@@ -151,7 +152,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             {
                 if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
                 }
 
                 return _dynProps[index].GetValue(this.Record);
@@ -161,7 +162,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             {
                 if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
                 }
 
                 _dynProps[index].SetValue(this.Record, value);
@@ -199,7 +200,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             {
                 if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
                 }
 
                 if (propertyName is null)
@@ -221,7 +222,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             {
                 if (Record is null)
                 {
-                    throw new InvalidOperationException(Res.CsvRecordIsNull);
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
                 }
 
                 if (propertyName is null)
@@ -272,7 +273,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         /// <param name="propertyName">Der <see cref="CsvProperty.PropertyName"/> der zu entfernenden
         /// <see cref="CsvProperty"/>.</param>
-        /// <returns>True, wenn die gesuchte <see cref="CsvProperty"/> in der Auflistung enthalten war
+        /// <returns><c>true</c>, wenn die gesuchte <see cref="CsvProperty"/> in der Auflistung enthalten war
         /// und entfernt werden konnte.</returns>
         public bool RemoveProperty(string? propertyName)
             => propertyName is null ? false : _dynProps.Remove(propertyName);
@@ -369,7 +370,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         /// <param name="propertyName">Der <see cref="CsvProperty.PropertyName"/> der zu suchenden
         /// <see cref="CsvProperty"/>.</param>
-        /// <returns>True, wenn ein <see cref="CsvProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
+        /// <returns><c>true</c>, wenn ein <see cref="CsvProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
         /// angegebenen Namen registriert ist.</returns>
         public bool Contains(string? propertyName) => propertyName is null ? false : _dynProps.Contains(propertyName);
 
@@ -391,7 +392,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         /// <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
         /// <param name="value">Das Objekt, das der dynamisch implementierten Eigenschaft zugewiesen wird.</param>
-        /// <returns>True, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvProperty"/>
+        /// <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvProperty"/>
         /// im <see cref="CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
         /// wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
@@ -409,7 +410,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             if (Record is null)
             {
-                throw new InvalidOperationException(Res.CsvRecordIsNull);
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
             }
 
             if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
@@ -427,7 +428,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         /// <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
         /// <param name="result">Das Objekt, das den Rückgabewert der dynamisch implementierten Eigenschaft darstellt.</param>
-        /// <returns>True, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvProperty"/>
+        /// <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvProperty"/>
         /// im <see cref="CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
         /// wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
@@ -445,7 +446,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             if (Record is null)
             {
-                throw new InvalidOperationException(Res.CsvRecordIsNull);
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
             }
 
             if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
@@ -492,7 +493,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             if (Record is null)
             {
-                throw new InvalidOperationException(Res.CsvRecordIsNull);
+                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
             }
 
 

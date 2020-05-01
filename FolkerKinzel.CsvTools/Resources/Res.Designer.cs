@@ -70,7 +70,7 @@ namespace FolkerKinzel.CsvTools.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die CsvRecordWrapper.Record is null. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die {0} is null. ähnelt.
         /// </summary>
         internal static string CsvRecordIsNull {
             get {

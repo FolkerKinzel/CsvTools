@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -255,7 +256,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             }//ctor ColumnAliasesLookup
 
 
-
+            [SuppressMessage("Microsoft.Performance", "CA1801:ReviewUnusedParameters", MessageId = "isChecked")]
             private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
             {
 #if NET40

@@ -121,7 +121,7 @@
     <value>The identifier is not well-formed.</value>
   </data>
   <data name="CsvRecordIsNull" xml:space="preserve">
-    <value>CsvRecordWrapper.Record is null.</value>
+    <value>{0} is null.</value>
   </data>
   <data name="DataTypeNotSupported" xml:space="preserve">
     <value>The converters data type is not supported.</value>

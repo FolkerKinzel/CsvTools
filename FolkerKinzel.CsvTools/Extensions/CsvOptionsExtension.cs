@@ -5,7 +5,7 @@ namespace FolkerKinzel.CsvTools.Extensions
     /// <summary>
     /// Erweiterungsmethoden, die die Arbeit mit der <see cref="CsvOptions"/>-Enum erleichtern.
     /// </summary>
-    public static class CsvOptionsExtensions
+    public static class CsvOptionsExtension
     {
         /// <summary>
         /// Setzt sämtliche in <paramref name="flags"/> gesetzten Flags in <paramref name="value"/>.
@@ -31,8 +31,8 @@ namespace FolkerKinzel.CsvTools.Extensions
         /// Flags auf ihm gesetzt sind.</param>
         /// <param name="flags">Ein einzelner <see cref="CsvOptions"/>-Wert oder eine Kombination aus mehreren 
         /// <see cref="CsvOptions"/>-Werten.</param>
-        /// <returns>True, wenn sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
-        /// gesetzt sind. (Wenn <paramref name="flags"/>&#160;<see cref="CsvOptions.None"/> ist, wird nur dann true zurückgegeben,
+        /// <returns><c>true</c>, wenn sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
+        /// gesetzt sind. (Wenn <paramref name="flags"/>&#160;<see cref="CsvOptions.None"/> ist, wird nur dann <c>true</c> zurückgegeben,
         /// wenn auch <paramref name="value"/>&#160;<see cref="CsvOptions.None"/> ist.</returns>
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

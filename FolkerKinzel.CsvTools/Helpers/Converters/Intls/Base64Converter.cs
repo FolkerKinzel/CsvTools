@@ -11,9 +11,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <summary>
         /// Initialisiert ein <see cref="Base64Converter"/>-Objekt.
         /// </summary>
-        /// <param name="allowNull">Wenn false, wird von <see cref="Parse(string)"/> nie <c>null</c> zurückgegeben: Der Rückgabewert von 
+        /// <param name="allowNull">Wenn <c>false</c>, wird von <see cref="Parse(string)"/> nie <c>null</c> zurückgegeben: Der Rückgabewert von 
         /// <see cref="FallbackValue"/>ist dann ein leeres Array (sonst <c>null</c>).</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
         /// Aus Gründen der Konsistenz sollten Sie diesen Konstruktor nicht direkt aufrufen, sondern die Methode
@@ -45,7 +45,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         public Type Type => typeof(byte[]);
 
         /// <summary>
-        /// True gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
+        /// <c>true</c> gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
         /// scheitert. Anderenfalls wird in diesem Fall <see cref="FallbackValue"/> zurückgegeben.
         /// </summary>
         public bool ThrowsOnParseErrors { get; }

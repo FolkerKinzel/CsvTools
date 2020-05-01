@@ -56,5 +56,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
             conv.ConvertToString(4711);
 
         }
+
+
+        [ExpectedException(typeof(InvalidCastException))]
+        [TestMethod()]
+        public void ConvertToStringTest_ThrowOnDBNull()
+        {
+            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
+
+            conv.ConvertToString(DBNull.Value);
+        }
     }
 }

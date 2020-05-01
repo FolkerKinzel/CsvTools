@@ -10,7 +10,7 @@ namespace FolkerKinzel.CsvTools
     /// </summary>
     /// <note type="tip">
     /// Verwenden Sie zum sicheren und bequemen Arbeiten mit der <see cref="CsvOptions"/>-Enum  die Erweiterungsmethoden der 
-    /// Klasse <see cref="CsvOptionsExtensions"/>.
+    /// Klasse <see cref="CsvOptionsExtension"/> (s.Beispiel)!
     /// </note>
     [Flags]
     public enum CsvOptions
@@ -77,8 +77,8 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Wenn das Flag gesetzt wird, wird beim Lesen der CSV-Datei für jede Datenzeile dasselbe <see cref="CsvRecord"/>-Objekt verwendet (gefüllt mit neuen Daten).
         /// Das bringt bei sehr großen
-        /// CSV-Dateien leichte Performancevorteile, macht es aber unmöglich, auf <see cref="CsvReader.Read"/> eine
-        /// Linq-Abfrage durchzuführen.
+        /// CSV-Dateien leichte Performancevorteile, kann aber zu unerwarteten Ergebnissen führen, wenn bei der Weiterverarbeitung versucht wird, die Ergbnismenge zu 
+        /// speichern. (s. Beispiel)
         /// </summary>
         DisableCaching = 1 << 5
     }

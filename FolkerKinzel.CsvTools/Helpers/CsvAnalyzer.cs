@@ -289,7 +289,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
-        /// True, wenn die CSV-Datei eine Kopfzeile hat.
+        /// <c>true</c>, wenn die CSV-Datei eine Kopfzeile hat.
         /// </summary>
         public bool HasHeader => ColumnNames != null;
 

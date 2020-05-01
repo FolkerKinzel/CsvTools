@@ -32,7 +32,7 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         /// <param name="fileName">Dateipfad der CSV-Datei.</param>
         /// <param name="fieldSeparator">Das Feldtrennzeichen, das in der CSV-Datei Verwendung findet.</param>
-        /// <param name="hasHeaderRow">True, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
+        /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
         /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
         /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
@@ -58,12 +58,8 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
         /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
-        /// <param name="hasHeaderRow">True, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
+        /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
         /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
-        /// <param name="disableCaching">Wenn <c>true</c>, wird beim Durchlaufen der Enumeration, die die Methode <see cref="Read"/>
-        /// zurückgibt, immer dasselbe <see cref="CsvRecord"/>-Objekt zurückgegeben (gefüllt mit neuen Daten). Das kann bei sehr großen
-        /// CSV-Dateien leichte Performancevorteile bringen, macht es aber unmöglich, auf dem Rückgabewert von <see cref="Read"/> eine
-        /// Linq-Abfrage durchzuführen.</param>
         /// <exception cref="ArgumentNullException"><paramref name="reader"/> ist <c>null</c>.</exception>
         public CsvReader(
             TextReader reader,

@@ -17,11 +17,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <param name="type">Der Datentyp des Konverters.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
-        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
         /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
         /// misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="ICsvTypeConverter.FallbackValue"/> zurück.</param>
@@ -47,7 +47,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
                 CsvTypeCode.Int64  => new NumberConverter<long>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.SByte => new NumberConverter<sbyte>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.Single => new NumberConverter<float>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
-                CsvTypeCode.String => new StringConverter(nullable),
+                CsvTypeCode.String => new StringConverter(nullable, maybeDBNull),
                 CsvTypeCode.UInt16 => new NumberConverter<ushort>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.UInt32 => new NumberConverter<uint>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.UInt64 => new NumberConverter<ulong>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
@@ -66,7 +66,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <typeparam name="TEnum">Ein beliebiger Enum-Typ.</typeparam>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
-        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
@@ -92,7 +92,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <typeparamref name="TEnum"/> verwendet wird.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
-        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
@@ -119,9 +119,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <param name="type">Konstante für einen ganzzahligen Datentyp.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
         /// und auch zurückzugeben vermag (<see cref="Nullable{T}"/>).</param>
-        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="ICsvTypeConverter.FallbackValue"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="ICsvTypeConverter.Parse(string)"/> des erzeugten 
         /// <see cref="ICsvTypeConverter"/>-Objekts eine Ausnahme, wenn das Parsen
         /// misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="ICsvTypeConverter.FallbackValue"/> zurück.</param>

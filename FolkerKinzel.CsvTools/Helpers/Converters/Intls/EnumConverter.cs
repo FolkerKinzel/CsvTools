@@ -19,11 +19,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}"/> akzeptiert und zurückgegeben,
         /// sonst <typeparamref name="TEnum"/>.</param>
-        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
-        /// <param name="ignoreCase">True gibt an, das beim Parsen die Groß- und Kleinschreibung von Enum-Bezeichnern ignoriert wird.</param>
+        /// <param name="ignoreCase"><c>true</c> gibt an, das beim Parsen die Groß- und Kleinschreibung von Enum-Bezeichnern ignoriert wird.</param>
         /// <remarks>
         /// <para>
         /// Sie sollten diesen Konstruktor nicht direkt aufrufen, sondern über 
@@ -122,11 +122,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <typeparamref name="TEnum"/> verwendet wird.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}"/> akzeptiert und zurückgegeben,
         /// sonst <typeparamref name="TEnum"/>.</param>
-        /// <param name="maybeDBNull">Wenn true, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
-        /// <param name="throwOnParseErrors">Wenn true, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+        /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
-        /// <param name="ignoreCase">True gibt an, das beim Parsen die Groß- und Kleinschreibung von Enum-Bezeichnern ignoriert wird.</param>
+        /// <param name="ignoreCase"><c>true</c> gibt an, das beim Parsen die Groß- und Kleinschreibung von Enum-Bezeichnern ignoriert wird.</param>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
         public EnumConverter(
             string? format,
@@ -228,7 +228,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         public Type Type { get; }
 
         /// <summary>
-        /// True gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
+        /// <c>true</c> gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
         /// scheitert. Anderenfalls wird in diesem Fall <see cref="FallbackValue"/> zurückgegeben.
         /// </summary>
         public bool ThrowsOnParseErrors { get; }

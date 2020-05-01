@@ -121,7 +121,7 @@
     <value>Der Bezeichner ist nicht wohlgefomt.</value>
   </data>
   <data name="CsvRecordIsNull" xml:space="preserve">
-    <value>CsvRecordWrapper.Record ist NULL.</value>
+    <value>{0} ist NULL.</value>
   </data>
   <data name="DataTypeNotSupported" xml:space="preserve">
     <value>Der Datentyp des Konverters wird nicht unterstützt.</value>

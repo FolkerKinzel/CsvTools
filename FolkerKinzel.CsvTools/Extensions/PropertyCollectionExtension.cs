@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace FolkerKinzel.CsvTools.Extensions
 {
 #if NET40
-    internal static class PropertyCollectionExtensions
+    internal static class PropertyCollectionExtension
     {
         internal static bool TryGetValue(
             this KeyedCollection<string, CsvProperty> kColl, string key, [NotNullWhen(true)] out CsvProperty? value)

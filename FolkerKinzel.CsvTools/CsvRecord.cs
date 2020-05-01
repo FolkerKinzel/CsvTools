@@ -63,8 +63,8 @@ namespace FolkerKinzel.CsvTools
         /// CSV-Dateien ohne Kopfzeile.)
         /// </summary>
         /// <param name="columnsCount">Anzahl der Spalten.</param>
-        /// <param name="caseSensitive">Wenn true, werden die Spaltennamen case-sensitiv behandelt.</param>
-        /// <param name="initArr">Wenn false, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
+        /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv behandelt.</param>
+        /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
         /// für weitere <see cref="CsvRecord"/>-Objekte. (Wird von <see cref="CsvReader"/> verwendet.</param>
         internal CsvRecord(int columnsCount, bool caseSensitive, bool initArr)
         {
@@ -100,15 +100,15 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         /// <param name="keys">Spaltennamen. Die Auflistung kann <c>null</c>-Werte enthalten: Diese werden dann durch 
         /// Standardnamen ersetzt.</param>
-        /// <param name="caseSensitive">Wenn true, werden die Spaltennamen case-sensitiv behandelt.</param>
-        /// <param name="trimColumns">Wenn true, werden alle Spaltennamen mit der Methode <see cref="string.Trim()"/> behandelt.</param>
-        /// <param name="initArr">Wenn false, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
+        /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv behandelt.</param>
+        /// <param name="trimColumns">Wenn <c>true</c>, werden alle Spaltennamen mit der Methode <see cref="string.Trim()"/> behandelt.</param>
+        /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
         /// für weitere <see cref="CsvRecord"/>-Objekte. (Wird von <see cref="CsvReader"/> verwendet.</param>
-        /// <param name="throwException">Wenn true, wird eine <see cref="ArgumentException"/> geworfen,
+        /// <param name="throwException">Wenn <c>true</c>, wird eine <see cref="ArgumentException"/> geworfen,
         /// wenn <paramref name="keys"/> 2 identische Spaltennamen enthält. Beim Lesen einer Datei sollte der 
-        /// Parameter auf false gesetzt werden, um die Spaltennamen automatisch so abzuwandeln, dass sie eindeutig sind.</param>
+        /// Parameter auf <c>false</c> gesetzt werden, um die Spaltennamen automatisch so abzuwandeln, dass sie eindeutig sind.</param>
         /// <exception cref="ArgumentException">Ein Spaltenname war bereits im Dictionary enthalten. Die Exception wird nur dann
-        /// geworfen, wenn <paramref name="throwException"/> true ist.</exception>
+        /// geworfen, wenn <paramref name="throwException"/> <c>true</c> ist.</exception>
         internal CsvRecord(string?[] keys, bool caseSensitive, bool trimColumns, bool initArr, bool throwException)
         {
             Debug.Assert(keys != null);
@@ -225,7 +225,7 @@ namespace FolkerKinzel.CsvTools
         public int Count => _columnNames.Count;
 
         /// <summary>
-        /// Gibt true zurück, wenn <see cref="Count"/> 0 ist oder wenn alle
+        /// Gibt <c>true</c> zurück, wenn <see cref="Count"/> 0 ist oder wenn alle
         /// Felder den Wert <c>null</c> haben.
         /// </summary>
         public bool IsEmpty => Count == 0 || _values.All(x => x is null);
@@ -297,7 +297,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem mit  <paramref name="columnName"/> angegebenen Spaltennamen
         /// zugeordnet ist, wenn der Schlüssel gefunden wurde, oder andernfalls <c>null</c>. Dieser Parameter wird nicht
         /// initialisiert übergeben.</param>
-        /// <returns>True, wenn ein Spaltenname mit dem Wert von <paramref name="columnName"/> enthalten ist.</returns>
+        /// <returns><c>true</c>, wenn ein Spaltenname mit dem Wert von <paramref name="columnName"/> enthalten ist.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
         public bool TryGetValue(string columnName, out string? value)
         {
@@ -360,7 +360,7 @@ namespace FolkerKinzel.CsvTools
         /// Bestimmt, ob das <see cref="CsvRecord"/>-Objekt eine Spalte mit dem angegebenen Spaltennamen enthält.
         /// </summary>
         /// <param name="columnName">Der Spaltenname der zu suchenden Spalte der CSV-Datei.</param>
-        /// <returns>True, wenn <paramref name="columnName"/> zu den Spaltennamen des <see cref="CsvRecord"/>-Objekts gehört.</returns>
+        /// <returns><c>true</c>, wenn <paramref name="columnName"/> zu den Spaltennamen des <see cref="CsvRecord"/>-Objekts gehört.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
         public bool ContainsColumn(string columnName)
         {

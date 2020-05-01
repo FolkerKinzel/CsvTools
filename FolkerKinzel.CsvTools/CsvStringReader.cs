@@ -34,7 +34,7 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
         /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
-        /// <param name="skipEmptyLines">Wenn True, werden unmaskierte Leerzeilen in der CSV-Datei übersprungen.</param>
+        /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen in der CSV-Datei übersprungen.</param>
         public CsvStringReader(TextReader reader, char fieldSeparator, bool skipEmptyLines)
         {
             Debug.Assert(reader != null);
