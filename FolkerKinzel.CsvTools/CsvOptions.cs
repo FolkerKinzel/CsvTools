@@ -8,10 +8,19 @@ namespace FolkerKinzel.CsvTools
     /// Benannte Konstanten, um Optionen für das Lesen und Schreiben von CSV-Dateien anzugeben. Die Flags
     /// können kombiniert werden.
     /// </summary>
+    /// <remarks>
     /// <note type="tip">
     /// Verwenden Sie zum sicheren und bequemen Arbeiten mit der <see cref="CsvOptions"/>-Enum  die Erweiterungsmethoden der 
     /// Klasse <see cref="CsvOptionsExtension"/> (s.Beispiel)!
     /// </note>
+    /// </remarks>
+    /// <example>
+    /// <para>Beispiel, das demonstriert, dass das Setzen des Flags <see cref="DisableCaching"/> zu unerwarteten Ergebnissen führen kann, wenn versucht wird,
+    /// die Ergebnismenge zu cachen.</para>
+    /// <note type="important">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <code language="cs" source="..\Examples\DisableCachingAndLinq.cs" />
+    /// </example>
+
     [Flags]
     public enum CsvOptions
     {

@@ -61,8 +61,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
             using var reader = new CsvReader(FILENAME_STANDARD);
 
-
-            Assert.AreEqual(VALUE1, reader.Read().First()["VALUE1"]);
+            Assert.AreEqual(VALUE1, reader.Read().First()[Key1]);
         }
 
 
@@ -87,8 +86,7 @@ namespace FolkerKinzel.CsvTools.Tests
                 writer.WriteRecord();
             }
 
-            using var reader = new CsvReader(FILENAME_STANDARD);
-
+            using var reader = new CsvReader(FILENAME_STANDARD, hasHeaderRow: false);
 
             Assert.AreEqual(VALUE1, reader.Read().First()[0]);
         }
@@ -108,8 +106,6 @@ namespace FolkerKinzel.CsvTools.Tests
             TestContext.WriteLine($"{nameof(TestContext.TestRunDirectory)}:            {TestContext.TestRunDirectory}");
             TestContext.WriteLine("");
             TestContext.WriteLine($"{nameof(TestContext.TestRunResultsDirectory)}:     {TestContext.TestRunResultsDirectory}");
-     
-
         }
     }
 }

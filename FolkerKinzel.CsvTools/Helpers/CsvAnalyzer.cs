@@ -8,16 +8,20 @@ using System.Text;
 namespace FolkerKinzel.CsvTools.Helpers
 {
     /// <summary>
-    /// <see cref="CsvAnalyzer"/> führt bei seiner Instanziierung eine statistische Analyse auf der CSV-Datei aus und stellt 
-    /// die Ergebnisse als Objekteigenschaften zur Verfügung.
+    /// <see cref="CsvAnalyzer"/> kann eine statistische Analyse auf einer CSV-Datei ausführen und
+    /// die Ergebnisse als Objekteigenschaften zur Verfügung stellen.
     /// </summary>
+    /// <example>
+    /// <note type="important">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
+    /// <code language="cs" source="..\Examples\ObjectFromCsv.cs"/>
+    /// </example>
     public class CsvAnalyzer
     {
         /// <summary>
         /// Mindestanzahl der zu untersuchenden Zeilen der CSV-Datei.
         /// </summary>
         public const int AnalyzedLinesMinCount = 5;
-
 
 
         /// <summary>
@@ -291,9 +295,12 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <summary>
         /// <c>true</c>, wenn die CSV-Datei eine Kopfzeile hat.
         /// </summary>
-        public bool HasHeader => ColumnNames != null;
+        public bool HasHeaderRow => ColumnNames != null;
 
 
+        /// <summary>
+        /// Spaltennamen der CSV-Datei.
+        /// </summary>
         public IList<string>? ColumnNames { get; private set; }
     }//class
 }

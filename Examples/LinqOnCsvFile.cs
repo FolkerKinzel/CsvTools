@@ -1,6 +1,5 @@
 ﻿using FolkerKinzel.CsvTools;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,9 +24,7 @@ namespace Examples
             Console.Write("How many people live in New York?: ");
             Console.WriteLine(csvReader.Read().Where(x => x["City"] == "New York").Count());
 
-
             // Console Output: How many people live in New York?: 2
-
         }
     }
 }

@@ -7,11 +7,6 @@ using System.Text;
 
 namespace Examples
 {
-    /// <summary>
-    /// This example shows, that setting the flag <see cref="CsvOptions.DisableCaching"/> 
-    /// may cause unexpected results,
-    /// if you try to cache the result set in further processing.
-    /// </summary>
     static class DisableCachingAndLinq
     {
         public static void TestDisableCachingAndLinq()
@@ -27,7 +22,7 @@ namespace Examples
                 .ToString());
 
 
-            Console.WriteLine("How many people live in New York?: ");
+            Console.WriteLine("Which people live in New York?: ");
 
             Console.Write("Determine with cache enabled:  ");
             using (var csvReader = new CsvReader(csvFileName))
@@ -55,7 +50,7 @@ namespace Examples
             }
 
             // Console Output: 
-            // How many people live in New York?:
+            // Which people live in New York?:
             // Determine with cache enabled:  Joyce John
             // Determine with cache disabled: John John
         }

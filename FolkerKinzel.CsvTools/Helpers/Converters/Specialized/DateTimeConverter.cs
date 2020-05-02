@@ -25,13 +25,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
-        /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param> 
-        /// <param name="styles">Ein Wert der <see cref="DateTimeStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
-        /// nur ausgewertet, wenn <paramref name="parseExact"/> <c>true</c> ist.</param>
-        /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
-        /// Formatstring entsprechen.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="format"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
+        /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
         /// <para>
         /// Sie können diesen Konstruktor nicht direkt aufrufen, sondern über 
@@ -39,7 +33,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </para>
         /// <para>
         /// Diese Überladung des Konstruktors ist wesentlich performanter als
-        /// <see cref="DateTimeOffsetConverter.DateTimeConverter(string, bool, bool, IFormatProvider, bool, DateTimeStyles, bool)"/>, bietet
+        /// <see cref="DateTimeConverter.DateTimeConverter(string, bool, bool, IFormatProvider, bool, DateTimeStyles, bool)"/>, bietet
         /// aber weniger Einstellmöglichkeiten. Beim Parsen kommt
         /// <see cref="DateTimeOffset.Parse(string, IFormatProvider, DateTimeStyles)"/> zum Einsatz. Der <see cref="DateTimeStyles"/>-Wert ist so
         /// eingestellt, dass Leerraum ignoriert wird (<see cref="DateTimeStyles.AllowWhiteSpaces"/>).

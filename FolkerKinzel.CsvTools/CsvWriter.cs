@@ -1,5 +1,6 @@
 ﻿using FolkerKinzel.CsvTools.Helpers;
 using System;
+using System.Data;
 using System.IO;
 using System.Text;
 
@@ -14,6 +15,12 @@ namespace FolkerKinzel.CsvTools
     /// <see cref="Record"/> wieder auf <c>null</c>-Werte, so dass der Datensatz erneut befüllt werden kann. Wenn andere Datentypen als <see cref="string"/>
     /// geschrieben werden sollen, bietet sich die Verwendung der Klasse <see cref="CsvRecordWrapper"/> an, die einen komfortablen Adapter zwischen den
     /// Daten der Anwendung und der CSV-Datei darstellt.</remarks>
+    /// <example>
+    /// <note type="important">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <para>Speichern des Inhalts einer <see cref="DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
+    /// eine <see cref="DataTable"/>:</para>
+    /// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
+    /// </example>
     public sealed class CsvWriter : IDisposable
     {
         /// <summary>

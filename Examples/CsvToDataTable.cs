@@ -2,11 +2,9 @@
 using FolkerKinzel.CsvTools.Helpers;
 using FolkerKinzel.CsvTools.Helpers.Converters;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Text;
 
 namespace Examples
 {
@@ -25,13 +23,12 @@ namespace Examples
 
             CsvRecordWrapper wrapper = InitCsvRecordWrapper();
 
-
             // Write the CSV-file:
             // (We can sort the columns of the csv file differently than those of the DataTable - 
             // CsvRecordWrapper will reorder that.)
             string[] columns = new string[] { Subject, LessonBegin, PupilsName, LessonDay };
             using (CsvWriter writer = new CsvWriter(fileName, columns))
-            { 
+            {
                 // (CsvWriter reuses the same record.)
                 wrapper.Record = writer.Record;
 
@@ -50,7 +47,6 @@ namespace Examples
                     }
                 }
             }
-
 
             dataTable.Clear();
 
@@ -71,10 +67,9 @@ namespace Examples
                     {
                         dataRow[i] = wrapper[i];
                     }
-                    
+
                 }
             }
-
 
             WriteConsole(dataTable);
 
@@ -94,7 +89,6 @@ namespace Examples
 
         }
 
-        
 
         private static CsvRecordWrapper InitCsvRecordWrapper()
         {
@@ -111,6 +105,7 @@ namespace Examples
 
             return wrapper;
         }
+
 
         private static DataTable InitDataTable()
         {
@@ -131,14 +126,13 @@ namespace Examples
                 new DataColumn(LessonBegin, typeof(TimeSpan))
                 );
 
-            dataTable.Rows.Add(new object[] { "Susi Meyer", "Piano", DayOfWeek.Wednesday, new TimeSpan(14,30,0) });
+            dataTable.Rows.Add(new object[] { "Susi Meyer", "Piano", DayOfWeek.Wednesday, new TimeSpan(14, 30, 0) });
             dataTable.Rows.Add(new object[] { "Carl Czerny", "Piano", DayOfWeek.Thursday, new TimeSpan(15, 15, 0) });
             dataTable.Rows.Add(new object[] { "Frederic Chopin" });
 
 
-                return dataTable;
+            return dataTable;
         }
-
 
 
         private static void WriteConsole(DataTable dataTable)
@@ -150,9 +144,9 @@ namespace Examples
             Console.WriteLine();
             Console.WriteLine("Content of the refilled DataTable:");
 
-            foreach(DataRow? dataRow in dataTable.Rows)
+            foreach (DataRow? dataRow in dataTable.Rows)
             {
-                if(dataRow is null)
+                if (dataRow is null)
                 {
                     continue;
                 }
@@ -175,7 +169,6 @@ namespace Examples
 
                 Console.WriteLine();
             }
-
         }
     }
 }

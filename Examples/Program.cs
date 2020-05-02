@@ -20,8 +20,8 @@ namespace Examples
         {
             // LinqOnCsvFile.TestLinqOnCsvFile();
             // DisableCachingAndLinq.TestDisableCachingAndLinq();
-               CsvToDataTable.TestCsvToDataTable();
-
+            // CsvToDataTable.TestCsvToDataTable();
+            ObjectFromCsv.TestObjectFromCsv();
 
             
         }

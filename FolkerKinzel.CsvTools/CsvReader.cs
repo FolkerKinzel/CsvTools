@@ -1,4 +1,5 @@
-﻿using FolkerKinzel.CsvTools.Resources;
+﻿using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.Resources;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,13 +12,30 @@ namespace FolkerKinzel.CsvTools
 {
     /// <summary>
     /// Bietet schreibgeschützten Vorwärtszugriff auf die Datensätze einer CSV-Datei. (Das bedeutet, dass der <see cref="CsvReader"/> die Datei nur einmal vorwärts
-    /// lesen kann.) Da die Ergebnisse zwischengespeichert werden, ist es möglich, eine Linq-Abfrage auf der CSV-Datei
-    /// auszuführen. Wenn Linq nicht benötigt wird, kann das Caching über <see cref="CsvOptions.DisableCaching"/> deaktiviert werden.
+    /// lesen kann.)
     /// </summary>
-    /// <remarks>Die Methode <see cref="Read"/> gibt einen <see cref="IEnumerator{T}"/> zurück, mit dem Sie über die Datensätze der CSV-Datei iterieren
-    /// können, die in Form von <see cref="CsvRecord"/>-Objekten zurückgegeben werden. Die Klasse <see cref="Helpers.CsvRecordWrapper"/> bietet die
-    /// Möglichkeit, die Reihenfolge der Datenspalten der <see cref="CsvRecord"/>-Objekte zur Laufzeit auf die Spaltenreihenfolge Ihrer <see cref="DataTable"/>
-    /// zu mappen und Typkonvertierungen durchzuführen.</remarks>
+    /// <remarks>
+    /// <para>
+    /// Die Methode <see cref="Read"/> gibt einen <see cref="IEnumerator{T}"/> zurück, mit dem Sie über die Datensätze der CSV-Datei iterieren
+    /// können, die in Form von <see cref="CsvRecord"/>-Objekten zurückgegeben werden.
+    /// </para>
+    /// <para>Die Klasse <see cref="CsvRecordWrapper"/> bietet die
+    /// Möglichkeit, die Reihenfolge der Datenspalten der <see cref="CsvRecord"/>-Objekte zur Laufzeit auf die Spaltenreihenfolge einer <see cref="DataTable"/>
+    /// zu mappen und Typkonvertierungen durchzuführen.
+    /// </para>
+    /// <para>Beim Lesen einer unbekannten CSV-Datei können die geeigneten Parameter für den Konstruktor von <see cref="CsvReader"/> mit Hilfe der Klasse
+    /// <see cref="CsvAnalyzer"/> ermittelt werden.</para>
+    /// </remarks>
+    /// <example>
+    /// <note type="important">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <para>Linq-Abfrage auf einer CSV-Datei:</para>
+    /// <code language="cs" source="..\Examples\LinqOnCsvFile.cs"/>
+    /// <para>Speichern des Inhalts einer <see cref="DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
+    /// eine <see cref="DataTable"/>:</para>
+    /// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
+    /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
+    /// <code language="cs" source="..\Examples\ObjectFromCsv.cs"/>
+    /// </example>
     public sealed class CsvReader : IDisposable
     {
         private readonly CsvStringReader _reader;
@@ -31,9 +49,9 @@ namespace FolkerKinzel.CsvTools
         /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
         /// </summary>
         /// <param name="fileName">Dateipfad der CSV-Datei.</param>
-        /// <param name="fieldSeparator">Das Feldtrennzeichen, das in der CSV-Datei Verwendung findet.</param>
         /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
         /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
+        /// <param name="fieldSeparator">Das Feldtrennzeichen, das in der CSV-Datei Verwendung findet.</param>
         /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
@@ -42,8 +60,8 @@ namespace FolkerKinzel.CsvTools
             string fileName,
             bool hasHeaderRow = true,
             CsvOptions options = CsvOptions.Default,
-            Encoding? textEncoding = null,
-            char fieldSeparator = ',')
+            char fieldSeparator = ',',
+            Encoding? textEncoding = null)
         {
             StreamReader streamReader = InitializeStreamReader(fileName, textEncoding);
 
@@ -57,9 +75,9 @@ namespace FolkerKinzel.CsvTools
         /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
         /// </summary>
         /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
-        /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
         /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
         /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
+        /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
         /// <exception cref="ArgumentNullException"><paramref name="reader"/> ist <c>null</c>.</exception>
         public CsvReader(
             TextReader reader,

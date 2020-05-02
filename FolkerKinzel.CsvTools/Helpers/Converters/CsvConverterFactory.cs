@@ -6,8 +6,8 @@ using System.Globalization;
 namespace FolkerKinzel.CsvTools.Helpers.Converters
 {
     /// <summary>
-    /// Statische Klasse, die eine Methode veröffentlicht, um <see cref="ICsvTypeConverter"/>-Objekte für alle elementaren
-    /// Datentypen (inkl. <see cref="DateTime"/>) zu instanziieren.
+    /// Statische Klasse, die Methoden veröffentlicht, um <see cref="ICsvTypeConverter"/>-Objekte für alle elementaren
+    /// Datentypen zu instanziieren.
     /// </summary>
     public static class CsvConverterFactory
     {

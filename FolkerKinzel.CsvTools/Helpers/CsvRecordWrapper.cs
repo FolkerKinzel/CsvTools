@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
@@ -49,19 +50,26 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// <see cref="CsvProperty"/>-Objekte wie normale Eigenschaften über ihren Namen anzusprechen (<see cref="CsvProperty.PropertyName"/>).
     /// Der Nachteil ist, dass Visual Studio auf dynamischen Variablen keinerlei "IntelliSense" bieten kann.
     /// </para>
-    /// <para>Wenn eine CSV-Datei mit <see cref="CsvWriter"/> geschrieben wird, ist es möglich den Konstruktor <see cref="CsvRecordWrapper(CsvRecord)"/>
-    /// zu verwenden, da das <see cref="CsvRecord"/>-Objekt, das es mit Daten zu füllen gilt, bereits vor dem ersten Schreibvorgang zur Verfügung
-    /// steht. Weitere Zuweisungen von <see cref="Record"/> sind nicht notwendig, da <see cref="CsvWriter"/> immer dasselbe
-    /// <see cref="CsvRecord"/>-Objekt verwendet.
+    /// <para>Wenn eine CSV-Datei mit <see cref="CsvWriter"/> geschrieben wird, genügt es, <see cref="CsvRecordWrapper"/> das <see cref="CsvRecord"/>-Objekt,
+    /// das es mit Daten zu füllen gilt, nur einmal zuzuweisen, da beim Schreiben immer dasselbe
+    /// <see cref="CsvRecord"/>-Objekt verwendet wird.
     /// </para>
     /// <para>
-    /// Beim Lesen einer CSV-Datei mit <see cref="CsvReader"/> verhält es sich anders: Ein <see cref="CsvRecord"/>-Objekt steht erst nach der 
-    /// ersten Iteration des Readers zur Verfügung. Deshalb kann nur der Konstruktor <see cref="CsvRecordWrapper()"/> benutzt werden und dem
+    /// Beim Lesen einer CSV-Datei mit <see cref="CsvReader"/> verhält es sich anders: Dem
     /// <see cref="CsvRecordWrapper"/>-Objekt muss bei jeder Iteration des Readers zuerst das aktuelle <see cref="CsvRecord"/>-Objekt zugewiesen
     /// werden, bevor auf die Eigenschaften des <see cref="CsvRecordWrapper"/>-Objekts zugegriffen wird, denn <see cref="CsvReader"/> gibt
-    /// bei jeder Iteration ein neues <see cref="CsvRecord"/>-Objekt zurück.
+    /// bei jeder Iteration ein neues <see cref="CsvRecord"/>-Objekt zurück. (Das gilt nicht, wenn der <see cref="CsvReader"/> mit <see cref="CsvOptions.DisableCaching"/>
+    /// initialisiert wurde.)
     /// </para>
     /// </remarks>
+    /// <example>
+    /// <note type="important">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <para>Speichern des Inhalts einer <see cref="DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
+    /// eine <see cref="DataTable"/>:</para>
+    /// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
+    /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
+    /// <code language="cs" source="..\Examples\ObjectFromCsv.cs"/>
+    /// </example>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
     public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<string, object?>>
     {
@@ -76,14 +84,14 @@ namespace FolkerKinzel.CsvTools.Helpers
         public CsvRecordWrapper() { }
 
 
-        /// <summary>
-        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt und weist diesem <paramref name="record"/> zu.
-        /// </summary>
-        /// <param name="record">Das <see cref="CsvRecord"/>-Objekt, auf dessen Daten <see cref="CsvRecordWrapper"/> zugreift.</param>
-        public CsvRecordWrapper(CsvRecord record)
-        {
-            this.Record = record;
-        }
+        ///// <summary>
+        ///// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt und weist diesem <paramref name="record"/> zu.
+        ///// </summary>
+        ///// <param name="record">Das <see cref="CsvRecord"/>-Objekt, auf dessen Daten <see cref="CsvRecordWrapper"/> zugreift.</param>
+        //public CsvRecordWrapper(CsvRecord record)
+        //{
+        //    this.Record = record;
+        //}
 
         #endregion
 
