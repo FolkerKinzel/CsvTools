@@ -8,7 +8,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>1.3.0</Version>
-    <FileVersion>1.3.100.0</FileVersion>
+    <FileVersion>1.3.101.0</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV-files.</Description>
