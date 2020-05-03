@@ -15,7 +15,7 @@
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
-    <HtmlHelpName>FolkerKinzel.CsvTools</HtmlHelpName>
+    <HtmlHelpName>FolkerKinzel.CsvTools.de</HtmlHelpName>
     <Language>de-DE</Language>
     <TransformComponentArguments>
       <Argument Key="logoFile" Value="Help.png" xmlns="" />
