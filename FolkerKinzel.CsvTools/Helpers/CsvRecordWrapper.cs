@@ -395,8 +395,8 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
-        /// Wird automatisch aufgerufen, wenn auf den Set-Accessor einer dynamisch implementierten Eigenschaft
-        /// zugegriffen wird. (Nicht zur direkten Verwendung in eigenem Code bestimmt.)
+        /// Wird automatisch aufgerufen, wenn einer dynamisch implementierten Eigenschaft ein Wert
+        /// zugewiesen wird. (Nicht zur direkten Verwendung in eigenem Code bestimmt.)
         /// </summary>
         /// <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
         /// <param name="value">Das Objekt, das der dynamisch implementierten Eigenschaft zugewiesen wird.</param>
@@ -431,8 +431,8 @@ namespace FolkerKinzel.CsvTools.Helpers
         }
 
         /// <summary>
-        /// Wird automatisch aufgerufen, wenn auf den Get-Accessor einer dynamisch implementierten Eigenschaft
-        /// zugegriffen wird. (Nicht zur direkten Verwendung in eigenem Code bestimmt.)
+        /// Wird automatisch aufgerufen, wenn der Wert einer dynamisch implementierten Eigenschaft
+        /// einer Variablen zugewiesen wird. (Nicht zur direkten Verwendung in eigenem Code bestimmt.)
         /// </summary>
         /// <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
         /// <param name="result">Das Objekt, das den Rückgabewert der dynamisch implementierten Eigenschaft darstellt.</param>

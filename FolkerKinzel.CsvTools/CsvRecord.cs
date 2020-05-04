@@ -94,6 +94,7 @@ namespace FolkerKinzel.CsvTools
             }
         }
 
+
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvRecord"/>-Objekt mit Spaltennamen. (Geeignet für
         /// CSV-Dateien mit Kopfzeile.)

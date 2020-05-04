@@ -1,4 +1,5 @@
 ﻿using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.Helpers.Converters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Helpers.Tests
@@ -13,18 +14,12 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
         }
 
 
-
-
-
-
-
-
-
         [TestMethod()]
         public void InsertPropertyTest()
         {
             Assert.Fail();
         }
+
 
         [TestMethod()]
         public void ReplacePropertyAtTest()
@@ -38,8 +33,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
         {
             Assert.Fail();
         }
-
-
 
 
         [TestMethod()]
@@ -104,6 +97,44 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
         public void RemovePropertyAtTest()
         {
             Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void IndexerTest()
+        {
+            var record = new CsvRecord(2, false, true);
+            record[0] = "42";
+            record[1] = "43";
+
+            var wrapper = new CsvRecordWrapper();
+
+            var intConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32);
+
+            wrapper.AddProperty(new CsvProperty(record.ColumnNames[0], new string[] { record.ColumnNames[0] }, intConverter));
+            wrapper.AddProperty(new CsvProperty(record.ColumnNames[1], new string[] { record.ColumnNames[1] }, intConverter));
+
+            wrapper.Record = record;
+
+            Assert.AreEqual(42, wrapper[0]);
+            Assert.AreEqual(43, wrapper[1]);
+
+
+            dynamic dyn = wrapper;
+
+            Assert.AreEqual(42, dyn[0]);
+            Assert.AreEqual(43, dyn[1]);
+
+            int test = dyn[0];
+            Assert.AreEqual(42, test);
+
+            test = dyn["Column1"];
+            Assert.AreEqual(42, test);
+
+            dyn["Column2"] = 7;
+            Assert.AreEqual(7, dyn["Column2"]);
+
+            dyn[0] = 3;
+            Assert.AreEqual(3, dyn[0]);
         }
     }
 }
