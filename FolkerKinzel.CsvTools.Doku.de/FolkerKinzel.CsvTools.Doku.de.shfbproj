@@ -11,7 +11,7 @@
     <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual Studio adds them anyway -->
     <AssemblyName>FolkerKinzel.Csv.Doku</AssemblyName>
     <RootNamespace>FolkerKinzel.Csv.Doku</RootNamespace>
-    <Name>FolkerKinzel.CsvTools.Doku</Name>
+    <Name>FolkerKinzel.CsvTools.Doku.de</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>

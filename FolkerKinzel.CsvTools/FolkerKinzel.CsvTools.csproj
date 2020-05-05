@@ -8,7 +8,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>1.3.0</Version>
-    <FileVersion>1.3.101.0</FileVersion>
+    <FileVersion>1.3.103.0</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV-files.</Description>
@@ -60,7 +60,7 @@
     <Compile Include="Exceptions\InvalidCsvException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Doku", "FolkerKinzel.Csv.Doku\FolkerKinzel.CsvTools.Doku.shfbproj", "{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}"
-	ProjectSection(ProjectDependencies) = postProject
-		{110B2723-F0A2-4CE0-B4E2-87A157C484BC} = {110B2723-F0A2-4CE0-B4E2-87A157C484BC}
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools", "FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj", "{110B2723-F0A2-4CE0-B4E2-87A157C484BC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{564D4E32-42E9-42B8-A4B2-8B5BD653E289}"
@@ -20,14 +15,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examples", "Examples\Examples.csproj", "{F850413D-BE94-47C3-92E6-50B03F76FE7D}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Doku.de", "FolkerKinzel.CsvTools.Doku.de\FolkerKinzel.CsvTools.Doku.de.shfbproj", "{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Reference.en", "FolkerKinzel.CsvTools.Reference.en\FolkerKinzel.CsvTools.Reference.en.shfbproj", "{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{110B2723-F0A2-4CE0-B4E2-87A157C484BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{110B2723-F0A2-4CE0-B4E2-87A157C484BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{110B2723-F0A2-4CE0-B4E2-87A157C484BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,6 +37,10 @@ Global
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
