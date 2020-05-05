@@ -13,7 +13,17 @@ interface to create converters of whatever data type you need.
 CSV files, that don't fit the standard.
 
 ```
+nuget Package Manager:
+PM> Install-Package FolkerKinzel.CsvTools -Version 1.3.0
 
+.NET CLI:
+> dotnet add package FolkerKinzel.CsvTools --version 1.3.0
+
+PackageReference (Visual Studio Project File):
+<PackageReference Include="FolkerKinzel.CsvTools" Version="1.3.0" />
+
+Paket CLI:
+> paket add FolkerKinzel.CsvTools --version 1.3.0
 ```
 
 * [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/FolkerKinzel.CsvTools.Reference.en/Help/FolkerKinzel.CsvTools.en.chm)
