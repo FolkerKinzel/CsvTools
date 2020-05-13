@@ -72,7 +72,6 @@ namespace Examples
         }
     }
 }
-
 ```
 
 #### CSV from and to DataTable:
@@ -239,7 +238,6 @@ namespace Examples
         }
     }
 }
-
 ```
 
 
@@ -367,7 +365,6 @@ Name:        Frederic Chopin
 Subject:     <null>
 LessonDay:   <null>
 LessonBegin: <null>
-
 */
 
 ```
