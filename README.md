@@ -163,7 +163,6 @@ namespace Examples
             // Susi Meyer      Piano           3               14:30:00
             // Carl Czerny     Piano           4               15:15:00
             // Frederic Chopin <DBNull>        <DBNull>        <DBNull>
-
         }
 
 
