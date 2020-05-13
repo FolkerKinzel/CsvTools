@@ -165,7 +165,7 @@ namespace Examples
             // Content of the refilled DataTable:
             // Susi Meyer      Piano           3               14:30:00
             // Carl Czerny     Piano           4               15:15:00
-            // Frederic Chopin <DBNull>        < DBNull >      < DBNull >
+            // Frederic Chopin <DBNull>        <DBNull>        <DBNull>
 
         }
 
