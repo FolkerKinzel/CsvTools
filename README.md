@@ -142,12 +142,10 @@ namespace Examples
                     // It doesn't matter that the columns in the csv-file have a
                     // different order than the columns of the DataTable:
                     // CsvRecordWrapper reorders that for us.
-
                     for (int i = 0; i < wrapper.Count; i++)
                     {
                         dataRow[i] = wrapper[i];
                     }
-
                 }
             }
 
@@ -191,25 +189,14 @@ namespace Examples
         {
             var dataTable = new DataTable();
 
-            dataTable.Columns.Add(
-                new DataColumn(PupilsName));
-
-            dataTable.Columns.Add(
-                new DataColumn(Subject)
-                );
-
-            dataTable.Columns.Add(
-                new DataColumn(LessonDay, typeof(DayOfWeek))
-                );
-
-            dataTable.Columns.Add(
-                new DataColumn(LessonBegin, typeof(TimeSpan))
-                );
+            dataTable.Columns.Add(new DataColumn(PupilsName));
+            dataTable.Columns.Add(new DataColumn(Subject));
+            dataTable.Columns.Add(new DataColumn(LessonDay, typeof(DayOfWeek)));
+            dataTable.Columns.Add(new DataColumn(LessonBegin, typeof(TimeSpan)));
 
             dataTable.Rows.Add(new object[] { "Susi Meyer", "Piano", DayOfWeek.Wednesday, new TimeSpan(14, 30, 0) });
             dataTable.Rows.Add(new object[] { "Carl Czerny", "Piano", DayOfWeek.Thursday, new TimeSpan(15, 15, 0) });
             dataTable.Rows.Add(new object[] { "Frederic Chopin" });
-
 
             return dataTable;
         }
@@ -312,25 +299,21 @@ namespace Examples
             // reuse a converter for more than one property
             var stringConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.String, nullable: true);
 
-            wrapper.AddProperty(
-                new CsvProperty("Name", new string[] { "*name" }, stringConverter)
-                );
-            wrapper.AddProperty(
-                new CsvProperty("Subject", new string[] { "*subject", "*fach" }, stringConverter)
-                );
-            wrapper.AddProperty(
-                new CsvProperty("LessonDay", new string[] { "*day", "*tag" }, CsvConverterFactory.CreateEnumConverter<DayOfWeek>(nullable: true))
-                );
-            wrapper.AddProperty(
-                new CsvProperty("LessonBegin", new string[] { "*begin?" }, CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, nullable: true))
-                );
-
+            wrapper.AddProperty(new CsvProperty("Name", new string[] { "*name" }, stringConverter));
+            wrapper.AddProperty(new CsvProperty("Subject", new string[] { "*subject", "*fach" }, stringConverter));
+            wrapper.AddProperty(new CsvProperty(
+                 "LessonDay",
+                 new string[] { "*day", "*tag" },
+                 CsvConverterFactory.CreateEnumConverter<DayOfWeek>(nullable: true)));
+            wrapper.AddProperty(new CsvProperty(
+                 "LessonBegin",
+                 new string[] { "*begin?" },
+                 CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, nullable: true)));
 
             // Analyze the CSV-file to determine the right parameters
             // for proper reading:
             CsvAnalyzer analyzer = new CsvAnalyzer();
             analyzer.Analyze(csvFileName);
-
 
             // Read the CSV-file:
             using CsvReader reader = new CsvReader(csvFileName, analyzer.HasHeaderRow, analyzer.Options, analyzer.FieldSeparator);
@@ -354,7 +337,6 @@ namespace Examples
                     Subject = dynWrapper.Subject
                 });
             }
-
 
             // Write the results to Console:
             foreach (var pupil in pupilsList)
