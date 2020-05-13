@@ -1,4 +1,7 @@
 # FolkerKinzel.CsvTools
+[![NuGet](https://img.shields.io/nuget/v/FolkerKinzel.CsvTools)](https://www.nuget.org/packages/FolkerKinzel.CsvTools/)
+
+
 .NET-library to read and write CSV-files.
 
 The library contains
