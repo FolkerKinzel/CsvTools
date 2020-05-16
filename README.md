@@ -176,8 +176,16 @@ namespace Examples
 
             wrapper.AddProperty(new CsvProperty(PupilsName, new string[] { PupilsName }, stringConverter));
             wrapper.AddProperty(new CsvProperty(Subject, new string[] { Subject }, stringConverter));
-            wrapper.AddProperty(new CsvProperty(LessonDay, new string[] { LessonDay }, CsvConverterFactory.CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true)));
-            wrapper.AddProperty(new CsvProperty(LessonBegin, new string[] { LessonBegin }, CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true)));
+            wrapper.AddProperty(
+                new CsvProperty(
+                        LessonDay,
+                        new string[] { LessonDay },
+                        CsvConverterFactory.CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true)));
+            wrapper.AddProperty(
+                new CsvProperty(
+                        LessonBegin,
+                        new string[] { LessonBegin },
+                        CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true)));
 
             return wrapper;
         }
@@ -298,14 +306,16 @@ namespace Examples
 
             wrapper.AddProperty(new CsvProperty("Name", new string[] { "*name" }, stringConverter));
             wrapper.AddProperty(new CsvProperty("Subject", new string[] { "*subject", "*fach" }, stringConverter));
-            wrapper.AddProperty(new CsvProperty(
-                 "LessonDay",
-                 new string[] { "*day", "*tag" },
-                 CsvConverterFactory.CreateEnumConverter<DayOfWeek>(nullable: true)));
-            wrapper.AddProperty(new CsvProperty(
-                 "LessonBegin",
-                 new string[] { "*begin?" },
-                 CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, nullable: true)));
+            wrapper.AddProperty(
+                new CsvProperty(
+                    "LessonDay",
+                    new string[] { "*day", "*tag" },
+                    CsvConverterFactory.CreateEnumConverter<DayOfWeek>(nullable: true)));
+            wrapper.AddProperty(
+                new CsvProperty(
+                    "LessonBegin",
+                    new string[] { "*begin?" },
+                    CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, nullable: true)));
 
             // Analyze the CSV-file to determine the right parameters
             // for proper reading:
