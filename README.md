@@ -323,7 +323,8 @@ namespace Examples
             analyzer.Analyze(csvFileName);
 
             // Read the CSV-file:
-            using CsvReader reader = new CsvReader(csvFileName, analyzer.HasHeaderRow, analyzer.Options, analyzer.FieldSeparator);
+            using CsvReader reader = 
+                    new CsvReader(csvFileName, analyzer.HasHeaderRow, analyzer.Options, analyzer.FieldSeparator);
 
             List<Pupil> pupilsList = new List<Pupil>();
 
