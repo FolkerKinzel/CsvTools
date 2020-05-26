@@ -1,5 +1,9 @@
 # FolkerKinzel.CsvTools
-.NET-library to read and write CSV-files.
+.NET-library to read and write CSV-files. 
+
+It is used as a dependency in [FolkerKinzel.Contacts.IO](https://www.nuget.org/packages/FolkerKinzel.Contacts.IO/) - an
+easy to use .NET-API to manage contact data of organizations and natural persons, including a data model and classes to 
+persist it as vCard (*.vcf) or CSV.
 
 The library contains
 * `CsvReader`: Reads CSV from files and streams. It enables you to perform Linq-Queries on CSV files.
@@ -12,7 +16,7 @@ interface to create converters of whatever data type you need.
 * `CsvAnalyzer`: Analyzes CSV files to get the right parameters for proper reading. This enables you, to read
 CSV files, that don't fit the standard.
 
-.
+
 
 [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/FolkerKinzel.CsvTools.Reference.en/Help/FolkerKinzel.CsvTools.en.chm)
 
@@ -21,3 +25,5 @@ CSV files, that don't fit the standard.
 > IMPORTANT: On some systems, the content of the CHM file is blocked. Before extracting it,
 >  right click on the file, select Properties, and check the "Allow" checkbox - if it 
 > is present - in the lower right corner of the General tab in the Properties dialog.
+
+

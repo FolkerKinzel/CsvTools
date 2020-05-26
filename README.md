@@ -4,6 +4,10 @@
 
 .NET-library to read and write CSV-files.
 
+It is used as a dependency in [FolkerKinzel.Contacts.IO](https://github.com/FolkerKinzel/Contacts.IO) - an
+easy to use .NET-API to manage contact data of organizations and natural persons, including a data model and classes to 
+persist it as vCard (*.vcf) or CSV.
+
 The library contains
 * `CsvReader`: Reads CSV from files and streams. It enables you to perform Linq-Queries on CSV files.
 * `CsvWriter`: Writes CSV to files and stream.
@@ -17,16 +21,16 @@ CSV files, that don't fit the standard.
 
 ```
 nuget Package Manager:
-PM> Install-Package FolkerKinzel.CsvTools -Version 1.3.0
+PM> Install-Package FolkerKinzel.CsvTools -Version 1.3.1
 
 .NET CLI:
-> dotnet add package FolkerKinzel.CsvTools --version 1.3.0
+> dotnet add package FolkerKinzel.CsvTools --version 1.3.1
 
 PackageReference (Visual Studio Project File):
-<PackageReference Include="FolkerKinzel.CsvTools" Version="1.3.0" />
+<PackageReference Include="FolkerKinzel.CsvTools" Version="1.3.1" />
 
 Paket CLI:
-> paket add FolkerKinzel.CsvTools --version 1.3.0
+> paket add FolkerKinzel.CsvTools --version 1.3.1
 ```
 
 * [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/FolkerKinzel.CsvTools.Reference.en/Help/FolkerKinzel.CsvTools.en.chm)
@@ -36,6 +40,7 @@ Paket CLI:
 > IMPORTANT: On some systems, the content of the CHM file is blocked. Before extracting it,
 >  right click on the file, select Properties, and check the "Allow" checkbox - if it 
 > is present - in the lower right corner of the General tab in the Properties dialog.
+
 
 ## Example Code
 _(For better readability exception handling is ommitted in the following examples.)_
