@@ -42,10 +42,14 @@ Paket CLI:
 > is present - in the lower right corner of the General tab in the Properties dialog.
 
 
-## Example Code
+## Examples
 _(For better readability exception handling is ommitted in the following examples.)_
 
-#### Linq-Query on a CSV file:
+- [Linq query on a CSV file](#linq-query-on-a-csv-file)
+- [CSV from and to DataTable](#csv-from-and-to-datatable)
+- [Deserialize object from CSV](#deserialize-object-from-csv)
+
+#### Linq query on a CSV file:
 ```csharp
 using FolkerKinzel.CsvTools;
 using System;
