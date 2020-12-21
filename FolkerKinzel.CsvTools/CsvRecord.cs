@@ -21,7 +21,7 @@ namespace FolkerKinzel.CsvTools
     /// Mit der Klasse <see cref="CsvRecordWrapper"/> kann die Reihenfolge der Datenspalten zur Laufzeit auf die evtl. andere Spaltenreihenfolge 
     /// einer <see cref="DataTable"/> gemappt werden und es können damit auch Typkonvertierungen durchgeführt werden.
     /// </remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
     public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     {
         #region fields
@@ -400,8 +400,8 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see> zurück, mit das 
-        /// <see cref="CsvRecord"/>-Objekts durchlaufen wird. Ein <see cref="KeyValuePair{TKey, TValue}"/> enthält dabei
+        /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see> zurück, mit dem das 
+        /// <see cref="CsvRecord"/>-Objekts durchlaufen wird. Das <see cref="KeyValuePair{TKey, TValue}">KeyValuePair&lt;string, string?&gt;</see> enthält dabei
         /// den Spaltennamen als <see cref="KeyValuePair{TKey, TValue}.Key"/> und den Inhalt der Spalte als <see cref="KeyValuePair{TKey, TValue}.Value"/>.
         /// </summary>
         /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see>.</returns>

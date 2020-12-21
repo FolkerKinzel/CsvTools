@@ -278,7 +278,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             }//using
 
-        }//ctor
+        }
 
 
         /// <summary>

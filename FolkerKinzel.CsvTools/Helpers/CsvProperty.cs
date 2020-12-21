@@ -27,7 +27,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <summary>
-        /// Initialisiert ein neues <see cref="CsvProperty"/>-Objekt.
+        /// Initialisiert ein <see cref="CsvProperty"/>-Objekt.
         /// </summary>
         /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für Bezeichner
         /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
@@ -256,7 +256,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             }//ctor ColumnAliasesLookup
 
 
-            [SuppressMessage("Microsoft.Performance", "CA1801:ReviewUnusedParameters", MessageId = "isChecked")]
+            //[SuppressMessage("Microsoft.Performance", "CA1801:ReviewUnusedParameters", MessageId = "isChecked")]
             private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
             {
 #if NET40

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Tsltn Version="1.0" SourceFile="..\bin\Release\net40\de\FolkerKinzel.CsvTools.xml" SourceLanguage="de" TargetLanguage="en">
   <T ID="DBC1FBE0460C8E94">Named constants to specify options for reading and writing CSV files. The flags can be combined.</T>
-  <T ID="9F247E3BD9FEE2F2">Provides read-only forward access to the records of a CSV file. (This means that the &lt;see cref="T:FolkerKinzel.CsvTools.CsvReader" /&gt; can only read the file forward once.)</T>
+  <T ID="9F247E3BD9FEE2F2">Provides read-only forward access to the records of a CSV file. (This means, that the &lt;see cref="T:FolkerKinzel.CsvTools.CsvReader" /&gt; can only read the file forward once.)</T>
   <T ID="8A33921DD001915A">Represents a record of the CSV file (row). The column order corresponds to that of the CSV file and all columns are of the data type &lt;see cref="T:System.String" /&gt;. The content of the columns can be accessed using a zero-based column index or the column name.</T>
   <T ID="BFEB3128DB7F4C5D">Writes data to a CSV file.</T>
   <T ID="994FACF04819064">Extension methods, that make working with the &lt;see cref="T:FolkerKinzel.CsvTools.CsvOptions" /&gt;-enum easier.</T>
@@ -16,4 +16,148 @@
   <T ID="A3B73B328B54DE84">Represents a property that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; implements dynamically at runtime ("late binding"). &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvProperty" /&gt; encapsulates information about access and type conversion that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; needs to access the data of the underlying &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord" /&gt; object.</T>
   <T ID="E07F0BFD4C5B87C8">The class forms a wrapper around objects of the class &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord" /&gt;, which enables you, to index the data of the &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord" /&gt; object in a sequence of your choice, access the data with properties dynamically implemented at runtime, and perform type conversions. In order to be able to use the dynamically implemented properties of the class &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; ("late binding") directly and to assign the return values of the indexers without a cast, the instance must be assigned to a variable that is declared with the keyword &lt;c&gt;dynamic&lt;/c&gt;.</T>
   <T ID="91571A2A2C5C243">Exception, thrown parsing invalid CSV documents.</T>
+  <T ID="4C84B8F95C3C56C4">&lt;note type ="tip"&gt;
+             To work safely and conveniently with the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvOptions"/&gt; enum, use the extension methods of the
+             class &lt;see cref ="T:FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension"/&gt; (see example)!
+             &lt;/note&gt;</T>
+  <T ID="8467B11814889718">&lt;para&gt; Example, that demonstrates, that setting the flag &lt;see cref ="F:FolkerKinzel.CsvTools.CsvOptions.DisableCaching"/&gt; can lead to unexpected results, when an attempt is made to cache the result set. &lt;/para&gt; &lt;note type ="important"&gt; In the following code example - for easier readability - exception handling was dispensed. &lt;/note&gt; &lt;code/&gt;</T>
+  <T ID="4154520EEA7E1B42">No flag is set. This creates a very lenient parser, that rarely throws exceptions.</T>
+  <T ID="ACBB925AD98AA35">If set, &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; throws an &lt;see cref ="T:FolkerKinzel.CsvTools.InvalidCsvException"/&gt;, if a data row contains more 
+             fields than the first data row.
+             &lt;note&gt;
+             If a data row has more
+             Fields than the first data row, this is a strong indication of a read error. The flag should therefore usually be set.
+             &lt;/note&gt;</T>
+  <T ID="DDC20687EE8B9E3E">If set, &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; throws an &lt;see cref ="T:FolkerKinzel.CsvTools.InvalidCsvException"/&gt;, if a data row has less fields  than the first data row.
+             &lt;note&gt;
+             Other software could dispense with marking empty fields at the end of a row with field separators. On the other hand, the missing
+             of fields at the end of a row could be an indication of a read error.
+             &lt;/note&gt;</T>
+  <T ID="51D701AFCD12677">If set, &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; throws an &lt;see cref ="T:FolkerKinzel.CsvTools.InvalidCsvException"/&gt;, if there are blank lines in the CSV file,
+              that are not part of a data field masked with quotes.
+             &lt;note&gt;
+             Blank lines, that are not part of a masked field, can in no case be interpreted as part of the data to be read. However, by removing the flag, &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; ignores such blank lines.
+             &lt;/note&gt;</T>
+  <T ID="A12B43CAF2A7B0B2">If the flag is not set, the class &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; interpretes the column names of the CSV file in a case-insensitive manner. This is the same behavior, that &lt;see cref ="T:System.Data.DataColumnCollection"/&gt; shows.</T>
+  <T ID="EF1B9D70D36EA84B">If the flag is set, &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; and &lt;see cref ="T:FolkerKinzel.CsvTools.CsvWriter"/&gt; will handle all data tokens and the
+             column names with the &lt;see cref ="M:System.String.Trim"/&gt; method. That leads to a strong loss of performance and also can damage data, where the leading and trailing white space has a meaning. Only set the flag for reading non-standard CSV files, that introduce additional padding.</T>
+  <T ID="98C887F8DBEBBAC6">Default setting. This is a combined value, that forces &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; to throw an &lt;see cref ="T:FolkerKinzel.CsvTools.InvalidCsvException"/&gt;,
+             if the file to be read does not comply with the RFC 4180 standard. (Alternative column separators and newline characters are always tolerated.)</T>
+  <T ID="F129A0C6E3C185CC">If the flag is set, the same &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object is used for each data row, when reading the CSV file (filled with new data).
+             That brings slight performance advantages, when parsing very large CSV files, but can lead to unexpected results, if an attempt is made to cache the results. (see example)</T>
+  <T ID="B994D74DA1D1FA2B">&lt;note type ="important"&gt; In the following code examples - for easier readability - exception handling has been omitted. &lt;/note&gt; 
+&lt;para&gt; Linq query on a CSV file: &lt;/para&gt;
+ &lt;code/&gt;
+ &lt;para&gt; Saving the content of a &lt;see cref ="T:System.Data.DataTable"/&gt; as a CSV file and reading data from a CSV file into
+             a &lt;see cref ="T:System.Data.DataTable"/&gt;: &lt;/para&gt;
+ &lt;code/&gt;
+ &lt;para&gt; Deserializing objects from CSV files: &lt;/para&gt;
+ &lt;code/&gt;</T>
+  <T ID="227C023C56CD9558">Initializes a &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; object.</T>
+  <T ID="F0AD03D42085E980">File path of the CSV file.</T>
+  <T ID="A3FB7BD4AA789A2A">&lt;c&gt;true&lt;/c&gt;, if the CSV file has a header with column names.</T>
+  <T ID="D2BA8826D243D778">Options for reading the CSV file.</T>
+  <T ID="3E5C13EE3827154F">The field separator char used in the CSV file.</T>
+  <T ID="D0CA1C974125C9C0">The text encoding to be used to read the CSV file or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Text.Encoding.UTF8"/&gt;.</T>
+  <T ID="370A59E3C46C7EAE">&lt;paramref name ="fileName"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="8426656E32DE2369">&lt;paramref name ="fileName"/&gt; is not a valid file path.</T>
+  <T ID="C64F830F0CE1DF3E">The data cannot be accessed.</T>
+  <T ID="B001C82356CD9558">Initializes a &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; object.</T>
+  <T ID="BE6FBB9438BA8B0B">The &lt;see cref ="T:System.IO.TextReader"/&gt; with which the CSV file is read.</T>
+  <T ID="2D844AACAA789A2A">&lt;c&gt;true&lt;/c&gt;, if the CSV file has a header with column names.</T>
+  <T ID="1E157DCED243D778">Options for reading the CSV file.</T>
+  <T ID="695FC4126993433C">The field separator char used in the CSV file.</T>
+  <T ID="AAE7A7953E269FDE">&lt;paramref name ="reader"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="47DC4E1AA5F8BDC2">Returns a &lt;see cref ="T:System.Collections.Generic.IEnumerable`1"&gt;IEnumerable&amp;lt;CsvRecord&amp;gt;&lt;/see&gt; object to iterate over the rows of the CSV file.</T>
+  <T ID="2B8C7AE3B67A22B9">An &lt;see cref ="T:System.Collections.Generic.IEnumerable`1"&gt;IEnumerable&amp;lt;CsvRecord&amp;gt;&lt;/see&gt;, that can be used to iterate over the rows of the CSV file.</T>
+  <T ID="C483D730EE942494">The method was called more than once.</T>
+  <T ID="D60798DDF6D6FFEC">The &lt;see cref ="T:System.IO.Stream"/&gt; was already closed.</T>
+  <T ID="3A6405E7DF026B62">Error accessing the disk.</T>
+  <T ID="56D3B0C6603B9FA4">Invalid CSV file. The interpretation depends on the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvOptions"/&gt; value,
+             specified in the constructor.</T>
+  <T ID="94432F8E50CC4D64">Releases the resources. (Closes the &lt;see cref ="T:System.IO.TextReader"/&gt;.)</T>
+  <T ID="72C31A01F67BF66">&lt;para&gt; The &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; class maps the the order of the data columns of the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; objects at runtime to the column order of a &lt;see cref ="T:System.Data.DataTable"/&gt; and performs type conversions.
+            &lt;/para&gt;</T>
+  <T ID="158293CDA1F83E99">Gets or sets the value of the column in the CSV file that is at the specified index.</T>
+  <T ID="7E779B496DDE25C8">The zero-based index of the column in the CSV file whose value is being obtained or set.</T>
+  <T ID="7DB08370ADCADCE8">The item at the specified index.</T>
+  <T ID="5F376FC73B7FF280">&lt;paramref name ="index"/&gt; is less than 0 or greater than or equal to &lt;see cref ="P:FolkerKinzel.CsvTools.CsvRecord.Count"/&gt;.</T>
+  <T ID="11F546CBA46260F6">Gets or sets the value associated with the specified column name in the CSV file.</T>
+  <T ID="117DF72DA798DFC1">The column name of the CSV file.</T>
+  <T ID="3C6CE6C058F24F0A">The value associated with the specified column name.</T>
+  <T ID="72DDA9717B8EAEF0">The column name specified with &lt;paramref name="columnName"/&gt; does not exist.</T>
+  <T ID="61135BD720C7834">&lt;paramref name="columnName"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="C45594ACF52C8C3F">Returns the number of columns in &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt;.</T>
+  <T ID="D3F3E200554B51FD">Returns &lt;c&gt;true&lt;/c&gt; if &lt;see cref ="P:FolkerKinzel.CsvTools.CsvRecord.Count"/&gt; is 0 or all
+             fields have the value &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="827F008317391C3F">Returns the column names.</T>
+  <T ID="2C903C69A9408DD9">Returns the &lt;see cref ="T:System.String"/&gt; collection of the data stored in &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt;. The
+             Values can be changed.</T>
+  <T ID="61B598618B6451C1">Returns a copy of the data stored in &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; as &lt;see cref="T:System.Collections.Generic.Dictionary`2"&gt;Dictionary&amp;lt;string, string?&amp;gt;&lt;/see&gt;.
+The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for the key comparison with which &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; was created.</T>
+  <T ID="350E407EDE8BFBF5">A copy of the data stored in &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; as &lt;see cref ="T:System.Collections.Generic.Dictionary`2"&gt;Dictionary&amp;lt;string, string?&amp;gt;&lt;/see&gt;.</T>
+  <T ID="2155D2BC814062AC"></T>
+  <T ID="9253F2EAD85A1861">Returns an &lt;see cref="T:System.Collections.Generic.IEnumerator`1"&gt;IEnumerator&amp;lt;KeyValuePair&amp;lt;string, string?&amp;gt;&amp;gt;&lt;/see&gt; to iterate over the
+             &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object. The &lt;see cref ="T:System.Collections.Generic.KeyValuePair`2"/&gt; contains
+             the column name as &lt;see cref ="P:System.Collections.Generic.KeyValuePair`2.Key"/&gt; and the content of the column as &lt;see cref ="P:System.Collections.Generic.KeyValuePair`2.Value"/&gt;.</T>
+  <T ID="42C28F72CACACC11">Sets all data fields of &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; to &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="D241E7C6AFC53FE2">Gets the value associated with the specified column name in the CSV file.</T>
+  <T ID="E56854B8BE6C9815">The column name in the CSV file, whose value is being obtained.</T>
+  <T ID="969E7A6154504913">After the method has finished, the argument contains the value associated with the column name specified with &lt;paramref name ="columnName"/&gt; if the key was found, or &lt;c&gt;null&lt;/c&gt; otherwise. The parameter is
+             passed uninitialized.</T>
+  <T ID="F122CA3FEC8B4854">&lt;c&gt;true&lt;/c&gt; if it contains a column name with the value of &lt;paramref name="columnName"/&gt;.</T>
+  <T ID="9BA84408720C7834">&lt;paramref name ="columnName"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="4CB549AEACF1A5DE">Fills &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; with the contents of a &lt;see cref ="T:System.String"/&gt; collection.</T>
+  <T ID="F58AA896E7084B5E">A &lt;see cref ="T:System.String"/&gt; collection.</T>
+  <T ID="9F5F53C2250AA28E">&lt;paramref name ="data"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="214125C7B4EF5A88">&lt;paramref name ="data"/&gt; contains more entries
+             than &lt;see cref ="P:FolkerKinzel.CsvTools.CsvRecord.Count"/&gt;.</T>
+  <T ID="55E5A607997275AF">If &lt;paramref name ="data"/&gt; has fewer entries than &lt;see cref ="P:FolkerKinzel.CsvTools.CsvRecord.Count"/&gt;,
+             the remaining fields of &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; are filled with &lt;c&gt;null&lt;/c&gt; values.</T>
+  <T ID="7909C7D5634869CD">Determines whether the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object contains a column with the specified column name.</T>
+  <T ID="8EEBA74AC7E083C2">The column name of the CSV file column to search for.</T>
+  <T ID="3F58B17A37C2C98B">&lt;c&gt;true&lt;/c&gt; if &lt;paramref name ="columnName"/&gt; is one of the column names of the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object.</T>
+  <T ID="81CEB13E720C7834">&lt;paramref name ="columnName"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="9989C5451CEE976">Returns the zero-based index of the column in the CSV file, that has the specified column name,
+             or -1, if &lt;paramref name ="columnName"/&gt; is not one of the column names in the CSV file.</T>
+  <T ID="FCA99DBFB5505FF9">The column name to be checked for the index of &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; that it refers to.</T>
+  <T ID="D45FC46333BEBEFE">The zero-based index of the column in the CSV file with the column name &lt;paramref name ="columnName"/&gt;
+             or -1, if &lt;paramref name ="columnName"/&gt; is not one of the column names in the CSV file.</T>
+  <T ID="483CA41BA6559CEF">Returns an &lt;see cref ="T:System.Collections.IEnumerator"/&gt; to iterate over the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object.</T>
+  <T ID="C6566EF0EEFAE681">An &lt;see cref="T:System.Collections.IEnumerator"/&gt;.</T>
+  <T ID="D1D0ECC754C6970E">An &lt;see cref="T:System.Collections.Generic.IEnumerator`1"&gt;IEnumerator&amp;lt;KeyValuePair&amp;lt;string, string?&amp;gt;&amp;gt;&lt;/see&gt;.</T>
+  <T ID="29102C1CB6A0332E">Creates a &lt;see cref ="T:System.String"/&gt; representation of the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object. (Nice for debugging.)</T>
+  <T ID="BBE03871020DDE14">A &lt;see cref ="T:System.String"/&gt; representation of the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object.</T>
+  <T ID="5BDB16F861B5FE65">&lt;para&gt;
+            The method &lt;see cref ="M:FolkerKinzel.CsvTools.CsvReader.Read"/&gt; returns an &lt;see cref="T:System.Collections.Generic.IEnumerator`1"&gt;IEnumerator&amp;lt;CsvRecord&amp;gt;&lt;/see&gt;  that can be used to iterate over the data records of the CSV file as &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; objects.
+            &lt;/para&gt; 
+&lt;para&gt; The &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; class maps the the order of the data columns of the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; objects at runtime to the column order of a &lt;see cref ="T:System.Data.DataTable"/&gt; and performs type conversions.
+            &lt;/para&gt;
+ &lt;para&gt; When reading an unknown CSV file, the appropriate parameters for the constructor of &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; can be found automatically with the help of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvAnalyzer"/&gt;. &lt;/para&gt;</T>
+  <T ID="227C023C91635856">Initializes a &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; object.</T>
+  <T ID="B001C82391635856">Initializes a &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; object.</T>
+  <T ID="D24DF236F5776046"></T>
+  <T ID="8CF2FCD62E94E715"></T>
+  <T ID="7E9133B94125C9C0"></T>
+  <T ID="A0EA234B1CDCDE94"></T>
+  <T ID="C154BCBCC46C7EAE"></T>
+  <T ID="EE14C1C732DE2369"></T>
+  <T ID="EAD2674D0CE1DF3E"></T>
+  <T ID="479BFF89CF7EFD36"></T>
+  <T ID="86142EBCC34784A9"></T>
+  <T ID="6E08518C21556F53"></T>
+  <T ID="F4C5144A8157EB80"></T>
+  <T ID="C2D851DE4D838ED8"></T>
+  <T ID="60C16D130F922D2A"></T>
+  <T ID="A4693A39B9036BD5"></T>
+  <T ID="A4D579E914CD6E5F"></T>
+  <T ID="3E72E6B24D838ED8"></T>
+  <T ID="7A694BE464023603"></T>
+  <T ID="6DE32DF80F922D2A"></T>
+  <T ID="660B1360B060E788"></T>
+  <T ID="B45173067CD500D1"></T>
+  <T ID="634A13C3F9A41974"></T>
+  <T ID="9253F2EA92F1AC68">Returns an &lt;see cref="T:System.Collections.Generic.IEnumerator`1"&gt;IEnumerator&amp;lt;KeyValuePair&amp;lt;string, string?&amp;gt;&amp;gt;&lt;/see&gt; to iterate over the
+             &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object. The &lt;see cref="T:System.Collections.Generic.KeyValuePair`2"&gt;KeyValuePair&amp;lt;string, string?&amp;gt;&lt;/see&gt;  contains
+             the column name as &lt;see cref ="P:System.Collections.Generic.KeyValuePair`2.Key"/&gt; and the content of the column as &lt;see cref ="P:System.Collections.Generic.KeyValuePair`2.Value"/&gt;.</T>
 </Tsltn>

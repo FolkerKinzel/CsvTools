@@ -56,7 +56,7 @@ namespace FolkerKinzel.CsvTools
         /// vorkommen, die nicht Teil eines mit Gänsefüßchen maskierten Datenfeldes sind.
         /// <note>
         /// Leerzeilen, die nicht Teil eines maskierten Feldes sind, können in keinem Fall als Teil der zu lesenden Daten interpretiert
-        /// werden. Sie können aber durch Entfernen des Fags erreichen, dass <see cref="CsvReader"/> solche Leerzeilen ignoriert.
+        /// werden. Sie können aber durch Entfernen des Flags erreichen, dass <see cref="CsvReader"/> solche Leerzeilen ignoriert.
         /// </note>
         /// </summary>
         ThrowOnEmptyLines = 1 << 2,

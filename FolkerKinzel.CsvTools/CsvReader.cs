@@ -16,7 +16,7 @@ namespace FolkerKinzel.CsvTools
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Die Methode <see cref="Read"/> gibt einen <see cref="IEnumerator{T}"/> zurück, mit dem Sie über die Datensätze der CSV-Datei iterieren
+    /// Die Methode <see cref="Read"/> gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;CsvRecord&gt;</see> zurück, mit dem Sie über die Datensätze der CSV-Datei iterieren
     /// können, die in Form von <see cref="CsvRecord"/>-Objekten zurückgegeben werden.
     /// </para>
     /// <para>Die Klasse <see cref="CsvRecordWrapper"/> bietet die
@@ -46,7 +46,7 @@ namespace FolkerKinzel.CsvTools
         #region ctors
 
         /// <summary>
-        /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
+        /// Initialisiert ein <see cref="CsvReader"/>-Objekt.
         /// </summary>
         /// <param name="fileName">Dateipfad der CSV-Datei.</param>
         /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
@@ -72,7 +72,7 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
+        /// Initialisiert ein <see cref="CsvReader"/>-Objekt.
         /// </summary>
         /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
         /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
@@ -109,7 +109,7 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="InvalidOperationException">Die Methode wurde mehr als einmal aufgerufen.</exception>
         /// <exception cref="ObjectDisposedException">Der <see cref="Stream"/> war bereits geschlossen.</exception>
         /// <exception cref="IOException">Fehler beim Zugriff auf den Datenträger.</exception>
-        /// <exception cref="InvalidCsvException">Ungültige CSV-Datei. Die Interpretation ist abhängig vom <see cref="CsvOptions"/>-Wert
+        /// <exception cref="InvalidCsvException">Ungültige CSV-Datei. Die Interpretation ist abhängig vom <see cref="CsvOptions"/>-Wert,
         /// der im Konstruktor angegeben wurde.</exception>
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
