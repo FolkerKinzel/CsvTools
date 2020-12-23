@@ -9,10 +9,10 @@ namespace FolkerKinzel.CsvTools
     /// <summary>
     /// Die Klasse ermöglicht es, Daten in eine CSV-Datei zu schreiben.
     /// </summary>
-    /// <remarks><see cref="CsvWriter"/> stellt in der Eigenschaft <see cref="Record"/> ein <see cref="CsvRecord"/>-Objekt zur Verfügung das einen
+    /// <remarks><see cref="CsvWriter"/> stellt in der Eigenschaft <see cref="Record"/> ein <see cref="CsvRecord"/>-Objekt zur Verfügung, das einen
     /// Puffer für einen Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"/>-Objekt mit <see cref="string"/>-Daten und schreiben
     /// Sie es anschließend mit der Methode <see cref="WriteRecord"/> in die Datei. Der Aufruf von <see cref="WriteRecord"/> setzt alle Felder von
-    /// <see cref="Record"/> wieder auf <c>null</c>-Werte, so dass der Datensatz erneut befüllt werden kann. Wenn andere Datentypen als <see cref="string"/>
+    /// <see cref="Record"/> wieder auf <c>null</c>-Werte, so dass das <see cref="CsvRecord"/>-Objekt erneut befüllt werden kann. Wenn andere Datentypen als <see cref="string"/>
     /// geschrieben werden sollen, bietet sich die Verwendung der Klasse <see cref="CsvRecordWrapper"/> an, die einen komfortablen Adapter zwischen den
     /// Daten der Anwendung und der CSV-Datei darstellt.</remarks>
     /// <example>
@@ -24,7 +24,7 @@ namespace FolkerKinzel.CsvTools
     public sealed class CsvWriter : IDisposable
     {
         /// <summary>
-        /// Das beim Schreiben von CSV-Dateien zu verwendende Newline-Zeichen.
+        /// Das beim Schreiben von CSV-Dateien zu verwendende Newline-Zeichen ("\r\n").
         /// </summary>
         public const string NewLine = "\r\n";
 
@@ -39,12 +39,12 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvWriter"/>-Objekt, mit den Spaltennamen für die zu schreibende Kopfzeile.
+        /// Initialisiert ein <see cref="CsvWriter"/>-Objekt mit den Spaltennamen für die zu schreibende Kopfzeile.
         /// </summary>
         /// <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
         /// <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
         /// enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
-        /// beachten, dass der Vergleich nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
+        /// beachten, dass der Vergleich der Spaltennamen nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
         /// gewählt wurde.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
         /// <param name="textEncoding">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM. (<see cref="Encoding.UTF8"/>)</param>
@@ -52,10 +52,10 @@ namespace FolkerKinzel.CsvTools
         /// 
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException">
-        /// <para><paramref name="fileName"/> ist kein gültiger Dateipfad.</para>
+        /// <para><paramref name="fileName"/> ist kein gültiger Dateipfad</para>
         /// <para>- oder -</para>
-        /// <para>Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
-        /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</para></exception>
+        /// <para>ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
+        /// gewählt werden, ob der Vergleich der Spaltennamen case-sensitiv erfolgt.</para></exception>
         /// <exception cref="IOException">E/A-Fehler.</exception>
         public CsvWriter(
             string fileName, string[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
@@ -89,7 +89,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="writer">Der <see cref="TextWriter"/>, mit dem geschrieben wird.</param>
         /// <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
         /// enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
-        /// beachten, dass der Vergleich nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
+        /// beachten, dass der Vergleich der Spaltennamen nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
         /// gewählt wurde.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
         /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
@@ -196,7 +196,7 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Schreibt den Inhalt von Record in die CSV-Datei und setzt anschließend alle Spalten von Record auf <c>null</c>. 
+        /// Schreibt den Inhalt von <see cref="Record"/> in die CSV-Datei und setzt anschließend alle Spalten von <see cref="Record"/> auf <c>null</c>. 
         /// (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.)
         /// </summary>
         /// <exception cref="IOException">E/A-Fehler</exception>
