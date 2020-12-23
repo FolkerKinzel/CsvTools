@@ -160,7 +160,6 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
             are to be written, the use of the class &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; offers a convenient adapter between the data of the application and the CSV file.</T>
   <T ID="868199AA2EE0429B">&lt;note type ="important"&gt; In the following code examples - for easier readability - exception handling has been omitted. &lt;/note&gt; &lt;para&gt; Saving the contents of a &lt;see cref ="T:System.Data.DataTable"/&gt; as a CSV file and importing data from a CSV file into
              a &lt;see cref ="T:System.Data.DataTable"/&gt;: &lt;/para&gt; &lt;code/&gt;</T>
-  <T ID="C003B50E5F11BFEA">The newline character to use, when writing CSV files.</T>
   <T ID="7578E296F5FA8F56">Initializes a &lt;see cref ="T:FolkerKinzel.CsvTools.CsvWriter"/&gt; object with the column names for the header row to be written.</T>
   <T ID="CF95C40923BC4110">The file path of the CSV file to be written. If the file exists, it will be overwritten.</T>
   <T ID="43571D293A0CCA9B">Options for the CSV file to be written.</T>
