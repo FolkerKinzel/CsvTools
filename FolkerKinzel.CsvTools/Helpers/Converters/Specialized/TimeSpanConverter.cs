@@ -18,10 +18,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;TimeSpan&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="TimeSpan"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
-        /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
+        /// bereitstellt, oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
@@ -117,14 +117,14 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Wenn die Option <paramref name="parseExact"/> gewählt ist, wird dieser Formatstring auch für das Parsen verwendet.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;TimeSpan&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="TimeSpan"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <param name="styles">Ein Wert der <see cref="TimeSpanStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
-        /// nur ausgewertet, wenn <paramref name="parseExact"/> <c>true</c> ist.</param>
+        /// nur ausgewertet, wenn <paramref name="parseExact"/>&#160;<c>true</c> ist.</param>
         /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
@@ -266,12 +266,12 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <summary>
         /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
         /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
-        /// von <see cref="Parse(string)"/> scheitert.
+        /// <see cref="Parse(string)"/> scheitert.
         /// </summary>
         public object? FallbackValue { get; }
 
         /// <summary>
-        /// Der Datentyp, in den <see cref="TimeSpanConverter"/> konvertieren kann, bzw. den <see cref="TimeSpanConverter"/>
+        /// Der Datentyp, den <see cref="TimeSpanConverter"/> parsen kann, bzw. den <see cref="TimeSpanConverter"/>
         /// in einen <see cref="string"/> umwandeln kann. (<c>typeof(TimeSpan)</c> oder <c>typeof(TimeSpan?)</c>)
         /// </summary>
         public Type Type { get; }
@@ -287,7 +287,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// nachdem, welche Option im Konstruktor gewählt wurde.
         /// </summary>
         /// <param name="value">Der zu parsende <see cref="string"/>.</param>
-        /// <returns>Ein <see cref="TimeSpan"/> bzw. <see cref="Nullable{T}">Nullable&lt;TimeSpan&gt;</see> als Ergebnis
+        /// <returns>Ein <see cref="TimeSpan"/>- bzw. <see cref="Nullable{T}">Nullable&lt;TimeSpan&gt;</see>-Objekt als Ergebnis
         /// des Parsens.</returns>
         /// <exception cref="FormatException"><paramref name="value"/> weist kein kompatibles Format auf. Die Ausnahme wird
         /// nur geworfen, wenn das im Konstruktor so konfiguriert wurde - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
@@ -300,7 +300,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <summary>
         /// Erzeugt die Zeichenfolgendarstellung von <paramref name="value"/>.
         /// </summary>
-        /// <param name="value">Ein <see cref="TimeSpan"/> bzw. <see cref="Nullable{T}">Nullable&lt;TimeSpan&gt;</see>.</param>
+        /// <param name="value">Ein <see cref="TimeSpan"/>- bzw. <see cref="Nullable{T}">Nullable&lt;TimeSpan&gt;</see>-Objekt.</param>
         /// <returns>Eine Zeichenfolgendarstellung von <paramref name="value"/>.</returns>
         /// <exception cref="InvalidCastException"><paramref name="value"/> ist kein <see cref="TimeSpan"/> 
         /// bzw. <see cref="Nullable{T}">Nullable&lt;TimeSpan&gt;</see>.</exception>

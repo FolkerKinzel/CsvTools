@@ -26,7 +26,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <summary>
         /// Konvertiert <paramref name="value"/> in einen <see cref="string"/>.
         /// </summary>
-        /// <param name="value">Ein <see cref="object"/> einer beliebigen Klasse oder <c>null</c>. Die Methode sollte aber eine 
+        /// <param name="value">Ein <see cref="object"/> einer beliebigen Klasse oder <c>null</c>. Die Methode sollte eine 
         /// <see cref="InvalidCastException"/> werfen, wenn der Datentyp von <paramref name="value"/> nicht dem Rückgabewert von 
         /// <see cref="Type"/> entspricht.</param>
         /// <returns><paramref name="value"/>, in einen <see cref="string"/> umgewandelt.</returns>
@@ -46,8 +46,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
 
 
         /// <summary>
-        /// Der Datentyp, in den <see cref="ICsvTypeConverter"/> konvertieren kann, bzw. den <see cref="ICsvTypeConverter"/>
-        /// in einen <see cref="string"/> verwandeln kann.
+        /// Der Datentyp, den <see cref="ICsvTypeConverter"/> parsen kann, bzw. den <see cref="ICsvTypeConverter"/>
+        /// in einen <see cref="string"/> umwandeln kann.
         /// </summary>
         Type Type { get; }
 

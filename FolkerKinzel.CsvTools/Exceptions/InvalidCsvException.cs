@@ -54,8 +54,8 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         /// <param name="message">Eine Textmeldung, die den Fehler beschreibt.</param>
         /// <param name="innerException">Die Ausnahme, die die gegenwärtige Ausnahme ausgelöst hat.
-        /// Wenn innerException ungleich <c>null</c> ist, wurde die gegenwärtige Ausnahme in einem catch-Block
-        /// ausgelöst, in dem die innerException behandelt wurde.</param>
+        /// Wenn <paramref name="innerException"/> ungleich <c>null</c> ist, wurde die gegenwärtige Ausnahme in einem catch-Block
+        /// ausgelöst, in dem <paramref name="innerException"/> behandelt wurde.</param>
         public InvalidCsvException(string message, Exception innerException) : base(message, innerException) { }
 
 

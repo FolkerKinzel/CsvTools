@@ -6,7 +6,6 @@
   <T ID="BFEB3128DB7F4C5D">Writes data to a CSV file.</T>
   <T ID="994FACF04819064">Extension methods, that make working with the &lt;see cref="T:FolkerKinzel.CsvTools.CsvOptions" /&gt;-enum easier.</T>
   <T ID="D61CD91808A7EB58">Static class, that publishes methods to instantiate &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; objects for all elementary data types.</T>
-  <T ID="8B1D6F5183713F15">Named constants to select the data type of a &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; object.</T>
   <T ID="9B731DCCE9FE6282">Defines an interface for converting a &lt;see cref="T:System.String" /&gt; object into another data type and back. Objects, that implement the interface, are required by the class &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvProperty" /&gt;.</T>
   <T ID="99DCFE5E04C954AD">Implements the interface &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; for the conversion of the &lt;see cref="T:System.DateTime" /&gt; data type.</T>
   <T ID="CB6840FA41EEF4D7">Implements the interface &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; for the conversion of the &lt;see cref="T:System.DateTimeOffset" /&gt; data type.</T>
@@ -220,4 +219,175 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="768E670C04FE9E5F">A &lt;see cref ="T:FolkerKinzel.CsvTools.CsvOptions"/&gt; value on which everyone in &lt;paramref name ="flags"/&gt;
              set flags are removed.</T>
   <T ID="C003B50E1B3A2890">The newline character to use, when writing CSV files ("\r\n").</T>
+  <T ID="E2D1665984B90CEF">Creates an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; for the specified data type.</T>
+  <T ID="506220A4E338DF36">The data type, that the &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; converts.</T>
+  <T ID="EC6A1E701F29CC6E">If &lt;c&gt;true&lt;/c&gt;, an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object is created, that accepts &lt;c&gt;null&lt;/c&gt; as input
+             and also is able to return &lt;c&gt;null&lt;/c&gt; (&lt;see cref ="T:System.Nullable`1"/&gt;).</T>
+  <T ID="70D14D62FC596047">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="F:System.DBNull.Value"/&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="629BC88445E4D6A1">An &lt;see cref ="T:System.IFormatProvider"/&gt; object, that provides culture-specific formatting information, or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Globalization.CultureInfo.InvariantCulture"/&gt;.</T>
+  <T ID="D94D2F6F3FB185FB">If &lt;c&gt;true&lt;/c&gt;, the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Parse(System.String)"/&gt; of the generated
+             &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object throws an exception, when parsing
+             fails,
+             otherwise it returns &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt; in this case.</T>
+  <T ID="286C19CE0E72816D">An &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object to convert the desired data type.</T>
+  <T ID="57267195E247B7E">&lt;paramref name ="type"/&gt; is not one of the defined values of the
+             &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode"/&gt; - Enum.</T>
+  <T ID="306DE623C78D800">Initializes an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object, that can convert an enum identifier to its number representation and can parse the enum identifier from this as well as from word representations.</T>
+  <T ID="4D85F0C96EA76271">Any type of enum.</T>
+  <T ID="AD2C8341F29CC6E">If &lt;c&gt;true&lt;/c&gt;, an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object is created, that accepts &lt;c&gt;null&lt;/c&gt; as input
+             and also is able to return &lt;c&gt;null&lt;/c&gt; (&lt;see cref ="T:System.Nullable`1"/&gt;).</T>
+  <T ID="DEAD8FD6FC596047">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="F:System.DBNull.Value"/&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="D15DD0783FB185FB">If &lt;c&gt;true&lt;/c&gt;, the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Parse(System.String)"/&gt; of the generated
+             &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object throws an exception, when parsing
+             fails,
+             otherwise it returns &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt; in this case.</T>
+  <T ID="368F5FF747963429">If &lt;c&gt;true&lt;/c&gt;, enum identifiers are parsed case insensitive.</T>
+  <T ID="267B37C727A2807A">An &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object for converting the enum data type &lt;typeparamref name ="TEnum"/&gt;.</T>
+  <T ID="FEEF31303C78D800">Initializes an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object, that can convert an enum identifier to its number representation and can parse the enum identifier from this as well as from word representations.</T>
+  <T ID="2C2F60446EA76271">Any type of enum.</T>
+  <T ID="63BA6AD02C880191">A format string, that is used for the &lt;see cref ="T:System.String"/&gt; output of &lt;typeparamref name ="TEnum"/&gt;.</T>
+  <T ID="885E507F1F29CC6E">If &lt;c&gt;true&lt;/c&gt;, an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object is created, that accepts &lt;c&gt;null&lt;/c&gt; as input
+             and also is able to return &lt;c&gt;null&lt;/c&gt; (&lt;see cref ="T:System.Nullable`1"/&gt;).</T>
+  <T ID="5603374FFC596047">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="F:System.DBNull.Value"/&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="DE6530C23FB185FB">If &lt;c&gt;true&lt;/c&gt;, the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Parse(System.String)"/&gt; of the generated
+             &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object throws an exception, when parsing
+             fails,
+             otherwise it returns &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt; in this case.</T>
+  <T ID="178AAFD927A2807A">An &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object for converting the enum data type &lt;typeparamref name ="TEnum"/&gt;.</T>
+  <T ID="AEDE9C2E47963429">If &lt;c&gt;true&lt;/c&gt;, enum identifiers are parsed case insensitive.</T>
+  <T ID="117A4DC6769C0F86">&lt;paramref name ="format"/&gt; is not a valid format string for enum data types.</T>
+  <T ID="F7FC73B524A4ADD1">Initializes a &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object, that converts an integer data type to its hexadecimal representation and can parse it from that.</T>
+  <T ID="E2A968B271B4B886">Constant for an integer data type.</T>
+  <T ID="B3934A5C1F29CC6E">If &lt;c&gt;true&lt;/c&gt;, an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object is created, that accepts &lt;c&gt;null&lt;/c&gt; as input
+             and also is able to return &lt;c&gt;null&lt;/c&gt; (&lt;see cref ="T:System.Nullable`1"/&gt;).</T>
+  <T ID="68B631DFFC596047">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="F:System.DBNull.Value"/&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="9AAE8F9E3FB185FB">If &lt;c&gt;true&lt;/c&gt;, the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Parse(System.String)"/&gt; of the generated
+             &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object throws an exception, when parsing
+             fails,
+             otherwise it returns &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt; in this case.</T>
+  <T ID="BD45665CBC6811B2">An &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object for converting the desired integer data type into hexadecimal representation and vice versa.</T>
+  <T ID="6E6A9AEDB751890B">&lt;paramref name="type"/&gt; is not an integer data type. (Supported are the types
+            &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.Byte"/&gt;, &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.UInt16"/&gt;, &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.UInt32"/&gt;, &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.UInt64"/&gt;,
+            &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.SByte"/&gt;, &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.Int16"/&gt;, &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.Int32"/&gt; und &lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.Int64"/&gt;.)</T>
+  <T ID="8B1D6F51284DC60A">Named constants to select the type of data, that an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object can convert.</T>
+  <T ID="56CCE14CE0608FA3">&lt;see cref="T:System.Boolean"/&gt;</T>
+  <T ID="EC8372037DAF422F">&lt;see cref="T:System.Byte"/&gt;</T>
+  <T ID="F36D325C9BF8F78E">&lt;see cref="T:System.SByte"/&gt;</T>
+  <T ID="99514C25A4283A77">&lt;see cref="T:System.Char"/&gt;</T>
+  <T ID="8D82A450DFCAD201">&lt;see cref="T:System.UInt16"/&gt;</T>
+  <T ID="32F272F7A52D6161">&lt;see cref="T:System.Int16"/&gt;</T>
+  <T ID="D6496AEE552CFF93">&lt;see cref="T:System.UInt32"/&gt;</T>
+  <T ID="5166BB2DEA7C4A93">&lt;see cref="T:System.Int32"/&gt;</T>
+  <T ID="C4041A752519BB3A">&lt;see cref="T:System.UInt64"/&gt;</T>
+  <T ID="E856152CBD37038E">&lt;see cref="T:System.Int64"/&gt;</T>
+  <T ID="81621B409F1432F5">&lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.Guid"/&gt;</T>
+  <T ID="96E615E3C8F19CA2">&lt;see cref="T:System.Single"/&gt;</T>
+  <T ID="BD6E19323D94696D">&lt;see cref="T:System.Double"/&gt;</T>
+  <T ID="35F90902EC7845DC">&lt;see cref="T:System.Decimal"/&gt;</T>
+  <T ID="957FFB76955EE138">&lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.TimeSpan"/&gt;</T>
+  <T ID="2943EA0D803B21DA">&lt;see cref ="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.DateTime"/&gt;: Only the date part is processed. (Corresponds to format string "d".)</T>
+  <T ID="B9009C38CE20C45B">&lt;see cref ="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.DateTime"/&gt;: Date and time (format string "s")</T>
+  <T ID="A656B914F2689904">&lt;see cref="F:FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode.DateTimeOffset"/&gt;</T>
+  <T ID="E2AA5DD126D1DB7">&lt;see cref="T:System.String"/&gt;</T>
+  <T ID="5328E0D96AB92D9A">&lt;see cref ="T:System.Byte"/&gt;-array (Base64-encoded)</T>
+  <T ID="C72433D7437A44B1">With the class &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory"/&gt; implementations for the most important data types can be instantiated. If the functional scope of the implementations of the interface available in the namespace &lt;see cref ="N:FolkerKinzel.CsvTools.Helpers.Converters"/&gt; does not meet your requirements or if you have to convert complex data types, you can easily create a class yourself which implements &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt;.</T>
+  <T ID="6E1229CE0BE0810F">Converts a &lt;see cref ="T:System.String"/&gt; to the data type returned by &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Type"/&gt;.</T>
+  <T ID="4B155852433BBB61">The &lt;see cref ="T:System.String"/&gt; to convert or &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="476C67090D22E623">&lt;paramref name ="value"/&gt;, converted to the data type of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Type"/&gt;.</T>
+  <T ID="E9AF797A3F9523A7">Converts &lt;paramref name ="value"/&gt; to a &lt;see cref ="T:System.String"/&gt;.</T>
+  <T ID="A78D6FB00D37121C">An &lt;see cref ="T:System.Object"/&gt; of any class or &lt;c&gt;null&lt;/c&gt;. The method should throw an
+             &lt;see cref ="T:System.InvalidCastException"/&gt;, if the data type of &lt;paramref name ="value"/&gt; does not match the return value of
+             &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Type"/&gt;.</T>
+  <T ID="A9FCDFD779AF6FC8">&lt;paramref name="value"/&gt;, converted to a &lt;see cref="T:System.String"/&gt;.</T>
+  <T ID="445E8C5EE691AEB7">The method should throw this exception, if the data type of
+             &lt;paramref name ="value"/&gt; does not correspond to the return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Type"/&gt;.</T>
+  <T ID="7A37E1BE1369AA08">An object of the data type returned by &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Type"/&gt;, that is used as the return value of the
+             &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object,  if &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; finds no access target
+             in the columns of the CSV file (represented by &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt;). &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;
+             should also be returned, if the type conversion in &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Parse(System.String)"/&gt; fails
+             and no &lt;see cref ="T:System.Exception"/&gt; is thrown.</T>
+  <T ID="FB9E0BDDFB3453F7">The data type, that &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; can parse, or that &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; can convert to a &lt;see cref ="T:System.String"/&gt;.</T>
+  <T ID="F98EFDDF0C2A4485">&lt;c&gt;true&lt;/c&gt; indicates, that the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object throws an exception, if &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Parse(System.String)"/&gt;
+             fails. Otherwise &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt; is returned in this case.</T>
+  <T ID="94F2DACCF1C9A89">Initialises a &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; object.</T>
+  <T ID="F4B6543D7C6A2FCF">If &lt;c&gt;true&lt;/c&gt;, only the date part is parsed and output.</T>
+  <T ID="A8AEB9FC3323C9FF">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; DateTime&amp;gt;&lt;/see&gt; is accepted and returned,
+             otherwise &lt;see cref ="T:System.DateTime"/&gt;.</T>
+  <T ID="BC083F690022525">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="F:System.DBNull.Value"/&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt;.</T>
+  <T ID="7A55398F45E4D6A1">An &lt;see cref ="T:System.IFormatProvider"/&gt; object, that provides culture-specific formatting information, or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Globalization.CultureInfo.InvariantCulture"/&gt;.</T>
+  <T ID="4CE43DABAEE7CA3A">If &lt;c&gt;true&lt;/c&gt;, the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.Parse(System.String)"/&gt; throws an exception, when parsing
+             fails,
+             otherwise it returns &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt; in this case.</T>
+  <T ID="273B4886CF1C9A89">Initialises a &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; object.</T>
+  <T ID="F57371EFB0D45909">A format string, that is used for the &lt;see cref ="T:System.String"/&gt; output of &lt;see cref ="T:System.DateTime"/&gt; values.
+             If the option &lt;paramref name ="parseExact"/&gt; is selected, this format string is also used for parsing.</T>
+  <T ID="B953C6C43323C9FF">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; DateTime&amp;gt;&lt;/see&gt; is accepted and returned,
+             otherwise &lt;see cref ="T:System.DateTime"/&gt;.</T>
+  <T ID="7806486D90022525">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref ="F:System.DBNull.Value"/&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt;.</T>
+  <T ID="DDC8C62445E4D6A1">An &lt;see cref ="T:System.IFormatProvider"/&gt; object, that provides culture-specific formatting information, or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Globalization.CultureInfo.InvariantCulture"/&gt;.</T>
+  <T ID="ABEE96DDAEE7CA3A">If &lt;c&gt;true&lt;/c&gt;, the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.Parse(System.String)"/&gt; throws an exception, when parsing
+             fails,
+             otherwise it returns &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt; in this case.</T>
+  <T ID="C51C43BCDFF42662">A value of the &lt;see cref ="T:System.Globalization.DateTimeStyles"/&gt; enum that provides additional information for parsing. Becomes
+             only evaluated if &lt;paramref name ="parseExact"/&gt; is &lt;c&gt;true&lt;/c&gt;.</T>
+  <T ID="EA9F7E48B3C75EB6">If &lt;c&gt;true&lt;/c&gt;, the text in the CSV file must exactly match the format string specified with &lt;paramref name ="format"/&gt;.</T>
+  <T ID="8F9F3EF1CE3F5EAE">&lt;paramref name="format"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="EF8A2F3867E65E92">&lt;paramref name="format"/&gt; is not a valid format string.</T>
+  <T ID="FBE50D5BD45359DE">If no special format is required, you should initialize the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; object
+             via the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider)"/&gt;: This is much better for performance.</T>
+  <T ID="8309548E7354BC1E">Value, that is returned, if &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; finds no data
+             in the columns of the CSV file (represented by &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt;) or if
+             &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.Parse(System.String)"/&gt; fails.</T>
+  <T ID="DF363B6F5913D7BB">The data type, that &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; can parse or
+             which &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; can convert to a &lt;see cref ="T:System.String"/&gt;. (&lt;c&gt;typeof (DateTime)&lt;/c&gt; or &lt;c&gt;typeof (DateTime?)&lt;/c&gt;)</T>
+  <T ID="A45E1677E459FDC6">&lt;c&gt;true&lt;/c&gt; indicates, that an exception is thrown, if &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.Parse(System.String)"/&gt;
+             fails. Otherwise &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt; is returned in this case.</T>
+  <T ID="C5E4B010CB056A95">Parses &lt;paramref name ="value"/&gt; as &lt;see cref ="T:System.DateTime"/&gt; or &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt;DateTime&amp;gt;&lt;/see&gt; - depending on the settings in the constructor.</T>
+  <T ID="F177A5297CA68363">The &lt;see cref="T:System.String"/&gt; to parse.</T>
+  <T ID="4F45C2EC7E621B75">&lt;paramref name ="value"/&gt; is not in a compatible format. The exception will only be
+             thrown, if it was configured in the constructor - otherwise &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt; is returned.</T>
+  <T ID="6A195DBB04BE30AD">Returns the string representation of &lt;paramref name ="value"/&gt;, if &lt;paramref name ="value"/&gt; is &lt;see cref ="T:System.DateTime"/&gt;
+             or &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt;DateTime&amp;gt;&lt;/see&gt;.</T>
+  <T ID="862DEFE3C26BB1E9">A &lt;see cref ="T:System.DateTime"/&gt;- or &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt;DateTime&amp;gt;&lt;/see&gt;-object as the result
+             of parsing.</T>
+  <T ID="660D865F8EBE77DE">A &lt;see cref ="T:System.DateTime"/&gt;- or &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt;DateTime&amp;gt;&lt;/see&gt;-object.</T>
+  <T ID="B2FF5F1E5AF8B776">A string representation of &lt;paramref name="value"/&gt;.</T>
+  <T ID="226C4EFA5AEF5F">&lt;paramref name ="value"/&gt; cannot be converted in the data type &lt;see cref ="T:System.DateTime"/&gt;
+             or &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt;DateTime&amp;gt;&lt;/see&gt;.</T>
+  <T ID="97DF871D325013F1">The date and time are outside the range of dates that
+             are supported by the calendar of the &lt;see cref ="T:System.Globalization.CultureInfo"/&gt;, assigned in the constructor.</T>
+  <T ID="70D14D620EBE990C">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="DEAD8FD60EBE990C">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="5603374F0EBE990C">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="68B631DF0EBE990C">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
+  <T ID="DC4BB26C9782CB08">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Intls.EnumConverter`1.FallbackValue"/&gt;.</T>
+  <T ID="5B189C8E9782CB08">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Intls.EnumConverter`1.FallbackValue"/&gt;.</T>
+  <T ID="BC083F6E8BDEC4D">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt;.</T>
+  <T ID="7806486DE8BDEC4D">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt;.</T>
+  <T ID="26FF0D46C534B116">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter.FallbackValue"/&gt;.</T>
+  <T ID="F63B5B9DC534B116">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter.FallbackValue"/&gt;.</T>
+  <T ID="EC6F8EF1F65C7A1E">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter.FallbackValue"/&gt;.</T>
+  <T ID="F367FB7F65C7A1E">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter.FallbackValue"/&gt;.</T>
+  <T ID="DA211DBF21734FE5">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter.FallbackValue"/&gt;.</T>
+  <T ID="B0A2C63121734FE5">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+             return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter.FallbackValue"/&gt;.</T>
 </Tsltn>

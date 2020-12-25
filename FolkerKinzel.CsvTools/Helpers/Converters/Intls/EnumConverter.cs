@@ -19,7 +19,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}"/> akzeptiert und zurückgegeben,
         /// sonst <typeparamref name="TEnum"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
@@ -122,7 +122,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <typeparamref name="TEnum"/> verwendet wird.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}"/> akzeptiert und zurückgegeben,
         /// sonst <typeparamref name="TEnum"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
@@ -236,9 +236,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <summary>
         /// Erzeugt die Zeichenfolgendarstellung von <paramref name="value"/>.
         /// </summary>
-        /// <param name="value">Ein <typeparamref name="TEnum"/> bzw. <see cref="Nullable{T}"/>.</param>
-        /// <returns>Ein <typeparamref name="TEnum"/> bzw. <see cref="Nullable{T}"/> als Ergebnis
-        /// des Parsens.</returns>
+        /// <param name="value">Ein <typeparamref name="TEnum"/>- bzw. <see cref="Nullable{T}">Nullable&lt;TEnum&gt;</see>-Objekt.</param>
+        /// <returns>Eine Zeichenfolgendarstellung von <paramref name="value"/>.</returns>
         /// <exception cref = "InvalidCastException" ><paramref name="value"/> ist nicht <typeparamref name="TEnum"/>
         /// bzw. <see cref="Nullable{T}"/>.</exception>
         public string? ConvertToString(object? value) => this._toStringConverter(value);
@@ -248,8 +247,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// nachdem, welche Option im Konstruktor gewählt wurde.
         /// </summary>
         /// <param name="value">Der zu parsende <see cref="string"/>.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"><paramref name="value"/> enthält nur Leerraum oder  <paramref name="value"/> ist ein Name, aber nicht der 
+        /// <returns>Ein <typeparamref name="TEnum"/>- bzw. <see cref="Nullable{T}">Nullable&lt;TEnum&gt;</see>-Objekt als Ergebnis
+        /// des Parsens.</returns>
+        /// <exception cref="ArgumentException"><paramref name="value"/> enthält nur Leerraum oder <paramref name="value"/> ist ein Name, aber nicht der 
         /// Name einer der für die Enumeration definierten benannten Konstanten.</exception>
         /// <exception cref="OverflowException"><paramref name="value"/> liegt außerhalb des Bereichs des <typeparamref name="TEnum"/> zugrunde liegenden Typs.</exception>
         public object? Parse(string? value) => this._parser(value);

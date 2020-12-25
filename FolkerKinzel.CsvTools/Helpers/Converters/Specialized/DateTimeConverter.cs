@@ -20,10 +20,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <param name="isDate">Wenn <c>true</c>, wird nur der Datumsteil gelesen und ausgegeben.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="DateTime"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
-        /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
+        /// bereitstellt, oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
@@ -126,19 +126,19 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Wenn die Option <paramref name="parseExact"/> gewählt ist, wird dieser Formatstring auch für das Parsen verwendet.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="DateTime"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="formatProvider">Ein <see cref="IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param> 
         /// <param name="styles">Ein Wert der <see cref="DateTimeStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
-        /// nur ausgewertet, wenn <paramref name="parseExact"/> <c>true</c> ist.</param>
+        /// nur ausgewertet, wenn <paramref name="parseExact"/>&#160;<c>true</c> ist.</param>
         /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>
         /// <exception cref="ArgumentNullException"><paramref name="format"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
-        /// <remarks>Wenn kein spezielles Format gefprdert ist, sollten Sie das <see cref="DateTimeConverter"/>-Objekt
+        /// <remarks>Wenn kein spezielles Format gefordert ist, sollten Sie das <see cref="DateTimeConverter"/>-Objekt
         /// über die Methode <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren: Das ist 
         /// wesentlich performanter.</remarks>
         public DateTimeConverter(
@@ -290,13 +290,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <summary>
         /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
         /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
-        /// von <see cref="Parse(string)"/> scheitert.
+        /// <see cref="Parse(string)"/> scheitert.
         /// </summary>
         public object? FallbackValue { get; }
 
         /// <summary>
         /// Der Datentyp, in den <see cref="DateTimeConverter"/> parsen bzw.
-        /// in einen <see cref="string"/> umwandeln kann. (<c>typeof(DateTime)</c> oder <c>typeof(DateTime?)</c>)
+        /// den <see cref="DateTimeConverter"/> in einen <see cref="string"/> umwandeln kann. (<c>typeof(DateTime)</c> oder <c>typeof(DateTime?)</c>)
         /// </summary>
         public Type Type { get; }
 
@@ -311,7 +311,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// nachdem, welche Option im Konstruktor gewählt wurde.
         /// </summary>
         /// <param name="value">Der zu parsende <see cref="string"/>.</param>
-        /// <returns>Ein <see cref="DateTime"/> bzw. <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see> als Ergebnis
+        /// <returns>Ein <see cref="DateTime"/>- bzw. <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see>-Objekt als Ergebnis
         /// des Parsens.</returns>
         /// <exception cref="FormatException"><paramref name="value"/> weist kein kompatibles Format auf. Die Ausnahme wird
         /// nur geworfen, wenn das im Konstruktor so konfiguriert wurde - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
@@ -322,7 +322,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Gibt die Zeichenfolgendarstellung von <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="DateTime"/> 
         /// bzw. <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see> ist.
         /// </summary>
-        /// <param name="value">Ein <see cref="DateTime"/> bzw. <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see>.</param>
+        /// <param name="value">Ein <see cref="DateTime"/>- bzw. <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see>-Objekt.</param>
         /// <returns>Eine Zeichenfolgendarstellung von <paramref name="value"/>.</returns>
         /// <exception cref="InvalidCastException"><paramref name="value"/> lässt sich nicht in den Datentyp <see cref="DateTime"/> 
         /// bzw. <see cref="Nullable{T}">Nullable&lt;DateTime&gt;</see> umwandeln.</exception>

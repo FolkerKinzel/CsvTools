@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="Guid"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
@@ -114,7 +114,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <see cref="Guid"/>-Werten verwendet wird.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> akzeptiert und zurückgegeben,
         /// sonst <see cref="Guid"/>.</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
@@ -205,13 +205,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <summary>
         /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
         /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
-        /// von <see cref="Parse(string)"/> scheitert.
+        /// <see cref="Parse(string)"/> scheitert.
         /// </summary>
         public object? FallbackValue { get; }
 
         /// <summary>
         /// Der Datentyp, in den <see cref="GuidConverter"/> parsen bzw.
-        /// in einen <see cref="string"/> umwandeln kann. (<c>typeof(Guid)</c> oder <c>typeof(Guid?)</c>)
+        /// den <see cref="GuidConverter"/> in einen <see cref="string"/> umwandeln kann. (<c>typeof(Guid)</c> oder <c>typeof(Guid?)</c>)
         /// </summary>
         public Type Type { get; }
 
@@ -226,7 +226,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// nachdem, welche Option im Konstruktor gewählt wurde.
         /// </summary>
         /// <param name="value">Der zu parsende <see cref="string"/>.</param>
-        /// <returns>Ein <see cref="Guid"/> bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> als Ergebnis
+        /// <returns>Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt als Ergebnis
         /// des Parsens.</returns>
         /// <exception cref="FormatException"><paramref name="value"/> weist kein kompatibles Format auf. Die Ausnahme wird
         /// nur geworfen, wenn das im Konstruktor so konfiguriert wurde - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
@@ -237,7 +237,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Gibt die Zeichenfolgendarstellung von <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="Guid"/> 
         /// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> ist.
         /// </summary>
-        /// <param name="value">Ein <see cref="Guid"/> bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>.</param>
+        /// <param name="value">Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt.</param>
         /// <returns>Eine Zeichenfolgendarstellung von <paramref name="value"/>.</returns>
         /// <exception cref="InvalidCastException"><paramref name="value"/> lässt sich nicht in den Datentyp <see cref="Guid"/> 
         /// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> umwandeln.</exception>

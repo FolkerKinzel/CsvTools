@@ -4,7 +4,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 {
     /// <summary>
     /// Übernimmt Konvertierungsvorgänge für den Datentyp <see cref="string"/>. Führt eine Typüberprüfung durch und kann Nullable-Strings in
-    /// Non-Nullable-Strings umwandeln. (Akzeptiert auch <see cref="DBNull.Value"/> als Eingabe.)
+    /// Non-Nullable-Strings umwandeln. (Akzeptiert auch <see cref="DBNull.Value">DBNull.Value</see> als Eingabe.)
     /// </summary>
     internal sealed class StringConverter : ICsvTypeConverter
     {
@@ -14,7 +14,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <param name="nullable">Wenn <c>false</c>, wird von <see cref="Parse(string)"/> ein Non-Nullable-<see cref="string"/> 
         /// zurückgegeben: Der Rückgabewert von 
         /// <see cref="FallbackValue"/>ist dann <see cref="string.Empty"/> (sonst <c>null</c>).</param>
-        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value"/> als Eingabe akzeptiert und bildet auch den
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>. (Überschreibt <paramref name="nullable"/>.)</param>
         public StringConverter(bool nullable, bool maybeDBNull)
         {
@@ -50,11 +50,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
 
         /// <summary>
-        /// Gibt <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="string"/>, <c>null</c> oder <see cref="DBNull.Value"/> ist.
+        /// Gibt <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="string"/>, <c>null</c> oder <see cref="DBNull.Value">DBNull.Value</see> ist.
         /// </summary>
-        /// <param name="value">Ein <see cref="string"/>, <c>null</c> oder <see cref="DBNull.Value"/>.</param>
+        /// <param name="value">Ein <see cref="string"/>, <c>null</c> oder <see cref="DBNull.Value">DBNull.Value</see>.</param>
         /// <returns><paramref name="value"/>, wenn <paramref name="value"/> ein <see cref="string"/> oder <c>null</c> ist.</returns>
-        /// <exception cref="InvalidCastException"><paramref name="value"/> ist nicht <c>null</c> oder <see cref="DBNull.Value"/> und auch kein <see cref="string"/>.</exception>
+        /// <exception cref="InvalidCastException"><paramref name="value"/> ist nicht <c>null</c> oder <see cref="DBNull.Value">DBNull.Value</see> und auch kein <see cref="string"/>.</exception>
         public string? ConvertToString(object? value) => Convert.IsDBNull(value) && FallbackValue is DBNull ? null : (string?)value;
 
 

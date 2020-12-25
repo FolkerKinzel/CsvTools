@@ -1,7 +1,7 @@
 ﻿namespace FolkerKinzel.CsvTools.Helpers.Converters
 {
     /// <summary>
-    /// Benannte Konstanten, um den Datentyp eines <see cref="ICsvTypeConverter"/>-Objekts auszuwählen.
+    /// Benannte Konstanten, um den Datentyp auszuwählen, den ein <see cref="ICsvTypeConverter"/>-Objekts umwandeln kann.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Bezeichner enthält Typnamen", Justification = "<Ausstehend>")]
     public enum CsvTypeCode
@@ -89,7 +89,7 @@
         Date,
 
         /// <summary>
-        /// <see cref="DateTime"/>: Datum und Uhrzeit (Formatstring "s".)
+        /// <see cref="DateTime"/>: Datum und Uhrzeit (Formatstring "s")
         /// </summary>
         DateTime,
 
