@@ -59,7 +59,7 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Initialisiert ein neues <see cref="CsvRecord"/>-Objekt mit Standardnamen für die Spalten. (Geeignet für
+        /// Initialisiert ein <see cref="CsvRecord"/>-Objekt mit Standardnamen für die Spalten ("Column1", "Column2" etc). (Geeignet für
         /// CSV-Dateien ohne Kopfzeile.)
         /// </summary>
         /// <param name="columnsCount">Anzahl der Spalten.</param>
@@ -236,6 +236,7 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück.
         /// </summary>
+        /// <remarks>Wenn die CSV-Datei keine Kopfzeile hatte, werden automatisch Spaltennamen der Art "Column1", "Column2" etc. vergeben.</remarks>
         public ReadOnlyCollection<string> ColumnNames => _columnNames;
 
 
@@ -391,11 +392,11 @@ namespace FolkerKinzel.CsvTools
         
 
 
-        /// <summary>
-        /// Gibt einen <see cref="IEnumerator"/> zurück, mit dem das <see cref="CsvRecord"/>-Objekt
-        /// durchlaufen wird.
-        /// </summary>
-        /// <returns>Ein <see cref="IEnumerator"/>.</returns>
+        ///// <summary>
+        ///// Gibt einen <see cref="IEnumerator"/> zurück, mit dem das <see cref="CsvRecord"/>-Objekt
+        ///// durchlaufen wird.
+        ///// </summary>
+        ///// <returns>Ein <see cref="IEnumerator"/>.</returns>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
@@ -418,10 +419,7 @@ namespace FolkerKinzel.CsvTools
 
 
 
-        /// <summary>
-        /// Erstellt eine <see cref="String"/>-Repräsentation des <see cref="CsvRecord"/>-Objekts. (Gut für's Debugging.)
-        /// </summary>
-        /// <returns>Eine <see cref="String"/>-Repräsentation des <see cref="CsvRecord"/>-Objekts.</returns>
+        /// <inheritdoc/>
         public override string ToString()
         {
             if (this.Count == 0)

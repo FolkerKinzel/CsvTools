@@ -5,10 +5,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
+
 
 namespace FolkerKinzel.CsvTools.Helpers
 {
@@ -78,20 +81,14 @@ namespace FolkerKinzel.CsvTools.Helpers
         #region ctors
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt zum Lesen einer CSV-Datei. Vor dem Zugriff auf die Eigenschaften muss <see cref="Record"/>
-        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen werden.
+        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt. 
         /// </summary>
+        /// <remarks>Vor dem Zugriff auf die Eigenschaften muss <see cref="Record"/>
+        /// ein <see cref="CsvRecord"/>-Objekt zugewiesen werden.</remarks>
         public CsvRecordWrapper() { }
 
 
-        ///// <summary>
-        ///// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt und weist diesem <paramref name="record"/> zu.
-        ///// </summary>
-        ///// <param name="record">Das <see cref="CsvRecord"/>-Objekt, auf dessen Daten <see cref="CsvRecordWrapper"/> zugreift.</param>
-        //public CsvRecordWrapper(CsvRecord record)
-        //{
-        //    this.Record = record;
-        //}
+        
 
         #endregion
 
@@ -182,7 +179,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
         /// über den Wert der Eigenschaft <see cref="CsvProperty.PropertyName"/>.
         /// </summary>
-        /// <param name="propertyName">Name der registrierten Eigenschaft. (Entspricht <see cref="CsvProperty.PropertyName"/>. Der
+        /// <param name="propertyName">Name der registrierten Eigenschaft. (Entspricht <see cref="CsvProperty.PropertyName"/>.) Der
         /// Vergleich erfolgt case-sensitiv.</param>
         /// <returns>Rückgabewert der registrierten <see cref="CsvProperty"/>, deren Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/>
         /// entspricht. Der Vergleich ist case-sensitiv.</returns>
@@ -393,7 +390,6 @@ namespace FolkerKinzel.CsvTools.Helpers
         public int IndexOf(string? propertyName) => propertyName is null ? -1 : _dynProps.Contains(propertyName) ? _dynProps.IndexOf(_dynProps[propertyName]) : -1;
 
 
-
         /// <summary>
         /// Wird automatisch aufgerufen, wenn einer dynamisch implementierten Eigenschaft ein Wert
         /// zugewiesen wird. (Nicht zur direkten Verwendung in eigenem Code bestimmt.)
@@ -409,6 +405,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="Exception">Es wurde versucht, auf eine nicht registrierte Property zuzugreifen.</exception>
         ///  <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TrySetMember(SetMemberBinder binder, object? value)
         {
             if (binder is null)
@@ -445,6 +442,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Ausnahme wirft.</exception>
         /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryGetMember(GetMemberBinder binder, out object? result)
         {
             if (binder is null)
@@ -467,6 +465,89 @@ namespace FolkerKinzel.CsvTools.Helpers
             return false;
         }
 
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override IEnumerable<string> GetDynamicMemberNames()
+        {
+            return base.GetDynamicMemberNames();
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override DynamicMetaObject GetMetaObject(Expression parameter)
+        {
+            return base.GetMetaObject(parameter);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object result)
+        {
+            return base.TryBinaryOperation(binder, arg, out result);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryConvert(ConvertBinder binder, out object result)
+        {
+            return base.TryConvert(binder, out result);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryCreateInstance(CreateInstanceBinder binder, object[] args, out object result)
+        {
+            return base.TryCreateInstance(binder, args, out result);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryDeleteIndex(DeleteIndexBinder binder, object[] indexes)
+        {
+            return base.TryDeleteIndex(binder, indexes);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryDeleteMember(DeleteMemberBinder binder)
+        {
+            return base.TryDeleteMember(binder);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
+        {
+            return base.TryGetIndex(binder, indexes, out result);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
+        {
+            return base.TryInvoke(binder, args, out result);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+            return base.TryInvokeMember(binder, args, out result);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
+        {
+            return base.TrySetIndex(binder, indexes, value);
+        }
+
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public override bool TryUnaryOperation(UnaryOperationBinder binder, out object result)
+        {
+            return base.TryUnaryOperation(binder, out result);
+        }
 
         ///// <summary>
         ///// Setzt den Wert sämtlicher Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.

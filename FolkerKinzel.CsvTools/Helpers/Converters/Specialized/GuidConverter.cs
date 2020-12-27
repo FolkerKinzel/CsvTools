@@ -202,11 +202,12 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             }
         }
 
-        /// <summary>
-        /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
-        /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
-        /// <see cref="Parse(string)"/> scheitert.
-        /// </summary>
+        ///// <summary>
+        ///// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
+        ///// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
+        ///// <see cref="Parse(string)"/> scheitert.
+        ///// </summary>
+        /// <inheritdoc path="summary"/>
         public object? FallbackValue { get; }
 
         /// <summary>
@@ -215,32 +216,35 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </summary>
         public Type Type { get; }
 
-        /// <summary>
-        /// <c>true</c> gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
-        /// scheitert. Anderenfalls wird in diesem Fall <see cref="FallbackValue"/> zurückgegeben.
-        /// </summary>
+        ///// <summary>
+        ///// <c>true</c> gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
+        ///// scheitert. Anderenfalls wird in diesem Fall <see cref="FallbackValue"/> zurückgegeben.
+        ///// </summary>
+        /// <inheritdoc/>
         public bool ThrowsOnParseErrors { get; }
 
-        /// <summary>
-        /// Parst <paramref name="value"/> als <see cref="Guid"/> oder <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> - je
-        /// nachdem, welche Option im Konstruktor gewählt wurde.
-        /// </summary>
-        /// <param name="value">Der zu parsende <see cref="string"/>.</param>
-        /// <returns>Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt als Ergebnis
-        /// des Parsens.</returns>
+        ///// <summary>
+        ///// Parst <paramref name="value"/> als <see cref="Guid"/> oder <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> - je
+        ///// nachdem, welche Option im Konstruktor gewählt wurde.
+        ///// </summary>
+        ///// <param name="value">Der zu parsende <see cref="string"/>.</param>
+        ///// <returns>Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt als Ergebnis
+        ///// des Parsens.</returns>
+        /// <inheritdoc/>
         /// <exception cref="FormatException"><paramref name="value"/> weist kein kompatibles Format auf. Die Ausnahme wird
         /// nur geworfen, wenn das im Konstruktor so konfiguriert wurde - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
         public object? Parse(string? value) => _parser(value);
 
 
-        /// <summary>
-        /// Gibt die Zeichenfolgendarstellung von <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="Guid"/> 
-        /// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> ist.
-        /// </summary>
-        /// <param name="value">Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt.</param>
-        /// <returns>Eine Zeichenfolgendarstellung von <paramref name="value"/>.</returns>
-        /// <exception cref="InvalidCastException"><paramref name="value"/> lässt sich nicht in den Datentyp <see cref="Guid"/> 
-        /// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> umwandeln.</exception>
+        ///// <summary>
+        ///// Gibt die Zeichenfolgendarstellung von <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="Guid"/> 
+        ///// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> ist.
+        ///// </summary>
+        ///// <param name="value">Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt.</param>
+        ///// <returns>Eine Zeichenfolgendarstellung von <paramref name="value"/>.</returns>
+        ///// <exception cref="InvalidCastException"><paramref name="value"/> lässt sich nicht in den Datentyp <see cref="Guid"/> 
+        ///// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> umwandeln.</exception>
+        /// <inheritdoc path="summary|returns|param|exception"/>
         public string? ConvertToString(object? value) => _toStringConverter(value);
 
     }

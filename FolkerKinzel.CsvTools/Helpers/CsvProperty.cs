@@ -119,7 +119,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <summary>
         /// Extrahiert mit Hilfe von <see cref="Converter"/> Daten eines bestimmten Typs aus einer Spalte von <see cref="CsvRecord"/>.
         /// </summary>
-        /// <param name="record"></param>
+        /// <param name="record">Das <see cref="CsvRecord"/>-Objekt, aus dem gelesen wird.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"><paramref name="record"/> ist null.</exception>
         /// <exception cref="InvalidCastException"><see cref="ICsvTypeConverter.ThrowsOnParseErrors"/> war <c>true</c> und der Wert konnte

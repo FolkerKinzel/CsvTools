@@ -93,7 +93,7 @@ namespace FolkerKinzel.CsvTools
         /// gewählt wurde.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
         /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
-        /// 
+        /// <exception cref="ArgumentNullException"><paramref name="writer"/> oder <paramref name="columnNames"/> ist <c>null.</c></exception>
         /// <exception cref="ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
         /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
         public CsvWriter(
@@ -122,6 +122,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
         /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="writer"/> ist <c>null.</c></exception>
         public CsvWriter(
             TextWriter writer, int columnsCount, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
             : this(columnsCount, fieldSeparator, options)

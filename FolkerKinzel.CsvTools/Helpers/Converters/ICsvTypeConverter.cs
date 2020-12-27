@@ -24,24 +24,24 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
 
 
         /// <summary>
-        /// Konvertiert <paramref name="value"/> in einen <see cref="string"/>.
+        /// Wandelt <paramref name="value"/> in einen <see cref="string"/> um.
         /// </summary>
-        /// <param name="value">Ein <see cref="object"/> einer beliebigen Klasse oder <c>null</c>. Die Methode sollte eine 
-        /// <see cref="InvalidCastException"/> werfen, wenn der Datentyp von <paramref name="value"/> nicht dem Rückgabewert von 
-        /// <see cref="Type"/> entspricht.</param>
+        /// <param name="value">Ein <see cref="object"/>, dessen Datentyp dem Rückgabewert von <see cref="Type"/> entspricht.</param>
         /// <returns><paramref name="value"/>, in einen <see cref="string"/> umgewandelt.</returns>
-        /// <exception cref="InvalidCastException">Diese Ausnahme sollte die Methode werfen, wenn der Datentyp von 
-        /// <paramref name="value"/> nicht dem Rückgabewert von <see cref="Type"/> entspricht.</exception>
+        /// <exception cref="InvalidCastException">Der Datentyp von 
+        /// <paramref name="value"/> stimmt nicht mit dem Rückgabewert von <see cref="Type"/> überein.</exception>
+        /// <remarks>Die Methode sollte eine 
+        /// <see cref="InvalidCastException"/> werfen, wenn der Datentyp von <paramref name="value"/> nicht dem Rückgabewert von 
+        /// <see cref="Type"/> entspricht.</remarks>
         string? ConvertToString(object? value);
 
 
         /// <summary>
-        /// Ein Objekt des von <see cref="Type"/> zurückgegebenen Datentyps, das als Rückgabewert des 
-        /// <see cref="ICsvTypeConverter"/>-Objekts verwendet wird, wenn <see cref="CsvProperty"/> kein Zugriffsziel
-        /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet. <see cref="FallbackValue"/>
-        /// sollte auch dann zurückgegeben werden, wenn die Typkonvertierung in <see cref="Parse(string)"/> scheitert 
-        /// und keine <see cref="Exception"/> geworfen wird.
+        /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
+        /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
+        /// <see cref="Parse(string)"/> scheitert und keine <see cref="Exception"/> geworfen wird.
         /// </summary>
+        /// <value>Ein Objekt des von <see cref="Type"/> zurückgegebenen Datentyps.</value>
         object? FallbackValue { get; }
 
 
