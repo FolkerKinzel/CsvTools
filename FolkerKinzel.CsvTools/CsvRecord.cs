@@ -26,7 +26,6 @@ namespace FolkerKinzel.CsvTools
     {
         #region fields
 
-        private const string DefaultKeyName = "Column";
 #if NET40
         private static readonly string?[] DefaultArr = new string?[0];
         private readonly string?[] _values = DefaultArr;
@@ -80,7 +79,7 @@ namespace FolkerKinzel.CsvTools
 
             for (int i = 0; i < columnsCount; i++)
             {
-                string keyName = DefaultKeyName + (i + 1).ToString(CultureInfo.InvariantCulture);
+                string keyName = AutoColumnName.Create(i);
 
                 keyArr[i] = keyName;
                 this._lookupDictionary.Add(keyName, i);
@@ -166,7 +165,7 @@ namespace FolkerKinzel.CsvTools
 
                 do
                 {
-                    key = DefaultKeyName + (++defaultNameCounter).ToString(CultureInfo.InvariantCulture);
+                    key = AutoColumnName.Create(defaultNameCounter++);
                 } while (_lookupDictionary.ContainsKey(key));
 
                 return key;

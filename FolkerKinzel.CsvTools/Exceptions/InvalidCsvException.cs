@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace FolkerKinzel.CsvTools
 {
     /// <summary>
-    /// Ausnahmen, die beim Lesen von Csv-Dokumenten durch ungültige CSV-Dokumente
+    /// Ausnahmen, die beim Lesen von CSV-Dokumenten durch ungültige CSV-Dokumente
     /// ausgelöst werden.
     /// </summary>
     [Serializable]

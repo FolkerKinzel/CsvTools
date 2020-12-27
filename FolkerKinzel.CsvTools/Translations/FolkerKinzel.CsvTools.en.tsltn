@@ -12,7 +12,7 @@
   <T ID="5509524449B6F322">Implements the interface &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; for the conversion of the &lt;see cref="T:System.Guid" /&gt; data type.</T>
   <T ID="1622738D817D61C2">Implements the interface &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; for the conversion of the &lt;see cref="T:System.TimeSpan" /&gt; data type.</T>
   <T ID="DCA391D76E0CF6EA">&lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvAnalyzer" /&gt; can perform a statistical analysis on a CSV file and make the results available as object properties.</T>
-  <T ID="A3B73B328B54DE84">Represents a property that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; implements dynamically at runtime ("late binding"). &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvProperty" /&gt; encapsulates information about access and type conversion that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; needs to access the data of the underlying &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord" /&gt; object.</T>
+  <T ID="A3B73B328B54DE84">Represents a property, that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; implements dynamically at runtime ("late binding"). &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvProperty" /&gt; encapsulates information about access and type conversion, that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; needs, to access the data of the underlying &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord" /&gt; object.</T>
   <T ID="E07F0BFD4C5B87C8">The class forms a wrapper around objects of the class &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord" /&gt;, which enables you, to index the data of the &lt;see cref="T:FolkerKinzel.CsvTools.CsvRecord" /&gt; object in a sequence of your choice, to access the data with properties dynamically implemented at runtime, and to perform type conversions. In order to be able to use the dynamically implemented properties of the class &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper" /&gt; ("late binding") directly and to assign the return values of the indexers without a cast, the instance of &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; must be assigned to a variable, that is declared with the keyword &lt;c&gt;dynamic&lt;/c&gt;.</T>
   <T ID="91571A2A2C5C243">Exception, thrown parsing invalid CSV documents.</T>
   <T ID="4C84B8F95C3C56C4">&lt;note type ="tip"&gt;
@@ -310,7 +310,7 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="8F9F3EF1CE3F5EAE">&lt;paramref name="format"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
   <T ID="EF8A2F3867E65E92">&lt;paramref name="format"/&gt; is not a valid format string.</T>
   <T ID="FBE50D5BD45359DE">If no special format is required, you should initialize the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; object
-             via the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider)"/&gt;: This is much better for performance.</T>
+             via the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider,System.Boolean)"/&gt;: This is much better for performance.</T>
   <T ID="DF363B6F5913D7BB">The data type, that &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; can parse or
              which &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; can convert to a &lt;see cref ="T:System.String"/&gt;. (&lt;c&gt;typeof (DateTime)&lt;/c&gt; or &lt;c&gt;typeof (DateTime?)&lt;/c&gt;)</T>
   <T ID="4F45C2EC7E621B75">&lt;paramref name ="value"/&gt; is not in a compatible format. The exception will only be
@@ -372,8 +372,8 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="FF80CC5CE3F5EAE">&lt;paramref name="format"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
   <T ID="FF2682A5CEF088BB">&lt;paramref name ="format"/&gt; is not a valid format string - or - &lt;paramref name ="styles"/&gt;
              contains the flag &lt;see cref ="F:System.Globalization.DateTimeStyles.NoCurrentDateDefault"/&gt;.</T>
-  <T ID="4E5DEF4BDC61F194">If it is sufficient that the standard format "O" is used for the &lt;see cref ="T:System.String"/&gt; output, you should initialize the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter"/&gt; object
-             via the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider)"/&gt;.: This is much better for performance.</T>
+  <T ID="4E5DEF4BDC61F194">If it is sufficient, that the standard format "O" is used for the &lt;see cref ="T:System.String"/&gt; output, you should initialize the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter"/&gt; object
+             via the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider,System.Boolean)"/&gt;.: This is much better for performance.</T>
   <T ID="ECBC64BEEE6D05E0">The data type, that &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter"/&gt; can parse or
              which &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter"/&gt; can convert to a &lt;see cref ="T:System.String"/&gt;. (&lt;c&gt;typeof (DateTimeOffset)&lt;/c&gt; or &lt;c&gt;typeof (DateTimeOffset?)&lt;/c&gt;)</T>
   <T ID="5E5F63D77AB73EE8">&lt;paramref name ="value"/&gt; is not in a compatible format. The exception will only be
@@ -394,8 +394,8 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
              fails,
              otherwise it returns &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter.FallbackValue"/&gt;  in this case.</T>
   <T ID="1BBD100367E65E92">&lt;paramref name ="format"/&gt; is not a valid format string.</T>
-  <T ID="A04875BC9B7E88BB">If it is sufficient that the standard format "D" is used for the &lt;see cref ="T:System.String"/&gt; output, you should initialize the &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter"/&gt; object
-             via the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider)"/&gt;.: This is much better for performance.</T>
+  <T ID="A04875BC9B7E88BB">If it is sufficient, that the standard format "D" is used for the &lt;see cref ="T:System.String"/&gt; output, you should initialize the &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter"/&gt; object
+             via the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider,System.Boolean)"/&gt;.: This is much better for performance.</T>
   <T ID="E7423D7B29BA9575">The data type, that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter"/&gt; can parse or
              which &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter"/&gt; can convert to a &lt;see cref ="T:System.String"/&gt;. (&lt;c&gt;typeof (Guid)&lt;/c&gt; or &lt;c&gt;typeof (Guid?)&lt;/c&gt;)</T>
   <T ID="923C9F18EA95953">&lt;paramref name ="value"/&gt; is not in a compatible format. The exception will only be
@@ -416,8 +416,8 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
              only evaluated, if &lt;paramref name ="parseExact"/&gt; is &lt;c&gt;true&lt;/c&gt;.</T>
   <T ID="42D23DADB3C75EB6">If &lt;c&gt;true&lt;/c&gt;, the text in the CSV file must exactly match the format string specified with &lt;paramref name ="format"/&gt;.</T>
   <T ID="7F1545A667E65E92">&lt;paramref name ="format"/&gt; is not a valid format string.</T>
-  <T ID="41B084FD52C92179">If it is sufficient that the standard format "g" is used for the &lt;see cref ="T:System.String"/&gt; output, you should initialize the &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter"/&gt; object
-             via the method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider)"/&gt;.</T>
+  <T ID="41B084FD52C92179">If it is sufficient, that the standard format "g" is used for the &lt;see cref ="T:System.String"/&gt; output, you should initialize the &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter"/&gt; object
+             via the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory.CreateConverter(FolkerKinzel.CsvTools.Helpers.Converters.CsvTypeCode,System.Boolean,System.Boolean,System.IFormatProvider,System.Boolean)"/&gt;.</T>
   <T ID="774EE13B695E7B3C">The data type, that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter"/&gt; can parse, or that &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter"/&gt; can convert to a &lt;see cref ="T:System.String"/&gt;.</T>
   <T ID="70D7B44F6D633DC4">&lt;paramref name ="value"/&gt; is not in a compatible format. The exception will only be
              thrown, if it was configured in the constructor - otherwise &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter.FallbackValue"/&gt; is returned.</T>
@@ -466,32 +466,6 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
              &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; objects. &lt;/para&gt;</T>
   <T ID="FF0ED3C5A044942C">An &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt; object to convert the desired data type.</T>
   <T ID="CEDF40FDFD6A7C2B">Extracts data of a certain type from a column of &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; using &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvProperty.Converter"/&gt;.</T>
-  <T ID="37350DB67BCDA679">&lt;para&gt; After a &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object has been initialized, the
- method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.AddProperty(FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt; has to be called, to register &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects, that are dynamic properties
-            of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object and perform type conversions for the &lt;see cref ="T:System.String"/&gt;s  in the underlying &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object. The order, in which the properties are registered, determines the
-            order, in which the return values ​​of these properties are returned, if the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object
-            is iterated in a &lt;c&gt;foreach&lt;/c&gt; loop or if it is accessed with the indexer &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Item(System.Int32)"/&gt;. Because of              the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects access the underlying &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object via the CSV column name,
-            the number and order of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects registered in the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object don't have to match the column-order of the underlying &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object.
-            &lt;/para&gt;
-&lt;para&gt; The order of the registered properties can be influenced at any time with the following methods:&lt;/para&gt; 
-&lt;list type="bullet"&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.InsertProperty(System.Int32,FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.ReplaceProperty(System.String,FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.ReplacePropertyAt(System.Int32,FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.RemoveProperty(System.String)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.RemovePropertyAt(System.Int32)"/&gt;&lt;/item&gt;&lt;/list&gt;
- &lt;para&gt; With &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Contains(System.String)"/&gt; you can check, whether a &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object with the specified name
-            is already registered. &lt;/para&gt; &lt;para&gt;
-            The indexers &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Item(System.Int32)"/&gt; and &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Item(System.String)"/&gt; can also be accessed, if the
-            &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; instance is assigned to a normal variable, but the the values returned by the indexers
-            possibly have be cast into the actual data type with the cast operator, since they are of the type &lt;see cref ="T:System.Object"/&gt;.
-            &lt;/para&gt; &lt;para&gt; If the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; instance is assigned to a variable, that has been declared with the keyword &lt;c&gt;dynamic&lt;/c&gt;, the runtime takes over the necessary casts. In addition, it is then possible to address the registered
-            &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects like normal properties by their name (&lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvProperty.PropertyName"/&gt;).
-            The disadvantage is, that Visual Studio cannot offer any "IntelliSense" on dynamic variables.
-            &lt;/para&gt; &lt;para&gt; If a CSV file is written with &lt;see cref ="T:FolkerKinzel.CsvTools.CsvWriter"/&gt;, it is sufficient to assign &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object only once,
-    since when writing data, always the same
-            &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object is used.
-            &lt;/para&gt; &lt;para&gt;
-            When reading a CSV file with &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; it behaves differently: With each iteration of the reader, the current &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object must first be assigned to &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt;, because &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; returnes
-            a new &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; with each iteration. (This does not apply, if the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; has been initialized with &lt;see cref ="F:FolkerKinzel.CsvTools.CsvOptions.DisableCaching"/&gt;.)
-            &lt;/para&gt;</T>
-  <T ID="73D306BF727D2DA">&lt;note type ="important"&gt; In the following code examples - for the sake of easier readability - exception handling has been omitted. &lt;/note&gt; &lt;para&gt; Saving the contents of a &lt;see cref ="T:System.Data.DataTable"/&gt; as a CSV file and importing data from a CSV file into
-             a &lt;see cref ="T:System.Data.DataTable"/&gt;: &lt;/para&gt; &lt;code/&gt; &lt;para&gt; Deserializing any objects from CSV files: &lt;/para&gt; &lt;code/&gt;</T>
   <T ID="90424C578F8AAE60">Initialises a &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object.</T>
   <T ID="6DF60B3E460985C8">Before accessing the properties, 
              a &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object must be assigned to &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Record"/&gt;.</T>
@@ -615,4 +589,56 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="27BB61896DB2D5A6">Maximum number of lines to analyze in the CSV file. The minimum value
              is &lt;see cref ="F:FolkerKinzel.CsvTools.Helpers.CsvAnalyzer.AnalyzedLinesMinCount"/&gt;. If the file has fewer lines than &lt;paramref name ="analyzedLinesCount"/&gt;
              it is completely analyzed. (You can specify &lt;see cref="F:System.Int32.MaxValue"&gt;Int32.MaxValue&lt;/see&gt; to ensure, that the entire file is analyzed.)</T>
+  <T ID="238D21E6492DEC47">Specialization of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; class for processing CSV files without a header.</T>
+  <T ID="93B285AB054C13E6">Initializes an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvIndexProperty"/&gt; object.</T>
+  <T ID="86D8FA55EC0D11EA">Zero-based index of the column in the CSV file.</T>
+  <T ID="F781168F2AF94912">&lt;paramref name="propertyName"/&gt; or 
+            &lt;paramref name="converter"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
+  <T ID="D5C098D164907B9D">&lt;paramref name ="csvColumnIndex"/&gt; is less than 0 - or -
+             &lt;paramref name ="wildcardTimeout"/&gt; is less than 1 or greater than
+             &lt;see cref ="F:FolkerKinzel.CsvTools.Helpers.CsvProperty.MaxWildcardTimeout"/&gt;.</T>
+  <T ID="CE270F4F71573C14">&lt;note type ="important"&gt;
+             It is not recommended, to use the same &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, to read from
+            CSV files with different headers - even if the assigned column aliases would allow it.
+             The reason for this is, that the first time you read from the CSV file, the most suitable alias is chosen and then for everyone
+             subsequent reads is used. The method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvProperty.Clone"/&gt; creates a fresh copy of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, that can be used to read another CSV file.
+             &lt;/note&gt;</T>
+  <T ID="EFD00A4F89FF3CC">Copy constructor</T>
+  <T ID="DB3E543043B43419">&lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, that will be copied.</T>
+  <T ID="F1817D5810A18114">It is not recommended, to use the same &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, to read from
+            CSV files with different headers - even if the assigned column aliases would allow it.
+             The reason for this is, that the first time you read from the CSV file, the most suitable alias is chosen and then for everyone
+             subsequent reads is used. The method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvProperty.Clone"/&gt; creates a fresh copy of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, that can be used to read another CSV file.</T>
+  <T ID="37350DB6E89D2A30">&lt;note type ="important"&gt;
+             It is not recommended, to use the same &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects, to read from
+            CSV files with different headers - even if the assigned column aliases would allow it.
+             The reason for this is, that the first time you read from the CSV file, the most suitable alias is chosen and then for everyone
+             subsequent reads is used. The method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvProperty.Clone"&gt;CsvProperty.Clone()&lt;/see&gt; creates a fresh copy of an &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, that can be used to read a different CSV file.
+             &lt;/note&gt;
+&lt;para&gt; After a &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object has been initialized, the
+ method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.AddProperty(FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt; has to be called, to register &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects, that are dynamic properties
+            of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object and perform type conversions for the &lt;see cref ="T:System.String"/&gt;s  in the underlying &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object. The order, in which the properties are registered, determines the
+            order, in which the return values ​​of these properties are returned, if the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object
+            is iterated in a &lt;c&gt;foreach&lt;/c&gt; loop or if it is accessed with the indexer &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Item(System.Int32)"/&gt;. Because of              the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects access the underlying &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object via the CSV column name,
+            the number and order of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects registered in the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; object don't have to match the column-order of the underlying &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object.
+            &lt;/para&gt;
+&lt;para&gt; The order of the registered properties can be influenced at any time with the following methods:&lt;/para&gt; 
+&lt;list type="bullet"&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.InsertProperty(System.Int32,FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.ReplaceProperty(System.String,FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.ReplacePropertyAt(System.Int32,FolkerKinzel.CsvTools.Helpers.CsvProperty)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.RemoveProperty(System.String)"/&gt;&lt;/item&gt;&lt;item&gt;&lt;see cref="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.RemovePropertyAt(System.Int32)"/&gt;&lt;/item&gt;&lt;/list&gt;
+ &lt;para&gt; With &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Contains(System.String)"/&gt; you can check, whether a &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object with the specified name
+            is already registered. &lt;/para&gt; &lt;para&gt;
+            The indexers &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Item(System.Int32)"/&gt; and &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper.Item(System.String)"/&gt; can also be accessed, if the
+            &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; instance is assigned to a normal variable, but the the values returned by the indexers
+            possibly have be cast into the actual data type with the cast operator, since they are of the type &lt;see cref ="T:System.Object"/&gt;.
+            &lt;/para&gt; &lt;para&gt; If the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; instance is assigned to a variable, that has been declared with the keyword &lt;c&gt;dynamic&lt;/c&gt;, the runtime takes over the necessary casts. In addition, it is then possible to address the registered
+            &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; objects like normal properties by their name (&lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.CsvProperty.PropertyName"/&gt;).
+            The disadvantage is, that Visual Studio cannot offer any "IntelliSense" on dynamic variables.
+            &lt;/para&gt; &lt;para&gt; If a CSV file is written with &lt;see cref ="T:FolkerKinzel.CsvTools.CsvWriter"/&gt;, it is sufficient to assign &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object only once,
+    since when writing data, always the same
+            &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object is used.
+            &lt;/para&gt; &lt;para&gt;
+            When reading a CSV file with &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; it behaves differently: With each iteration of the reader, the current &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object must first be assigned to &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt;, because &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; returnes
+            a new &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; with each iteration. (This does not apply, if the &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; has been initialized with &lt;see cref ="F:FolkerKinzel.CsvTools.CsvOptions.DisableCaching"/&gt;.)
+            &lt;/para&gt;</T>
+  <T ID="73D306B8E6614C1">&lt;note type ="note"&gt; In the following code examples - for easier readability - exception handling has been omitted. &lt;/note&gt; &lt;para&gt; Saving the contents of a &lt;see cref ="T:System.Data.DataTable"/&gt; as a CSV file and importing data from a CSV file into
+             a &lt;see cref ="T:System.Data.DataTable"/&gt;: &lt;/para&gt; &lt;code/&gt;</T>
 </Tsltn>

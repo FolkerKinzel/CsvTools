@@ -21,7 +21,7 @@ namespace Examples
             // LinqOnCsvFile.TestLinqOnCsvFile();
             // DisableCachingAndLinq.TestDisableCachingAndLinq();
             // CsvToDataTable.TestCsvToDataTable();
-            ObjectFromCsv.TestObjectFromCsv();
+            // ObjectFromCsv.TestObjectFromCsv();
         }
     }
 }

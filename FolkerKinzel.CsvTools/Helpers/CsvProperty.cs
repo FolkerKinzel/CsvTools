@@ -15,7 +15,16 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// <see cref="CsvProperty"/> kapselt Informationen über Zugriff und die Typkonvertierung, die <see cref="CsvRecordWrapper"/> benötigt,
     /// um auf die Daten des ihm zugrundeliegenden <see cref="CsvRecord"/>-Objekts zuzugreifen.
     /// </summary>
-    public sealed class CsvProperty
+    /// <remarks>
+    /// <note type="important">
+    /// Es ist nicht empfehlenswert, dasselbe <see cref="CsvProperty"/>-Objekt zum Lesen von 
+    /// CSV-Dateien mit verschiedenen Kopfzeilen zu verwenden - selbst wenn die zugewiesenen Spalten-Aliase dies ermöglichen würden.
+    /// Der Grund dafür ist, dass beim ersten Lesen der geeignetste Alias ausgesucht und dann für alle
+    /// nachfolgenden Lesevorgänge verwendet wird. Die Methode <see cref="Clone"/> erstellt eine frische
+    /// Kopie des <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
+    /// </note>
+    /// </remarks>
+    public class CsvProperty : ICloneable
     {
         /// <summary>
         /// Maximale Zeit (in Millisekunden) die für das Auflösen eines Spaltennamen-Aliases aufgewendet werden kann.
@@ -25,6 +34,17 @@ namespace FolkerKinzel.CsvTools.Helpers
         private ColumnAliasesLookup? _lookup;
         private readonly int _wildcardTimeout;
 
+        /// <summary>
+        /// Kopierkonstruktor
+        /// </summary>
+        /// <param name="source"><see cref="CsvProperty"/>-Objekt, das kopiert wird.</param>
+        protected CsvProperty(CsvProperty source)
+        {
+            this.PropertyName = source.PropertyName;
+            this.ColumnNameAliases = source.ColumnNameAliases;
+            this.Converter = source.Converter;
+            this._wildcardTimeout = source._wildcardTimeout;
+        }
 
         /// <summary>
         /// Initialisiert ein <see cref="CsvProperty"/>-Objekt.
@@ -172,6 +192,18 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             return _lookup.ColumnName;
         }
+
+
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Es ist nicht empfehlenswert, dasselbe <see cref="CsvProperty"/>-Objekt zum Lesen von
+        /// CSV-Dateien mit verschiedenen Kopfzeilen zu verwenden - selbst wenn die zugewiesenen Spalten-Aliase dies ermöglichen würden.
+        /// Der Grund dafür ist, dass beim ersten Lesen der geeignetste Alias ausgesucht und dann für alle
+        /// nachfolgenden Lesevorgänge verwendet wird. Die Methode <see cref="Clone"/> erstellt eine frische
+        /// Kopie des <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
+        /// </remarks>
+        public virtual object Clone() => new CsvProperty(this);
+        
 
 
         /////////////////////////////////////////////////////////////////////

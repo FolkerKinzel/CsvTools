@@ -9,10 +9,11 @@
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <Version>1.3.1</Version>
-    <FileVersion>1.3.1.62</FileVersion>
+    <Version>1.4.0</Version>
+    <FileVersion>1.4.0.1</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>More English IntelliSense.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added FolkerKinzel.CsvTools.Helpers.CsvIndexProperty class for easier reading and writing CSV files without header.
+Complete IntelliSense and project reference in English and German.</PackageReleaseNotes>
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV-files.</Description>
     <Authors>Folker Kinzel</Authors>

@@ -39,10 +39,10 @@
     <IndentHtml>False</IndentHtml>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
-    <HelpTitle>FolkerKinzel.CsvTools</HelpTitle>
+    <HelpTitle>FolkerKinzel.CsvTools 1.4.0</HelpTitle>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <RootNamespaceContainer>False</RootNamespaceContainer>
-    <NamespaceGrouping>True</NamespaceGrouping>
+    <NamespaceGrouping>False</NamespaceGrouping>
     <MaximumGroupParts>6</MaximumGroupParts>
     <Preliminary>False</Preliminary>
     <SdkLinkTarget>Blank</SdkLinkTarget>
