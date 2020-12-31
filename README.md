@@ -21,16 +21,16 @@ CSV files, that don't fit the standard.
 
 ```
 nuget Package Manager:
-PM> Install-Package FolkerKinzel.CsvTools -Version 1.4.0
+PM> Install-Package FolkerKinzel.CsvTools -Version 1.4.3
 
 .NET CLI:
-> dotnet add package FolkerKinzel.CsvTools --version 1.4.0
+> dotnet add package FolkerKinzel.CsvTools --version 1.4.3
 
 PackageReference (Visual Studio Project File):
-<PackageReference Include="FolkerKinzel.CsvTools" Version="1.4.0" />
+<PackageReference Include="FolkerKinzel.CsvTools" Version="1.4.3" />
 
 Paket CLI:
-> paket add FolkerKinzel.CsvTools --version 1.4.0
+> paket add FolkerKinzel.CsvTools --version 1.4.3
 ```
 
 * [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/FolkerKinzel.CsvTools.Reference.en/Help/FolkerKinzel.CsvTools.en.chm)
