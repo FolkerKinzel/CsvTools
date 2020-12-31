@@ -109,7 +109,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="GuidConverter"/>-Objekt.
+        /// Initialisiert ein neues <see cref="GuidConverter"/>-Objekt.
         /// </summary>
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <see cref="Guid"/>-Werten verwendet wird.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> akzeptiert und zurückgegeben,

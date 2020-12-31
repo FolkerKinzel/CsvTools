@@ -1,4 +1,5 @@
 ﻿using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.Intls;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,13 +22,12 @@ namespace FolkerKinzel.CsvTools
     /// Mit der Klasse <see cref="CsvRecordWrapper"/> kann die Reihenfolge der Datenspalten zur Laufzeit auf die evtl. andere Spaltenreihenfolge 
     /// einer <see cref="DataTable"/> gemappt werden und es können damit auch Typkonvertierungen durchgeführt werden.
     /// </remarks>
-    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
     public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     {
         #region fields
 
 #if NET40
-        private static readonly string?[] DefaultArr = new string?[0];
+        private readonly static string?[] DefaultArr = new string?[0];
         private readonly string?[] _values = DefaultArr;
 #else
         private readonly string?[] _values = Array.Empty<string?>();
@@ -72,7 +72,7 @@ namespace FolkerKinzel.CsvTools
                 StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
 
             this._lookupDictionary = new Dictionary<string, int>(columnsCount, comparer);
-            
+
 
             var keyArr = new string[columnsCount];
 
@@ -230,7 +230,7 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         public bool IsEmpty => Count == 0 || _values.All(x => x is null);
 
-        
+
 
         /// <summary>
         /// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück.
@@ -241,10 +241,11 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Gibt die <see cref="String"/>-Collection der in <see cref="CsvRecord"/> gespeicherten Daten zurück. Die 
+        /// Gibt die <see cref="string"/>-Collection der in <see cref="CsvRecord"/> gespeicherten Daten zurück. Die 
         /// Werte können verändert werden.
         /// </summary>
         public IList<string?> Values => _values;
+
 
 
         /// <summary>
@@ -257,7 +258,7 @@ namespace FolkerKinzel.CsvTools
 #if NET40
             var dic = new Dictionary<string, string?>(this.Count, this._lookupDictionary.Comparer);
 
-            foreach (var kvp in this)
+            foreach (KeyValuePair<string, string?> kvp in this)
             {
                 dic.Add(kvp.Key, kvp.Value);
             }
@@ -267,6 +268,8 @@ namespace FolkerKinzel.CsvTools
             return new Dictionary<string, string?>(this, this._lookupDictionary.Comparer);
 #endif
         }
+
+
 
         /// <summary>
         /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zu selben CSV-Datei
@@ -282,7 +285,7 @@ namespace FolkerKinzel.CsvTools
         /// </summary>
         internal IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Setzt alle Datenfelder von <see cref="CsvRecord"/> auf <c>null</c>.
@@ -302,7 +305,7 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
         public bool TryGetValue(string columnName, out string? value)
         {
-            if(columnName is null)
+            if (columnName is null)
             {
                 throw new ArgumentNullException(columnName);
             }
@@ -365,7 +368,7 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
         public bool ContainsColumn(string columnName)
         {
-            if(columnName is null)
+            if (columnName is null)
             {
                 throw new ArgumentNullException(nameof(columnName));
             }
@@ -388,7 +391,7 @@ namespace FolkerKinzel.CsvTools
 
 
 
-        
+
 
 
         ///// <summary>
@@ -412,7 +415,7 @@ namespace FolkerKinzel.CsvTools
             {
                 yield return new KeyValuePair<string, string?>(ColumnNames[i], Values[i]);
             }
-            
+
         }
 
 
@@ -426,7 +429,7 @@ namespace FolkerKinzel.CsvTools
                 return base.ToString();
             }
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (var key in _columnNames)
             {
@@ -442,7 +445,7 @@ namespace FolkerKinzel.CsvTools
         }
 
 
-        
+
 
 
 

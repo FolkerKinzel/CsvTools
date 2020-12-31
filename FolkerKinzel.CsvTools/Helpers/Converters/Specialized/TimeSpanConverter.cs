@@ -111,7 +111,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="TimeSpanConverter"/>-Objekt.
+        /// Initialisiert ein neues <see cref="TimeSpanConverter"/>-Objekt.
         /// </summary>
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <see cref="TimeSpan"/>-Werten verwendet wird.
         /// Wenn die Option <paramref name="parseExact"/> gewählt ist, wird dieser Formatstring auch für das Parsen verwendet.</param>

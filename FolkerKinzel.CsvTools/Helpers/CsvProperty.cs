@@ -47,9 +47,9 @@ namespace FolkerKinzel.CsvTools.Helpers
         }
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvProperty"/>-Objekt.
+        /// Initialisiert ein neues <see cref="CsvProperty"/>-Objekt.
         /// </summary>
-        /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für Bezeichner
+        /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
         /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
         /// <param name="columnNameAliases">Spaltennamen der CSV-Datei, auf die <see cref="CsvProperty"/> zugreifen kann. Für den
         /// Zugriff auf <see cref="CsvProperty"/> wird der erste Alias verwendet, der eine Übereinstimmung 
@@ -218,8 +218,8 @@ namespace FolkerKinzel.CsvTools.Helpers
             {
                 this.CsvRecordIdentifier = record.Identifier;
 
-                var comparer = record.Comparer;
-                var columnNames = record.ColumnNames;
+                IEqualityComparer<string>? comparer = record.Comparer;
+                ReadOnlyCollection<string>? columnNames = record.ColumnNames;
 
                 //this.Aliases = aliases.Intersect(record.Keys, comparer).Distinct(comparer).ToList();
 

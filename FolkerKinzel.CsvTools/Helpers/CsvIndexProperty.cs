@@ -1,4 +1,5 @@
 ﻿using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.Intls;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,21 +16,23 @@ namespace FolkerKinzel.CsvTools.Helpers
 
         }
 
-#pragma warning disable 1573
-        /// <inheritdoc cref="CsvProperty.CsvProperty(string, IEnumerable{string}, ICsvTypeConverter, int)" 
-        /// path="param[@name='propertyName']|param[@name='converter']|param[@name='wildcardTimeout']|exception"/>
+
+        
         /// <summary>
-        /// Initialisiert ein <see cref="CsvIndexProperty"/>-Objekt.
+        /// Initialisiert ein neues <see cref="CsvIndexProperty"/>-Objekt.
         /// </summary>
+        /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
+        /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
         /// <param name="csvColumnIndex">Nullbasierter Index der Spalte der CSV-Datei.</param>
+        /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
+        /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
+        /// ASCII-Zeichen).</exception>
         /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
         /// <paramref name="converter"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0 - oder - 
-        /// <paramref name="wildcardTimeout"/> ist kleiner als 1 oder größer als
-        /// <see cref="CsvProperty.MaxWildcardTimeout"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0.</exception>
         public CsvIndexProperty(
-            string propertyName, int csvColumnIndex, ICsvTypeConverter converter, int wildcardTimeout = 10) : 
-            base(propertyName, new string[] { AutoColumnName.Create(csvColumnIndex) }, converter, wildcardTimeout)
+            string propertyName, int csvColumnIndex, ICsvTypeConverter converter) : 
+            base(propertyName, new string[] { AutoColumnName.Create(csvColumnIndex) }, converter)
         {
             if(csvColumnIndex < 0)
             {
@@ -37,9 +40,29 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
         }
 
-#pragma warning restore 1573
 
-        
+        /// <summary>
+        /// Initialisiert ein neues <see cref="CsvIndexProperty"/>-Objekt.
+        /// </summary>
+        /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
+        /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
+        /// <param name="csvColumnIndex">Nullbasierter Index der Spalte der CSV-Datei.</param>
+        /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
+        /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
+        /// ASCII-Zeichen).</exception>
+        /// <param name="wildcardTimeout">Der Parameter hat keine Funktion.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
+        /// <paramref name="converter"/> ist <c>null</c>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0.</exception>
+        [Obsolete("Use CsvIndexProperty(string propertyName, int csvColumnIndex, ICsvTypeConverter converter) instead!")]
+        public CsvIndexProperty(
+            string propertyName, int csvColumnIndex, ICsvTypeConverter converter, int wildcardTimeout = 10) :
+            this(propertyName, csvColumnIndex, converter)
+        {
+        }
+
+
+
         /// <inheritdoc path="summary|returns"/>
         public override object Clone() => new CsvIndexProperty(this);
         

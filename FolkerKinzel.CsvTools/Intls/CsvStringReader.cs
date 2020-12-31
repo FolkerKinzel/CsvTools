@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools
+namespace FolkerKinzel.CsvTools.Intls
 {
     /// <summary>
     /// Liest eine Csv-Datei vorwärts und ermöglicht es, über die enthaltenen <see cref="string"/>s zu iterieren.
@@ -68,12 +68,9 @@ namespace FolkerKinzel.CsvTools
             }
         }
 
-    
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
         /// <summary>
@@ -243,9 +240,6 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
         /// </summary>
-        public void Dispose()
-        {
-            _reader.Dispose();
-        }
+        public void Dispose() => _reader.Dispose();
     }
 }

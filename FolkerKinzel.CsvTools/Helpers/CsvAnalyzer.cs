@@ -1,4 +1,5 @@
 ﻿using FolkerKinzel.CsvTools.Extensions;
+using FolkerKinzel.CsvTools.Intls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// die Ergebnisse als Objekteigenschaften zur Verfügung stellen.
     /// </summary>
     /// <example>
-    /// <note type="important">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <note type="note">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
     /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
     /// <code language="cs" source="..\Examples\ObjectFromCsv.cs"/>
     /// </example>
@@ -23,6 +24,13 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         public const int AnalyzedLinesMinCount = 5;
 
+        /// <summary>
+        /// Initialisiert ein neues <see cref="CsvAnalyzer"/>-Objekt.
+        /// </summary>
+        public CsvAnalyzer()
+        {
+
+        }
 
         /// <summary>
         /// Analysiert die CSV-Datei, auf die <paramref name="fileName"/> verweist, und füllt die Eigenschaften des <see cref="CsvAnalyzer"/>-Objekts mit den
@@ -49,7 +57,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             
             
             // Suche Feldtrennzeichen:
-            using (var reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
+            using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
             {
                 const int COMMA_INDEX = 0;
                 const int SEMICOLON_INDEX = 1;
@@ -174,7 +182,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             }//using
 
-            using (var reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
+            using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
             {
                 bool firstLine = true;
 
@@ -183,13 +191,13 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                 using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.IsSet(CsvOptions.ThrowOnEmptyLines));
 
-                foreach (var row in csvStringReader)
+                foreach (IEnumerable<string?>? row in csvStringReader)
                 {
                     if(firstLine)
                     {
                         firstLine = false;
 
-                        List<string> firstLineFields = new List<string>();
+                        var firstLineFields = new List<string>();
 
                         bool hasHeader = true;
                         bool hasMaybeNoHeader = false;

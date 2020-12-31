@@ -17,7 +17,7 @@ namespace FolkerKinzel.CsvTools
     /// <example>
     /// <para>Beispiel, das demonstriert, dass das Setzen des Flags <see cref="DisableCaching"/> zu unerwarteten Ergebnissen führen kann, wenn versucht wird,
     /// die Ergebnismenge zu cachen.</para>
-    /// <note type="important">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <note type="note">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
     /// <code language="cs" source="..\Examples\DisableCachingAndLinq.cs" />
     /// </example>
 

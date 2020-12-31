@@ -72,12 +72,10 @@ namespace FolkerKinzel.CsvTools
         }
 
 
-        
+
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return base.ToString() + $" ({nameof(CsvLineNumber)}: {CsvLineNumber}, {nameof(CsvCharIndex)}: {CsvCharIndex})";
-        }
+        public override string ToString() =>
+            base.ToString() + $" ({nameof(CsvLineNumber)}: {CsvLineNumber}, {nameof(CsvCharIndex)}: {CsvCharIndex})";
 
     }
 }

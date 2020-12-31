@@ -37,7 +37,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             string message = "Message";
 
-            Exception inner = new Exception();
+            var inner = new Exception();
 
             var e = new InvalidCsvException(message,  inner);
 

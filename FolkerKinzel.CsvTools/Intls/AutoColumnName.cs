@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools
+namespace FolkerKinzel.CsvTools.Intls
 {
     internal static class AutoColumnName
     {

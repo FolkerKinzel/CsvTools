@@ -88,7 +88,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         #region ctors
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvRecordWrapper"/>-Objekt. 
+        /// Initialisiert ein neues <see cref="CsvRecordWrapper"/>-Objekt. 
         /// </summary>
         /// <remarks>Vor dem Zugriff auf die Eigenschaften muss <see cref="Record"/>
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen werden.</remarks>
@@ -474,87 +474,51 @@ namespace FolkerKinzel.CsvTools.Helpers
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override IEnumerable<string> GetDynamicMemberNames()
-        {
-            return base.GetDynamicMemberNames();
-        }
+        public override IEnumerable<string> GetDynamicMemberNames() => base.GetDynamicMemberNames();
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override DynamicMetaObject GetMetaObject(Expression parameter)
-        {
-            return base.GetMetaObject(parameter);
-        }
+        public override DynamicMetaObject GetMetaObject(Expression parameter) => base.GetMetaObject(parameter);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object result)
-        {
-            return base.TryBinaryOperation(binder, arg, out result);
-        }
+        public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object result) => base.TryBinaryOperation(binder, arg, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryConvert(ConvertBinder binder, out object result)
-        {
-            return base.TryConvert(binder, out result);
-        }
+        public override bool TryConvert(ConvertBinder binder, out object result) => base.TryConvert(binder, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryCreateInstance(CreateInstanceBinder binder, object[] args, out object result)
-        {
-            return base.TryCreateInstance(binder, args, out result);
-        }
+        public override bool TryCreateInstance(CreateInstanceBinder binder, object[] args, out object result) => base.TryCreateInstance(binder, args, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryDeleteIndex(DeleteIndexBinder binder, object[] indexes)
-        {
-            return base.TryDeleteIndex(binder, indexes);
-        }
+        public override bool TryDeleteIndex(DeleteIndexBinder binder, object[] indexes) => base.TryDeleteIndex(binder, indexes);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryDeleteMember(DeleteMemberBinder binder)
-        {
-            return base.TryDeleteMember(binder);
-        }
+        public override bool TryDeleteMember(DeleteMemberBinder binder) => base.TryDeleteMember(binder);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
-        {
-            return base.TryGetIndex(binder, indexes, out result);
-        }
+        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result) => base.TryGetIndex(binder, indexes, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryInvoke(InvokeBinder binder, object[] args, out object result)
-        {
-            return base.TryInvoke(binder, args, out result);
-        }
+        public override bool TryInvoke(InvokeBinder binder, object[] args, out object result) => base.TryInvoke(binder, args, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
-        {
-            return base.TryInvokeMember(binder, args, out result);
-        }
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result) => base.TryInvokeMember(binder, args, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
-        {
-            return base.TrySetIndex(binder, indexes, value);
-        }
+        public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value) => base.TrySetIndex(binder, indexes, value);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryUnaryOperation(UnaryOperationBinder binder, out object result)
-        {
-            return base.TryUnaryOperation(binder, out result);
-        }
+        public override bool TryUnaryOperation(UnaryOperationBinder binder, out object result) => base.TryUnaryOperation(binder, out result);
 
         ///// <summary>
         ///// Setzt den Wert sämtlicher Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.
@@ -593,7 +557,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
 
 
-            foreach (var prop in this._dynProps)
+            foreach (CsvProperty? prop in this._dynProps)
             {
                 yield return new KeyValuePair<string, object?>(prop.PropertyName, prop.GetValue(Record));
             }

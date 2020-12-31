@@ -1,4 +1,5 @@
 ﻿using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace FolkerKinzel.CsvTools
     /// <see cref="CsvAnalyzer"/> ermittelt werden.</para>
     /// </remarks>
     /// <example>
-    /// <note type="important">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
     /// <para>Linq-Abfrage auf einer CSV-Datei:</para>
     /// <code language="cs" source="..\Examples\LinqOnCsvFile.cs"/>
     /// <para>Speichern des Inhalts einer <see cref="DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
@@ -46,7 +47,7 @@ namespace FolkerKinzel.CsvTools
         #region ctors
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvReader"/>-Objekt.
+        /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
         /// </summary>
         /// <param name="fileName">Dateipfad der CSV-Datei.</param>
         /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
@@ -72,7 +73,7 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvReader"/>-Objekt.
+        /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
         /// </summary>
         /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
         /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
@@ -126,19 +127,13 @@ namespace FolkerKinzel.CsvTools
             return new CsvRecordCollection(this);
         }
 
-        private static void ThrowInvalidOperationException()
-        {
-            throw new InvalidOperationException(Res.NotTwice);
-        }
+        private static void ThrowInvalidOperationException() => throw new InvalidOperationException(Res.NotTwice);
 
 
         /// <summary>
         /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
         /// </summary>
-        public void Dispose()
-        {
-            _reader.Dispose();
-        }
+        public void Dispose() => _reader.Dispose();
 
         #endregion
 
@@ -166,7 +161,7 @@ namespace FolkerKinzel.CsvTools
                     }
                     else
                     {
-                        var arr = row.ToArray();
+                        string?[]? arr = row.ToArray();
 
                         if (arr.Length == 0) continue; // Leerzeile am Anfang
 

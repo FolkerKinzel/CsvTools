@@ -12,7 +12,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
     public static class CsvConverterFactory
     {
         /// <summary>
-        /// Erzeugt einen <see cref="ICsvTypeConverter"/> für den angegebenen Datentyp.
+        /// Initialisiert einen neues <see cref="ICsvTypeConverter"/>-Objekt für den angegebenen Datentyp.
         /// </summary>
         /// <param name="type">Der Datentyp, den der <see cref="ICsvTypeConverter"/> konvertiert.</param>
         /// <param name="nullable">Wenn <c>true</c>, wird ein <see cref="ICsvTypeConverter"/>-Objekt erstellt, das <c>null</c> als Eingabe akzeptiert
@@ -60,7 +60,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="ICsvTypeConverter"/>-Objekt, das einen Enum-Typ in seine
+        /// Initialisiert ein neues <see cref="ICsvTypeConverter"/>-Objekt, das einen Enum-Typ in seine
         /// Zahlendarstellung wandeln und aus dieser sowie auch aus Wort-Darstellungen der Enum-Bezeichner wieder parsen kann.
         /// </summary>
         /// <typeparam name="TEnum">Ein beliebiger Enum-Typ.</typeparam>
@@ -78,14 +78,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
             bool nullable = false,
             bool maybeDBNull = false,
             bool throwOnParseErrors = false,
-            bool ignoreCase = true) where TEnum: struct, Enum
-        {
-            return new EnumConverter<TEnum>(nullable, maybeDBNull, throwOnParseErrors, ignoreCase);
-        }
+            bool ignoreCase = true) where TEnum : struct, Enum => new EnumConverter<TEnum>(nullable, maybeDBNull, throwOnParseErrors, ignoreCase);
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="ICsvTypeConverter"/>-Objekt, das einen Enum-Typ in seine
+        /// Initialisiert ein neues <see cref="ICsvTypeConverter"/>-Objekt, das einen Enum-Typ in seine
         /// Zahlendarstellung wandeln und aus dieser sowie auch aus Wort-Darstellungen der Enum-Bezeichner wieder parsen kann.
         /// </summary>
         /// <typeparam name="TEnum">Ein beliebiger Enum-Typ.</typeparam>
@@ -106,14 +103,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
             bool nullable = false,
             bool maybeDBNull = false,
             bool throwOnParseErrors = false,
-            bool ignoreCase = true) where TEnum : struct, Enum
-        {
-            return new EnumConverter<TEnum>(format, nullable, maybeDBNull, throwOnParseErrors, ignoreCase);
-        }
+            bool ignoreCase = true) where TEnum : struct, Enum => new EnumConverter<TEnum>(format, nullable, maybeDBNull, throwOnParseErrors, ignoreCase);
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="ICsvTypeConverter"/>-Objekt, das einen ganzzahligen Datentyp in seine
+        /// Initialisiert ein neues <see cref="ICsvTypeConverter"/>-Objekt, das einen ganzzahligen Datentyp in seine
         /// hexadezimale Darstellung wandeln und aus dieser wieder parsen kann.
         /// </summary>
         /// <param name="type">Konstante für einen ganzzahligen Datentyp.</param>

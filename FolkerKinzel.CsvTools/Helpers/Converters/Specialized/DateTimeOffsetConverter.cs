@@ -116,7 +116,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="DateTimeOffsetConverter"/>-Objekt.
+        /// Initialisiert ein neues <see cref="DateTimeOffsetConverter"/>-Objekt.
         /// </summary>
         /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <see cref="DateTimeOffset"/>-Werten verwendet wird.
         /// Wenn die Option <paramref name="parseExact"/> gewählt ist, wird dieser Formatstring auch für das Parsen verwendet.</param>

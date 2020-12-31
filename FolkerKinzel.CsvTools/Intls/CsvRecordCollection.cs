@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace FolkerKinzel.CsvTools
+namespace FolkerKinzel.CsvTools.Intls
 {
     internal readonly struct CsvRecordCollection : IEnumerable<CsvRecord>
     {
@@ -20,17 +20,11 @@ namespace FolkerKinzel.CsvTools
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public IEnumerator<CsvRecord> GetEnumerator()
-        {
-            return _reader.GetEnumerator();
-        }
+        public IEnumerator<CsvRecord> GetEnumerator() => _reader.GetEnumerator();
 
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

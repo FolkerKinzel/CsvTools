@@ -1,5 +1,6 @@
 ﻿using FolkerKinzel.CsvTools.Helpers;
 using System;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.IO;
 using System.Text;
@@ -16,7 +17,7 @@ namespace FolkerKinzel.CsvTools
     /// geschrieben werden sollen, bietet sich die Verwendung der Klasse <see cref="CsvRecordWrapper"/> an, die einen komfortablen Adapter zwischen den
     /// Daten der Anwendung und der CSV-Datei darstellt.</remarks>
     /// <example>
-    /// <note type="important">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+    /// <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
     /// <para>Speichern des Inhalts einer <see cref="DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
     /// eine <see cref="DataTable"/>:</para>
     /// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
@@ -39,7 +40,7 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvWriter"/>-Objekt mit den Spaltennamen für die zu schreibende Kopfzeile.
+        /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt mit den Spaltennamen für die zu schreibende Kopfzeile.
         /// </summary>
         /// <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
         /// <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
@@ -65,7 +66,7 @@ namespace FolkerKinzel.CsvTools
         }
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
+        /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
         /// </summary>
         /// <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
         /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
@@ -84,7 +85,7 @@ namespace FolkerKinzel.CsvTools
         }
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvWriter"/>-Objekt, mit den Spaltennamen für die zu schreibende Kopfzeile.
+        /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit den Spaltennamen für die zu schreibende Kopfzeile.
         /// </summary>
         /// <param name="writer">Der <see cref="TextWriter"/>, mit dem geschrieben wird.</param>
         /// <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
@@ -116,7 +117,7 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Initialisiert ein <see cref="CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
+        /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
         /// </summary>
         /// <param name="writer">Der <see cref="TextWriter"/>, mit dem geschrieben wird.</param>
         /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
@@ -212,7 +213,7 @@ namespace FolkerKinzel.CsvTools
 
             if (!_isHeaderRowWritten)
             {
-                var columns = Record.ColumnNames;
+                ReadOnlyCollection<string>? columns = Record.ColumnNames;
 
                 for (int i = 0; i < recordLength - 1; i++)
                 {
@@ -305,13 +306,10 @@ namespace FolkerKinzel.CsvTools
         /// <summary>
         /// Gibt die Ressourcen frei. (Schließt den <see cref="TextWriter"/>.)
         /// </summary>
-        public void Dispose()
-        {
-            _writer.Dispose();
-        }
+        public void Dispose() => _writer.Dispose();
 
 
-        
+
 
 
         #region private
