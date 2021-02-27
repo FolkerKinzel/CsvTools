@@ -264,21 +264,9 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                         if(currentLineCount != firstLineCount)
                         {
-                            if(currentLineCount < firstLineCount)
-                            {
-                                if (currentLineCount == 0)
-                                {
-                                    this.Options = this.Options.Unset(CsvOptions.ThrowOnEmptyLines);
-                                }
-                                else
-                                {
-                                    this.Options = this.Options.Unset(CsvOptions.ThrowOnTooFewFields);
-                                }
-                            }
-                            else
-                            {
-                                this.Options = this.Options.Unset(CsvOptions.ThrowOnTooMuchFields);
-                            }
+                            this.Options = currentLineCount < firstLineCount
+                                ? currentLineCount == 0 ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines) : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
+                                : this.Options.Unset(CsvOptions.ThrowOnTooMuchFields);
                         }
                     }
                 }
