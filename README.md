@@ -2,7 +2,7 @@
 [![NuGet](https://img.shields.io/nuget/v/FolkerKinzel.CsvTools)](https://www.nuget.org/packages/FolkerKinzel.CsvTools/)
 
 
-.NET-library to read and write CSV-files.
+.NET-library to read and write CSV files.
 
 It is used as a dependency in [FolkerKinzel.Contacts.IO](https://github.com/FolkerKinzel/Contacts.IO) - an
 easy to use .NET-API to manage contact data of organizations and natural persons, including a data model and classes to 
