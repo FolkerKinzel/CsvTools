@@ -60,10 +60,8 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="IOException">E/A-Fehler.</exception>
         public CsvWriter(
             string fileName, string[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
-             : this(columnNames, fieldSeparator, options)
-        {
-            _writer = InitStreamWriter(fileName, textEncoding);
-        }
+             : this(columnNames, fieldSeparator, options) => _writer = InitStreamWriter(fileName, textEncoding);
+
 
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
@@ -79,10 +77,8 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="IOException">E/A-Fehler.</exception>
         public CsvWriter(
             string fileName, int columnsCount, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
-             : this(columnsCount, fieldSeparator, options)
-        {
-            _writer = InitStreamWriter(fileName, textEncoding);
-        }
+             : this(columnsCount, fieldSeparator, options) => _writer = InitStreamWriter(fileName, textEncoding);
+
 
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit den Spaltennamen für die zu schreibende Kopfzeile.
@@ -291,13 +287,13 @@ namespace FolkerKinzel.CsvTools
             }
 
 #if NET40
-            bool NeedsToBeQuoted(string s) => (s.Contains(fieldSeparatorString) ||
+            bool NeedsToBeQuoted(string s) => s.Contains(fieldSeparatorString) ||
                                                   s.Contains("\"") ||
-                                                  s.Contains(Environment.NewLine)); 
+                                                  s.Contains(Environment.NewLine); 
 #else
-            bool NeedsToBeQuoted(string s) => (s.Contains(_fieldSeparator, StringComparison.Ordinal) ||
+            bool NeedsToBeQuoted(string s) => s.Contains(_fieldSeparator, StringComparison.Ordinal) ||
                                                       s.Contains('"', StringComparison.Ordinal) ||
-                                                      s.Contains(Environment.NewLine, StringComparison.Ordinal));
+                                                      s.Contains(Environment.NewLine, StringComparison.Ordinal);
 #endif
 
         }
@@ -307,9 +303,6 @@ namespace FolkerKinzel.CsvTools
         /// Gibt die Ressourcen frei. (Schließt den <see cref="TextWriter"/>.)
         /// </summary>
         public void Dispose() => _writer.Dispose();
-
-
-
 
 
         #region private

@@ -150,7 +150,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// nur ausgewertet, wenn <paramref name="parseExact"/>&#160;<c>true</c> ist.</param>
         /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>
-        /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
+        /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring - oder - <paramref name="styles"/>
+        /// hat einen ungültigen Wert.</exception>
         /// <remarks>Wenn kein spezielles Format gefordert ist, sollten Sie das <see cref="DateTimeConverter"/>-Objekt
         /// über die Methode <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren: Das ist 
         /// wesentlich performanter.</remarks>
@@ -170,29 +171,21 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             Type = nullable ? typeof(DateTime?) : typeof(DateTime);
             FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(DateTime?) : default(DateTime));
 
-
-            //if (format is null)
-            //{
-            //    throw new ArgumentNullException(nameof(format));
-            //}
-
             format ??= string.Empty;
 
             try
             {
-                _ = DateTime.Now.ToString(format, formatProvider);
+                string tmp = DateTime.Now.ToString(format, formatProvider);
+
+                if(parseExact)
+                {
+                    _ = DateTime.ParseExact(tmp, format, formatProvider, styles);
+                }
             }
             catch (FormatException e)
             {
                 throw new ArgumentException(e.Message, nameof(format), e);
             }
-
-
-            //if ((styles & DateTimeStyles.NoCurrentDateDefault) == DateTimeStyles.NoCurrentDateDefault)
-            //{
-            //    throw new ArgumentException(Res.NoCurrentDateDafault, nameof(styles));
-            //}
-
 
 
             if (nullable)

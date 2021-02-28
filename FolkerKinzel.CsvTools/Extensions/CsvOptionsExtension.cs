@@ -18,10 +18,8 @@ namespace FolkerKinzel.CsvTools.Extensions
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public static CsvOptions Set(this CsvOptions value, CsvOptions flags)
-        {
-            return (value | flags);
-        }
+        public static CsvOptions Set(this CsvOptions value, CsvOptions flags) => value | flags;
+
 
         /// <summary>
         /// Untersucht, ob sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
@@ -37,10 +35,9 @@ namespace FolkerKinzel.CsvTools.Extensions
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public static bool IsSet(this CsvOptions value, CsvOptions flags)
-        {
-            return flags == CsvOptions.None ? value == flags : (value & flags) == flags;
-        }
+        public static bool IsSet(this CsvOptions value, CsvOptions flags) 
+            => flags == CsvOptions.None ? value == flags : (value & flags) == flags;
+
 
         /// <summary>
         /// Entfernt sämtliche in <paramref name="flags"/> gesetzten Flags aus <paramref name="value"/>.
@@ -53,9 +50,6 @@ namespace FolkerKinzel.CsvTools.Extensions
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public static CsvOptions Unset(this CsvOptions value, CsvOptions flags)
-        {
-            return value & ~flags;
-        }
+        public static CsvOptions Unset(this CsvOptions value, CsvOptions flags) => value & ~flags;
     }
 }

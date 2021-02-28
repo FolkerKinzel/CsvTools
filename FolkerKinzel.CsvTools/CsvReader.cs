@@ -35,7 +35,7 @@ namespace FolkerKinzel.CsvTools
     /// eine <see cref="DataTable"/>:</para>
     /// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
     /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
-    /// <code language="cs" source="..\Examples\ObjectFromCsv.cs"/>
+    /// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
     /// </example>
     public sealed class CsvReader : IDisposable
     {

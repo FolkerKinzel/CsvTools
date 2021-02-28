@@ -69,7 +69,6 @@ namespace FolkerKinzel.CsvTools.Intls
         }
 
 
-
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
@@ -113,7 +112,7 @@ namespace FolkerKinzel.CsvTools.Intls
                 bool isQuoted = false;
                 bool isMaskedDoubleQuote = false;
 
-                _sb.Clear();
+                _ = _sb.Clear();
 
                 while (true)
                 {
@@ -125,7 +124,7 @@ namespace FolkerKinzel.CsvTools.Intls
 
                     if (isQuoted && _currentLine.Length == 0) // Leerzeile
                     {
-                        _sb.AppendLine();
+                        _ = _sb.AppendLine();
                         _currentLine = _reader.ReadLine();
                         LineNumber++;
                         LineIndex = 0;
@@ -152,7 +151,7 @@ namespace FolkerKinzel.CsvTools.Intls
                         {
                             if (c != '\"')
                             {
-                                _sb.Append(c).AppendLine();
+                                _ = _sb.Append(c).AppendLine();
                             }
                             _currentLine = _reader.ReadLine();
                             LineIndex = 0;
@@ -165,7 +164,7 @@ namespace FolkerKinzel.CsvTools.Intls
                             // wird dieses nicht gelesen, aber von GetNextRecord() als null-Wert ergänzt
                             if (c != _fieldSeparator)
                             {
-                                _sb.Append(c);
+                                _ = _sb.Append(c);
                             }
 
                             
@@ -182,7 +181,7 @@ namespace FolkerKinzel.CsvTools.Intls
                                 if (isMaskedDoubleQuote)
                                 {
                                     isMaskedDoubleQuote = false;
-                                    _sb.Append(c);
+                                    _ = _sb.Append(c);
                                 }
                                 else
                                 {
@@ -201,7 +200,7 @@ namespace FolkerKinzel.CsvTools.Intls
                             }
                             else
                             {
-                                _sb.Append(c);
+                                _ = _sb.Append(c);
                             }
                         }
                         else
@@ -217,7 +216,7 @@ namespace FolkerKinzel.CsvTools.Intls
                             }
                             else
                             {
-                                _sb.Append(c);
+                                _ = _sb.Append(c);
                             }
                         }
 
@@ -233,9 +232,9 @@ namespace FolkerKinzel.CsvTools.Intls
                     string field = _sb.ToString();
                     return (field.Length == 0) ? null : field;
                 }
-
             }
         }
+
 
         /// <summary>
         /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)

@@ -97,15 +97,6 @@ namespace FolkerKinzel.CsvTools.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die The flag &apos;DateTimeStyles.NoCurrentDateDefault&apos; is not supported. ähnelt.
-        /// </summary>
-        internal static string NoCurrentDateDafault {
-            get {
-                return ResourceManager.GetString("NoCurrentDateDafault", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die You must not run this method twice. ähnelt.
         /// </summary>
         internal static string NotTwice {

@@ -141,7 +141,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>
         /// 
-        /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
+        /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring - oder - <paramref name="styles"/>
+        /// hat einen ungültigen Wert.</exception>
         /// 
         /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe wird das <see cref="TimeSpan"/>-Standardformat "g" verwendet wird,
         /// sollten Sie aus Performancegründen das <see cref="TimeSpanConverter"/>-Objekt mit der Methode 
@@ -165,7 +166,12 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
             try
             {
-                _ = TimeSpan.Zero.ToString(format, formatProvider);
+                string tmp = TimeSpan.Zero.ToString(format, formatProvider);
+
+                if(parseExact)
+                {
+                    _ = TimeSpan.ParseExact(tmp, format, formatProvider, styles);
+                }
             }
             catch (FormatException e)
             {

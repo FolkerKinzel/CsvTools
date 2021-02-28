@@ -129,9 +129,6 @@
   <data name="InvalidCastNullToValueType" xml:space="preserve">
     <value>NULL kann nicht in einen Werttyp umgewandelt werden.</value>
   </data>
-  <data name="NoCurrentDateDafault" xml:space="preserve">
-    <value>Das Flag 'DateTimeStyles.NoCurrentDateDefault' wird nicht unterstützt.</value>
-  </data>
   <data name="NotTwice" xml:space="preserve">
     <value>Die Methode darf nicht mehrmals aufgerufen werden.</value>
   </data>

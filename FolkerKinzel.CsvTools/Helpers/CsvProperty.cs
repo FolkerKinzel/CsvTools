@@ -38,8 +38,14 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Kopierkonstruktor
         /// </summary>
         /// <param name="source"><see cref="CsvProperty"/>-Objekt, das kopiert wird.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="source"/> ist <c>null</c>.</exception>
         protected CsvProperty(CsvProperty source)
         {
+            if (source is null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             this.PropertyName = source.PropertyName;
             this.ColumnNameAliases = source.ColumnNameAliases;
             this.Converter = source.Converter;

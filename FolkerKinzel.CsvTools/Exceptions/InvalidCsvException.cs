@@ -38,7 +38,9 @@ namespace FolkerKinzel.CsvTools
         /// <inheritdoc cref="InvalidCsvException(string)" />
         /// <param name="csvLineNumber">Zeilennummer der CSV-Datei beim Auftreten des Fehlers (1-basierter Index).</param>
         /// <param name="csvCharIndex">Zeichen in der Zeile der CSV-Datei, bei dem der Fehler auftrat (0-basierter Index).</param>
+#pragma warning disable CS1573 // Parameter besitzt kein übereinstimmendes param-Tag im XML-Kommentar (andere Parameter jedoch schon)
         public InvalidCsvException(string message, int csvLineNumber, int csvCharIndex) : base(message)
+#pragma warning restore CS1573 // Parameter besitzt kein übereinstimmendes param-Tag im XML-Kommentar (andere Parameter jedoch schon)
         {
             this.CsvLineNumber = csvLineNumber;
             this.CsvCharIndex = csvCharIndex;

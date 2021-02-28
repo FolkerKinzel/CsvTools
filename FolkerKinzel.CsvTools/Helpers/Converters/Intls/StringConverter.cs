@@ -17,9 +17,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>. (Überschreibt <paramref name="nullable"/>.)</param>
         public StringConverter(bool nullable, bool maybeDBNull)
-        {
-            this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? null : string.Empty);
-        }
+            => this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? null : string.Empty);
 
 
         /// <summary>

@@ -79,9 +79,8 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// eine <see cref="DataTable"/>:</para>
     /// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
     /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
-    /// <code language="cs" source="..\Examples\ObjectFromCsv.cs"/>
+    /// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
     /// </example>
-    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Bezeichner müssen ein korrektes Suffix aufweisen", Justification = "<Ausstehend>")]
     public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<string, object?>>
     {
         private readonly PropertyCollection _dynProps = new PropertyCollection();

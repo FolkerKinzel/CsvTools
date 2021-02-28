@@ -1,14 +1,19 @@
-# Rules in this file were initially inferred by Visual Studio IntelliCode from the C:\Users\fkinz\source\repos\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools\ codebase based on best match to current usage at 31.12.2020
-# You can modify the rules from these initially generated values to suit your own policies
-# You can learn more about editorconfig here: https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference
-[*.cs]
+﻿[*.cs]
 
-
+# IDE0078: Musterabgleich verwenden
+csharp_style_prefer_pattern_matching = true:silent
 
 # IDE0046: In bedingten Ausdruck konvertieren
-dotnet_style_prefer_conditional_expression_over_return = true:silent
+dotnet_diagnostic.IDE0046.severity = silent
+
 
 
 [CsvRecord.cs]
-# IDE0022: Ausdrucksk�rper f�r Methoden verwenden
+
+# IDE0022: Ausdruckskörper für Methoden verwenden
 csharp_style_expression_bodied_methods = when_on_single_line:silent
+
+[InvalidCsvException.cs]
+
+# IDE0079: Unnötige Unterdrückung entfernen
+dotnet_diagnostic.IDE0079.severity = none

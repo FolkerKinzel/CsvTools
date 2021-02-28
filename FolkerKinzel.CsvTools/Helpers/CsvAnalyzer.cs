@@ -15,7 +15,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// <example>
     /// <note type="note">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
     /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
-    /// <code language="cs" source="..\Examples\ObjectFromCsv.cs"/>
+    /// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
     /// </example>
     public class CsvAnalyzer
     {

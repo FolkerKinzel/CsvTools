@@ -83,15 +83,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Content" />
     <Folder Include="icons" />
     <Folder Include="media" />
-    <Folder Include="VersionHistory\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Content\Welcome.aml" />
-    <None Include="VersionHistory\v1.0.0.0.aml" />
-    <None Include="VersionHistory\VersionHistory.aml" />
   </ItemGroup>
   <ItemGroup>
     <ContentLayout Include="ContentLayout.content" />

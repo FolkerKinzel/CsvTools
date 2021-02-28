@@ -11,10 +11,7 @@ namespace FolkerKinzel.CsvTools.Intls
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        internal CsvRecordCollection(CsvReader reader)
-        {
-            this._reader = reader;
-        }
+        internal CsvRecordCollection(CsvReader reader) => this._reader = reader;
 
 
 #if !NET40

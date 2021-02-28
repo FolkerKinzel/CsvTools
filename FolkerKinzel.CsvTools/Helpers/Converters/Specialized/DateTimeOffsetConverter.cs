@@ -148,7 +148,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Formatstring entsprechen.</param>
         /// 
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring - oder - <paramref name="styles"/> 
-        /// enthält das Flag <see cref="DateTimeStyles.NoCurrentDateDefault"/>.</exception>
+        /// hat einen ungültigen Wert.</exception>
         /// 
         /// <remarks>Wenn es genügt, dass bei der <see cref="string"/>-Ausgabe das Standardformat "O" verwendet wird, sollten Sie das <see cref="DateTimeOffsetConverter"/>-Objekt
         /// über die Methode <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> initialisieren: Das ist 
@@ -174,20 +174,17 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
             try
             {
-                _ = DateTimeOffset.Now.ToString(format, formatProvider);
+                string tmp = DateTimeOffset.Now.ToString(format, formatProvider);
+
+                if(parseExact)
+                {
+                    _ = DateTimeOffset.ParseExact(tmp, format, formatProvider, styles);
+                }
             }
             catch (FormatException e)
             {
                 throw new ArgumentException(e.Message, nameof(format), e);
             }
-
-
-            if ((styles & DateTimeStyles.NoCurrentDateDefault) == DateTimeStyles.NoCurrentDateDefault)
-            {
-                throw new ArgumentException(Res.NoCurrentDateDafault, nameof(styles));
-            }
-
-
 
             if (nullable)
             {
