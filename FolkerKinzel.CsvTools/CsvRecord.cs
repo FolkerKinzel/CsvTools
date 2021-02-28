@@ -426,7 +426,7 @@ namespace FolkerKinzel.CsvTools
         {
             if (this.Count == 0)
             {
-                return base.ToString();
+                return base.ToString() ?? string.Empty;
             }
 
             var sb = new StringBuilder();

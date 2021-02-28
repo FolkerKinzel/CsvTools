@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
@@ -482,15 +483,15 @@ namespace FolkerKinzel.CsvTools.Helpers
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object result) => base.TryBinaryOperation(binder, arg, out result);
+        public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object? result) => base.TryBinaryOperation(binder, arg, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryConvert(ConvertBinder binder, out object result) => base.TryConvert(binder, out result);
+        public override bool TryConvert(ConvertBinder binder, out object? result) => base.TryConvert(binder, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryCreateInstance(CreateInstanceBinder binder, object[] args, out object result) => base.TryCreateInstance(binder, args, out result);
+        public override bool TryCreateInstance(CreateInstanceBinder binder, object?[]? args, [NotNullWhen(true)] out object? result) => base.TryCreateInstance(binder, args, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -502,23 +503,23 @@ namespace FolkerKinzel.CsvTools.Helpers
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result) => base.TryGetIndex(binder, indexes, out result);
+        public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object? result) => base.TryGetIndex(binder, indexes, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryInvoke(InvokeBinder binder, object[] args, out object result) => base.TryInvoke(binder, args, out result);
+        public override bool TryInvoke(InvokeBinder binder, object?[]? args, out object? result) => base.TryInvoke(binder, args, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result) => base.TryInvokeMember(binder, args, out result);
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object?[]? args, out object? result) => base.TryInvokeMember(binder, args, out result);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value) => base.TrySetIndex(binder, indexes, value);
+        public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object? value) => base.TrySetIndex(binder, indexes, value);
 
         /// <inheritdoc/>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override bool TryUnaryOperation(UnaryOperationBinder binder, out object result) => base.TryUnaryOperation(binder, out result);
+        public override bool TryUnaryOperation(UnaryOperationBinder binder, out object? result) => base.TryUnaryOperation(binder, out result);
 
         ///// <summary>
         ///// Setzt den Wert sämtlicher Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.
