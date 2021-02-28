@@ -24,3 +24,4 @@ dotnet_diagnostic.CA1707.severity = none
 
 # CA1825: Arrayzuordnungen mit einer Länge von null vermeiden
 dotnet_diagnostic.CA1825.severity = none
+

@@ -3,6 +3,7 @@ using FolkerKinzel.CsvTools.Helpers.Converters.Specialized;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
 {
@@ -10,17 +11,89 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
     public class DateTimeConverterTests
     {
         [TestMethod()]
-        public void DateTimeConverterTest()
+        public void DateTimeConverterTest1()
         {
-            Assert.Fail();
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
         }
+
+        [TestMethod()]
+        public void DateTimeConverterTest2()
+        {
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date);
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
+        }
+
+        [DataTestMethod()]
+        [DataRow(null)]
+        [DataRow("")]
+        public void DateTimeConverterTest3(string? format)
+        {
+            var conv = new DateTimeConverter(format);
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
+        }
+
+        [DataTestMethod()]
+        [DataRow(null)]
+        [DataRow("")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DateTimeConverterTest4(string? format) => _ = new DateTimeConverter(format, parseExact: true);
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DateTimeConverterTest5()
+            => _ = new DateTimeConverter("Ä");
+
+        [TestMethod()]
+        public void DateTimeConverterTest6()
+        {
+            var conv = new DateTimeConverter("D");
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
+        }
+
+        [TestMethod()]
+        public void Roundtrip1()
+        {
+            var now = new DateTime(2021, 3, 1, 17, 25, 38, DateTimeKind.Unspecified);
+
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+
+            string? tmp = conv.ConvertToString(now);
+
+            Assert.IsNotNull(tmp);
+
+            var now2 = (DateTime?)conv.Parse(tmp);
+
+
+            Assert.AreEqual(now, now2);
+        }
+
+
+        [TestMethod()]
+        public void Roundtrip2()
+        {
+            DateTime now = DateTime.UtcNow;
+
+            now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, DateTimeKind.Utc);
+
+            var conv = new DateTimeConverter("F", styles: DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+
+            string? tmp = conv.ConvertToString(now);
+
+            Assert.IsNotNull(tmp);
+
+            var now2 = (DateTime?)conv.Parse(tmp);
+
+            Assert.AreEqual(now, now2);
+        }
+
 
         [DataTestMethod()]
         [DataRow("1972-01-31")]
         [DataRow("1972/01/31")]
         public void ParseTest(string s)
         {
-            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
 
             var dt = conv.Parse(s);
 
@@ -31,7 +104,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
         public void ConvertToStringTest1()
         {
             var dt = new DateTime(1972, 01, 31);
-            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date);
 
             //dt = dt.ToLocalTime();
 
@@ -45,7 +118,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
         public void ConvertToStringTest2()
         {
             var dt = new DateTime(1972, 01, 31);
-            var conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
 
             //dt = dt.ToLocalTime();
 

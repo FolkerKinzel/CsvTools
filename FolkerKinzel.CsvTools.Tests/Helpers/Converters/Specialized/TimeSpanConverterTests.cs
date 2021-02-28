@@ -27,21 +27,49 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
         [DataRow(null)]
         [DataRow("")]
         [ExpectedException(typeof(ArgumentException))]
-        public void TimeSpanConverterTest3(string? format)
+        public void TimeSpanConverterTest3(string? format) => _ = new TimeSpanConverter(format, parseExact: true);
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TimeSpanConverterTest4() => _ = new TimeSpanConverter("bla");
+
+        [TestMethod()]
+        public void TimeSpanConverterTest5()
         {
-            _ = new TimeSpanConverter(format, parseExact: true);
+            var conv = new TimeSpanConverter("G");
+            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter));
         }
 
         [TestMethod()]
-        public void ParseTest()
+        public void Roundtrip1()
         {
-            Assert.Fail();
+            TimeSpan now = DateTime.UtcNow.TimeOfDay;
+
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan);
+
+            string? tmp = conv.ConvertToString(now);
+
+            Assert.IsNotNull(tmp);
+
+            var now2 = (TimeSpan?)conv.Parse(tmp);
+
+            Assert.AreEqual(now, now2);
         }
 
         [TestMethod()]
-        public void ConvertToStringTest()
+        public void Roundtrip2()
         {
-            Assert.Fail();
+            TimeSpan now = DateTime.UtcNow.TimeOfDay;
+
+            var conv = new TimeSpanConverter("G");
+
+            string? tmp = conv.ConvertToString(now);
+
+            Assert.IsNotNull(tmp);
+
+            var now2 = (TimeSpan?)conv.Parse(tmp);
+
+            Assert.AreEqual(now, now2);
         }
     }
 }
