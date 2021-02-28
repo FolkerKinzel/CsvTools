@@ -30,9 +30,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// <returns><paramref name="value"/>, in einen <see cref="string"/> umgewandelt.</returns>
         /// <exception cref="InvalidCastException">Der Datentyp von 
         /// <paramref name="value"/> stimmt nicht mit dem Rückgabewert von <see cref="Type"/> überein.</exception>
-        /// <remarks>Die Methode sollte eine 
+        /// <remarks>
+        /// <note type="implement">
+        /// Die Methode sollte eine 
         /// <see cref="InvalidCastException"/> werfen, wenn der Datentyp von <paramref name="value"/> nicht dem Rückgabewert von 
-        /// <see cref="Type"/> entspricht.</remarks>
+        /// <see cref="Type"/> entspricht.
+        /// </note>
+        /// </remarks>
         string? ConvertToString(object? value);
 
 

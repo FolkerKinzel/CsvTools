@@ -4,3 +4,11 @@
 [*.cs]
 
 
+
+# IDE0046: In bedingten Ausdruck konvertieren
+dotnet_style_prefer_conditional_expression_over_return = true:silent
+
+
+[CsvRecord.cs]
+# IDE0022: Ausdruckskörper für Methoden verwenden
+csharp_style_expression_bodied_methods = when_on_single_line:silent
