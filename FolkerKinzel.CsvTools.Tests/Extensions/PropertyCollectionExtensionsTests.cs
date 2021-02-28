@@ -6,12 +6,9 @@ using FolkerKinzel.CsvTools.Helpers.Converters;
 namespace FolkerKinzel.CsvTools.Extensions.Tests
 {
 #if !NET45
-    class TestCollection : KeyedCollection<string, CsvProperty>
+    internal class TestCollection : KeyedCollection<string, CsvProperty>
     {
-        protected override string GetKeyForItem(CsvProperty item)
-        {
-            return item.PropertyName;
-        }
+        protected override string GetKeyForItem(CsvProperty item) => item.PropertyName;
     }
 
 
@@ -27,7 +24,7 @@ namespace FolkerKinzel.CsvTools.Extensions.Tests
 
             kColl.Add(prop1); 
 
-            Assert.IsTrue(kColl.TryGetValue("Test", out CsvProperty prop2));
+            Assert.IsTrue(kColl.TryGetValue("Test", out CsvProperty? prop2));
 
             Assert.AreEqual(prop1, prop2);
         }

@@ -108,7 +108,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
 
             var wrapper = new CsvRecordWrapper();
 
-            var intConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter intConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32);
 
             wrapper.AddProperty(new CsvProperty(record.ColumnNames[0], new string[] { record.ColumnNames[0] }, intConverter));
             wrapper.AddProperty(new CsvProperty(record.ColumnNames[1], new string[] { record.ColumnNames[1] }, intConverter));
@@ -121,8 +121,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
 
             dynamic dyn = wrapper;
 
-            Assert.AreEqual(42, dyn[0]);
-            Assert.AreEqual(43, dyn[1]);
+            _ = Assert.AreEqual(42, dyn[0]);
+            _ = Assert.AreEqual(43, dyn[1]);
 
             int test = dyn[0];
             Assert.AreEqual(42, test);
@@ -131,10 +131,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             Assert.AreEqual(42, test);
 
             dyn["Column2"] = 7;
-            Assert.AreEqual(7, dyn["Column2"]);
+            _ = Assert.AreEqual(7, dyn["Column2"]);
 
             dyn[0] = 3;
-            Assert.AreEqual(3, dyn[0]);
+            _ = Assert.AreEqual(3, dyn[0]);
         }
     }
 }
