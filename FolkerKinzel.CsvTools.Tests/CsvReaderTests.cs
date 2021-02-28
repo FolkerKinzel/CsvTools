@@ -3,6 +3,7 @@ using System;
 using System.Text;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace FolkerKinzel.CsvTools.Tests
 {
@@ -24,7 +25,7 @@ namespace FolkerKinzel.CsvTools.Tests
             using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);
 
             int counter = 0;
-            foreach (var record in csvReader.Read())
+            foreach (CsvRecord record in csvReader.Read())
             {
                 counter++;
             }
@@ -44,19 +45,19 @@ namespace FolkerKinzel.CsvTools.Tests
         public void CsvReaderTest2()
         {
             string outDir = Path.Combine(TestContext.TestRunResultsDirectory, "CsvFilesAnalyzed");
-            Directory.CreateDirectory(outDir);
+            _ = Directory.CreateDirectory(outDir);
 
             foreach (var file in TestFiles.GetAll().Where(x => StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(x), ".CSV")))
             {
                 using var Reader = new CsvReader(file, options: CsvOptions.None);
 
-                foreach (var record in Reader.Read())
+                foreach (CsvRecord record in Reader.Read())
                 {
-                    StringBuilder sb = new StringBuilder();
+                    var sb = new StringBuilder();
 
-                    foreach (var item in record)
+                    foreach (KeyValuePair<string, string?> item in record)
                     {
-                        sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
+                        _ = sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
                     }
 
                     File.WriteAllText(Path.Combine(outDir, Path.GetFileName(file) + ".txt"), sb.ToString());
