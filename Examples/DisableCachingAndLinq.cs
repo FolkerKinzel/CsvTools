@@ -1,13 +1,13 @@
-﻿using FolkerKinzel.CsvTools;
-using FolkerKinzel.CsvTools.Extensions;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FolkerKinzel.CsvTools;
+using FolkerKinzel.CsvTools.Extensions;
 
 namespace Examples
 {
-    static class DisableCachingAndLinq
+    public static class DisableCachingAndLinq
     {
         public static void TestDisableCachingAndLinq()
         {
@@ -21,14 +21,14 @@ namespace Examples
                 .AppendLine("John,New York")
                 .ToString());
 
-
             Console.WriteLine("Which people live in New York?: ");
 
-            Console.Write("Determine with cache enabled:  ");
+            Console.Write("  Determine with cache enabled:  ");
             using (var csvReader = new CsvReader(csvFileName))
             {
 
-                foreach (var record in csvReader.Read().Where(x => x["City"] == "New York").ToArray())
+                foreach (CsvRecord record in
+                    csvReader.Read().Where(x => x["City"] == "New York").ToArray())
                 {
                     Console.Write(record["Name"]);
                     Console.Write(' ');
@@ -37,22 +37,26 @@ namespace Examples
                 Console.WriteLine();
             }
 
-
-            Console.Write("Determine with cache disabled: ");
-            using (var csvReader = new CsvReader(csvFileName, options: CsvOptions.Default.Set(CsvOptions.DisableCaching)))
+            Console.Write("  Determine with cache disabled: ");
+            using (var csvReader =
+                new CsvReader(csvFileName,
+                              options: CsvOptions.Default.Set(CsvOptions.DisableCaching)))
             {
                 // NOTICE: Removing ".ToArray()" would cause the correct results:
-                foreach (var record in csvReader.Read().Where(x => x["City"] == "New York").ToArray())
+                foreach (CsvRecord record in
+                    csvReader.Read().Where(x => x["City"] == "New York").ToArray())
                 {
                     Console.Write(record["Name"]);
                     Console.Write(' ');
                 }
             }
 
+            Console.WriteLine();
+
             // Console Output: 
             // Which people live in New York?:
-            // Determine with cache enabled:  Joyce John
-            // Determine with cache disabled: John John
+            //   Determine with cache enabled:  Joyce John
+            //   Determine with cache disabled: John John
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿using FolkerKinzel.CsvTools;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FolkerKinzel.CsvTools;
 
 namespace Examples
 {
-    static class LinqOnCsvFile
+    public static class LinqOnCsvFile
     {
         public static void TestLinqOnCsvFile()
         {
@@ -22,7 +22,8 @@ namespace Examples
 
             using var csvReader = new CsvReader(csvFileName);
             Console.Write("How many people live in New York?: ");
-            Console.WriteLine(csvReader.Read().Where(x => x["City"] == "New York").Count());
+            Console.WriteLine(
+                csvReader.Read().Where(x => x["City"] == "New York").Count());
 
             // Console Output: How many people live in New York?: 2
         }
