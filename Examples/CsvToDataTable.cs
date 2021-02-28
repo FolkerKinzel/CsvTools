@@ -22,10 +22,11 @@ namespace Examples
 
             CsvRecordWrapper wrapper = InitCsvRecordWrapper();
 
-            // Write the CSV-file:
-            // (We can sort the columns of the CSV file differently than those of the DataTable - 
-            // CsvRecordWrapper will reorder that.)
-            string[] columns = new string[] { SUBJECT, LESSON_BEGIN, PUPILS_NAME, LESSON_DAY };
+            // Write the CSV file:
+            // (We can sort the columns of the CSV file differently than those 
+            // of the DataTable - CsvRecordWrapper will reorder that.)
+            string[] columns = 
+                new string[] { SUBJECT, LESSON_BEGIN, PUPILS_NAME, LESSON_DAY };
 
             using (var writer = new CsvWriter(FILE_NAME, columns))
             {
@@ -36,8 +37,9 @@ namespace Examples
                 {
                     if (obj is DataRow dataRow)
                     {
-                        // The properties of the CsvRecordWrapper match the columns of
-                        // the DataTable in data type and order (but not the columns of the CSV file).
+                        // The properties of the CsvRecordWrapper match the columns
+                        // of the DataTable in data type and order (but not the 
+                        // columns of the CSV file).
                         for (int i = 0; i < wrapper.Count; i++)
                         {
                             wrapper[i] = dataRow[i];
@@ -92,30 +94,36 @@ namespace Examples
         {
             var wrapper = new CsvRecordWrapper();
 
-            // Store the stringConverter because you can reuse the same converter for more than one property
-            // in CsvRecordWrapper.
+            // Store the stringConverter because you can reuse the same 
+            // converter for more than one property in CsvRecordWrapper.
             ICsvTypeConverter stringConverter = 
                 CsvConverterFactory.CreateConverter(CsvTypeCode.String, maybeDBNull: true);
 
             wrapper.AddProperty
                 (
-                    new CsvProperty(PUPILS_NAME, new string[] { PUPILS_NAME }, stringConverter)
+                    new CsvProperty(PUPILS_NAME,
+                                    new string[] { PUPILS_NAME },
+                                    stringConverter)
                 );
             wrapper.AddProperty
                 (
-                    new CsvProperty(SUBJECT, new string[] { SUBJECT }, stringConverter)
+                    new CsvProperty(SUBJECT,
+                                    new string[] { SUBJECT },
+                                    stringConverter)
                 );
             wrapper.AddProperty
                 (
                     new CsvProperty(LESSON_DAY,
                                     new string[] { LESSON_DAY },
-                                    CsvConverterFactory.CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true))
+                                    CsvConverterFactory
+                                        .CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true))
                 );
             wrapper.AddProperty
                 (
                     new CsvProperty(LESSON_BEGIN,
                                     new string[] { LESSON_BEGIN },
-                                    CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true))
+                                    CsvConverterFactory
+                                        .CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true))
                 );
 
             return wrapper;

@@ -2,7 +2,7 @@
 [![NuGet](https://img.shields.io/nuget/v/FolkerKinzel.CsvTools)](https://www.nuget.org/packages/FolkerKinzel.CsvTools/)
 
 
-.NET-library to read and write CSV files.
+.NET library to read and write CSV files.
 
 It is used as a dependency in [FolkerKinzel.Contacts.IO](https://github.com/FolkerKinzel/Contacts.IO) - an
 easy to use .NET-API to manage contact data of organizations and natural persons, including a data model and classes to 
@@ -43,23 +43,23 @@ Paket CLI:
 
 
 ## Examples
-_(For better readability exception handling is ommitted in the following examples.)_
+_(For the sake of better readability exception handling is ommitted in the following examples.)_
 
-- [Linq query on a CSV file](#linq-query-on-a-csv-file)
+- [Linq Query on a CSV File](#linq-query-on-a-csv-file)
 - [CSV from and to DataTable](#csv-from-and-to-datatable)
-- [Deserialize object from CSV](#deserialize-object-from-csv)
+- [Deserializing Classes from CSV](#deserializing-classes-from-csv)
 
-#### Linq query on a CSV file:
+#### Linq Query on a CSV File:
 ```csharp
-using FolkerKinzel.CsvTools;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FolkerKinzel.CsvTools;
 
 namespace Examples
 {
-    static class LinqOnCsvFile
+    public static class LinqOnCsvFile
     {
         public static void TestLinqOnCsvFile()
         {
@@ -75,7 +75,8 @@ namespace Examples
 
             using var csvReader = new CsvReader(csvFileName);
             Console.Write("How many people live in New York?: ");
-            Console.WriteLine(csvReader.Read().Where(x => x["City"] == "New York").Count());
+            Console.WriteLine(
+                csvReader.Read().Where(x => x["City"] == "New York").Count());
 
             // Console Output: How many people live in New York?: 2
         }
@@ -84,26 +85,24 @@ namespace Examples
 ```
 
 #### CSV from and to DataTable:
-
 ```csharp
-using FolkerKinzel.CsvTools;
-using FolkerKinzel.CsvTools.Helpers;
-using FolkerKinzel.CsvTools.Helpers.Converters;
 using System;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using FolkerKinzel.CsvTools;
+using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.Helpers.Converters;
 
 namespace Examples
 {
-    static class CsvToDataTable
+    public static class CsvToDataTable
     {
-        const string PupilsName = "Name";
-        const string Subject = "Subject";
-        const string LessonDay = "Day";
-        const string LessonBegin = "Begin";
-
-        const string fileName = "DataTable.csv";
+        private const string PUPILS_NAME = "Name";
+        private const string SUBJECT = "Subject";
+        private const string LESSON_DAY = "Day";
+        private const string LESSON_BEGIN = "Begin";
+        private const string FILE_NAME = "DataTable.csv";
 
         public static void TestCsvToDataTable()
         {
@@ -111,11 +110,13 @@ namespace Examples
 
             CsvRecordWrapper wrapper = InitCsvRecordWrapper();
 
-            // Write the CSV-file:
-            // (We can sort the columns of the csv file differently than those of the DataTable - 
-            // CsvRecordWrapper will reorder that.)
-            string[] columns = new string[] { Subject, LessonBegin, PupilsName, LessonDay };
-            using (CsvWriter writer = new CsvWriter(fileName, columns))
+            // Write the CSV file:
+            // (We can sort the columns of the CSV file differently than those 
+            // of the DataTable - CsvRecordWrapper will reorder that.)
+            string[] columns = 
+                new string[] { SUBJECT, LESSON_BEGIN, PUPILS_NAME, LESSON_DAY };
+
+            using (var writer = new CsvWriter(FILE_NAME, columns))
             {
                 // (CsvWriter reuses the same record.)
                 wrapper.Record = writer.Record;
@@ -124,8 +125,9 @@ namespace Examples
                 {
                     if (obj is DataRow dataRow)
                     {
-                        // The properties of the CsvRecordWrapper match the columns of
-                        // the DataTable in data type and order (but not the columns of the CSV-file).
+                        // The properties of the CsvRecordWrapper match the columns
+                        // of the DataTable in data type and order (but not the 
+                        // columns of the CSV file).
                         for (int i = 0; i < wrapper.Count; i++)
                         {
                             wrapper[i] = dataRow[i];
@@ -139,21 +141,22 @@ namespace Examples
             dataTable.Clear();
 
             // Refill the DataTable from the CSV-file:
-            using (CsvReader reader = new CsvReader(fileName))
+            using (var reader = new CsvReader(FILE_NAME))
             {
                 foreach (CsvRecord record in reader.Read())
                 {
                     wrapper.Record = record;
-                    var dataRow = dataTable.NewRow();
+                    DataRow dataRow = dataTable.NewRow();
                     dataTable.Rows.Add(dataRow);
 
-                    // It doesn't matter that the columns in the csv-file have a
+                    // It doesn't matter that the columns in the CSV file have a
                     // different order than the columns of the DataTable:
                     // CsvRecordWrapper reorders that for us.
                     for (int i = 0; i < wrapper.Count; i++)
                     {
                         dataRow[i] = wrapper[i];
                     }
+
                 }
             }
 
@@ -171,30 +174,45 @@ namespace Examples
             // Content of the refilled DataTable:
             // Susi Meyer      Piano           3               14:30:00
             // Carl Czerny     Piano           4               15:15:00
-            // Frederic Chopin <DBNull>        <DBNull>        <DBNull>
+            // Frederic Chopin <DBNull>        < DBNull >      < DBNull >
         }
 
 
         private static CsvRecordWrapper InitCsvRecordWrapper()
         {
-            CsvRecordWrapper wrapper = new CsvRecordWrapper();
+            var wrapper = new CsvRecordWrapper();
 
-            // Store the stringConverter because you can reuse the same converter for more than one property
-            // in CsvRecordWrapper.
-            var stringConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.String, maybeDBNull: true);
+            // Store the stringConverter because you can reuse the same 
+            // converter for more than one property in CsvRecordWrapper.
+            ICsvTypeConverter stringConverter = 
+                CsvConverterFactory.CreateConverter(CsvTypeCode.String, maybeDBNull: true);
 
-            wrapper.AddProperty(new CsvProperty(PupilsName, new string[] { PupilsName }, stringConverter));
-            wrapper.AddProperty(new CsvProperty(Subject, new string[] { Subject }, stringConverter));
-            wrapper.AddProperty(
-                new CsvProperty(
-                        LessonDay,
-                        new string[] { LessonDay },
-                        CsvConverterFactory.CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true)));
-            wrapper.AddProperty(
-                new CsvProperty(
-                        LessonBegin,
-                        new string[] { LessonBegin },
-                        CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true)));
+            wrapper.AddProperty
+                (
+                    new CsvProperty(PUPILS_NAME,
+                                    new string[] { PUPILS_NAME },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvProperty(SUBJECT,
+                                    new string[] { SUBJECT },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvProperty(LESSON_DAY,
+                                    new string[] { LESSON_DAY },
+                                    CsvConverterFactory
+                                        .CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true))
+                );
+            wrapper.AddProperty
+                (
+                    new CsvProperty(LESSON_BEGIN,
+                                    new string[] { LESSON_BEGIN },
+                                    CsvConverterFactory
+                                        .CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true))
+                );
 
             return wrapper;
         }
@@ -204,14 +222,17 @@ namespace Examples
         {
             var dataTable = new DataTable();
 
-            dataTable.Columns.Add(new DataColumn(PupilsName));
-            dataTable.Columns.Add(new DataColumn(Subject));
-            dataTable.Columns.Add(new DataColumn(LessonDay, typeof(DayOfWeek)));
-            dataTable.Columns.Add(new DataColumn(LessonBegin, typeof(TimeSpan)));
+            dataTable.Columns.Add(new DataColumn(PUPILS_NAME));
+            dataTable.Columns.Add(new DataColumn(SUBJECT));
+            dataTable.Columns.Add(new DataColumn(LESSON_DAY, typeof(DayOfWeek)));
+            dataTable.Columns.Add(new DataColumn(LESSON_BEGIN, typeof(TimeSpan)));
 
-            dataTable.Rows.Add(new object[] { "Susi Meyer", "Piano", DayOfWeek.Wednesday, new TimeSpan(14, 30, 0) });
-            dataTable.Rows.Add(new object[] { "Carl Czerny", "Piano", DayOfWeek.Thursday, new TimeSpan(15, 15, 0) });
-            dataTable.Rows.Add(new object[] { "Frederic Chopin" });
+            _ = dataTable.Rows.Add(
+                new object[] { "Susi Meyer", "Piano", DayOfWeek.Wednesday, new TimeSpan(14, 30, 0) });
+            _ = dataTable.Rows.Add(
+                new object[] { "Carl Czerny", "Piano", DayOfWeek.Thursday, new TimeSpan(15, 15, 0) });
+            _ = dataTable.Rows.Add(
+                new object[] { "Frederic Chopin" });
 
             return dataTable;
         }
@@ -221,7 +242,7 @@ namespace Examples
         {
             Console.WriteLine("Csv file:");
             Console.WriteLine();
-            Console.WriteLine(File.ReadAllText(fileName));
+            Console.WriteLine(File.ReadAllText(FILE_NAME));
 
             Console.WriteLine();
             Console.WriteLine("Content of the refilled DataTable:");
@@ -241,7 +262,7 @@ namespace Examples
                     Console.Write(o switch
                     {
                         null => "<null>".PadRight(padding),
-                        object dbNull when dbNull == DBNull.Value => "<DBNull>".PadRight(padding),
+                        DBNull dBNull => "<DBNull>".PadRight(padding),
                         string s when s.Length == 0 => "\"\"".PadRight(padding),
                         TimeSpan ts => ts.ToString("g", CultureInfo.InvariantCulture).PadRight(padding),
                         _ => o.ToString()?.PadRight(padding)
@@ -257,24 +278,27 @@ namespace Examples
 ```
 
 
-#### Deserialize object from CSV:
+#### Deserializing Classes from CSV:
 
 ```csharp
-using FolkerKinzel.CsvTools;
-using FolkerKinzel.CsvTools.Helpers;
-using FolkerKinzel.CsvTools.Helpers.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using FolkerKinzel.CsvTools;
+using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.Helpers.Converters;
 
 namespace Examples
 {
-    class Pupil
+    public class Pupil
     {
         public string? Name { get; set; }
+
         public string? Subject { get; set; }
+
         public DayOfWeek? LessonDay { get; set; }
+
         public TimeSpan? LessonBegin { get; set; }
 
         public override string ToString()
@@ -283,66 +307,92 @@ namespace Examples
             return new StringBuilder()
                 .Append("Name:        ").AppendLine(Name ?? NULL)
                 .Append("Subject:     ").AppendLine(Subject ?? NULL)
-                .Append("LessonDay:   ").AppendLine(LessonDay.HasValue ? $"{nameof(DayOfWeek)}.{LessonDay.Value}" : NULL)
-                .Append("LessonBegin: ").AppendLine(LessonBegin.HasValue ? LessonBegin.Value.ToString() : NULL)
+                .Append("LessonDay:   ").AppendLine(LessonDay.HasValue
+                                                    ? $"{nameof(DayOfWeek)}.{LessonDay.Value}"
+                                                    : NULL)
+                .Append("LessonBegin: ").AppendLine(LessonBegin.HasValue
+                                                    ? LessonBegin.Value.ToString()
+                                                    : NULL)
                 .ToString();
         }
     }
 
 
-    static class ObjectFromCsv
+    public static class DeserializingClassesFromCsv
     {
-        public static void TestObjectFromCsv()
+        public static void TestDeserializingClassesFromCsv()
         {
             const string csvFileName = "Objects.csv";
 
             // Create a nonstandard CSV-File
             File.WriteAllText(csvFileName, new StringBuilder()
-                .AppendLine("Unterrichtstag;Unterrichtsbeginn;Vollständiger Name;Unterrichtsfach;")
-                .AppendLine("Wednesday;14:30;Susi Meyer;Piano")
-                .AppendLine("Thursday;15:15;Carl Czerny;Piano;")
-                .AppendLine(";;Frederic Chopin")
+                .AppendLine(
+                    "Unterrichtstag;Unterrichtsbeginn;Vollständiger Name;Unterrichtsfach;")
+                .AppendLine(
+                    "Wednesday;14:30;Susi Meyer;Piano")
+                .AppendLine(
+                    "Thursday;15:15;Carl Czerny;Piano;")
+                .AppendLine(
+                    ";;Frederic Chopin")
                 .ToString());
 
-            // Initialize a CsvRecordWrapper that retrieves the data from
-            // the CSV-Columns and converts it to the right data type
+            // Initialize a CsvRecordWrapper which retrieves the data from
+            // the CSV-Columns and converts it to the right data type.
             // Aliases with wildcards can be used to match the column-headers
-            // of the csv-file.
-            CsvRecordWrapper wrapper = new CsvRecordWrapper();
+            // of the CSV file.
+            var wrapper = new CsvRecordWrapper();
 
-            // reuse a converter for more than one property
-            var stringConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.String, nullable: true);
+            // Reuse a converter for more than one property:
+            ICsvTypeConverter stringConverter =
+                CsvConverterFactory.CreateConverter(CsvTypeCode.String, nullable: true);
 
-            wrapper.AddProperty(new CsvProperty("Name", new string[] { "*name" }, stringConverter));
-            wrapper.AddProperty(new CsvProperty("Subject", new string[] { "*subject", "*fach" }, stringConverter));
-            wrapper.AddProperty(
-                new CsvProperty(
-                    "LessonDay",
-                    new string[] { "*day", "*tag" },
-                    CsvConverterFactory.CreateEnumConverter<DayOfWeek>(nullable: true)));
-            wrapper.AddProperty(
-                new CsvProperty(
-                    "LessonBegin",
-                    new string[] { "*begin?" },
-                    CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, nullable: true)));
+            wrapper.AddProperty
+                (
+                    new CsvProperty("Name",
+                                    new string[] { "*name" },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvProperty("Subject",
+                                    new string[] { "*subject", "*fach" },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvProperty("LessonDay",
+                                    new string[] { "*day", "*tag" },
+                                    CsvConverterFactory
+                                        .CreateEnumConverter<DayOfWeek>(nullable: true))
+                );
+            wrapper.AddProperty
+                (
+                    new CsvProperty("LessonBegin",
+                                    new string[] { "*begin?" },
+                                    CsvConverterFactory
+                                        .CreateConverter(CsvTypeCode.TimeSpan, nullable: true))
+                );
 
-            // Analyze the CSV-file to determine the right parameters
+            // Analyze the CSV file to determine the right parameters
             // for proper reading:
-            CsvAnalyzer analyzer = new CsvAnalyzer();
+            var analyzer = new CsvAnalyzer();
             analyzer.Analyze(csvFileName);
 
-            // Read the CSV-file:
-            using CsvReader reader = 
-                    new CsvReader(csvFileName, analyzer.HasHeaderRow, analyzer.Options, analyzer.FieldSeparator);
+            // Read the CSV file:
+            using var reader =
+                new CsvReader(csvFileName,
+                              analyzer.HasHeaderRow,
+                              analyzer.Options,
+                              analyzer.FieldSeparator);
 
-            List<Pupil> pupilsList = new List<Pupil>();
+            var pupilsList = new List<Pupil>();
 
             foreach (CsvRecord record in reader.Read())
             {
                 wrapper.Record = record;
 
-                // Using a dynamic variable enables you, to assign
-                // the properties without having to exlicitely cast them
+                // Using a dynamic variable enables you to assign
+                // the properties without having to explicitely cast them
                 // to the target data type:
                 dynamic dynWrapper = wrapper;
 
@@ -356,7 +406,7 @@ namespace Examples
             }
 
             // Write the results to Console:
-            foreach (var pupil in pupilsList)
+            foreach (Pupil pupil in pupilsList)
             {
                 Console.WriteLine(pupil);
                 Console.WriteLine();
@@ -385,6 +435,5 @@ Subject:     <null>
 LessonDay:   <null>
 LessonBegin: <null>
 */
-
 ```
 
