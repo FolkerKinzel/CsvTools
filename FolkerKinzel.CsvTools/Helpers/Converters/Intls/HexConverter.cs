@@ -48,8 +48,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                     // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
                     {
-                        if (o is null) return null;
-                        if (Convert.IsDBNull(o) && maybeDBNull) return null;
+                        if (o is null)
+                        {
+                            return null;
+                        }
+
+                        if (Convert.IsDBNull(o) && maybeDBNull)
+                        {
+                            return null;
+                        }
 
                         ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
                         return l.ToString(format, CultureInfo.InvariantCulture);
@@ -84,8 +91,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                     // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
                     {
-                        if (o is null) return null;
-                        if (Convert.IsDBNull(o) && maybeDBNull) return null;
+                        if (o is null)
+                        {
+                            return null;
+                        }
+
+                        if (Convert.IsDBNull(o) && maybeDBNull)
+                        {
+                            return null;
+                        }
 
                         long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
                         return l.ToString(format, CultureInfo.InvariantCulture);
@@ -123,8 +137,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                     // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
                     {
-                        if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                        if (Convert.IsDBNull(o) && maybeDBNull) return null;
+                        if (o is null)
+                        {
+                            throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                        }
+
+                        if (Convert.IsDBNull(o) && maybeDBNull)
+                        {
+                            return null;
+                        }
 
                         ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
                         return l.ToString(format, CultureInfo.InvariantCulture);
@@ -159,8 +180,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                     // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
                     {
-                        if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                        if (Convert.IsDBNull(o) && maybeDBNull) return null;
+                        if (o is null)
+                        {
+                            throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                        }
+
+                        if (Convert.IsDBNull(o) && maybeDBNull)
+                        {
+                            return null;
+                        }
 
                         long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
                         return l.ToString(format, CultureInfo.InvariantCulture);

@@ -50,19 +50,18 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             {
                 // Cast nach Guid um InvalidCastException auszulösen bei falschem Typ:
                 _toStringConverter = new Converter<object?, string?>(
-                    o =>
-                    {
-                        if (o is null) return null;
-                        if (Convert.IsDBNull(o) && maybeDBNull) return null;
-
-                        return ((Guid)o).ToString(format, CultureInfo.InvariantCulture);
-                    });
+                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
+                            ? null 
+                            : ((Guid)o).ToString(format, CultureInfo.InvariantCulture));
 
 
                 _parser = new Converter<string?, object?>(
                      s =>
                      {
-                         if (s is null) return null;
+                         if (s is null)
+                         {
+                             return null;
+                         }
 
                          try
                          {
@@ -70,7 +69,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                          }
                          catch
                          {
-                             if (throwOnParseErrors) throw;
+                             if (throwOnParseErrors)
+                             {
+                                 throw;
+                             }
 
                              return FallbackValue;
                          }
@@ -81,8 +83,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                 _toStringConverter = new Converter<object?, string?>(
                 o =>
                 {
-                    if (Convert.IsDBNull(o) && maybeDBNull) return null;
-                    if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                    if (Convert.IsDBNull(o) && maybeDBNull)
+                    {
+                        return null;
+                    }
+
+                    if (o is null)
+                    {
+                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                    }
 
                     return ((Guid)o).ToString(format, CultureInfo.InvariantCulture);
                 });
@@ -90,7 +99,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                 _parser = new Converter<string?, object?>(
                     s =>
                     {
-                        if (s is null) return FallbackValue;
+                        if (s is null)
+                        {
+                            return FallbackValue;
+                        }
 
                         try
                         {
@@ -98,7 +110,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                         }
                         catch
                         {
-                            if (throwOnParseErrors) throw;
+                            if (throwOnParseErrors)
+                            {
+                                throw;
+                            }
 
                             return FallbackValue;
                         }
@@ -118,11 +133,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
+        /// 
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
+        /// 
         /// <remarks>Wenn lediglich das <see cref="Guid"/>-Standardformat "D" ausgegeben werden soll, sollte ein <see cref="GuidConverter"/> mit 
         /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider?, bool)"/> erzeugt werden: Das ist wesentlich performanter!</remarks>
         public GuidConverter(
-            string format,
+            string? format,
             bool nullable = false,
             bool maybeDBNull = false,
             bool throwOnParseErrors = false)
@@ -146,19 +163,18 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             {
                 // Cast nach Guid um InvalidCastException auszulösen bei falschem Typ:
                 _toStringConverter = new Converter<object?, string?>(
-                    o =>
-                    {
-                        if (o is null) return null;
-                        if (Convert.IsDBNull(o) && maybeDBNull) return null;
-
-                        return ((Guid)o).ToString(format, CultureInfo.InvariantCulture);
-                    });
+                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
+                         ? null 
+                         : ((Guid)o).ToString(format, CultureInfo.InvariantCulture));
 
 
                 _parser = new Converter<string?, object?>(
                      s =>
                      {
-                         if (s is null) return null;
+                         if (s is null)
+                         {
+                             return null;
+                         }
 
                          try
                          {
@@ -166,7 +182,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                          }
                          catch
                          {
-                             if (throwOnParseErrors) throw;
+                             if (throwOnParseErrors)
+                             {
+                                 throw;
+                             }
 
                              return FallbackValue;
                          }
@@ -177,8 +196,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                 _toStringConverter = new Converter<object?, string?>(
                 o =>
                 {
-                    if (Convert.IsDBNull(o) && maybeDBNull) return null;
-                    if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                    if (Convert.IsDBNull(o) && maybeDBNull)
+                    {
+                        return null;
+                    }
+
+                    if (o is null)
+                    {
+                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                    }
 
                     return ((Guid)o).ToString(format, CultureInfo.InvariantCulture);
                 });
@@ -186,7 +212,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                 _parser = new Converter<string?, object?>(
                     s =>
                     {
-                        if (s is null) return FallbackValue;
+                        if (s is null)
+                        {
+                            return FallbackValue;
+                        }
 
                         try
                         {
@@ -194,7 +223,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                         }
                         catch
                         {
-                            if (throwOnParseErrors) throw;
+                            if (throwOnParseErrors)
+                            {
+                                throw;
+                            }
 
                             return FallbackValue;
                         }
@@ -202,12 +234,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             }
         }
 
-        ///// <summary>
-        ///// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
-        ///// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
-        ///// <see cref="Parse(string)"/> scheitert.
-        ///// </summary>
-        /// <inheritdoc path="summary"/>
+        
+        /// <inheritdoc />
         public object? FallbackValue { get; }
 
         /// <summary>
@@ -216,35 +244,19 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
         /// </summary>
         public Type Type { get; }
 
-        ///// <summary>
-        ///// <c>true</c> gibt an, dass eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
-        ///// scheitert. Anderenfalls wird in diesem Fall <see cref="FallbackValue"/> zurückgegeben.
-        ///// </summary>
+        
         /// <inheritdoc/>
         public bool ThrowsOnParseErrors { get; }
 
-        ///// <summary>
-        ///// Parst <paramref name="value"/> als <see cref="Guid"/> oder <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> - je
-        ///// nachdem, welche Option im Konstruktor gewählt wurde.
-        ///// </summary>
-        ///// <param name="value">Der zu parsende <see cref="string"/>.</param>
-        ///// <returns>Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt als Ergebnis
-        ///// des Parsens.</returns>
+        
         /// <inheritdoc/>
         /// <exception cref="FormatException"><paramref name="value"/> weist kein kompatibles Format auf. Die Ausnahme wird
         /// nur geworfen, wenn das im Konstruktor so konfiguriert wurde - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
         public object? Parse(string? value) => _parser(value);
 
 
-        ///// <summary>
-        ///// Gibt die Zeichenfolgendarstellung von <paramref name="value"/> zurück, wenn <paramref name="value"/> ein <see cref="Guid"/> 
-        ///// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> ist.
-        ///// </summary>
-        ///// <param name="value">Ein <see cref="Guid"/>- bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see>-Objekt.</param>
-        ///// <returns>Eine Zeichenfolgendarstellung von <paramref name="value"/>.</returns>
-        ///// <exception cref="InvalidCastException"><paramref name="value"/> lässt sich nicht in den Datentyp <see cref="Guid"/> 
-        ///// bzw. <see cref="Nullable{T}">Nullable&lt;Guid&gt;</see> umwandeln.</exception>
-        /// <inheritdoc path="summary|returns|param|exception"/>
+        
+        /// <inheritdoc/>
         public string? ConvertToString(object? value) => _toStringConverter(value);
 
     }

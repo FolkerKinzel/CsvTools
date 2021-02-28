@@ -163,12 +163,9 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             get
             {
-                if (Record is null)
-                {
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
-                }
-
-                return _dynProps[index].GetValue(this.Record);
+                return Record is null
+                    ? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)))
+                    : _dynProps[index].GetValue(this.Record);
             }
 
             set
@@ -221,14 +218,9 @@ namespace FolkerKinzel.CsvTools.Helpers
                     throw new ArgumentNullException(nameof(propertyName));
                 }
 
-                if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
-                {
-                    return prop.GetValue(this.Record);
-                }
-                else
-                {
-                    throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
-                }
+                return this._dynProps.TryGetValue(propertyName, out CsvProperty? prop)
+                    ? prop.GetValue(this.Record)
+                    : throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
             }
 
             set

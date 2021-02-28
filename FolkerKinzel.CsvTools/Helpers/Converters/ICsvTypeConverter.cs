@@ -16,7 +16,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
     public interface ICsvTypeConverter
     {
         /// <summary>
-        /// Kovertiert einen <see cref="string"/> in den von <see cref="Type"/> zurückgegebenen Datentyp.
+        /// Konvertiert einen <see cref="string"/> in den von <see cref="Type"/> zurückgegebenen Datentyp.
         /// </summary>
         /// <param name="value">Der zu konvertierende <see cref="string"/> oder <c>null</c>.</param>
         /// <returns><paramref name="value"/>, in den Datentyp von <see cref="Type"/> konvertiert.</returns>

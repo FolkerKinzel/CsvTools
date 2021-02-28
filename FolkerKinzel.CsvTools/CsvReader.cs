@@ -163,7 +163,10 @@ namespace FolkerKinzel.CsvTools
                     {
                         string?[]? arr = row.ToArray();
 
-                        if (arr.Length == 0) continue; // Leerzeile am Anfang
+                        if (arr.Length == 0)
+                        {
+                            continue; // Leerzeile am Anfang
+                        }
 
                         record = new CsvRecord(arr.Length, caseSensitiveColumns, false);
                         clone = new CsvRecord(record);

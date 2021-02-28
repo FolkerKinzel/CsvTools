@@ -61,7 +61,7 @@ dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggesti
 dotnet_style_readonly_field = true:suggestion
 
 # Einstellungen für Parameter
-#dotnet_code_quality_unused_parameters = all:suggestion
+dotnet_code_quality_unused_parameters = all:suggestion
 
 
 # Unterdrückungseinstellungen
@@ -78,8 +78,8 @@ csharp_style_var_when_type_is_apparent = true:suggestion
 csharp_style_expression_bodied_accessors = when_on_single_line:suggestion
 csharp_style_expression_bodied_constructors = when_on_single_line:suggestion
 csharp_style_expression_bodied_indexers = when_on_single_line:suggestion
-#csharp_style_expression_bodied_lambdas = true:suggestion
-#csharp_style_expression_bodied_local_functions = false:silent
+csharp_style_expression_bodied_lambdas = true:suggestion
+csharp_style_expression_bodied_local_functions = false:silent
 csharp_style_expression_bodied_methods = when_on_single_line:suggestion
 csharp_style_expression_bodied_operators = when_on_single_line:suggestion
 csharp_style_expression_bodied_properties = when_on_single_line:suggestion
@@ -95,12 +95,12 @@ csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
 
 # Einstellungen für Modifizierer
-#csharp_prefer_static_local_function = true:suggestion
+csharp_prefer_static_local_function = true:suggestion
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
 
 # Einstellungen für Codeblöcke
 csharp_prefer_braces = true:suggestion
-#csharp_prefer_simple_using_statement = true:suggestion
+csharp_prefer_simple_using_statement = true:suggestion
 
 # Einstellungen für Ausdrucksebene
 csharp_prefer_simple_default_expression = true:suggestion
@@ -110,8 +110,8 @@ csharp_style_pattern_local_over_anonymous_function = true:suggestion
 #csharp_style_prefer_index_operator = true:silent
 #csharp_style_prefer_range_operator = true:silent
 csharp_style_throw_expression = true:suggestion
-#csharp_style_unused_value_assignment_preference = discard_variable:suggestion
-#csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
+csharp_style_unused_value_assignment_preference = discard_variable:suggestion
+csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
 
 # Einstellungen für using-Anweisungen
 csharp_using_directive_placement = outside_namespace:silent

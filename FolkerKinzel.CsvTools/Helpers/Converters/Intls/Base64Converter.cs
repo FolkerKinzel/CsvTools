@@ -74,7 +74,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// nur geworfen, wenn das im Konstruktor so konfiguriert wurde - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
         public object? Parse(string? value)
         {
-            if (value is null) return null;
+            if (value is null)
+            {
+                return null;
+            }
 
             try
             {

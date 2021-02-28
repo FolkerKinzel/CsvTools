@@ -53,9 +53,12 @@ namespace FolkerKinzel.CsvTools.Helpers
         {
             
 
-            if (analyzedLinesCount < AnalyzedLinesMinCount) analyzedLinesCount = AnalyzedLinesMinCount;
-            
-            
+            if (analyzedLinesCount < AnalyzedLinesMinCount)
+            {
+                analyzedLinesCount = AnalyzedLinesMinCount;
+            }
+
+
             // Suche Feldtrennzeichen:
             using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
             {
@@ -85,9 +88,10 @@ namespace FolkerKinzel.CsvTools.Helpers
                 {
                     string? line = reader.ReadLine();
 
-                    if (line is null) break;
-
-                    
+                    if (line is null)
+                    {
+                        break;
+                    }
 
                     if (firstLine)
                     {

@@ -27,7 +27,7 @@ namespace FolkerKinzel.CsvTools
         #region fields
 
 #if NET40
-        private readonly static string?[] _defaultArr = new string?[0];
+        private static readonly string?[] _defaultArr = new string?[0];
         private readonly string?[] _values = _defaultArr;
 #else
         private readonly string?[] _values = Array.Empty<string?>();
@@ -359,7 +359,6 @@ namespace FolkerKinzel.CsvTools
         }
 
 
-
         /// <summary>
         /// Bestimmt, ob das <see cref="CsvRecord"/>-Objekt eine Spalte mit dem angegebenen Spaltennamen enthält.
         /// </summary>
@@ -368,16 +367,10 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
         public bool ContainsColumn(string columnName)
         {
-            if (columnName is null)
-            {
-                throw new ArgumentNullException(nameof(columnName));
-            }
-
-            return _lookupDictionary.ContainsKey(columnName);
+            return columnName is null
+                ? throw new ArgumentNullException(nameof(columnName)) 
+                : _lookupDictionary.ContainsKey(columnName);
         }
-
-
-
 
 
         /// <summary>
@@ -390,15 +383,7 @@ namespace FolkerKinzel.CsvTools
         public int IndexOfColumn(string? columnName) => columnName != null && _lookupDictionary.TryGetValue(columnName, out int i) ? i : -1;
 
 
-
-
-
-
-        ///// <summary>
-        ///// Gibt einen <see cref="IEnumerator"/> zurück, mit dem das <see cref="CsvRecord"/>-Objekt
-        ///// durchlaufen wird.
-        ///// </summary>
-        ///// <returns>Ein <see cref="IEnumerator"/>.</returns>
+        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
@@ -417,8 +402,6 @@ namespace FolkerKinzel.CsvTools
             }
 
         }
-
-
 
 
         /// <inheritdoc/>
@@ -443,20 +426,6 @@ namespace FolkerKinzel.CsvTools
 
             return sb.ToString();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

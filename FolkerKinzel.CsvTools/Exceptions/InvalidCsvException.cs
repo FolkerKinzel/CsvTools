@@ -35,7 +35,6 @@ namespace FolkerKinzel.CsvTools
         }
 
 
-#pragma warning disable 1573
         /// <inheritdoc cref="InvalidCsvException(string)" />
         /// <param name="csvLineNumber">Zeilennummer der CSV-Datei beim Auftreten des Fehlers (1-basierter Index).</param>
         /// <param name="csvCharIndex">Zeichen in der Zeile der CSV-Datei, bei dem der Fehler auftrat (0-basierter Index).</param>
@@ -44,10 +43,9 @@ namespace FolkerKinzel.CsvTools
             this.CsvLineNumber = csvLineNumber;
             this.CsvCharIndex = csvCharIndex;
         }
-#pragma warning restore 1573
 
 
-        
+
         /// <inheritdoc/>
         public InvalidCsvException(string message, Exception innerException) : base(message, innerException) { }
 

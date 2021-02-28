@@ -228,7 +228,10 @@ namespace FolkerKinzel.CsvTools.Helpers
                 {
                     string alias = aliases[i];
 
-                    if (alias is null) continue;
+                    if (alias is null)
+                    {
+                        continue;
+                    }
 
                     if (HasWildcard(alias))
                     {

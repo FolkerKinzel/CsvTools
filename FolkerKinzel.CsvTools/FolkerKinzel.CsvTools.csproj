@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net5.0;netstandard2.1;net40</TargetFrameworks>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
     <!-- .nuget-Package: -->
@@ -10,7 +10,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Version>1.4.3</Version>
-    <FileVersion>1.4.3.14</FileVersion>
+    <FileVersion>1.4.3.15</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>Better Visual Studio IntelliSense and a new constructor overload for CsvIndexProperty.</PackageReleaseNotes>
     <PackageTags>csv</PackageTags>

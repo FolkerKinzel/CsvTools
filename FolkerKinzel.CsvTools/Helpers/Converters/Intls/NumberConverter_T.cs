@@ -44,8 +44,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                 // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                 _toStringConverter = new Converter<object?, string?>(o =>
                 {
-                    if (o is null) return null;
-                    if (Convert.IsDBNull(o) && maybeDBNull) return null;
+                    if (o is null)
+                    {
+                        return null;
+                    }
+
+                    if (Convert.IsDBNull(o) && maybeDBNull)
+                    {
+                        return null;
+                    }
 
                     try
                     {
@@ -85,9 +92,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             {
                 _toStringConverter = new Converter<object?, string?>( o =>
                 {
-                    if (o is null) throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    if (Convert.IsDBNull(o) && maybeDBNull) return null;
+                    if (o is null)
+                    {
+                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                    }
 
+                    if (Convert.IsDBNull(o) && maybeDBNull)
+                    {
+                        return null;
+                    }
 
                     try
                     {
@@ -103,7 +116,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                 _converter = new Converter<string?, object?>(
                     s =>
                     {
-                        if (s is null) return FallbackValue;
+                        if (s is null)
+                        {
+                            return FallbackValue;
+                        }
+
                         try
                         {
                             return Convert.ChangeType(s, typeof(T), formatProvider);
