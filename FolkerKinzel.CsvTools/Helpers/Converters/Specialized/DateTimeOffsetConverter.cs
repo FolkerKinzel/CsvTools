@@ -183,7 +183,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             }
             catch (FormatException e)
             {
-                throw new ArgumentException(e.Message, nameof(format), e);
+                throw new ArgumentException(e.Message, e);
             }
 
             if (nullable)
