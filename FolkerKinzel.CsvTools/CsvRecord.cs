@@ -27,8 +27,8 @@ namespace FolkerKinzel.CsvTools
         #region fields
 
 #if NET40
-        private readonly static string?[] DefaultArr = new string?[0];
-        private readonly string?[] _values = DefaultArr;
+        private readonly static string?[] _defaultArr = new string?[0];
+        private readonly string?[] _values = _defaultArr;
 #else
         private readonly string?[] _values = Array.Empty<string?>();
 #endif
@@ -433,7 +433,7 @@ namespace FolkerKinzel.CsvTools
 
             foreach (var key in _columnNames)
             {
-                sb.Append(key).Append(": ").Append(this[key] ?? "<null>").Append(", ");
+                _ = sb.Append(key).Append(": ").Append(this[key] ?? "<null>").Append(", ");
             }
 
             if (sb.Length >= 2)
