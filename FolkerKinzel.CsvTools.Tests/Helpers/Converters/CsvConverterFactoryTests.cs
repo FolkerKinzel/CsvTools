@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
 {
@@ -6,21 +7,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
     public class CsvConverterFactoryTests
     {
         [TestMethod()]
-        public void CreateConverterTest()
-        {
-            Assert.Fail();
-        }
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CreateConverterTest() => _ = CsvConverterFactory.CreateConverter((CsvTypeCode)4711);
 
-        [TestMethod()]
-        public void CreateEnumConverterTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CreateHexConverterTest()
-        {
-            Assert.Fail();
-        }
+        
     }
 }

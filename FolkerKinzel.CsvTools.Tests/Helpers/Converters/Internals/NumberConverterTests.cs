@@ -5,22 +5,26 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
     [TestClass()]
     public class NumberConverterTests
     {
-        [TestMethod()]
-        public void EnumConverterTest()
+        [TestMethod]
+        public void NumberConverterTest1()
         {
-            Assert.Fail();
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Double);
+            Assert.IsInstanceOfType(conv, typeof(NumberConverter<double>));
         }
 
-        [TestMethod()]
-        public void ConvertToStringTest()
+        [TestMethod]
+        public void RoundtripTest1()
         {
-            Assert.Fail();
+            double d = 72.81;
+
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Double);
+
+            string? s = conv.ConvertToString(d);
+            Assert.IsNotNull(s);
+
+            double? d2 = (double?)conv.Parse(s);
+            Assert.AreEqual(d, d2);
         }
 
-        [TestMethod()]
-        public void ParseTest()
-        {
-            Assert.Fail();
-        }
     }
 }

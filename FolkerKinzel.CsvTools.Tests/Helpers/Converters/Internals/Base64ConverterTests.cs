@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Security.Cryptography;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
 {
@@ -6,21 +8,30 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
     public class Base64ConverterTests
     {
         [TestMethod()]
-        public void Base64ConverterTest()
+        public void Base64ConverterTest1()
         {
-            Assert.Fail();
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray);
+            Assert.IsInstanceOfType(conv, typeof(Base64Converter));
         }
 
-        [TestMethod()]
-        public void ConvertToStringTest()
+        
+
+        [TestMethod]
+        public void RoundtripTest1()
         {
-            Assert.Fail();
+            var bytes = new byte[7];
+            using var rnd = RandomNumberGenerator.Create();
+            rnd.GetBytes(bytes);
+
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray);
+
+            string? s = conv.ConvertToString(bytes);
+            Assert.IsNotNull(s);
+
+            var bytes2 = (byte[]?)conv.Parse(s);
+
+            CollectionAssert.AreEqual(bytes, bytes2);
         }
 
-        [TestMethod()]
-        public void ParseTest()
-        {
-            Assert.Fail();
-        }
     }
 }
