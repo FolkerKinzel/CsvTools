@@ -52,6 +52,16 @@ namespace FolkerKinzel.CsvTools.Tests
 
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void FillTest4()
+        {
+            var rec = new CsvRecord(2, false, true);
+
+            rec.Fill(null!);
+
+        }
+
 
         [TestMethod()]
         public void TryGetValueTest()
