@@ -2,6 +2,7 @@
 using FolkerKinzel.CsvTools.Intls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace FolkerKinzel.CsvTools.Helpers
@@ -16,7 +17,6 @@ namespace FolkerKinzel.CsvTools.Helpers
 
         }
 
-
         
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvIndexProperty"/>-Objekt.
@@ -25,10 +25,13 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
         /// <param name="csvColumnIndex">Nullbasierter Index der Spalte der CSV-Datei.</param>
         /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
+        /// 
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
         /// ASCII-Zeichen).</exception>
+        /// 
         /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
         /// <paramref name="converter"/> ist <c>null</c>.</exception>
+        /// 
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0.</exception>
         public CsvIndexProperty(
             string propertyName, int csvColumnIndex, ICsvTypeConverter converter) : 
@@ -54,16 +57,18 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
         /// <paramref name="converter"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0.</exception>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
         [Obsolete("Use CsvIndexProperty(string propertyName, int csvColumnIndex, ICsvTypeConverter converter) instead!")]
         public CsvIndexProperty(
-            string propertyName, int csvColumnIndex, ICsvTypeConverter converter, int wildcardTimeout = 10) :
+            string propertyName, int csvColumnIndex, ICsvTypeConverter converter, int wildcardTimeout) :
             this(propertyName, csvColumnIndex, converter)
         {
         }
 
 
 
-        /// <inheritdoc path="summary|returns"/>
+        /// <inheritdoc cref="ICloneable.Clone" />
         public override object Clone() => new CsvIndexProperty(this);
         
     }

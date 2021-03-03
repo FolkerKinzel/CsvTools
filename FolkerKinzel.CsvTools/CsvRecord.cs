@@ -42,7 +42,7 @@ namespace FolkerKinzel.CsvTools
         #region ctors
 
         /// <summary>
-        /// Initialisiert aus <paramref name="source"/>, das als Vorlage dient ein neues <see cref="CsvRecord"/>-Objekt,
+        /// Initialisiert aus <paramref name="source"/>, das als Vorlage dient, ein neues <see cref="CsvRecord"/>-Objekt,
         /// das die unveränderlichen Teile der Vorlage referenziert bzw. kopiert. (Ctor der von <see cref="CsvReader"/> verwendet wird.)
         /// </summary>
         /// <param name="source"><see cref="CsvRecord"/>-Objekt, das als Vorlage dient.</param>
@@ -64,7 +64,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="columnsCount">Anzahl der Spalten.</param>
         /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv behandelt.</param>
         /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
-        /// für weitere <see cref="CsvRecord"/>-Objekte. (Wird von <see cref="CsvReader"/> verwendet.</param>
+        /// für weitere <see cref="CsvRecord"/>-Objekte. (Wird von <see cref="CsvReader"/> verwendet.)</param>
         internal CsvRecord(int columnsCount, bool caseSensitive, bool initArr)
         {
             IEqualityComparer<string> comparer =

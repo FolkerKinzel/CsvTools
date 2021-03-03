@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Tests
 {
@@ -6,10 +8,50 @@ namespace FolkerKinzel.CsvTools.Tests
     public class CsvRecordTests
     {
         [TestMethod()]
-        public void ClearTest()
+        public void FillClearTest()
         {
-            Assert.Fail();
+            string[] data = new string[] { "eins", "zwei" };
+            var rec = new CsvRecord(2, false, true);
+
+            Assert.AreEqual(2, rec.Count);
+
+            rec.Fill(data);
+
+            CollectionAssert.AreEquivalent(data, rec.ToDictionary().Values);
+
+            rec.Clear();
+
+            Assert.IsTrue(rec.ToDictionary().Values.All(x => x is null));
+
+            Assert.AreEqual(2, rec.Count);
         }
+
+        [TestMethod()]
+        public void FillTest2()
+        {
+            string[] data = new string[] { "eins", "zwei" };
+            var rec = new CsvRecord(2, false, true);
+
+            Assert.AreEqual(2, rec.Count);
+
+            rec.Fill(data);
+            CollectionAssert.AreEquivalent(data, rec.ToDictionary().Values);
+
+            rec.Fill(new string[] { "sieben" });
+
+            CollectionAssert.AreEquivalent(new string?[] { "sieben", null }, rec.ToDictionary().Values);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void FillTest3()
+        {
+            var rec = new CsvRecord(2, false, true);
+
+            rec.Fill(new string[] { "1", "2", "3" });
+
+        }
+
 
         [TestMethod()]
         public void TryGetValueTest()
@@ -17,11 +59,7 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.Fail();
         }
 
-        [TestMethod()]
-        public void FillTest()
-        {
-            Assert.Fail();
-        }
+        
 
         [TestMethod()]
         public void ContainsTest()

@@ -10,7 +10,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Version>1.4.3</Version>
-    <FileVersion>1.4.3.19</FileVersion>
+    <FileVersion>1.4.3.22</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>Better Visual Studio IntelliSense and a new constructor overload for CsvIndexProperty.</PackageReleaseNotes>
     <PackageTags>csv</PackageTags>

@@ -66,10 +66,13 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Wildcard-Zeichen enthält, wird innerhalb
         /// dieses Timeouts versucht, den Alias aufzulösen. Gelingt dies nicht, reagiert <see cref="CsvProperty"/> so, als hätte sie
         /// kein Ziel in den Spalten der CSV-Datei. (In .Net-Framework 4.0 wird kein Timeout angewendet.)</param>
+        /// 
         /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="columnNameAliases"/> oder 
         /// <paramref name="converter"/> ist <c>null</c>.</exception>
+        /// 
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
         /// ASCII-Zeichen).</exception>
+        /// 
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 1 oder größer als
         /// <see cref="MaxWildcardTimeout"/>.</exception>
         public CsvProperty(
@@ -205,7 +208,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Es ist nicht empfehlenswert, dasselbe <see cref="CsvProperty"/>-Objekt zum Lesen von
         /// CSV-Dateien mit verschiedenen Kopfzeilen zu verwenden - selbst wenn die zugewiesenen Spalten-Aliase dies ermöglichen würden.
         /// Der Grund dafür ist, dass beim ersten Lesen der geeignetste Alias ausgesucht und dann für alle
-        /// nachfolgenden Lesevorgänge verwendet wird. Die Methode <see cref="Clone"/> erstellt eine frische
+        /// nachfolgenden Lesevorgänge verwendet wird. Die Methode <see cref="Clone"/> erstellt eine flache
         /// Kopie des <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
         /// </remarks>
         public virtual object Clone() => new CsvProperty(this);
