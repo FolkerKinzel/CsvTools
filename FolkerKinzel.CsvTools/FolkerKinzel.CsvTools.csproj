@@ -19,7 +19,7 @@
       
       CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
       
-      ToString() overload for CsvRecordWrapper.
+      ToString() overload for CsvRecordWrapper.  
 </PackageReleaseNotes>
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV files.</Description>
