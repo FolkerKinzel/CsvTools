@@ -5,8 +5,7 @@ namespace FolkerKinzel.CsvTools.Tests
     internal static class TestFiles
     {
         private const string TEST_FILE_DIRECTORY_NAME = "TestFiles";
-
-        static readonly string _testFileDirectory;
+        private static readonly string _testFileDirectory;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1810:Statische Felder für Referenztyp inline initialisieren", Justification = "<Ausstehend>")]
         static TestFiles()
@@ -16,10 +15,7 @@ namespace FolkerKinzel.CsvTools.Tests
         }
 
 
-        internal static string[] GetAll()
-        {
-            return Directory.GetFiles(_testFileDirectory);
-        }
+        internal static string[] GetAll() => Directory.GetFiles(_testFileDirectory);
 
 
         internal static string ProjectDirectory { get; }
@@ -33,6 +29,8 @@ namespace FolkerKinzel.CsvTools.Tests
         internal static string ThunderbirdAnsiCsv => Path.Combine(_testFileDirectory, "ThunderbirdAnsi.csv");
 
         internal static string ThunderbirdUtf8Csv => Path.Combine(_testFileDirectory, "ThunderbirdUtf8.csv");
+
+        internal static string AnalyzerTestCsv => Path.Combine(_testFileDirectory, "AnalyzerTest.csv");
 
 
     }

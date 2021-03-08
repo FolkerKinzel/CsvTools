@@ -83,7 +83,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// </example>
     public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<string, object?>>
     {
-        private readonly PropertyCollection _dynProps = new PropertyCollection();
+        private readonly PropertyCollection _dynProps = new();
 
         #region ctors
 

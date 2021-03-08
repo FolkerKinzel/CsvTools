@@ -2,6 +2,7 @@
 using FolkerKinzel.CsvTools.Intls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// wird sie komplett analysiert. (Sie können <see cref="int.MaxValue">Int32.MaxValue</see> angeben, um in jedem Fall die gesamte Datei zu
         /// analysieren.)</param>
         /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
+        /// 
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
@@ -51,13 +53,10 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <para>Die Analyse ist zeitaufwändig, da auf die CSV-Datei lesend zugegriffen werden muss.</para></remarks>
         public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount, Encoding? textEncoding = null)
         {
-            
-
             if (analyzedLinesCount < AnalyzedLinesMinCount)
             {
                 analyzedLinesCount = AnalyzedLinesMinCount;
             }
-
 
             // Suche Feldtrennzeichen:
             using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
@@ -191,7 +190,6 @@ namespace FolkerKinzel.CsvTools.Helpers
                 bool firstLine = true;
 
                 int firstLineCount = 0;
-                int currentLineCount = 0;
 
                 using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.IsSet(CsvOptions.ThrowOnEmptyLines));
 
@@ -241,7 +239,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                         if(hasHeader)
                         {
-                            this.ColumnNames = firstLineFields;
+                            this.ColumnNames = new ReadOnlyCollection<string>(firstLineFields);
                         }
 
                         // Prüfe, ob sich zwei Spaltennamen nur durch Groß- und Kleinschreibung unterscheiden:
@@ -259,25 +257,28 @@ namespace FolkerKinzel.CsvTools.Helpers
                     }
                     else
                     {
-                        currentLineCount = 0;
+                        int currentLineCount = 0;
+                        string? firstString = null;
 
                         foreach (string? s in row)
                         {
+                            if(currentLineCount == 0)
+                            {
+                                firstString = s;
+                            }
+
                             currentLineCount++;
                         }
 
                         if(currentLineCount != firstLineCount)
                         {
                             this.Options = currentLineCount < firstLineCount
-                                ? currentLineCount == 0 ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines) : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
+                                ? currentLineCount == 1 && firstString is null ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines) : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
                                 : this.Options.Unset(CsvOptions.ThrowOnTooMuchFields);
                         }
                     }
                 }
-
-
             }//using
-
         }
 
 
@@ -291,16 +292,14 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         public CsvOptions Options { get; private set; } = CsvOptions.Default;
 
-
         /// <summary>
         /// <c>true</c>, wenn die CSV-Datei eine Kopfzeile hat.
         /// </summary>
         public bool HasHeaderRow => ColumnNames != null;
 
-
         /// <summary>
         /// Spaltennamen der CSV-Datei.
         /// </summary>
-        public IList<string>? ColumnNames { get; private set; }
+        public ReadOnlyCollection<string>? ColumnNames { get; private set; }
     }//class
 }

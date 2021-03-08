@@ -12,7 +12,11 @@
     <Version>1.4.3</Version>
     <FileVersion>1.4.3.22</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Better Visual Studio IntelliSense and a new constructor overload for CsvIndexProperty.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+      Fixes an issue in CsvAnalyzer, that invalid empty lines inside the CSV file where not recognized.
+      
+      CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
+</PackageReleaseNotes>
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV files.</Description>
     <Authors>Folker Kinzel</Authors>

@@ -202,7 +202,7 @@ namespace FolkerKinzel.CsvTools
         public void WriteRecord()
         {
 #if NET40
-        string fieldSeparatorString = new string(_fieldSeparator, 1);
+        string fieldSeparatorString = new(_fieldSeparator, 1);
 #endif
 
             int recordLength = Record.Count;

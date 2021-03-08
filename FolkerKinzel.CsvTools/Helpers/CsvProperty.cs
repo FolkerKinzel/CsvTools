@@ -223,6 +223,9 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             public string? ColumnName { get; private set; }
 
+#if NET40
+            [SuppressMessage("Usage", "CA1801:Nicht verwendete Parameter überprüfen", Justification = "<Ausstehend>")]
+#endif
             public ColumnAliasesLookup(CsvRecord record, ReadOnlyCollection<string> aliases, int wildcardTimeout)
             {
                 this.CsvRecordIdentifier = record.Identifier;
@@ -244,7 +247,11 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                     if (HasWildcard(alias))
                     {
+#if NET40
+                        Regex regex = InitRegex(comparer, alias);
+#else
                         Regex regex = InitRegex(comparer, alias, wildcardTimeout);
+#endif
 
                         for (int k = 0; k < columnNames.Count; k++) // Die Wildcard könnte auf alle keys passen.
                         {
@@ -300,37 +307,45 @@ namespace FolkerKinzel.CsvTools.Helpers
             }//ctor ColumnAliasesLookup
 
 
-            //[SuppressMessage("Microsoft.Performance", "CA1801:ReviewUnusedParameters", MessageId = "isChecked")]
-            private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
-            {
 #if NET40
+            private static Regex InitRegex(IEqualityComparer<string> comparer, string alias)
+            {
                 string pattern = "^" +
                     Regex
                     .Escape(alias)
                     .Replace("\\?", ".")
                     .Replace("\\*", ".*?") + "$";
-#else
-                string pattern = "^" +
-                    Regex
-                    .Escape(alias)
-                    .Replace("\\?", ".", StringComparison.Ordinal)
-                    .Replace("\\*", ".*?", StringComparison.Ordinal) + "$";
-#endif
 
                 RegexOptions options = comparer.Equals(StringComparer.OrdinalIgnoreCase) ?
                     RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline :
                                               RegexOptions.CultureInvariant | RegexOptions.Singleline;
 
-
-#if NET40
+                // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
+                // verwendet.
                 return new Regex(pattern, options);
+            }
+
 #else
+
+            private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
+            {
+                string pattern = "^" +
+                    Regex
+                    .Escape(alias)
+                    .Replace("\\?", ".", StringComparison.Ordinal)
+                    .Replace("\\*", ".*?", StringComparison.Ordinal) + "$";
+
+                RegexOptions options = comparer.Equals(StringComparer.OrdinalIgnoreCase) ?
+                    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline :
+                                              RegexOptions.CultureInvariant | RegexOptions.Singleline;
+
                 // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
                 // verwendet.
                 return new Regex(pattern, options, TimeSpan.FromMilliseconds(wildcardTimeout));
+            }
 #endif
 
-            }
+
         }//class ColumnAliasesLookup
 
     }
