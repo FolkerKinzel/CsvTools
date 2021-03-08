@@ -9,13 +9,17 @@
     <Product>FolkerKinzel.CsvTools</Product>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Version>1.4.3</Version>
-    <FileVersion>1.4.3.22</FileVersion>
+    <Version>1.5.0</Version>
+    <FileVersion>1.5.0.0</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>
+      Added a .NET 5.0 dll to the package.
+      
       Fixes an issue in CsvAnalyzer, that invalid empty lines inside the CSV file where not recognized.
       
       CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
+      
+      ToString() overload for CsvRecordWrapper.
 </PackageReleaseNotes>
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV files.</Description>

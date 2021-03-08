@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.Intls
         private readonly TextReader _reader;
         private readonly char _fieldSeparator;
        
-        private readonly StringBuilder _sb = new StringBuilder();
+        private readonly StringBuilder _sb = new();
         private readonly bool _skipEmptyLines;
 
         private string? _currentLine;

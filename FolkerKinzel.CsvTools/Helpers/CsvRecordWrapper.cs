@@ -12,7 +12,7 @@ using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
-
+using System.Text;
 
 namespace FolkerKinzel.CsvTools.Helpers
 {
@@ -93,9 +93,6 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <remarks>Vor dem Zugriff auf die Eigenschaften muss <see cref="Record"/>
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen werden.</remarks>
         public CsvRecordWrapper() { }
-
-
-        
 
         #endregion
 
@@ -246,10 +243,6 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
         }
 
-
-        
-
-
         #endregion
 
 
@@ -352,6 +345,11 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// mit der von <paramref name="property"/> ist. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
         public void ReplaceProperty(string propertyName, CsvProperty property)
         {
+            if (propertyName is null)
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
+
             if (property is null)
             {
                 throw new ArgumentNullException(nameof(property));
@@ -570,6 +568,45 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
+
+        /// <inheritdoc/>
+        [SuppressMessage("Design", "CA1031:Keine allgemeinen Ausnahmetypen abfangen", Justification = "<Ausstehend>")]
+        public override string ToString()
+        {
+            if(Record is null || Count == 0)
+            {
+                return base.ToString() ?? string.Empty;
+            }
+
+            var sb = new StringBuilder();
+
+            foreach (string propName in this.PropertyNames)
+            {
+                object? value;
+
+                string valString;
+
+                try
+                {
+                    value = this[propName];
+                    valString = value is null ? "<null>" : value is DBNull ? "<DBNull>" : value.ToString();
+                }
+                catch
+                {
+                    valString = "<Exception>";
+                }
+
+                _ = sb.Append(propName).Append(": ").Append(valString).Append(", ");
+            }
+
+            if (sb.Length >= 2)
+            {
+                sb.Length -= 2;
+            }
+
+            return sb.ToString();
+        }
+        
 
         /// ////////////////////////////////////////////////////////////////////////
 
