@@ -4,18 +4,18 @@ using System.Text;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FolkerKinzel.CsvTools.Tests
 {
     [TestClass()]
     public class CsvReaderTests
     {
-#pragma warning disable CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
-        public TestContext TestContext { get; set; }
-#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+        [NotNull]
+        public TestContext? TestContext { get; set; }
 
         [TestMethod()]
-        public void CsvReaderTest()
+        public void ReadTest1()
         {
             const string testCsv =
                 "Spalte \"1\",," + "\r\n" +
@@ -35,37 +35,87 @@ namespace FolkerKinzel.CsvTools.Tests
 
 
         [TestMethod()]
-        public void CsvReaderTest1()
-        {
-            Assert.Fail();
-        }
-
-
-        [TestMethod()]
-        public void CsvReaderTest2()
+        public void ReadTest2()
         {
             string outDir = Path.Combine(TestContext.TestRunResultsDirectory, "CsvFilesAnalyzed");
             _ = Directory.CreateDirectory(outDir);
 
-            foreach (var file in TestFiles.GetAll().Where(x => StringComparer.OrdinalIgnoreCase.Equals(Path.GetExtension(x), ".CSV")))
+            string file = TestFiles.GoogleCsv;
+            using var Reader = new CsvReader(file, options: CsvOptions.None);
+
+            foreach (CsvRecord record in Reader.Read())
             {
-                using var Reader = new CsvReader(file, options: CsvOptions.None);
+                var sb = new StringBuilder();
 
-                foreach (CsvRecord record in Reader.Read())
+                foreach (KeyValuePair<string, string?> item in record)
                 {
-                    var sb = new StringBuilder();
-
-                    foreach (KeyValuePair<string, string?> item in record)
-                    {
-                        _ = sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
-                    }
-
-                    File.WriteAllText(Path.Combine(outDir, Path.GetFileName(file) + ".txt"), sb.ToString());
-
-                    break;
+                    _ = sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
                 }
+
+                File.WriteAllText(Path.Combine(outDir, Path.GetFileName(file) + ".txt"), sb.ToString());
+
+                break;
             }
         }
 
+
+        [TestMethod]
+        [ExpectedException(typeof(ObjectDisposedException))]
+        public void ReadTest3()
+        {
+            const string testCsv =
+                "Spalte \"1\",," + "\r\n" +
+                ",Spalte \"2\",";
+
+            using var stringReader = new StringReader(testCsv);
+            using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);
+
+            stringReader.Dispose();
+
+            foreach (CsvRecord _ in csvReader.Read())
+            {
+
+            }
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ReadTest4()
+        {
+            const string testCsv =
+                "Spalte \"1\",," + "\r\n" +
+                ",Spalte \"2\",";
+
+            using var stringReader = new StringReader(testCsv);
+            using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);
+
+            _ = csvReader.Read();
+            _ = csvReader.Read();
+        }
+
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CsvReaderTest3()
+        {
+            using var _ = new CsvReader((string?)null!);
+        }
+
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CsvReaderTest4()
+        {
+            using var _ = new CsvReader("   ");
+        }
+
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CsvReaderTest5()
+        {
+            using var _ = new CsvReader((StreamReader?)null!);
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0.</exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Browsable(false)]
-        [Obsolete("Use CsvIndexProperty(string propertyName, int csvColumnIndex, ICsvTypeConverter converter) instead!")]
+        [Obsolete("Remove the argument for wildcardTimeout!", true)]
         public CsvIndexProperty(
             string propertyName, int csvColumnIndex, ICsvTypeConverter converter, int wildcardTimeout) :
             this(propertyName, csvColumnIndex, converter)

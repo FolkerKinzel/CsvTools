@@ -589,7 +589,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 try
                 {
                     value = this[propName];
-                    valString = value is null ? "<null>" : value is DBNull ? "<DBNull>" : value.ToString();
+                    valString = value is null ? "<null>" : value is DBNull ? "<DBNull>" : value.ToString() ?? string.Empty;
                 }
                 catch
                 {

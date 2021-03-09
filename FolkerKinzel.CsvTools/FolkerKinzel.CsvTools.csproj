@@ -18,9 +18,11 @@
       Fixes an issue in CsvAnalyzer, that invalid empty lines inside the CSV file where not recognized.
       
       CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
-      
-      ToString() overload for CsvRecordWrapper.  
-</PackageReleaseNotes>
+
+      ToString() overload for CsvRecordWrapper.
+
+      The use of the obsolete constructor overload CsvIndexProperty(string, int, ICsvTypeConverter, int) is now treated as error.
+    </PackageReleaseNotes>
     <PackageTags>csv</PackageTags>
     <Description>.NET-library to read and write CSV files.</Description>
     <Authors>Folker Kinzel</Authors>

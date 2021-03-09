@@ -127,8 +127,6 @@ namespace FolkerKinzel.CsvTools
             return new CsvRecordCollection(this);
         }
 
-        private static void ThrowInvalidOperationException() => throw new InvalidOperationException(Res.NotTwice);
-
 
         /// <summary>
         /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
@@ -297,6 +295,13 @@ namespace FolkerKinzel.CsvTools
                 throw new IOException(e.Message, e);
             }
         }
+
+        #endregion
+
+
+        #region private
+
+        private static void ThrowInvalidOperationException() => throw new InvalidOperationException(Res.NotTwice);
 
         #endregion
     }

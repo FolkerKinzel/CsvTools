@@ -322,6 +322,29 @@ namespace FolkerKinzel.CsvTools
             }
         }
 
+        /// <summary>
+        /// Ruft den dem angegebenen Spaltenindex der CSV-Datei zugeordneten Wert ab.
+        /// </summary>
+        /// <param name="columnIndex">Nullbasierter Index der Datenspalte der CSV-Datei.</param>
+        /// <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem mit  <paramref name="columnIndex"/> 
+        /// angegebenen Spaltenindex
+        /// zugeordnet ist, wenn der Spaltenindex existiert, oder andernfalls <c>null</c>. Dieser Parameter wird nicht
+        /// initialisiert übergeben.</param>
+        /// <returns><c>true</c>, wenn ein Spaltenindex mit dem Wert von <paramref name="columnIndex"/> in der CSV-Datei existiert.</returns>
+        public bool TryGetValue(int columnIndex, out string? value)
+        {
+            if(columnIndex >= 0 && columnIndex < Count)
+            {
+                value = _values[columnIndex];
+                return true;
+            }
+            else
+            {
+                value = null;
+                return false;
+            }
+        }
+
 
 
         /// <summary>

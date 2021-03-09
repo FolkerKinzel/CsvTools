@@ -2,41 +2,93 @@
 using System;
 using System.Linq;
 using System.IO;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FolkerKinzel.CsvTools.Tests
 {
     [TestClass()]
     public class CsvWriterTests
     {
-
-#pragma warning disable CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
-        public TestContext TestContext {get; set;}
-#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+        [NotNull]
+        public TestContext? TestContext { get; set; }
 
 
         [TestMethod()]
         public void CsvWriterTest()
         {
-            Assert.Fail();
+            using var writer = new CsvWriter("Test", 0);
+            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void CsvWriterTest1()
         {
-            Assert.Fail();
+            using var _ = new CsvWriter((string?)null!, 0);
         }
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
         public void CsvWriterTest2()
         {
-            Assert.Fail();
+            using var _ = new CsvWriter("  ", 0);
         }
 
         [TestMethod()]
         public void CsvWriterTest3()
         {
-            Assert.Fail();
+            using var writer = new CsvWriter("Test", new string[] { "1", "2" });
+            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
         }
+
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CsvWriterTest4()
+        {
+            using var _ = new CsvWriter("  ", new string[] { "1", "2" });
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CsvWriterTest5()
+        {
+            using var _ = new CsvWriter("Test", new string[] { "1", "1" });
+        }
+
+        [TestMethod()]
+        public void CsvWriterTest6()
+        {
+            using var textWriter = new StringWriter();
+            using var writer = new CsvWriter(textWriter, new string[] { "1", "2" });
+
+            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentException))]
+        public void CsvWriterTest7()
+        {
+            using var textWriter = new StringWriter();
+            using var _ = new CsvWriter(textWriter, new string[] { "1", "1" });
+        }
+
+        [TestMethod()]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CsvWriterTest8()
+        {
+            using var _ = new CsvWriter((TextWriter?)null!, new string[] { "1", "2" });
+        }
+
+        [TestMethod()]
+        public void CsvWriterTest9()
+        {
+            using var textWriter = new StringWriter();
+            using var writer = new CsvWriter(textWriter, 0);
+
+            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
+        }
+
 
         [TestMethod()]
         public void WriteRecordTest1()
@@ -89,6 +141,17 @@ namespace FolkerKinzel.CsvTools.Tests
             using var reader = new CsvReader(FILENAME_STANDARD, hasHeaderRow: false);
 
             Assert.AreEqual(VALUE1, reader.Read().First()[0]);
+        }
+
+
+        [TestMethod()]
+        [ExpectedException(typeof(ObjectDisposedException))]
+        public void WriteRecordTest3()
+        {
+            using var writer = new CsvWriter("File", 2);
+
+            writer.Dispose();
+            writer.WriteRecord();
         }
 
 
