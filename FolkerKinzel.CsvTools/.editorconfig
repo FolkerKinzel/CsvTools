@@ -8,12 +8,19 @@ dotnet_diagnostic.IDE0046.severity = silent
 
 
 
+
 [CsvRecord.cs]
 
 # IDE0022: Ausdruckskörper für Methoden verwenden
 csharp_style_expression_bodied_methods = when_on_single_line:silent
 
 [InvalidCsvException.cs]
+
+# IDE0079: Unnötige Unterdrückung entfernen
+dotnet_diagnostic.IDE0079.severity = none
+
+
+[CsvRecordWrapper.cs]
 
 # IDE0079: Unnötige Unterdrückung entfernen
 dotnet_diagnostic.IDE0079.severity = none

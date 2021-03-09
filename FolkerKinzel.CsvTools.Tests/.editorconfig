@@ -28,3 +28,9 @@ dotnet_diagnostic.CA1825.severity = none
 
 # CA1308: Zeichenfolgen in Großbuchstaben normalisieren
 dotnet_diagnostic.CA1308.severity = none
+
+
+[TestFiles.cs]
+
+# CA1810: Statische Felder für Referenztyp inline initialisieren
+dotnet_diagnostic.CA1810.severity = none

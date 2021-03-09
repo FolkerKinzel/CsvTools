@@ -569,6 +569,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
+
         /// <inheritdoc/>
         [SuppressMessage("Design", "CA1031:Keine allgemeinen Ausnahmetypen abfangen", Justification = "<Ausstehend>")]
         public override string ToString()
