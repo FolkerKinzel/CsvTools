@@ -23,8 +23,8 @@
 
       The use of the obsolete constructor overload CsvIndexProperty(string, int, ICsvTypeConverter, int) is now treated as error.
     </PackageReleaseNotes>
-    <PackageTags>csv</PackageTags>
-    <Description>.NET-library to read and write CSV files.</Description>
+    <PackageTags>.NET CSV C#</PackageTags>
+    <Description>.NET library to read and write CSV files.</Description>
     <Authors>Folker Kinzel</Authors>
     <Copyright>Copyright © 2020 Folker Kinzel</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
