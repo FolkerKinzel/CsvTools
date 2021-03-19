@@ -31,6 +31,9 @@ PackageReference (Visual Studio Project File):
 
 Paket CLI:
 > paket add FolkerKinzel.CsvTools --version 1.4.3
+
+F# Interactive:
+> #r "nuget: FolkerKinzel.CsvTools, 1.4.3"
 ```
 
 * [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0-rc/FolkerKinzel.CsvTools.en.chm)

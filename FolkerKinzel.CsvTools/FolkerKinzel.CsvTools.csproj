@@ -13,7 +13,7 @@
     <FileVersion>1.5.0.8</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>
-      Added a .NET 5.0 dll to the package.
+      Adds a .NET 5.0 dll to the package.
       
       Fixes an issue in CsvAnalyzer, that invalid empty lines inside the CSV file where not recognized.
       
