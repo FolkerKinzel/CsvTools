@@ -272,9 +272,9 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zu selben CSV-Datei
+        /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zu derselben CSV-Datei
         /// gehören, identisch ist. (Wird von <see cref="CsvProperty"/> verwendet, um festzustellen,
-        /// ob das aktuelle <see cref="CsvRecord"/>-Objekt zur selben CSV-Datei gehört, mit der das
+        /// ob das aktuelle <see cref="CsvRecord"/>-Objekt zu derselben CSV-Datei gehört, mit der das
         /// Alias-Lookup erstellt wurde.)
         /// </summary>
         internal int Identifier => _lookupDictionary.GetHashCode();
@@ -295,7 +295,7 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Ruft den dem angegebenen Spaltennamen der CSV-Datei zugeordneten Wert ab.
+        /// Ruft den Wert ab, der dem angegebenen Spaltennamen der CSV-Datei zugeordnet ist.
         /// </summary>
         /// <param name="columnName">Der Name der Spalte der CSV-Datei, deren Wert abgerufen wird.</param>
         /// <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem mit  <paramref name="columnName"/> angegebenen Spaltennamen
@@ -323,7 +323,7 @@ namespace FolkerKinzel.CsvTools
         }
 
         /// <summary>
-        /// Ruft den dem angegebenen Spaltenindex der CSV-Datei zugeordneten Wert ab.
+        /// Ruft den Wert ab, der dem angegebenen Spaltenindex der CSV-Datei zugeordnet ist.
         /// </summary>
         /// <param name="columnIndex">Nullbasierter Index der Datenspalte der CSV-Datei.</param>
         /// <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem mit  <paramref name="columnIndex"/> 

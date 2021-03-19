@@ -12,10 +12,10 @@ CSV files, that don't fit the standard.
 
 
 
-[Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/FolkerKinzel.CsvTools.Reference.en/Help/FolkerKinzel.CsvTools.en.chm)
+[Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0-rc/FolkerKinzel.CsvTools.en.chm)
 
-[Projektdokumentation (Deutsch) herunterladen](https://github.com/FolkerKinzel/CsvTools/blob/master/FolkerKinzel.CsvTools.Doku.de/Help/FolkerKinzel.CsvTools.de.chm)
+[Projektdokumentation (Deutsch) herunterladen](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0-rc/FolkerKinzel.CsvTools.de.chm)
 
-> IMPORTANT: On some systems, the content of the CHM file is blocked. Before extracting it, right click on the file, select Properties, and check the "Allow" checkbox (if it is present) in the lower right corner of the General tab in the Properties dialog.
+> IMPORTANT: On some systems the content of the CHM file is blocked. Before opening the file right click on it, select Properties, and check the "Allow" checkbox (if it is present) in the lower right corner of the General tab in the Properties dialog.
 
 
