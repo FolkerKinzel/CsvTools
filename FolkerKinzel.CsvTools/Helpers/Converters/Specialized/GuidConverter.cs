@@ -60,7 +60,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                      {
                          if (s is null)
                          {
-                             return null;
+                             return FallbackValue;
                          }
 
                          try
@@ -173,7 +173,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                      {
                          if (s is null)
                          {
-                             return null;
+                             return FallbackValue;
                          }
 
                          try

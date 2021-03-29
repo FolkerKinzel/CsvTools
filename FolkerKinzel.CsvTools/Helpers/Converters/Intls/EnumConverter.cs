@@ -73,7 +73,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                 {
                     if (s is null)
                     {
-                        return null;
+                        return FallbackValue;
                     }
 
                     Debug.Assert(s.Length != 0);
@@ -197,7 +197,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                 {
                     if (s is null)
                     {
-                        return null;
+                        return FallbackValue;
                     }
 
                     Debug.Assert(s.Length != 0);

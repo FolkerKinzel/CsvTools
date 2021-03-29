@@ -23,7 +23,7 @@
       
       Fixes an issue that EnumConverter&lt;TEnum&gt; didn't show correctly the Type it converts.
       
-      Fixes an issue that Base64Converter handles DBNull.Value incorrectly.
+      Fixes an issue that some Converters handle DBNull.Value incorrectly.
       
       CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
 
