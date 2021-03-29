@@ -49,77 +49,46 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
             const string format = "g";
 
-            if (nullable)
-            {
-                // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
-                _toStringConverter = new Converter<object?, string?>(
-                                        o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
-                                                ? null 
-                                                : ((TimeSpan)o).ToString(format, formatProvider));
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>
+                    (
+                        o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                                ? null
+                                : ((TimeSpan)o).ToString(format, formatProvider)
+                     )
+                : new Converter<object?, string?>
+                    (
+                        o => Convert.IsDBNull(o) && maybeDBNull
+                                ? null
+                                : o is null ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
+                                            : ((TimeSpan)o).ToString(format, formatProvider)
+                    );
 
-                _parser = new Converter<string?, object?>(
-                s =>
-                {
-                    if (s is null)
-                    {
-                        return FallbackValue;
-                    }
 
-                    try
+            _parser = new Converter<string?, object?>
+                (
+                    s =>
                     {
-                        return TimeSpan.Parse(s, formatProvider);
-                    }
-                    catch
-                    {
-                        if (throwOnParseErrors)
+                        if (s is null)
                         {
-                            throw;
+                            return FallbackValue;
                         }
 
-                        return FallbackValue;
-                    }
-                });
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                o =>
-                {
-                    if (Convert.IsDBNull(o) && maybeDBNull) {
-                        return null;
-                    }
-                    if (o is null)
-                    {
-                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    }
-
-                    return ((TimeSpan)o).ToString(format, formatProvider);
-                });
-
-                
-                _parser = new Converter<string?, object?>(
-                s =>
-                {
-                    if (s is null)
-                    {
-                        return FallbackValue;
-                    }
-
-                    try
-                    {
-                        return TimeSpan.Parse(s, formatProvider);
-                    }
-                    catch
-                    {
-                        if (throwOnParseErrors)
+                        try
                         {
-                            throw;
+                            return TimeSpan.Parse(s, formatProvider);
                         }
+                        catch
+                        {
+                            if (throwOnParseErrors)
+                            {
+                                throw;
+                            }
 
-                        return FallbackValue;
+                            return FallbackValue;
+                        }
                     }
-                });
-            }
+                );
         }
 
 
@@ -178,16 +147,22 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                 throw new ArgumentException(e.Message, e);
             }
 
-            if (nullable)
-            {
-                // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
-                _toStringConverter = new Converter<object?, string?>(
-                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
-                            ? null 
-                            : ((TimeSpan)o).ToString(format, formatProvider));
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>
+                  (
+                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                            ? null
+                            : ((TimeSpan)o).ToString(format, formatProvider)
+                   )
+                : new Converter<object?, string?>
+                  (
+                    o => Convert.IsDBNull(o) && maybeDBNull
+                            ? null
+                            : o is null ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
+                                        : ((TimeSpan)o).ToString(format, formatProvider)
+                   );
 
-
-                _parser = parseExact
+            _parser = parseExact
                     ? new Converter<string?, object?>(
                         s =>
                         {
@@ -232,71 +207,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                                return FallbackValue;
                            }
                        });
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                    o =>
-                    {
-                        if (Convert.IsDBNull(o) && maybeDBNull)
-                        {
-                            return null;
-                        }
-
-                        if (o is null)
-                        {
-                            throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                        }
-
-                        return ((TimeSpan)o).ToString(format, formatProvider);
-                    });
-
-                _parser = parseExact
-                    ? new Converter<string?, object?>(
-                        s =>
-                        {
-                            if (s is null)
-                            {
-                                return FallbackValue;
-                            }
-
-                            try
-                            {
-                                return TimeSpan.ParseExact(s, format, formatProvider, styles);
-                            }
-                            catch
-                            {
-                                if (throwOnParseErrors)
-                                {
-                                    throw;
-                                }
-
-                                return FallbackValue;
-                            }
-                        })
-                    : new Converter<string?, object?>(
-                        s =>
-                        {
-                            if (s is null)
-                            {
-                                return FallbackValue;
-                            }
-
-                            try
-                            {
-                                return TimeSpan.Parse(s, formatProvider);
-                            }
-                            catch
-                            {
-                                if (throwOnParseErrors)
-                                {
-                                    throw;
-                                }
-
-                                return FallbackValue;
-                            }
-                        });
-            }
         }
 
         

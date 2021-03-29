@@ -4,7 +4,7 @@
 csharp_style_prefer_pattern_matching = true:silent
 
 # IDE0046: In bedingten Ausdruck konvertieren
-dotnet_diagnostic.IDE0046.severity = silent
+# dotnet_diagnostic.IDE0046.severity = silent
 
 
 

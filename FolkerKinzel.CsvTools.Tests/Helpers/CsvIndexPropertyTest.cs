@@ -41,6 +41,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
        
 
         [TestMethod()]
+        [Obsolete("Obsolete")]
         public void CloneTest()
         {
             const string propName = "Prop";

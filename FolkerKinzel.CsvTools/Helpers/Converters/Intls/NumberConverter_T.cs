@@ -38,105 +38,74 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             formatProvider ??= CultureInfo.InvariantCulture;
             this.ThrowsOnParseErrors = throwOnParseErrors;
 
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>
+                  (
+                        o =>
+                        {
+                            if (o is null || (Convert.IsDBNull(o) && maybeDBNull))
+                            {
+                                return null;
+                            }
 
-            if (nullable)
-            {
-                // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
-                _toStringConverter = new Converter<object?, string?>(o =>
+                            try
+                            {
+                                // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
+                                return Convert.ToString((T)o, formatProvider);
+                            }
+                            catch (Exception e)
+                            {
+                                throw new InvalidCastException(e.Message, e);
+                            }
+                        }
+                  )
+                : new Converter<object?, string?>
+                  (
+                        o =>
+                        {
+                            if (o is null)
+                            {
+                                throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                            }
+
+                            if (Convert.IsDBNull(o) && maybeDBNull)
+                            {
+                                return null;
+                            }
+
+                            try
+                            {
+                                return Convert.ToString((T)o, formatProvider);
+                            }
+                            catch(Exception e)
+                            {
+                                throw new InvalidCastException(e.Message, e);
+                            }
+                        }
+                 );
+
+            _converter = new Converter<string?, object?>(
+                s =>
                 {
-                    if (o is null)
+                    if (s is null)
                     {
-                        return null;
-                    }
-
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
+                        return FallbackValue;
                     }
 
                     try
                     {
-                        return Convert.ToString((T)o, formatProvider);
+                        return Convert.ChangeType(s, typeof(T), formatProvider);
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        throw new InvalidCastException(e.Message, e);
-                    }
-                });
-
-                
-                _converter = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
+                        if(throwOnParseErrors)
                         {
-                            return FallbackValue;
+                            throw;
                         }
 
-                        try
-                        {
-                            return Convert.ChangeType(s, typeof(T), formatProvider);
-                        }
-                        catch
-                        {
-                            if(throwOnParseErrors)
-                            {
-                                throw;
-                            }
-
-                            return FallbackValue;
-                        }
-                    });
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>( o =>
-                {
-                    if (o is null)
-                    {
-                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    }
-
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    try
-                    {
-                        return Convert.ToString((T)o, formatProvider);
-                    }
-                    catch(Exception e)
-                    {
-                        throw new InvalidCastException(e.Message, e);
+                        return FallbackValue;
                     }
                 });
-
-
-                _converter = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
-                        {
-                            return FallbackValue;
-                        }
-
-                        try
-                        {
-                            return Convert.ChangeType(s, typeof(T), formatProvider);
-                        }
-                        catch
-                        {
-                            if(throwOnParseErrors)
-                            {
-                                throw;
-                            }
-
-                            return FallbackValue;
-                        }
-                    });
-                
-            }
         }
 
         /// <summary>

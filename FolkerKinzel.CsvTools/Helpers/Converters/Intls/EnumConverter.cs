@@ -49,70 +49,25 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             Type = nullable ? typeof(TEnum?) : typeof(TEnum);
             FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(TEnum?) : default(TEnum));
 
-            if (nullable)
-            {
-                // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
-                _toStringConverter = new Converter<object?, string?>(o =>
-                {
-                    if (o is null)
-                    {
-                        return null;
-                    }
-
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    return ((TEnum)o).ToString(format);
-                });
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>
+                     (
+                        o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                                ? null
+                                : ((TEnum)o).ToString(format)
+                     )
+                : new Converter<object?, string?>
+                     (
+                         o => Convert.IsDBNull(o) && maybeDBNull
+                                ? null
+                                : o is null
+                                    ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
+                                    : ((TEnum)o).ToString(format)
+                     );
 
 
-                _parser = new Converter<string?, object?>(
-                s =>
-                {
-                    if (s is null)
-                    {
-                        return FallbackValue;
-                    }
-
-                    Debug.Assert(s.Length != 0);
-
-                    try
-                    {
-                        return Enum.Parse(typeof(TEnum), s, ignoreCase);
-                    }
-                    catch
-                    {
-                        if (throwOnParseErrors)
-                        {
-                            throw;
-                        }
-
-                        return FallbackValue;
-                    }
-                });
-
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                o =>
-                {
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    if (o is null)
-                    {
-                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    }
-
-                    return ((TEnum)o).ToString(format);
-                });
-
-                _parser = new Converter<string?, object?>(
+            _parser = new Converter<string?, object?>
+                (
                     s =>
                     {
                         if (s is null)
@@ -135,8 +90,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
                             return FallbackValue;
                         }
-                    });
-            }
+                    }
+                );
         }
 
 
@@ -173,78 +128,29 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                 throw new ArgumentException(e.Message, nameof(format), e);
             }
 
-            if(nullable)
-            {
-                // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
-                _toStringConverter = new Converter<object?, string?>(o =>
-                {
-                    if (o is null)
-                    {
-                        return null;
-                    }
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>
+                    (
+                        o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                                ? null
+                                : ((TEnum)o).ToString(format)
+                    )
+                : new Converter<object?, string?>
+                    (
+                        o => Convert.IsDBNull(o) && maybeDBNull
+                                ? null
+                                : o is null ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
+                                            : ((TEnum)o).ToString(format)
+                    );
 
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    return ((TEnum)o).ToString(format);
-                });
-
-
-                _parser = new Converter<string?, object?>(
-                s =>
-                {
-                    if (s is null)
-                    {
-                        return FallbackValue;
-                    }
-
-                    Debug.Assert(s.Length != 0);
-
-                    try
-                    {
-                        return Enum.Parse(typeof(TEnum), s, ignoreCase);
-                    }
-                    catch
-                    {
-                        if (throwOnParseErrors)
-                        {
-                            throw;
-                        }
-
-                        return FallbackValue;
-                    }
-                });
-
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                o =>
-                {
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    if (o is null)
-                    {
-                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    }
-
-                    return ((TEnum)o).ToString(format);
-                });
-
-                _parser = new Converter<string?, object?>(
+            _parser = new Converter<string?, object?>
+                (
                     s =>
                     {
                         if (s is null)
                         {
                             return FallbackValue;
                         }
-
-                        Debug.Assert(s.Length != 0);
 
                         try
                         {
@@ -259,8 +165,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
                             return FallbackValue;
                         }
-                    });
-            }
+                    }
+                );
         }
 
         /// <summary>

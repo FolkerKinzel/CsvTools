@@ -11,7 +11,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
     /// <typeparam name="T">Ein ganzzahliger Datentyp.</typeparam>
     internal class HexConverter<T> : ICsvTypeConverter where T: struct, IConvertible
     {
-        //private readonly bool _unsigned;
         private readonly Converter<string?, object?> _converter;
         private readonly Converter<object?, string?> _toStringConverter;
 
@@ -32,7 +31,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             bool maybeDBNull,
             bool throwOnParseErrors)
         {
-            //this._unsigned = unsigned;
             this.Type = nullable ? typeof(T?) : typeof(T);
             this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(T?) : default(T));
             this.ThrowsOnParseErrors = throwOnParseErrors;
@@ -45,15 +43,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             {
                 if (unsigned)
                 {
-                    // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
                     {
-                        if (o is null)
-                        {
-                            return null;
-                        }
-
-                        if (Convert.IsDBNull(o) && maybeDBNull)
+                        if (o is null || (Convert.IsDBNull(o) && maybeDBNull))
                         {
                             return null;
                         }
@@ -88,15 +80,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                 }
                 else
                 {
-                    // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
                     {
-                        if (o is null)
-                        {
-                            return null;
-                        }
-
-                        if (Convert.IsDBNull(o) && maybeDBNull)
+                        if (o is null || (Convert.IsDBNull(o) && maybeDBNull))
                         {
                             return null;
                         }
@@ -134,89 +120,89 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             {
                 if (unsigned)
                 {
-                    // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
-                    _toStringConverter = new Converter<object?, string?>(o =>
-                    {
-                        if (o is null)
+                    _toStringConverter = new Converter<object?, string?>(
+                        o =>
                         {
-                            throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                        }
+                            if (o is null)
+                            {
+                                throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                            }
 
-                        if (Convert.IsDBNull(o) && maybeDBNull)
-                        {
-                            return null;
-                        }
+                            if (Convert.IsDBNull(o) && maybeDBNull)
+                            {
+                                return null;
+                            }
 
-                        ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
-                        return l.ToString(format, CultureInfo.InvariantCulture);
-                    });
+                            ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
+                            return l.ToString(format, CultureInfo.InvariantCulture);
+                        });
 
 
                     _converter = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
+                        s =>
                         {
-                            return FallbackValue;
-                        }
-
-                        try
-                        {
-                            return Convert.ChangeType(ulong.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
-                        }
-                        catch
-                        {
-                            if (ThrowsOnParseErrors)
+                            if (s is null)
                             {
-                                throw;
+                                return FallbackValue;
                             }
 
-                            return FallbackValue;
-                        }
-                    });
+                            try
+                            {
+                                return Convert.ChangeType(ulong.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
+                            }
+                            catch
+                            {
+                                if (ThrowsOnParseErrors)
+                                {
+                                    throw;
+                                }
+
+                                return FallbackValue;
+                            }
+                        });
                 }
                 else
                 {
-                    // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
-                    _toStringConverter = new Converter<object?, string?>(o =>
-                    {
-                        if (o is null)
+                    _toStringConverter = new Converter<object?, string?>(
+                        o =>
                         {
-                            throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                        }
+                            if (o is null)
+                            {
+                                throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                            }
 
-                        if (Convert.IsDBNull(o) && maybeDBNull)
-                        {
-                            return null;
-                        }
+                            if (Convert.IsDBNull(o) && maybeDBNull)
+                            {
+                                return null;
+                            }
 
-                        long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
-                        return l.ToString(format, CultureInfo.InvariantCulture);
-                    });
+                            long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
+                            return l.ToString(format, CultureInfo.InvariantCulture);
+                        });
 
 
                     _converter = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
+                        s =>
                         {
-                            return FallbackValue;
-                        }
-
-                        try
-                        {
-                            return Convert.ChangeType(long.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
-                        }
-                        catch
-                        {
-                            if (ThrowsOnParseErrors)
+                            if (s is null)
                             {
-                                throw;
+                                return FallbackValue;
                             }
 
-                            return FallbackValue;
-                        }
-                    });
+                            try
+                            {
+                                return Convert.ChangeType(long.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
+                            }
+                            catch
+                            {
+                                if (ThrowsOnParseErrors)
+                                {
+                                    throw;
+                                }
+
+                                return FallbackValue;
+                            }
+                        });
                 }
             }
         }

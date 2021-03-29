@@ -46,16 +46,24 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             const string format = "D";
 
             
-            if (nullable)
-            {
-                // Cast nach Guid um InvalidCastException auszulösen bei falschem Typ:
-                _toStringConverter = new Converter<object?, string?>(
-                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
-                            ? null 
-                            : ((Guid)o).ToString(format, CultureInfo.InvariantCulture));
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>
+                    (
+                        o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                                ? null
+                                : ((Guid)o).ToString(format, CultureInfo.InvariantCulture) 
+                                // Cast nach Guid um InvalidCastException auszulösen bei falschem Typ:
+                     )
+                : new Converter<object?, string?>
+                    (
+                        o => Convert.IsDBNull(o) && maybeDBNull
+                                ? null
+                                : o is null
+                                    ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
+                                    : ((Guid)o).ToString(format, CultureInfo.InvariantCulture)
+                     );
 
-
-                _parser = new Converter<string?, object?>(
+            _parser = new Converter<string?, object?>(
                      s =>
                      {
                          if (s is null)
@@ -77,48 +85,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                              return FallbackValue;
                          }
                      });
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                o =>
-                {
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    if (o is null)
-                    {
-                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    }
-
-                    return ((Guid)o).ToString(format, CultureInfo.InvariantCulture);
-                });
-
-                _parser = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
-                        {
-                            return FallbackValue;
-                        }
-
-                        try
-                        {
-                            return Guid.Parse(s);
-                        }
-                        catch
-                        {
-                            if (throwOnParseErrors)
-                            {
-                                throw;
-                            }
-
-                            return FallbackValue;
-                        }
-                    });
-            }
         }
 
 
@@ -157,59 +123,24 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                 throw new ArgumentException(e.Message, nameof(format), e);
             }
 
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>
+                  (
+                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                         ? null
+                         : ((Guid)o).ToString(format, CultureInfo.InvariantCulture)
+                  )
+                : new Converter<object?, string?>
+                  (
+                    o => Convert.IsDBNull(o) && maybeDBNull
+                            ? null
+                            : o is null
+                                ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
+                                : ((Guid)o).ToString(format, CultureInfo.InvariantCulture)
+                   );
 
-
-            if (nullable)
-            {
-                // Cast nach Guid um InvalidCastException auszulösen bei falschem Typ:
-                _toStringConverter = new Converter<object?, string?>(
-                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
-                         ? null 
-                         : ((Guid)o).ToString(format, CultureInfo.InvariantCulture));
-
-
-                _parser = new Converter<string?, object?>(
-                     s =>
-                     {
-                         if (s is null)
-                         {
-                             return FallbackValue;
-                         }
-
-                         try
-                         {
-                             return Guid.Parse(s);
-                         }
-                         catch
-                         {
-                             if (throwOnParseErrors)
-                             {
-                                 throw;
-                             }
-
-                             return FallbackValue;
-                         }
-                     });
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                o =>
-                {
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    if (o is null)
-                    {
-                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    }
-
-                    return ((Guid)o).ToString(format, CultureInfo.InvariantCulture);
-                });
-
-                _parser = new Converter<string?, object?>(
+            _parser = new Converter<string?, object?>
+                (
                     s =>
                     {
                         if (s is null)
@@ -230,8 +161,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
 
                             return FallbackValue;
                         }
-                    });
-            }
+                    }
+                );
         }
 
         

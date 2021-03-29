@@ -56,15 +56,21 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             DateTimeStyles styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
 
 
-            if (nullable)
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
-                          ? null 
-                          : ((DateTime)o).ToString(format, formatProvider));
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>(
+                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                          ? null
+                          : ((DateTime)o).ToString(format, formatProvider)
+                          )
+                
+                : new Converter<object?, string?>(
+                    o => Convert.IsDBNull(o) && maybeDBNull
+                        ? null
+                        : o is null ? throw new InvalidCastException(Res.InvalidCastNullToValueType) 
+                                    : ((DateTime)o).ToString(format, formatProvider));
 
 
-                _parser = new Converter<string?, object?>(
+            _parser = new Converter<string?, object?>(
                     s =>
                     {
                         if (s is null)
@@ -86,49 +92,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                             return FallbackValue;
                         }
                     });
-
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                o =>
-                {
-                    if (Convert.IsDBNull(o) && maybeDBNull)
-                    {
-                        return null;
-                    }
-
-                    if (o is null)
-                    {
-                        throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                    }
-
-                    return ((DateTime)o).ToString(format, formatProvider);
-                });
-
-                _parser = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
-                        {
-                            return FallbackValue;
-                        }
-
-                        try
-                        {
-                            return DateTime.Parse(s, formatProvider, styles);
-                        }
-                        catch
-                        {
-                            if (throwOnParseErrors)
-                            {
-                                throw;
-                            }
-
-                            return FallbackValue;
-                        }
-                    });
-            }
         }
 
 
@@ -188,15 +151,18 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             }
 
 
-            if (nullable)
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull) 
-                           ? null 
-                           : ((DateTime)o).ToString(format, formatProvider));
+            _toStringConverter = nullable
+                ? new Converter<object?, string?>(
+                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                           ? null
+                           : ((DateTime)o).ToString(format, formatProvider))
+                : new Converter<object?, string?>(
+                    o => Convert.IsDBNull(o) && maybeDBNull
+                         ? null
+                         : o is null ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
+                                     : ((DateTime)o).ToString(format, formatProvider));
 
-
-                _parser = parseExact
+            _parser = parseExact
                     ? new Converter<string?, object?>(
                         s =>
                         {
@@ -241,73 +207,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
                                 return FallbackValue;
                             }
                         });
-            }
-            else
-            {
-                _toStringConverter = new Converter<object?, string?>(
-                    o =>
-                    {
-                        if (Convert.IsDBNull(o) && maybeDBNull)
-                        {
-                            return null;
-                        }
-
-                        if (o is null)
-                        {
-                            throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                        }
-
-                        return ((DateTime)o).ToString(format, formatProvider);
-                    });
-
-
-
-                _parser = parseExact
-                    ? new Converter<string?, object?>(
-                        s =>
-                        {
-                            if (s is null)
-                            {
-                                return FallbackValue;
-                            }
-
-                            try
-                            {
-                                return DateTime.ParseExact(s, format, formatProvider, styles);
-                            }
-                            catch
-                            {
-                                if (throwOnParseErrors)
-                                {
-                                    throw;
-                                }
-
-                                return FallbackValue;
-                            }
-                        })
-                    : new Converter<string?, object?>(
-                        s =>
-                        {
-                            if (s is null)
-                            {
-                                return FallbackValue;
-                            }
-
-                            try
-                            {
-                                return DateTime.Parse(s, formatProvider, styles);
-                            }
-                            catch
-                            {
-                                if (throwOnParseErrors)
-                                {
-                                    throw;
-                                }
-
-                                return FallbackValue;
-                            }
-                        });
-            }
         }
 
 
