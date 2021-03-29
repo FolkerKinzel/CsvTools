@@ -54,7 +54,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
                 CsvTypeCode.UInt64 => new NumberConverter<ulong>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.DateTimeOffset => new DateTimeOffsetConverter(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.TimeSpan => new TimeSpanConverter(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
-                CsvTypeCode.ByteArray => new Base64Converter(nullable, throwOnParseErrors),
+                CsvTypeCode.ByteArray => new Base64Converter(nullable, maybeDBNull, throwOnParseErrors),
                 CsvTypeCode.Guid => new GuidConverter(nullable, maybeDBNull, throwOnParseErrors),
                 _ => throw new ArgumentOutOfRangeException(nameof(type))
             };

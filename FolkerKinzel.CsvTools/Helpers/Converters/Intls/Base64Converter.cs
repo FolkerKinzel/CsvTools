@@ -13,18 +13,20 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// </summary>
         /// <param name="allowNull">Wenn <c>false</c>, wird von <see cref="Parse(string)"/> nie <c>null</c> zurückgegeben: Der Rückgabewert von 
         /// <see cref="FallbackValue"/>ist dann ein leeres Array (sonst <c>null</c>).</param>
+        /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
+        /// Rückgabewert von <see cref="FallbackValue"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <remarks>
         /// Aus Gründen der Konsistenz sollten Sie diesen Konstruktor nicht direkt aufrufen, sondern die Methode
         /// <see cref="CsvConverterFactory.CreateConverter(CsvTypeCode, bool, bool, IFormatProvider, bool)"/> verwenden.
         /// </remarks>
-        public Base64Converter(bool allowNull, bool throwOnParseErrors)
+        internal Base64Converter(bool allowNull, bool maybeDBNull, bool throwOnParseErrors)
         {
 #if NET40
-            FallbackValue = allowNull ? null : new byte[0];
+            FallbackValue = maybeDBNull ? DBNull.Value : allowNull ? null : new byte[0];
 #else
-            FallbackValue = allowNull ? null : Array.Empty<byte>();
+            FallbackValue = maybeDBNull ? DBNull.Value : allowNull ? null : Array.Empty<byte>();
 #endif
 
 
@@ -61,7 +63,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <exception cref="InvalidCastException"><paramref name="value"/> ist weder <c>null</c> noch <see cref="DBNull.Value">DBNull.Value</see>
         /// noch ein Byte-Array.</exception>
         public string? ConvertToString(object? value) 
-            => (value is null || Convert.IsDBNull(value)) ? null : Convert.ToBase64String((byte[])value, Base64FormattingOptions.None);
+            => (value is null || (Convert.IsDBNull(value) && Convert.IsDBNull(FallbackValue))) ? null : Convert.ToBase64String((byte[])value, Base64FormattingOptions.None);
 
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         {
             if (value is null)
             {
-                return null;
+                return FallbackValue;
             }
 
             try

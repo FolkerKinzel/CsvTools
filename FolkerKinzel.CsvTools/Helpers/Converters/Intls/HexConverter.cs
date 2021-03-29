@@ -11,7 +11,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
     /// <typeparam name="T">Ein ganzzahliger Datentyp.</typeparam>
     internal class HexConverter<T> : ICsvTypeConverter where T: struct, IConvertible
     {
-        private readonly bool _unsigned;
+        //private readonly bool _unsigned;
         private readonly Converter<string?, object?> _converter;
         private readonly Converter<object?, string?> _toStringConverter;
 
@@ -32,7 +32,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             bool maybeDBNull,
             bool throwOnParseErrors)
         {
-            this._unsigned = unsigned;
+            //this._unsigned = unsigned;
             this.Type = nullable ? typeof(T?) : typeof(T);
             this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(T?) : default(T));
             this.ThrowsOnParseErrors = throwOnParseErrors;
@@ -43,7 +43,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
             if (nullable)
             {
-                if (_unsigned)
+                if (unsigned)
                 {
                     // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
@@ -132,7 +132,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             }
             else
             {
-                if (_unsigned)
+                if (unsigned)
                 {
                     // Cast nach T um InvalidCastException auszulösen bei falschem Typ:
                     _toStringConverter = new Converter<object?, string?>(o =>
