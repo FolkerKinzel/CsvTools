@@ -135,7 +135,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
             {
                 CsvTypeCode.Byte => new HexConverter<byte>(true, nullable, maybeDBNull, throwOnParseErrors),
                 CsvTypeCode.UInt16 => new HexConverter<ushort>(true, nullable, maybeDBNull, throwOnParseErrors),
-                CsvTypeCode.UInt32 => new HexConverter<int>(true, nullable, maybeDBNull, throwOnParseErrors),
+                CsvTypeCode.UInt32 => new HexConverter<uint>(true, nullable, maybeDBNull, throwOnParseErrors),
                 CsvTypeCode.UInt64 => new HexConverter<ulong>(true, nullable, maybeDBNull, throwOnParseErrors),
                 CsvTypeCode.SByte => new HexConverter<sbyte>(false, nullable, maybeDBNull, throwOnParseErrors),
                 CsvTypeCode.Int16 => new HexConverter<short>(false, nullable, maybeDBNull, throwOnParseErrors),

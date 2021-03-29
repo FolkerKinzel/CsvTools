@@ -10,12 +10,14 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Version>1.5.0-rc</Version>
-    <FileVersion>1.5.0.9</FileVersion>
+    <FileVersion>1.5.0.17</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>
       Adds a .NET 5.0 dll to the package.
       
       Fixes an issue in CsvAnalyzer, that invalid empty lines inside the CSV file where not recognized.
+      
+      Fixes an issue in CsvConverterFactory that HexConverter&lt;UInt32&gt; was not properly initialized.
       
       CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
 

@@ -1,0 +1,2 @@
+dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./reports/ /p:ExcludeByAttribute="Obsolete%2cGeneratedCodeAttribute%2cCompilerGeneratedAttribute" /p:SkipAutoProps=true /p:DoesNotReturnAttribute="DoesNotReturnAttribute"
+reportgenerator -reports:./reports/coverage.net5.0.cobertura.xml -targetdir:./reports/html/

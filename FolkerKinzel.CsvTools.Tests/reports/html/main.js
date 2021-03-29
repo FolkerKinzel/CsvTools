@@ -224,28 +224,29 @@ var assemblies = [
   {
     "name": "FolkerKinzel.CsvTools",
     "classes": [
-      { "name": "FolkerKinzel.CsvTools.CsvReader", "rp": "FolkerKinzel.CsvTools_CsvReader.html", "cl": 45, "ucl": 16, "cal": 61, "tl": 308, "ct": "LineCoverage", "mc": "-", "cb": 6, "tb": 6, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.CsvRecord", "rp": "FolkerKinzel.CsvTools_CsvRecord.html", "cl": 119, "ucl": 15, "cal": 134, "tl": 454, "ct": "LineCoverage", "mc": "-", "cb": 44, "tb": 54, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.CsvWriter", "rp": "FolkerKinzel.CsvTools_CsvWriter.html", "cl": 81, "ucl": 19, "cal": 100, "tl": 361, "ct": "LineCoverage", "mc": "-", "cb": 16, "tb": 18, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.CsvReader", "rp": "FolkerKinzel.CsvTools_CsvReader.html", "cl": 90, "ucl": 50, "cal": 140, "tl": 308, "ct": "LineCoverage", "mc": "-", "cb": 21, "tb": 42, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.CsvRecord", "rp": "FolkerKinzel.CsvTools_CsvRecord.html", "cl": 125, "ucl": 28, "cal": 153, "tl": 454, "ct": "LineCoverage", "mc": "-", "cb": 46, "tb": 60, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.CsvWriter", "rp": "FolkerKinzel.CsvTools_CsvWriter.html", "cl": 113, "ucl": 22, "cal": 135, "tl": 361, "ct": "LineCoverage", "mc": "-", "cb": 29, "tb": 32, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension", "rp": "FolkerKinzel.CsvTools_CsvOptionsExtension.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 55, "ct": "LineCoverage", "mc": "-", "cb": 1, "tb": 2, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.Helpers.Converters.CsvConverterFactory", "rp": "FolkerKinzel.CsvTools_CsvConverterFactory.html", "cl": 21, "ucl": 17, "cal": 38, "tl": 150, "ct": "LineCoverage", "mc": "-", "cb": 14, "tb": 31, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.Base64Converter", "rp": "FolkerKinzel.CsvTools_Base64Converter.html", "cl": 11, "ucl": 10, "cal": 21, "tl": 99, "ct": "LineCoverage", "mc": "-", "cb": 4, "tb": 10, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.EnumConverter<T>", "rp": "FolkerKinzel.CsvTools_EnumConverter_1.html", "cl": 113, "ucl": 80, "cal": 193, "tl": 310, "ct": "LineCoverage", "mc": "-", "cb": 8, "tb": 16, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.HexConverter<T>", "rp": "FolkerKinzel.CsvTools_HexConverter_1.html", "cl": 56, "ucl": 120, "cal": 176, "tl": 267, "ct": "LineCoverage", "mc": "-", "cb": 5, "tb": 12, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.NumberConverter<T>", "rp": "FolkerKinzel.CsvTools_NumberConverter_1.html", "cl": 104, "ucl": 0, "cal": 104, "tl": 188, "ct": "LineCoverage", "mc": "-", "cb": 10, "tb": 10, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.EnumConverter<T>", "rp": "FolkerKinzel.CsvTools_EnumConverter_1.html", "cl": 99, "ucl": 94, "cal": 193, "tl": 310, "ct": "LineCoverage", "mc": "-", "cb": 16, "tb": 48, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.HexConverter<T>", "rp": "FolkerKinzel.CsvTools_HexConverter_1.html", "cl": 44, "ucl": 132, "cal": 176, "tl": 267, "ct": "LineCoverage", "mc": "-", "cb": 8, "tb": 44, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.NumberConverter<T>", "rp": "FolkerKinzel.CsvTools_NumberConverter_1.html", "cl": 81, "ucl": 23, "cal": 104, "tl": 188, "ct": "LineCoverage", "mc": "-", "cb": 18, "tb": 26, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.StringConverter", "rp": "FolkerKinzel.CsvTools_StringConverter.html", "cl": 6, "ucl": 0, "cal": 6, "tl": 60, "ct": "LineCoverage", "mc": "-", "cb": 10, "tb": 10, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter", "rp": "FolkerKinzel.CsvTools_DateTimeConverter.html", "cl": 143, "ucl": 80, "cal": 223, "tl": 340, "ct": "LineCoverage", "mc": "-", "cb": 19, "tb": 30, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter", "rp": "FolkerKinzel.CsvTools_DateTimeOffsetConverter.html", "cl": 140, "ucl": 80, "cal": 220, "tl": 342, "ct": "LineCoverage", "mc": "-", "cb": 17, "tb": 28, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter", "rp": "FolkerKinzel.CsvTools_GuidConverter.html", "cl": 107, "ucl": 56, "cal": 163, "tl": 263, "ct": "LineCoverage", "mc": "-", "cb": 8, "tb": 16, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter", "rp": "FolkerKinzel.CsvTools_TimeSpanConverter.html", "cl": 138, "ucl": 80, "cal": 218, "tl": 331, "ct": "LineCoverage", "mc": "-", "cb": 17, "tb": 28, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.CsvAnalyzer", "rp": "FolkerKinzel.CsvTools_CsvAnalyzer.html", "cl": 146, "ucl": 13, "cal": 159, "tl": 305, "ct": "LineCoverage", "mc": "-", "cb": 69, "tb": 74, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.CsvIndexProperty", "rp": "FolkerKinzel.CsvTools_CsvIndexProperty.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 75, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 2, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.CsvProperty", "rp": "FolkerKinzel.CsvTools_CsvProperty.html", "cl": 77, "ucl": 34, "cal": 111, "tl": 352, "ct": "LineCoverage", "mc": "-", "cb": 25, "tb": 38, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper", "rp": "FolkerKinzel.CsvTools_CsvRecordWrapper.html", "cl": 112, "ucl": 31, "cal": 143, "tl": 621, "ct": "LineCoverage", "mc": "-", "cb": 48, "tb": 64, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter", "rp": "FolkerKinzel.CsvTools_DateTimeConverter.html", "cl": 106, "ucl": 117, "cal": 223, "tl": 340, "ct": "LineCoverage", "mc": "-", "cb": 25, "tb": 70, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter", "rp": "FolkerKinzel.CsvTools_DateTimeOffsetConverter.html", "cl": 103, "ucl": 117, "cal": 220, "tl": 342, "ct": "LineCoverage", "mc": "-", "cb": 23, "tb": 68, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter", "rp": "FolkerKinzel.CsvTools_GuidConverter.html", "cl": 83, "ucl": 80, "cal": 163, "tl": 263, "ct": "LineCoverage", "mc": "-", "cb": 14, "tb": 48, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter", "rp": "FolkerKinzel.CsvTools_TimeSpanConverter.html", "cl": 102, "ucl": 116, "cal": 218, "tl": 331, "ct": "LineCoverage", "mc": "-", "cb": 23, "tb": 68, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.CsvAnalyzer", "rp": "FolkerKinzel.CsvTools_CsvAnalyzer.html", "cl": 149, "ucl": 13, "cal": 162, "tl": 308, "ct": "LineCoverage", "mc": "-", "cb": 69, "tb": 74, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.CsvIndexProperty", "rp": "FolkerKinzel.CsvTools_CsvIndexProperty.html", "cl": 10, "ucl": 3, "cal": 13, "tl": 75, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 2, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.CsvProperty", "rp": "FolkerKinzel.CsvTools_CsvProperty.html", "cl": 85, "ucl": 36, "cal": 121, "tl": 352, "ct": "LineCoverage", "mc": "-", "cb": 29, "tb": 44, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper", "rp": "FolkerKinzel.CsvTools_CsvRecordWrapper.html", "cl": 121, "ucl": 31, "cal": 152, "tl": 621, "ct": "LineCoverage", "mc": "-", "cb": 52, "tb": 68, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.Intls.AutoColumnName", "rp": "FolkerKinzel.CsvTools_AutoColumnName.html", "cl": 1, "ucl": 0, "cal": 1, "tl": 15, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.Intls.CsvRecordCollection", "rp": "FolkerKinzel.CsvTools_CsvRecordCollection.html", "cl": 2, "ucl": 1, "cal": 3, "tl": 27, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
-      { "name": "FolkerKinzel.CsvTools.Intls.CsvStringReader", "rp": "FolkerKinzel.CsvTools_CsvStringReader.html", "cl": 9, "ucl": 1, "cal": 10, "tl": 244, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Intls.CsvStringReader", "rp": "FolkerKinzel.CsvTools_CsvStringReader.html", "cl": 120, "ucl": 9, "cal": 129, "tl": 244, "ct": "LineCoverage", "mc": "-", "cb": 48, "tb": 52, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.InvalidCsvException", "rp": "FolkerKinzel.CsvTools_InvalidCsvException.html", "cl": 24, "ucl": 0, "cal": 24, "tl": 81, "ct": "LineCoverage", "mc": "-", "cb": 0, "tb": 0, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.Resources.Res", "rp": "FolkerKinzel.CsvTools_Res.html", "cl": 19, "ucl": 14, "cal": 33, "tl": 117, "ct": "LineCoverage", "mc": "-", "cb": 2, "tb": 2, "lch": [], "bch": [], "hc": [] },
     ]},
 ];
 
@@ -260,6 +261,26 @@ var riskHotspots = [
     "assembly": "FolkerKinzel.CsvTools", "class": "FolkerKinzel.CsvTools.Helpers.CsvAnalyzer", "reportPath": "FolkerKinzel.CsvTools_CsvAnalyzer.html", "methodName": "Analyze(System.String,System.Int32,System.Text.Encoding)", "methodShortName": "Analyze(...)", "fileIndex": 0, "line": 55,
     "metrics": [
       { "value": 74, "exceeded": true },
+    ]},
+  {
+    "assembly": "FolkerKinzel.CsvTools", "class": "FolkerKinzel.CsvTools.Helpers.Converters.Intls.HexConverter<T>", "reportPath": "FolkerKinzel.CsvTools_HexConverter_1.html", "methodName": ".ctor(System.Boolean,System.Boolean,System.Boolean,System.Boolean)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 29,
+    "metrics": [
+      { "value": 44, "exceeded": true },
+    ]},
+  {
+    "assembly": "FolkerKinzel.CsvTools", "class": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter", "reportPath": "FolkerKinzel.CsvTools_DateTimeConverter.html", "methodName": ".ctor(System.String,System.Boolean,System.Boolean,System.IFormatProvider,System.Boolean,System.Globalization.DateTimeStyles,System.Boolean)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 158,
+    "metrics": [
+      { "value": 42, "exceeded": true },
+    ]},
+  {
+    "assembly": "FolkerKinzel.CsvTools", "class": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter", "reportPath": "FolkerKinzel.CsvTools_DateTimeOffsetConverter.html", "methodName": ".ctor(System.String,System.Boolean,System.Boolean,System.IFormatProvider,System.Boolean,System.Globalization.DateTimeStyles,System.Boolean)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 156,
+    "metrics": [
+      { "value": 42, "exceeded": true },
+    ]},
+  {
+    "assembly": "FolkerKinzel.CsvTools", "class": "FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter", "reportPath": "FolkerKinzel.CsvTools_TimeSpanConverter.html", "methodName": ".ctor(System.String,System.Boolean,System.Boolean,System.IFormatProvider,System.Boolean,System.Globalization.TimeSpanStyles,System.Boolean)", "methodShortName": ".ctor(...)", "fileIndex": 0, "line": 150,
+    "metrics": [
+      { "value": 42, "exceeded": true },
     ]},
 ];
 
