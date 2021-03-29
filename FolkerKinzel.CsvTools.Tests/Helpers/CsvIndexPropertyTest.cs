@@ -15,7 +15,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
         public void CsvIndexPropertyTest1()
         {
             const string propertyName = "myProp";
-            var prop = new CsvIndexProperty(propertyName, 0, new StringConverter(true, false));
+            var prop = new CsvIndexProperty(propertyName, 0, new StringConverter(true, false, false));
 
             Assert.IsNotNull(prop);
             Assert.AreEqual(prop.PropertyName, propertyName);
@@ -24,7 +24,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CsvIndexPropertyTest2() => _ = new CsvIndexProperty("propertyName", -1, new StringConverter(true, false));
+        public void CsvIndexPropertyTest2() => _ = new CsvIndexProperty("propertyName", -1, new StringConverter(true, false, false));
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]

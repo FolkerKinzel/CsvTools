@@ -48,7 +48,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
                 CsvTypeCode.Int64  => new NumberConverter<long>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.SByte => new NumberConverter<sbyte>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.Single => new NumberConverter<float>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
-                CsvTypeCode.String => new StringConverter(nullable, maybeDBNull),
+                CsvTypeCode.String => new StringConverter(nullable, maybeDBNull, throwOnParseErrors),
                 CsvTypeCode.UInt16 => new NumberConverter<ushort>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.UInt32 => new NumberConverter<uint>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),
                 CsvTypeCode.UInt64 => new NumberConverter<ulong>(nullable, maybeDBNull, formatProvider, throwOnParseErrors),

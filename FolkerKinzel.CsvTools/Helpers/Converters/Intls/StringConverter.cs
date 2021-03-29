@@ -16,8 +16,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <see cref="FallbackValue"/>ist dann <see cref="string.Empty"/> (sonst <c>null</c>).</param>
         /// <param name="maybeDBNull">Wenn <c>true</c>, wird <see cref="DBNull.Value">DBNull.Value</see> als Eingabe akzeptiert und bildet auch den
         /// Rückgabewert von <see cref="FallbackValue"/>. (Überschreibt <paramref name="nullable"/>.)</param>
-        public StringConverter(bool nullable, bool maybeDBNull)
-            => this.FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? null : string.Empty);
+        /// <param name="throwOnParseErrors">Dieser Parameter dient nur der Konsistenz, da das Parsen bei <see cref="StringConverter"/>
+        /// niemals scheitert.</param>
+        internal StringConverter(bool nullable, bool maybeDBNull, bool throwOnParseErrors)
+        {
+            ThrowsOnParseErrors = throwOnParseErrors;
+            FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? null : string.Empty);
+        }
 
 
         /// <summary>
@@ -36,7 +41,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// Gibt an, ob eine Ausnahme geworfen wird, wenn <see cref="Parse(string)"/>
         /// scheitert. (Immer <c>false</c>.)
         /// </summary>
-        public bool ThrowsOnParseErrors => false;
+        public bool ThrowsOnParseErrors { get; }
 
 
         /// <summary>

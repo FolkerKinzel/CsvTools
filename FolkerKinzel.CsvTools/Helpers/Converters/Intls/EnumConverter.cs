@@ -15,7 +15,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         private readonly Converter<object?, string?> _toStringConverter;
 
         /// <summary>
-        /// Initialisiert ein <see cref="EnumConverter{T}"/>-Objekt.
+        /// Initialisiert ein <see cref="EnumConverter{TEnum}"/>-Objekt.
         /// </summary>
         /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}"/> akzeptiert und zurückgegeben,
         /// sonst <typeparamref name="TEnum"/>.</param>
@@ -37,7 +37,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <see cref="Enum.Parse(Type, string, bool)"/> zum Einsatz.
         /// </para>
         /// </remarks>
-        public EnumConverter(
+        internal EnumConverter(
             bool nullable,
             bool maybeDBNull,
             bool throwOnParseErrors,
@@ -46,10 +46,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             const string format = "D";
             this.ThrowsOnParseErrors = throwOnParseErrors;
 
-            Type = nullable ? typeof(DateTimeOffset?) : typeof(DateTimeOffset);
+            Type = nullable ? typeof(TEnum?) : typeof(TEnum);
             FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(TEnum?) : default(TEnum));
-
-            
 
             if (nullable)
             {
@@ -154,7 +152,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
         /// <param name="ignoreCase"><c>true</c> gibt an, das beim Parsen die Groß- und Kleinschreibung von Enum-Bezeichnern ignoriert wird.</param>
         /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring.</exception>
-        public EnumConverter(
+        internal EnumConverter(
             string? format,
             bool nullable,
             bool maybeDBNull,
@@ -163,7 +161,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         {
             this.ThrowsOnParseErrors = throwOnParseErrors;
 
-            Type = nullable ? typeof(DateTimeOffset?) : typeof(DateTimeOffset);
+            Type = nullable ? typeof(TEnum?) : typeof(TEnum);
             FallbackValue = maybeDBNull ? DBNull.Value : (object?)(nullable ? default(TEnum?) : default(TEnum));
 
             try
