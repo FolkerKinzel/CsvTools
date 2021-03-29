@@ -4,6 +4,7 @@ using FolkerKinzel.CsvTools.Resources;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -301,6 +302,7 @@ namespace FolkerKinzel.CsvTools
 
         #region private
 
+        [DoesNotReturn]
         private static void ThrowInvalidOperationException() => throw new InvalidOperationException(Res.NotTwice);
 
         #endregion
