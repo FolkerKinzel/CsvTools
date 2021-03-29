@@ -261,6 +261,7 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
+        [ExcludeFromCodeCoverage]
         internal static StreamReader InitializeStreamReader(string fileName, Encoding? textEncoding)
         {
             try

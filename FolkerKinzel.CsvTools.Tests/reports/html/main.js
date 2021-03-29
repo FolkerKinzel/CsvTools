@@ -224,7 +224,7 @@ var assemblies = [
   {
     "name": "FolkerKinzel.CsvTools",
     "classes": [
-      { "name": "FolkerKinzel.CsvTools.CsvReader", "rp": "FolkerKinzel.CsvTools_CsvReader.html", "cl": 90, "ucl": 50, "cal": 140, "tl": 308, "ct": "LineCoverage", "mc": "-", "cb": 21, "tb": 42, "lch": [], "bch": [], "hc": [] },
+      { "name": "FolkerKinzel.CsvTools.CsvReader", "rp": "FolkerKinzel.CsvTools_CsvReader.html", "cl": 80, "ucl": 34, "cal": 114, "tl": 311, "ct": "LineCoverage", "mc": "-", "cb": 19, "tb": 40, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.CsvRecord", "rp": "FolkerKinzel.CsvTools_CsvRecord.html", "cl": 125, "ucl": 28, "cal": 153, "tl": 454, "ct": "LineCoverage", "mc": "-", "cb": 46, "tb": 60, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.CsvWriter", "rp": "FolkerKinzel.CsvTools_CsvWriter.html", "cl": 113, "ucl": 22, "cal": 135, "tl": 361, "ct": "LineCoverage", "mc": "-", "cb": 29, "tb": 32, "lch": [], "bch": [], "hc": [] },
       { "name": "FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension", "rp": "FolkerKinzel.CsvTools_CsvOptionsExtension.html", "cl": 3, "ucl": 0, "cal": 3, "tl": 55, "ct": "LineCoverage", "mc": "-", "cb": 1, "tb": 2, "lch": [], "bch": [], "hc": [] },
