@@ -368,6 +368,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             dyn.Prop1 = 42;
         }
 
+
         [TestMethod()]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TryGetMemberTest()
@@ -387,10 +388,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             _ = dyn.Prop1;
         }
 
+
         [TestMethod]
         public void DynPropTest()
         {
-            var rec = new CsvRecord(new string[] { "Hallo1" }, false, false, true, false);
+            var rec = new CsvRecord(new string[] { "Hallo1", "Blabla" }, false, false, true, false);
 
             var wrapper = new CsvRecordWrapper
             {
@@ -398,12 +400,20 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             };
 
             const string prop1Name = "Prop1";
+            const string prop2Name = "Prop2";
+
 
             var prop1 =
-                new CsvProperty(prop1Name, new string[] { "Hallo1" },
+                new CsvProperty(prop1Name, new string[] {"Hallo1" },
                 Converters.CsvConverterFactory.CreateConverter(Converters.CsvTypeCode.Int32, true));
 
             wrapper.AddProperty(prop1);
+
+            var prop2 =
+                new CsvProperty(prop2Name, new string[] {"Blub", null!, "Bla*" },
+                Converters.CsvConverterFactory.CreateConverter(Converters.CsvTypeCode.String, true));
+
+            wrapper.AddProperty(prop2);
 
             dynamic dyn = wrapper;
 
@@ -413,6 +423,14 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             int i = dyn.Prop1;
 
             Assert.AreEqual(val, i);
+
+            const string prop2Value = "HullyGully";
+            dyn.Prop2 = prop2Value;
+            string? s = dyn.Prop2;
+
+            Assert.AreEqual(prop2Value, s);
+
+
         }
 
 

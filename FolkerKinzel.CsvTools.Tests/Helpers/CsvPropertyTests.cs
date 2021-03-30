@@ -38,6 +38,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
 
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void CsvPropertyTest7() => _ = new CsvProperty("Prop", new string[] { "Col1" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String), CsvProperty.MaxWildcardTimeout + 1);
+
+        [TestMethod()]
         [Obsolete("Obsolete")]
         public void CloneTest1()
         {

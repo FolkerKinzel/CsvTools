@@ -14,6 +14,39 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
             Assert.IsInstanceOfType(conv, typeof(Base64Converter));
         }
 
+
+        [TestMethod]
+        public void ParseTest1()
+        {
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true);
+            Assert.IsInstanceOfType(conv, typeof(Base64Converter));
+
+            Assert.IsNull(conv.FallbackValue);
+            Assert.IsNull(conv.Parse(null));
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void ParseTest2()
+        {
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true, throwOnParseErrors:true);
+            Assert.IsInstanceOfType(conv, typeof(Base64Converter));
+
+            Assert.IsNull(conv.FallbackValue);
+            _ = conv.Parse("blabla");
+        }
+
+
+        [TestMethod]
+        public void ParseTest3()
+        {
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true, throwOnParseErrors:false);
+            Assert.IsInstanceOfType(conv, typeof(Base64Converter));
+
+            Assert.IsNull(conv.FallbackValue);
+            Assert.IsNull(conv.Parse("blabla"));
+        }
         
 
         [TestMethod]
@@ -31,6 +64,15 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls.Tests
             var bytes2 = (byte[]?)conv.Parse(s);
 
             CollectionAssert.AreEqual(bytes, bytes2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidCastException))]
+        public void MyTestMethod()
+        {
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray);
+
+            _ = conv.ConvertToString(4711);
         }
 
     }

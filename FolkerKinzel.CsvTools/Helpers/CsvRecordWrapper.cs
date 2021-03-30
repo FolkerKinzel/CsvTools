@@ -463,34 +463,42 @@ namespace FolkerKinzel.CsvTools.Helpers
         }
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override IEnumerable<string> GetDynamicMemberNames() => base.GetDynamicMemberNames();
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override DynamicMetaObject GetMetaObject(Expression parameter) => base.GetMetaObject(parameter);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryBinaryOperation(BinaryOperationBinder binder, object arg, out object? result) => base.TryBinaryOperation(binder, arg, out result);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryConvert(ConvertBinder binder, out object? result) => base.TryConvert(binder, out result);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryCreateInstance(CreateInstanceBinder binder, object?[]? args, [NotNullWhen(true)] out object? result) => base.TryCreateInstance(binder, args, out result);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryDeleteIndex(DeleteIndexBinder binder, object[] indexes) => base.TryDeleteIndex(binder, indexes);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryDeleteMember(DeleteMemberBinder binder) => base.TryDeleteMember(binder);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object? result) => base.TryGetIndex(binder, indexes, out result);
 
@@ -499,14 +507,17 @@ namespace FolkerKinzel.CsvTools.Helpers
         public override bool TryInvoke(InvokeBinder binder, object?[]? args, out object? result) => base.TryInvoke(binder, args, out result);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryInvokeMember(InvokeMemberBinder binder, object?[]? args, out object? result) => base.TryInvokeMember(binder, args, out result);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object? value) => base.TrySetIndex(binder, indexes, value);
 
         /// <inheritdoc/>
+        [ExcludeFromCodeCoverage]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override bool TryUnaryOperation(UnaryOperationBinder binder, out object? result) => base.TryUnaryOperation(binder, out result);
 

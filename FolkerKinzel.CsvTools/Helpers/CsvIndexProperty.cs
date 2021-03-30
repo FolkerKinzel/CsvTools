@@ -13,6 +13,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// <threadsafety static="true" instance="false"/>
     public sealed class CsvIndexProperty : CsvProperty, ICloneable
     {
+        [Obsolete("This constructor will be removed in the next major update.", false)]
         private CsvIndexProperty(CsvIndexProperty source) : base(source)
         {
 

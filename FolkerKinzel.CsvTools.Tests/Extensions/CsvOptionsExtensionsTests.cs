@@ -18,11 +18,19 @@ namespace FolkerKinzel.CsvTools.Extensions.Tests
         }
 
         [TestMethod()]
-        public void IsSetTest()
+        public void IsSetTest1()
         {
             CsvOptions options = CsvOptions.ThrowOnEmptyLines | CsvOptions.TrimColumns;
 
             Assert.IsTrue(options.IsSet(CsvOptions.ThrowOnEmptyLines));
+        }
+
+        [TestMethod()]
+        public void IsSetTest2()
+        {
+            CsvOptions options = CsvOptions.ThrowOnEmptyLines | CsvOptions.TrimColumns;
+
+            Assert.IsFalse(options.IsSet(CsvOptions.None));
         }
 
         [TestMethod()]

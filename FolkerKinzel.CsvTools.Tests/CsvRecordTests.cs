@@ -126,7 +126,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
 
         [TestMethod()]
-        public void GetEnumeratorTest()
+        public void GetEnumeratorTest1()
         {
             var rec = new CsvRecord(2, true, true);
             rec[0] = "1";
@@ -134,6 +134,8 @@ namespace FolkerKinzel.CsvTools.Tests
 
             Assert.AreEqual(3, rec.Select(x => int.Parse(x.Value!, CultureInfo.InvariantCulture)).Sum());
         }
+
+        
 
 
         [TestMethod()]

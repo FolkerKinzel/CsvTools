@@ -40,6 +40,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// </summary>
         /// <param name="source"><see cref="CsvProperty"/>-Objekt, das kopiert wird.</param>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> ist <c>null</c>.</exception>
+        [Obsolete("This constructor will be removed in the next major update.", false)]
         protected CsvProperty(CsvProperty source)
         {
             if (source is null)
@@ -216,7 +217,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         ///// Kopie des <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
         ///// </para>
         ///// </remarks>
-        [Obsolete("This method will be removed in the next major update.")]
+        [Obsolete("This method will be removed in the next major update.", false)]
         public virtual object Clone() => new CsvProperty(this);
         
 

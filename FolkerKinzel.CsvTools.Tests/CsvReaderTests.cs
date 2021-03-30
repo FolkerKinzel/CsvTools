@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Collections;
 
 namespace FolkerKinzel.CsvTools.Tests
 {
@@ -96,6 +97,28 @@ namespace FolkerKinzel.CsvTools.Tests
 
 
         [TestMethod()]
+        public void ReadTest5()
+        {
+            const string testCsv =
+                "Spalte \"1\",," + "\r\n" +
+                ",Spalte \"2\",";
+
+            using var stringReader = new StringReader(testCsv);
+            using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);
+
+            IEnumerable numerable = csvReader.Read();
+
+            int counter = 0;
+            foreach (object? record in numerable)
+            {
+                counter++;
+            }
+
+            Assert.AreEqual(2, counter);
+        }
+
+
+        [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
         public void CsvReaderTest3()
         {
@@ -117,5 +140,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             using var _ = new CsvReader((StreamReader?)null!);
         }
+
+        
     }
 }
