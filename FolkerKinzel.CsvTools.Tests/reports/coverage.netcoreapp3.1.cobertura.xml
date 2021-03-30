@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.9319" branch-rate="0.8373999999999999" version="1.9" timestamp="1617111934" lines-covered="1521" lines-valid="1632" branches-covered="371" branches-valid="443">
+<coverage line-rate="0.9319" branch-rate="0.8373999999999999" version="1.9" timestamp="1617112149" lines-covered="1521" lines-valid="1632" branches-covered="371" branches-valid="443">
   <sources>
     <source>C:\Users\fkinz\source\repos\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools\</source>
   </sources>
