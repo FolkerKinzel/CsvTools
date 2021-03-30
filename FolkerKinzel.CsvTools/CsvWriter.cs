@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
@@ -317,6 +318,7 @@ namespace FolkerKinzel.CsvTools
         /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
         /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
         /// <exception cref="IOException">E/A-Fehler.</exception>
+        [ExcludeFromCodeCoverage]
         private static StreamWriter InitStreamWriter(string fileName, Encoding? textEncoding)
         {
             try
