@@ -17,6 +17,9 @@ namespace Benchmarks
         public bool EqualSign() => _o == DBNull.Value;
 
         [Benchmark]
+        public bool EqualSignReverse() => DBNull.Value == _o;
+
+        [Benchmark]
         public bool EqualsMethod() => DBNull.Value.Equals(_o);
 
         [Benchmark]

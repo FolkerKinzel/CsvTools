@@ -52,13 +52,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             _toStringConverter = nullable
                 ? new Converter<object?, string?>
                     (
-                        o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                        o => o is null || ((o == DBNull.Value) && maybeDBNull)
                                 ? null
                                 : ((TimeSpan)o).ToString(format, formatProvider)
                      )
                 : new Converter<object?, string?>
                     (
-                        o => Convert.IsDBNull(o) && maybeDBNull
+                        o => (o == DBNull.Value) && maybeDBNull
                                 ? null
                                 : o is null ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
                                             : ((TimeSpan)o).ToString(format, formatProvider)
@@ -150,13 +150,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
             _toStringConverter = nullable
                 ? new Converter<object?, string?>
                   (
-                    o => o is null || (Convert.IsDBNull(o) && maybeDBNull)
+                    o => o is null || ((o == DBNull.Value) && maybeDBNull)
                             ? null
                             : ((TimeSpan)o).ToString(format, formatProvider)
                    )
                 : new Converter<object?, string?>
                   (
-                    o => Convert.IsDBNull(o) && maybeDBNull
+                    o => (o == DBNull.Value) && maybeDBNull
                             ? null
                             : o is null ? throw new InvalidCastException(Res.InvalidCastNullToValueType)
                                         : ((TimeSpan)o).ToString(format, formatProvider)

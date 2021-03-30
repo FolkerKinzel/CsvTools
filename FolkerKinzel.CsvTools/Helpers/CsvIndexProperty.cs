@@ -70,7 +70,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <inheritdoc cref="ICloneable.Clone" />
-        [Obsolete("This method will be removed with the next major update.")]
+        [Obsolete("This method will be removed in the next major update.")]
         public override object Clone() => new CsvIndexProperty(this);
         
     }

@@ -9,7 +9,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
     /// zum Parsen dieser Datentypen aus hexadezimaler Darstellung dient.
     /// </summary>
     /// <typeparam name="T">Ein ganzzahliger Datentyp.</typeparam>
-    internal class HexConverter<T> : ICsvTypeConverter where T: struct, IConvertible
+    internal class HexConverter<T> : ICsvTypeConverter where T : struct, IConvertible
     {
         private readonly Converter<string?, object?> _converter;
         private readonly Converter<object?, string?> _toStringConverter;
@@ -41,104 +41,79 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
             if (nullable)
             {
-                if (unsigned)
-                {
-                    _toStringConverter = new Converter<object?, string?>(o =>
-                    {
-                        if (o is null || (Convert.IsDBNull(o) && maybeDBNull))
-                        {
-                            return null;
-                        }
-
-                        ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
-                        return l.ToString(format, CultureInfo.InvariantCulture);
-                    });
-
-
-                    _converter = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
-                        {
-                            return FallbackValue;
-                        }
-
-                        try
-                        {
-                            return Convert.ChangeType(ulong.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
-                        }
-                        catch
-                        {
-                            if (ThrowsOnParseErrors)
+                _toStringConverter = unsigned
+                    ? new Converter<object?, string?>
+                        (
+                            o =>
                             {
-                                throw;
+                                if (o is null || ((o == DBNull.Value) && maybeDBNull))
+                                {
+                                    return null;
+                                }
+
+                                ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
                             }
-
-                            return FallbackValue;
-                        }
-                    });
-                }
-                else
-                {
-                    _toStringConverter = new Converter<object?, string?>(o =>
-                    {
-                        if (o is null || (Convert.IsDBNull(o) && maybeDBNull))
-                        {
-                            return null;
-                        }
-
-                        long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
-                        return l.ToString(format, CultureInfo.InvariantCulture);
-                    });
-
-
-                    _converter = new Converter<string?, object?>(
-                    s =>
-                    {
-                        if (s is null)
-                        {
-                            return FallbackValue;
-                        }
-
-                        try
-                        {
-                            return Convert.ChangeType(long.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
-                        }
-                        catch
-                        {
-                            if (ThrowsOnParseErrors)
+                        )
+                    : new Converter<object?, string?>
+                         (
+                            o =>
                             {
-                                throw;
-                            }
+                                if (o is null || ((o == DBNull.Value) && maybeDBNull))
+                                {
+                                    return null;
+                                }
 
-                            return FallbackValue;
-                        }
-                    });
-                }
+                                long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
+                            }
+                         );
             }
             else
             {
-                if (unsigned)
-                {
-                    _toStringConverter = new Converter<object?, string?>(
-                        o =>
-                        {
-                            if (o is null)
+                _toStringConverter = unsigned
+                    ? new Converter<object?, string?>
+                        (
+                            o =>
                             {
-                                throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                            }
+                                if (o is null)
+                                {
+                                    throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                                }
 
-                            if (Convert.IsDBNull(o) && maybeDBNull)
+                                if ((o == DBNull.Value) && maybeDBNull)
+                                {
+                                    return null;
+                                }
+
+                                ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
+                            }
+                        )
+                    : new Converter<object?, string?>
+                        (
+                            o =>
                             {
-                                return null;
+                                if (o is null)
+                                {
+                                    throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                                }
+
+                                if ((o == DBNull.Value) && maybeDBNull)
+                                {
+                                    return null;
+                                }
+
+                                long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
                             }
-
-                            ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
-                            return l.ToString(format, CultureInfo.InvariantCulture);
-                        });
+                        );
+            }
 
 
-                    _converter = new Converter<string?, object?>(
+            _converter = unsigned
+                ? new Converter<string?, object?>
+                    (
                         s =>
                         {
                             if (s is null)
@@ -159,29 +134,10 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
                                 return FallbackValue;
                             }
-                        });
-                }
-                else
-                {
-                    _toStringConverter = new Converter<object?, string?>(
-                        o =>
-                        {
-                            if (o is null)
-                            {
-                                throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                            }
-
-                            if (Convert.IsDBNull(o) && maybeDBNull)
-                            {
-                                return null;
-                            }
-
-                            long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
-                            return l.ToString(format, CultureInfo.InvariantCulture);
-                        });
-
-
-                    _converter = new Converter<string?, object?>(
+                        }
+                    )
+                : new Converter<string?, object?>
+                    (
                         s =>
                         {
                             if (s is null)
@@ -202,9 +158,9 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
 
                                 return FallbackValue;
                             }
-                        });
-                }
-            }
+                        }
+                    );
+
         }
 
 
@@ -237,7 +193,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <returns>Eine hexadezimale Zeichenfolgendarstellung von <paramref name="value"/> oder <c>null</c></returns>
         /// <exception cref="InvalidCastException"><paramref name="value"/> lässt sich nicht in <see cref="Type"/> umwandeln.</exception>
         public string? ConvertToString(object? value) => _toStringConverter(value);
-        
+
 
         /// <summary>
         /// Parst <paramref name="value"/> als <typeparamref name="T"/>.
@@ -248,6 +204,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// nur geworfen, wenn wenn <see cref="ThrowsOnParseErrors"/>&#160;<c>true</c> - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
         /// <exception cref="OverflowException"><paramref name="value"/> stellt eine Zahl außerhalb des Bereichs von <see cref="Type"/> dar.</exception>
         public object? Parse(string? value) => _converter(value);
-   
+
     }
 }

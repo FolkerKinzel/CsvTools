@@ -43,7 +43,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                   (
                         o =>
                         {
-                            if (o is null || (Convert.IsDBNull(o) && maybeDBNull))
+                            if (o is null || ((o == DBNull.Value) && maybeDBNull))
                             {
                                 return null;
                             }
@@ -68,7 +68,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
                                 throw new InvalidCastException(Res.InvalidCastNullToValueType);
                             }
 
-                            if (Convert.IsDBNull(o) && maybeDBNull)
+                            if ((o == DBNull.Value) && maybeDBNull)
                             {
                                 return null;
                             }

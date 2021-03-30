@@ -63,7 +63,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <exception cref="InvalidCastException"><paramref name="value"/> ist weder <c>null</c> noch <see cref="DBNull.Value">DBNull.Value</see>
         /// noch ein Byte-Array.</exception>
         public string? ConvertToString(object? value) 
-            => (value is null || (Convert.IsDBNull(value) && Convert.IsDBNull(FallbackValue))) ? null : Convert.ToBase64String((byte[])value, Base64FormattingOptions.None);
+            => (value is null || (value == DBNull.Value && FallbackValue == DBNull.Value)) ? null : Convert.ToBase64String((byte[])value, Base64FormattingOptions.None);
 
 
         /// <summary>

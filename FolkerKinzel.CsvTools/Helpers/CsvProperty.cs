@@ -216,7 +216,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         ///// Kopie des <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
         ///// </para>
         ///// </remarks>
-        [Obsolete("This method will be removed with the next major update.")]
+        [Obsolete("This method will be removed in the next major update.")]
         public virtual object Clone() => new CsvProperty(this);
         
 

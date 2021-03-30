@@ -58,7 +58,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// <param name="value">Ein <see cref="string"/>, <c>null</c> oder <see cref="DBNull.Value">DBNull.Value</see>.</param>
         /// <returns><paramref name="value"/>, wenn <paramref name="value"/> ein <see cref="string"/> oder <c>null</c> ist.</returns>
         /// <exception cref="InvalidCastException"><paramref name="value"/> ist nicht <c>null</c> oder <see cref="DBNull.Value">DBNull.Value</see> und auch kein <see cref="string"/>.</exception>
-        public string? ConvertToString(object? value) => Convert.IsDBNull(value) && FallbackValue is DBNull ? null : (string?)value;
+        public string? ConvertToString(object? value) => (value == DBNull.Value) && (FallbackValue == DBNull.Value) ? null : (string?)value;
 
 
     }
