@@ -20,6 +20,8 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Doku.
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Reference.en", "FolkerKinzel.CsvTools.Reference.en\FolkerKinzel.CsvTools.Reference.en.shfbproj", "{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{90C696E7-B5B0-408B-A391-B7FA0DEAC255}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
