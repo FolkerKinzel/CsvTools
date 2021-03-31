@@ -21,24 +21,24 @@ CSV files, that don't fit the standard.
 
 ```
 nuget Package Manager:
-PM> Install-Package FolkerKinzel.CsvTools -Version 1.4.3
+PM> Install-Package FolkerKinzel.CsvTools -Version 1.5.0
 
 .NET CLI:
-> dotnet add package FolkerKinzel.CsvTools --version 1.4.3
+> dotnet add package FolkerKinzel.CsvTools --version 1.5.0
 
 PackageReference (Visual Studio Project File):
-<PackageReference Include="FolkerKinzel.CsvTools" Version="1.4.3" />
+<PackageReference Include="FolkerKinzel.CsvTools" Version="1.5.0" />
 
 Paket CLI:
-> paket add FolkerKinzel.CsvTools --version 1.4.3
+> paket add FolkerKinzel.CsvTools --version 1.5.0
 
 F# Interactive:
-> #r "nuget: FolkerKinzel.CsvTools, 1.4.3"
+> #r "nuget: FolkerKinzel.CsvTools, 1.5.0"
 ```
 
-* [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0-rc/FolkerKinzel.CsvTools.en.chm)
+* [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0/FolkerKinzel.CsvTools.en.chm)
 
-* [Projektdokumentation (Deutsch) herunterladen](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0-rc/FolkerKinzel.CsvTools.de.chm)
+* [Projektdokumentation (Deutsch) herunterladen](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0/FolkerKinzel.CsvTools.de.chm)
 
 > IMPORTANT: On some systems the content of the CHM file is blocked. Before opening the file right click on the file icon, select Properties, and check the "Allow" checkbox (if it is present) in the lower right corner of the General tab in the Properties dialog.
 
