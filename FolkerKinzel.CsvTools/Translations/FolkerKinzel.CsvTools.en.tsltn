@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Tsltn Version="1.0" SourceFile="..\bin\Release\net40\de\FolkerKinzel.CsvTools.xml" SourceLanguage="de" TargetLanguage="en">
+<Tsltn Version="1.0" SourceFile="..\bin\Release\net5.0\de\FolkerKinzel.CsvTools.xml" SourceLanguage="de" TargetLanguage="en">
   <T ID="DBC1FBE0460C8E94">Named constants to specify options for reading and writing CSV files. The flags can be combined.</T>
   <T ID="9F247E3BD9FEE2F2">Provides read-only forward access to the records of a CSV file. (This means, that the &lt;see cref="T:FolkerKinzel.CsvTools.CsvReader" /&gt; can only read the file forward once.)</T>
   <T ID="8A33921DD001915A">Represents a record of the CSV file (row). The column order corresponds to that of the CSV file and all columns are of the data type &lt;see cref="T:System.String" /&gt;. The content of the columns can be accessed using a zero-based column index or the column name.</T>
@@ -398,16 +398,10 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
              with a column name of the CSV file. The alias strings may contain the wildcard characters * and ?. When a
               wildcard alias matches several columns in the CSV file, the column with the lowest index is referenced.</T>
   <T ID="8C5500AB1D0C6F86">The &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter"/&gt;, that does the type conversion.</T>
-  <T ID="E2F69A772C3DBB12">Timeout value in milliseconds. If an alias in &lt;paramref name ="columnNameAliases"/&gt;
-             contains wildcard characters, inside
-             this timeout the program tries to resolve the alias. If this does not succeed, &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; reacts, as if it had
-             no target in the columns of the CSV file. (No timeout is used in .NET-Framework 4.0.)</T>
   <T ID="AA2A98FCA84481B0">&lt;paramref name="propertyName"/&gt; or &lt;paramref name="columnNameAliases"/&gt; or 
             &lt;paramref name="converter"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
   <T ID="93CF9973A48AD6B0">&lt;paramref name ="propertyName"/&gt; does not conform to the rules for C# identifiers (only
              ASCII characters).</T>
-  <T ID="747247FF00B533FB">&lt;paramref name ="wildcardTimeout"/&gt; is less than 1 or greater than
-             &lt;see cref ="F:FolkerKinzel.CsvTools.Helpers.CsvProperty.MaxWildcardTimeout"/&gt;.</T>
   <T ID="2DB3E32D453B4815">Identifier of the property</T>
   <T ID="57E612A7E784BF8E">Collection of alternative column names of the CSV file, that &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvRecordWrapper"/&gt; uses to access a column of &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt;.</T>
   <T ID="EFB98B5E08286E26">&lt;para&gt;
@@ -544,12 +538,6 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="86D8FA55EC0D11EA">Zero-based index of the column in the CSV file.</T>
   <T ID="F781168F2AF94912">&lt;paramref name="propertyName"/&gt; or 
             &lt;paramref name="converter"/&gt; is &lt;c&gt;null&lt;/c&gt;.</T>
-  <T ID="CE270F4F71573C14">&lt;note type ="important"&gt;
-             It is not recommended, to use the same &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, to read from
-            CSV files with different headers - even if the assigned column aliases would allow it.
-             The reason for this is, that the first time you read from the CSV file, the most suitable alias is chosen and then for everyone
-             subsequent reads is used. The method &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvProperty.Clone"/&gt; creates a fresh copy of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, that can be used to read another CSV file.
-             &lt;/note&gt;</T>
   <T ID="EFD00A4F89FF3CC">Copy constructor</T>
   <T ID="DB3E543043B43419">&lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object, that will be copied.</T>
   <T ID="37350DB6E89D2A30">&lt;note type ="important"&gt;
@@ -668,10 +656,6 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
 The method should throw an &lt;see cref ="T:System.InvalidCastException"/&gt; if the data type of &lt;paramref name ="value"/&gt; doesn't correspond to the return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Type"/&gt;.
 &lt;/note&gt;</T>
   <T ID="84DBBEB5FC06B1E4"></T>
-  <T ID="9070C042BB11069E"></T>
-  <T ID="53D74E4CDFBDAE1B"></T>
-  <T ID="D19807F2FC80F50C"></T>
-  <T ID="223B8589A621807F"></T>
   <T ID="77BAA67DFB838D50"></T>
   <T ID="77ADDBA9CBEB7D71"></T>
   <T ID="156E23EA8F620F5D"></T>
@@ -747,9 +731,6 @@ The method should throw an &lt;see cref ="T:System.InvalidCastException"/&gt; if
   <T ID="E2816AE55AF8B776"></T>
   <T ID="569FD7831FF5F199"></T>
   <T ID="85B834E56C03C4F5"></T>
-  <T ID="8F07F717FCAA60F8"></T>
-  <T ID="A89836189663F241"></T>
-  <T ID="6DACD5BB9D5B6F94"></T>
   <T ID="DBC30DFEE821F266"></T>
   <T ID="72D70F19B8417348"></T>
   <T ID="1C2D536C14D6309D"></T>
@@ -784,7 +765,6 @@ The method should throw an &lt;see cref ="T:System.InvalidCastException"/&gt; if
   <T ID="CE3B65792D2816FE"></T>
   <T ID="4520576B7F422992"></T>
   <T ID="B770F6C419C7D1CA"></T>
-  <T ID="F1817D583CA91426">It is not recommended to use the same &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object to read CSV files with different headers - even if the assigned column aliases would allow this. The reason for this is, that the most suitable alias is chosen the first time reading from the CSV file and then it is used for all subsequent reads. The &lt;see cref ="M:FolkerKinzel.CsvTools.Helpers.CsvProperty.Clone"/&gt; method creates a shallow copy of the &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; object that can be used to read an other CSV file.</T>
   <T ID="6AC6495EB09F9F4F">Called automatically when a value is assigned to a dynamically implemented property. (Not intended for direct use in your own code.)</T>
   <T ID="15AB4B26A5D9A9A7"></T>
   <T ID="58C0AE55EA00CECF"></T>
@@ -820,4 +800,19 @@ The method should throw an &lt;see cref ="T:System.InvalidCastException"/&gt; if
   <T ID="D4DCCAD54D70CAD2"></T>
   <T ID="DEF3BA1A77E9181F"></T>
   <T ID="406E08520797207D"></T>
+  <T ID="23B1E291BB11069E"></T>
+  <T ID="A4372AD5DFBDAE1B"></T>
+  <T ID="44ABA1EC3C22D126"></T>
+  <T ID="8B1793DCFC80F50C"></T>
+  <T ID="B51A6C10A621807F"></T>
+  <T ID="92A2AA98FCAA60F8"></T>
+  <T ID="E93FD2C09663F241"></T>
+  <T ID="422DF19D9D5B6F94"></T>
+  <T ID="A2421FC432FCC668"></T>
+  <T ID="747247FFDDCE3A7D">&lt;paramref name ="wildcardTimeout"/&gt; is less than 0.</T>
+  <T ID="E2F69A776002CC80">Timeout value in milliseconds or 0, for &lt;see cref ="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/&gt;. If the value is greater than &lt;see cref ="F:FolkerKinzel.CsvTools.Helpers.CsvProperty.MaxWildcardTimeout"/&gt; it is normalized to this value.
+If an alias in &lt;paramref name ="columnNameAliases"/&gt;
+             contains wildcard characters, inside
+             this timeout the program tries to resolve the alias. If this does not succeed, &lt;see cref ="T:FolkerKinzel.CsvTools.Helpers.CsvProperty"/&gt; reacts, as if it had
+             no target in the columns of the CSV file. (No timeout is used in .NET-Framework 4.0.)</T>
 </Tsltn>

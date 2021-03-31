@@ -9,15 +9,21 @@
     <Product>FolkerKinzel.CsvTools</Product>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Version>1.5.0-rc</Version>
-    <FileVersion>1.5.0.25</FileVersion>
+    <Version>1.5.0</Version>
+    <FileVersion>1.5.0.30</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>Adds a .NET 5.0 dll to the package.
-      
+
+CsvProperty constructor has now the option, to set the Regex timout to Regex.InfiniteMatchTimeout.
+
+CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
+
+ToString() overload for CsvRecordWrapper.
+
 Fixes an issue in CsvAnalyzer, that invalid empty lines inside the CSV file where not recognized.
-      
+
 Fixes an issue in CsvConverterFactory that HexConverter&lt;UInt32&gt; was not properly initialized.
-      
+
 Fixes an issue with the property ThrowsOnParseErrors in StringConverter.
       
 Fixes an issue that EnumConverter&lt;TEnum&gt; didn't show correctly the Type it converts.
@@ -28,7 +34,7 @@ CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of 
 
 ToString() overload for CsvRecordWrapper.
 
-CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete now.</PackageReleaseNotes>
+CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
     <Description>.NET library to read and write CSV files.</Description>
     <Authors>Folker Kinzel</Authors>

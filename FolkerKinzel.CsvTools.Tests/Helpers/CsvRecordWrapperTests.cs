@@ -389,8 +389,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
         }
 
 
-        [TestMethod]
-        public void DynPropTest()
+        [DataTestMethod]
+        [DataRow(0)]
+        [DataRow(CsvProperty.MaxWildcardTimeout)]
+        [DataRow(CsvProperty.MaxWildcardTimeout + 1)]
+        public void DynPropTest(int wildcardTimeout)
         {
             var rec = new CsvRecord(new string[] { "Hallo1", "Blabla" }, false, false, true, false);
 
@@ -411,7 +414,8 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
 
             var prop2 =
                 new CsvProperty(prop2Name, new string[] {"Blub", null!, "Bla*" },
-                Converters.CsvConverterFactory.CreateConverter(Converters.CsvTypeCode.String, true));
+                Converters.CsvConverterFactory.CreateConverter(Converters.CsvTypeCode.String, true),
+                wildcardTimeout);
 
             wrapper.AddProperty(prop2);
 

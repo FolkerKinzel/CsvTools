@@ -16,15 +16,6 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// um auf die Daten des ihm zugrundeliegenden <see cref="CsvRecord"/>-Objekts zuzugreifen.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    ///// <remarks>
-    ///// <note type="important">
-    ///// Es ist nicht empfehlenswert, dasselbe <see cref="CsvProperty"/>-Objekt zum Lesen von 
-    ///// CSV-Dateien mit verschiedenen Kopfzeilen zu verwenden - selbst wenn die zugewiesenen Spalten-Aliase dies ermöglichen würden.
-    ///// Der Grund dafür ist, dass beim ersten Lesen der geeignetste Alias ausgesucht und dann für alle
-    ///// nachfolgenden Lesevorgänge verwendet wird. Die Methode <see cref="Clone"/> erstellt eine frische
-    ///// Kopie des <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
-    ///// </note>
-    ///// </remarks>
     public class CsvProperty : ICloneable
     {
         /// <summary>
@@ -64,7 +55,9 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// mit einem Spaltennamen der CSV-Datei hat. Die Alias-Strings dürfen die Wildcard-Zeichen * und ? enthalten. Wenn ein 
         /// Wildcard-Alias mit mehreren Spalten der CSV-Datei eine Übereinstimmung hat, wird die Spalte mit dem niedrigsten Index referenziert.</param>
         /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
-        /// <param name="wildcardTimeout">Timeout-Wert in Millisekunden. Wenn ein Alias in <paramref name="columnNameAliases"/> ein
+        /// <param name="wildcardTimeout">Timeout-Wert in Millisekunden oder 0, für <see cref="Regex.InfiniteMatchTimeout"/>. 
+        /// Ist der Wert größer als <see cref="MaxWildcardTimeout"/> wird er auf diesen Wert normalisiert.
+        /// Wenn ein Alias in <paramref name="columnNameAliases"/> ein
         /// Wildcard-Zeichen enthält, wird innerhalb
         /// dieses Timeouts versucht, den Alias aufzulösen. Gelingt dies nicht, reagiert <see cref="CsvProperty"/> so, als hätte sie
         /// kein Ziel in den Spalten der CSV-Datei. (In .Net-Framework 4.0 wird kein Timeout angewendet.)</param>
@@ -75,8 +68,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
         /// ASCII-Zeichen).</exception>
         /// 
-        /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 1 oder größer als
-        /// <see cref="MaxWildcardTimeout"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 0.</exception>
         public CsvProperty(
             string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10)
         {
@@ -104,12 +96,14 @@ namespace FolkerKinzel.CsvTools.Helpers
             }
 
 
-            if(wildcardTimeout > MaxWildcardTimeout || wildcardTimeout < 1)
+            if (wildcardTimeout > MaxWildcardTimeout)
+            {
+                wildcardTimeout = MaxWildcardTimeout;
+            }
+            else if (wildcardTimeout < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(wildcardTimeout));
             }
-            
-
 
             this.PropertyName = propertyName;
             this.ColumnNameAliases = new ReadOnlyCollection<string>(columnNameAliases.Where(x => x != null).ToArray());
@@ -348,7 +342,10 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                 // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
                 // verwendet.
-                return new Regex(pattern, options, TimeSpan.FromMilliseconds(wildcardTimeout));
+                return new Regex(pattern,
+                                 options,
+                                 wildcardTimeout == 0 ? Regex.InfiniteMatchTimeout 
+                                                      : TimeSpan.FromMilliseconds(wildcardTimeout));
             }
 #endif
 
