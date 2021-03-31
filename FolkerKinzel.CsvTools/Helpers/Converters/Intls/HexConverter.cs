@@ -14,7 +14,6 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         private readonly Converter<string?, object?> _converter;
         private readonly Converter<object?, string?> _toStringConverter;
 
-
         /// <summary>
         /// Initialisiert ein <see cref="HexConverter{T}"/>-Objekt.
         /// </summary>
@@ -39,130 +38,12 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
             const NumberStyles styles = NumberStyles.HexNumber;
 
 
-            if (nullable)
-            {
-                _toStringConverter = unsigned
-                    ? new Converter<object?, string?>
-                        (
-                            o =>
-                            {
-                                if (o is null || ((o == DBNull.Value) && maybeDBNull))
-                                {
-                                    return null;
-                                }
+            _toStringConverter = nullable
+                ? InitNullableToStringConverter(unsigned, maybeDBNull, format)
+                : InitNonNullableToStringConverter(unsigned, maybeDBNull, format);
 
-                                ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
-                                return l.ToString(format, CultureInfo.InvariantCulture);
-                            }
-                        )
-                    : new Converter<object?, string?>
-                         (
-                            o =>
-                            {
-                                if (o is null || ((o == DBNull.Value) && maybeDBNull))
-                                {
-                                    return null;
-                                }
-
-                                long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
-                                return l.ToString(format, CultureInfo.InvariantCulture);
-                            }
-                         );
-            }
-            else
-            {
-                _toStringConverter = unsigned
-                    ? new Converter<object?, string?>
-                        (
-                            o =>
-                            {
-                                if (o is null)
-                                {
-                                    throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                                }
-
-                                if ((o == DBNull.Value) && maybeDBNull)
-                                {
-                                    return null;
-                                }
-
-                                ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
-                                return l.ToString(format, CultureInfo.InvariantCulture);
-                            }
-                        )
-                    : new Converter<object?, string?>
-                        (
-                            o =>
-                            {
-                                if (o is null)
-                                {
-                                    throw new InvalidCastException(Res.InvalidCastNullToValueType);
-                                }
-
-                                if ((o == DBNull.Value) && maybeDBNull)
-                                {
-                                    return null;
-                                }
-
-                                long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
-                                return l.ToString(format, CultureInfo.InvariantCulture);
-                            }
-                        );
-            }
-
-
-            _converter = unsigned
-                ? new Converter<string?, object?>
-                    (
-                        s =>
-                        {
-                            if (s is null)
-                            {
-                                return FallbackValue;
-                            }
-
-                            try
-                            {
-                                return Convert.ChangeType(ulong.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
-                            }
-                            catch
-                            {
-                                if (ThrowsOnParseErrors)
-                                {
-                                    throw;
-                                }
-
-                                return FallbackValue;
-                            }
-                        }
-                    )
-                : new Converter<string?, object?>
-                    (
-                        s =>
-                        {
-                            if (s is null)
-                            {
-                                return FallbackValue;
-                            }
-
-                            try
-                            {
-                                return Convert.ChangeType(long.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
-                            }
-                            catch
-                            {
-                                if (ThrowsOnParseErrors)
-                                {
-                                    throw;
-                                }
-
-                                return FallbackValue;
-                            }
-                        }
-                    );
-
+            _converter = InitConverter(unsigned, styles);
         }
-
 
         /// <summary>
         /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
@@ -204,6 +85,128 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters.Intls
         /// nur geworfen, wenn wenn <see cref="ThrowsOnParseErrors"/>&#160;<c>true</c> - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
         /// <exception cref="OverflowException"><paramref name="value"/> stellt eine Zahl außerhalb des Bereichs von <see cref="Type"/> dar.</exception>
         public object? Parse(string? value) => _converter(value);
+
+        
+        #region private
+
+        private static Converter<object?, string?> InitNullableToStringConverter(bool unsigned, bool maybeDBNull, string format)
+        => unsigned ? new Converter<object?, string?>
+                        (
+                            o =>
+                            {
+                                if (o is null || ((o == DBNull.Value) && maybeDBNull))
+                                {
+                                    return null;
+                                }
+
+                                ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
+                            }
+                        )
+                    : new Converter<object?, string?>
+                            (
+                            o =>
+                            {
+                                if (o is null || ((o == DBNull.Value) && maybeDBNull))
+                                {
+                                    return null;
+                                }
+
+                                long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
+                            }
+                            );
+
+
+        private static Converter<object?, string?> InitNonNullableToStringConverter(bool unsigned, bool maybeDBNull, string format)
+        => unsigned ? new Converter<object?, string?>
+                        (
+                            o =>
+                            {
+                                if (o is null)
+                                {
+                                    throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                                }
+
+                                if ((o == DBNull.Value) && maybeDBNull)
+                                {
+                                    return null;
+                                }
+
+                                ulong l = Convert.ToUInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
+                            }
+                        )
+                    : new Converter<object?, string?>
+                        (
+                            o =>
+                            {
+                                if (o is null)
+                                {
+                                    throw new InvalidCastException(Res.InvalidCastNullToValueType);
+                                }
+
+                                if ((o == DBNull.Value) && maybeDBNull)
+                                {
+                                    return null;
+                                }
+
+                                long l = Convert.ToInt64((T)o, CultureInfo.InvariantCulture);
+                                return l.ToString(format, CultureInfo.InvariantCulture);
+                            }
+                        );
+
+        private Converter<string?, object?> InitConverter(bool unsigned, NumberStyles styles)
+        => unsigned ? new Converter<string?, object?>
+                        (
+                            s =>
+                            {
+                                if (s is null)
+                                {
+                                    return FallbackValue;
+                                }
+
+                                try
+                                {
+                                    return Convert.ChangeType(ulong.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
+                                }
+                                catch
+                                {
+                                    if (ThrowsOnParseErrors)
+                                    {
+                                        throw;
+                                    }
+
+                                    return FallbackValue;
+                                }
+                            }
+                        )
+                    : new Converter<string?, object?>
+                        (
+                            s =>
+                            {
+                                if (s is null)
+                                {
+                                    return FallbackValue;
+                                }
+
+                                try
+                                {
+                                    return Convert.ChangeType(long.Parse(s, styles, CultureInfo.InvariantCulture), typeof(T), CultureInfo.InvariantCulture);
+                                }
+                                catch
+                                {
+                                    if (ThrowsOnParseErrors)
+                                    {
+                                        throw;
+                                    }
+
+                                    return FallbackValue;
+                                }
+                            }
+                        );
+
+        #endregion
 
     }
 }
