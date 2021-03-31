@@ -45,6 +45,9 @@ namespace FolkerKinzel.CsvTools.Helpers
             this._wildcardTimeout = source._wildcardTimeout;
         }
 
+#if NET40
+#pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
+#endif
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvProperty"/>-Objekt.
         /// </summary>
@@ -70,6 +73,9 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// 
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 0.</exception>
         public CsvProperty(
+#if NET40
+#pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
+#endif
             string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10)
         {
             if (propertyName is null)
