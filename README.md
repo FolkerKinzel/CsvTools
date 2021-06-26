@@ -16,25 +16,10 @@ properties of an `object` and performs type conversions. `CsvRecordWrapper` supp
 for CSV column names and ships with a lot of 
 supporting classes - most are data type converters for the most needed data types and an easy to implement
 interface to create converters of whatever data type you need.
-* `CsvAnalyzer`: Analyzes CSV files to get the right parameters for proper reading. This enables you, to read
+* `CsvAnalyzer`: Analyzes CSV files to get the right parameters for proper reading automatically. This enables you, to read
 CSV files, that don't fit the standard.
 
-```
-nuget Package Manager:
-PM> Install-Package FolkerKinzel.CsvTools -Version 1.5.0
-
-.NET CLI:
-> dotnet add package FolkerKinzel.CsvTools --version 1.5.0
-
-PackageReference (Visual Studio Project File):
-<PackageReference Include="FolkerKinzel.CsvTools" Version="1.5.0" />
-
-Paket CLI:
-> paket add FolkerKinzel.CsvTools --version 1.5.0
-
-F# Interactive:
-> #r "nuget: FolkerKinzel.CsvTools, 1.5.0"
-```
+.
 
 * [Download Reference (English)](https://github.com/FolkerKinzel/CsvTools/blob/master/ProjectReference/1.5.0/FolkerKinzel.CsvTools.en.chm)
 
