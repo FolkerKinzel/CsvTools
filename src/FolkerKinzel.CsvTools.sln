@@ -8,7 +8,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{564D4E32-42E9-42B8-A4B2-8B5BD653E289}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		README.md = README.md
+		..\.github\ISSUE_TEMPLATE\bug_report.md = ..\.github\ISSUE_TEMPLATE\bug_report.md
+		..\.github\ISSUE_TEMPLATE\feature_request.md = ..\.github\ISSUE_TEMPLATE\feature_request.md
+		..\README.md = ..\README.md
 		Reference.md = Reference.md
 	EndProjectSection
 EndProject
@@ -20,7 +22,7 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Doku.
 EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Reference.en", "FolkerKinzel.CsvTools.Reference.en\FolkerKinzel.CsvTools.Reference.en.shfbproj", "{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{90C696E7-B5B0-408B-A391-B7FA0DEAC255}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{90C696E7-B5B0-408B-A391-B7FA0DEAC255}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

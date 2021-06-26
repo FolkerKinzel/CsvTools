@@ -46,6 +46,7 @@ CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</Packag
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/FolkerKinzel/CsvTools</PackageProjectUrl>
     <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <PackageIconUrl />
   </PropertyGroup>
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
@@ -61,7 +62,7 @@ CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</Packag
     <EmbeddedResource Remove="Translations\**" />
     <None Remove="Exceptions\**" />
     <None Remove="Translations\**" />
-    <None Include="..\..\..\Nuget-Logo\Logo.png">
+    <None Include="..\..\..\..\Nuget-Logo\Logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

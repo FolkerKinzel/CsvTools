@@ -1,6 +1,6 @@
 # FolkerKinzel.CsvTools
 [![NuGet](https://img.shields.io/nuget/v/FolkerKinzel.CsvTools)](https://www.nuget.org/packages/FolkerKinzel.CsvTools/)
-![GitHub](https://img.shields.io/github/license/FolkerKinzel/CsvTools)
+[![GitHub](https://img.shields.io/github/license/FolkerKinzel/CsvTools)](https://github.com/FolkerKinzel/CsvTools/blob/master/LICENSE)
 
 .NET library to read and write CSV files.
 
