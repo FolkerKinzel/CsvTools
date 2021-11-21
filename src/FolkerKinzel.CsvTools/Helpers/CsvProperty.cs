@@ -160,7 +160,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <summary>
         /// Der Index der Spalte der CSV-Datei, auf die <see cref="CsvProperty"/> zugreift oder <c>null</c>,
         /// wenn <see cref="CsvProperty"/> kein Ziel in der CSV-Datei findet. Die Eigenschaft wird beim
-        /// ersten Lese- oder Schreibzugriff auf die CSV-Datei aktualisiert.
+        /// ersten Lese- oder Schreibzugriff aktualisiert.
         /// </summary>
         public int? ReferredCsvColumnIndex => _lookup?.ColumnIndex;
 
