@@ -455,13 +455,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
             ICsvTypeConverter conv = Converters.CsvConverterFactory.CreateConverter(Converters.CsvTypeCode.Int32, true);
 
             var prop1 =
-                new CsvIndexProperty(prop1Name, 0, conv);
+                new CsvProperty(prop1Name, 0, conv);
 
             var prop2 =
-                new CsvIndexProperty(prop2Name, 1, conv);
+                new CsvProperty(prop2Name, 1, conv);
 
             var prop3 =
-                new CsvIndexProperty(prop3Name, 2, conv);
+                new CsvProperty(prop3Name, 2, conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -725,13 +725,13 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
                                                                                     true);
 
             var prop1 =
-                new CsvIndexProperty(prop1Name, 0, conv);
+                new CsvProperty(prop1Name, 0, conv);
 
             var prop2 =
-                new CsvIndexProperty(prop2Name, 1, conv);
+                new CsvProperty(prop2Name, 1, conv);
 
             var prop3 =
-                new CsvIndexProperty(prop3Name, 2, conv);
+                new CsvProperty(prop3Name, 2, conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);

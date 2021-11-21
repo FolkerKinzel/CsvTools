@@ -12,6 +12,6 @@
     <Exec Command="if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net5.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="FolkerKinzel.CsvTools" Version="1.5.0" />
+    <ProjectReference Include="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
   </ItemGroup>
 </Project>

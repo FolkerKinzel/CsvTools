@@ -1,4 +1,5 @@
 ﻿using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// um auf die Daten des ihm zugrundeliegenden <see cref="CsvRecord"/>-Objekts zuzugreifen.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    public class CsvProperty : ICloneable
+    public sealed class CsvProperty
     {
         /// <summary>
         /// Maximale Zeit (in Millisekunden) die für das Auflösen eines Spaltennamen-Aliases aufgewendet werden kann.
@@ -27,27 +28,46 @@ namespace FolkerKinzel.CsvTools.Helpers
         private readonly int _wildcardTimeout;
 
         /// <summary>
-        /// Kopierkonstruktor
+        /// Initialisiert ein neues <see cref="CsvProperty"/>-Objekt.
         /// </summary>
-        /// <param name="source"><see cref="CsvProperty"/>-Objekt, das kopiert wird.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="source"/> ist <c>null</c>.</exception>
-        [Obsolete("This constructor will be removed in the next major update.", false)]
-        protected CsvProperty(CsvProperty source)
+        /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
+        /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
+        /// <param name="desiredCsvColumnIndex">Nullbasierter Index der Spalte der CSV-Datei in die <see cref="CsvProperty"/> schreiben soll bzw.
+        /// aus der <see cref="CsvProperty"/> lesen soll. Wenn es den Index in der CSV-Datei nicht
+        /// gibt, wird die <see cref="CsvProperty"/> beim Schreiben ignoriert. Beim Lesen wird in diesem Fall
+        /// <see cref="ICsvTypeConverter.FallbackValue"/> zurückgegeben.</param>
+        /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
+        /// 
+        /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
+        /// ASCII-Zeichen).</exception>
+        /// 
+        /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
+        /// <paramref name="converter"/> ist <c>null</c>.</exception>
+        /// 
+        /// <exception cref="ArgumentOutOfRangeException"><paramref name="desiredCsvColumnIndex"/> ist kleiner als 0.</exception>
+        public CsvProperty(
+            string propertyName, int desiredCsvColumnIndex, ICsvTypeConverter converter)
         {
-            if (source is null)
+            ValidatePropertyName(propertyName);
+
+            if (desiredCsvColumnIndex < 0)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentOutOfRangeException(nameof(desiredCsvColumnIndex));
             }
 
-            this.PropertyName = source.PropertyName;
-            this.ColumnNameAliases = source.ColumnNameAliases;
-            this.Converter = source.Converter;
-            this._wildcardTimeout = source._wildcardTimeout;
+            if (converter is null)
+            {
+                throw new ArgumentNullException(nameof(converter));
+            }
+
+            this.PropertyName = propertyName;
+            this.DesiredCsvColumnIndex = desiredCsvColumnIndex;
+            this.Converter = converter;
         }
 
-#if NET40
-#pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
-#endif
+//#if NET40
+//#pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
+//#endif
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvProperty"/>-Objekt.
         /// </summary>
@@ -73,27 +93,17 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// 
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 0.</exception>
         public CsvProperty(
-#if NET40
-#pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
-#endif
+//#if NET40
+//#pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
+//#endif
             string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10)
         {
-            if (propertyName is null)
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
-
-            if (!Regex.IsMatch(propertyName, "^[A-Za-z_][A-Za-z0-9_]*$"))
-            {
-                throw new ArgumentException(Res.BadIdentifier, nameof(propertyName));
-            }
-
+            ValidatePropertyName(propertyName);
 
             if (columnNameAliases is null)
             {
                 throw new ArgumentNullException(nameof(columnNameAliases));
             }
-
 
 
             if (converter is null)
@@ -117,7 +127,6 @@ namespace FolkerKinzel.CsvTools.Helpers
             this._wildcardTimeout = wildcardTimeout;
         }
 
-
         /// <summary>
         /// Bezeichner der Eigenschaft
         /// </summary>
@@ -126,7 +135,8 @@ namespace FolkerKinzel.CsvTools.Helpers
 
         /// <summary>
         /// Sammlung von alternativen Spaltennamen der CSV-Datei, die <see cref="CsvRecordWrapper"/> für den Zugriff auf
-        /// auf eine Spalte von <see cref="CsvRecord"/> verwendet.
+        /// auf eine Spalte von <see cref="CsvRecord"/> verwendet oder <c>null</c>, wenn im Konstruktor stattdessen ein Index
+        /// angegeben wurde.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -138,7 +148,22 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// Da beim Setzen des Wertes von <see cref="CsvProperty"/> alle Aliase berücksichtigt werden, empfiehlt es sich nicht, mehreren
         /// <see cref="CsvRecord"/>-Objekten denselben Alias zuzuweisen.</para>
         /// </remarks>
-        public ReadOnlyCollection<string> ColumnNameAliases { get; }
+        public ReadOnlyCollection<string>? ColumnNameAliases { get; }
+
+        /// <summary>
+        /// Der Index der Spalte der CSV-Datei, auf die <see cref="CsvProperty"/> zugreifen soll oder
+        /// <c>null</c>, wenn dieser im Konstruktor nicht angegeben wurde.
+        /// </summary>
+        public int? DesiredCsvColumnIndex { get; }
+
+
+        /// <summary>
+        /// Der Index der Spalte der CSV-Datei, auf die <see cref="CsvProperty"/> zugreift oder <c>null</c>,
+        /// wenn <see cref="CsvProperty"/> kein Ziel in der CSV-Datei findet. Die Eigenschaft wird beim
+        /// ersten Lese- oder Schreibzugriff auf die CSV-Datei aktualisiert.
+        /// </summary>
+        public int? ReferredCsvColumnIndex => _lookup?.ColumnIndex;
+
 
 
         /// <summary>
@@ -158,14 +183,13 @@ namespace FolkerKinzel.CsvTools.Helpers
         internal object? GetValue(CsvRecord? record)
         {
             Debug.Assert(record != null);
-            
-            string? columnName = GetColumnName(record);
+            int? columnIndex = GetColumnIndex(record);
 
             try
             {
-                return columnName is null ? Converter.FallbackValue : Converter.Parse(record[columnName]);
+                return columnIndex.HasValue ? Converter.Parse(record[columnIndex.Value]) : Converter.FallbackValue;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new InvalidCastException(e.Message, e);
             }
@@ -182,44 +206,46 @@ namespace FolkerKinzel.CsvTools.Helpers
         internal void SetValue(CsvRecord? record, object? value)
         {
             Debug.Assert(record != null);
+            int? columnIndex = GetColumnIndex(record);
 
-            string? columnName = GetColumnName(record);
-
-            if (columnName != null)
+            if (columnIndex.HasValue)
             {
                 string? s = Converter.ConvertToString(value);
-                record[columnName] = s;
+                record[columnIndex.Value] = s;
             }
-            
         }
 
 
-        private string? GetColumnName(CsvRecord record)
+        private int? GetColumnIndex(CsvRecord record)
         {
             if (this._lookup is null || record.Identifier != _lookup.CsvRecordIdentifier)
             {
-                this._lookup = new ColumnAliasesLookup(record, this.ColumnNameAliases, this._wildcardTimeout);
+                this._lookup = ColumnNameAliases is null
+                    ? new ColumnAliasesLookup(record, this.DesiredCsvColumnIndex!.Value) 
+                    : new ColumnAliasesLookup(record, this.ColumnNameAliases, this._wildcardTimeout);
             }
 
-            return _lookup.ColumnName;
+            return _lookup.ColumnIndex;
         }
 
+        /// <summary>
+        /// Validates the propertyName.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> is null.</exception>
+        /// <exception cref="ArgumentException"><paramref name="propertyName"/> is not a valid C# identifier.</exception>
+        private static void ValidatePropertyName(string propertyName)
+        {
+            if (propertyName is null)
+            {
+                throw new ArgumentNullException(nameof(propertyName));
+            }
 
-        /// <inheritdoc/>
-        ///// <remarks>
-        ///// <para>
-        ///// Es ist nicht empfehlenswert, dasselbe <see cref="CsvProperty"/>-Objekt zum Lesen von
-        ///// CSV-Dateien mit verschiedenen Kopfzeilen zu verwenden - selbst wenn die zugewiesenen Spalten-Aliase dies ermöglichen würden.
-        ///// Der Grund dafür ist, dass beim ersten Lesen auf einer neuen Datei der geeignetste Alias ausgesucht und dann für alle
-        ///// nachfolgenden Lesevorgänge verwendet wird.
-        ///// </para>
-        ///// <para>Die Methode <see cref="Clone"/> erstellt eine flache
-        ///// Kopie des <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
-        ///// </para>
-        ///// </remarks>
-        [Obsolete("This method will be removed in the next major update.", false)]
-        public virtual object Clone() => new CsvProperty(this);
-        
+            if (!Regex.IsMatch(propertyName, "^[A-Za-z_][A-Za-z0-9_]*$"))
+            {
+                throw new ArgumentException(Res.BadIdentifier, nameof(propertyName));
+            }
+        }
 
 
         /////////////////////////////////////////////////////////////////////
@@ -227,8 +253,17 @@ namespace FolkerKinzel.CsvTools.Helpers
         private class ColumnAliasesLookup
         {
             public int CsvRecordIdentifier { get; }
+            public int? ColumnIndex { get; }
 
-            public string? ColumnName { get; private set; }
+            public ColumnAliasesLookup(CsvRecord record, int estimatedIndex)
+            {
+                this.CsvRecordIdentifier = record.Identifier;
+
+                if (estimatedIndex < record.ColumnNames.Count)
+                {
+                    ColumnIndex = estimatedIndex;
+                }
+            }
 
 #if NET40
             [SuppressMessage("Usage", "CA1801:Nicht verwendete Parameter überprüfen", Justification = "<Ausstehend>")]
@@ -239,9 +274,6 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                 IEqualityComparer<string>? comparer = record.Comparer;
                 ReadOnlyCollection<string>? columnNames = record.ColumnNames;
-
-                //this.Aliases = aliases.Intersect(record.Keys, comparer).Distinct(comparer).ToList();
-
 
                 for (int i = 0; i < aliases.Count; i++)
                 {
@@ -268,11 +300,11 @@ namespace FolkerKinzel.CsvTools.Helpers
                             {
                                 if (regex.IsMatch(columnName))
                                 {
-                                    this.ColumnName = columnName;
+                                    this.ColumnIndex = k;
                                     return;
                                 }
                             }
-                            catch(TimeoutException)
+                            catch (TimeoutException)
                             {
 #if !NET40
                                 Debug.WriteLine(nameof(RegexMatchTimeoutException));
@@ -288,7 +320,7 @@ namespace FolkerKinzel.CsvTools.Helpers
 
                             if (comparer.Equals(columnName, alias)) // Es kann in columnNames keine 2 Strings geben, auf die das zutrifft.
                             {
-                                this.ColumnName = columnName;
+                                this.ColumnIndex = j;
                                 return;
                             }
                         }
@@ -350,7 +382,7 @@ namespace FolkerKinzel.CsvTools.Helpers
                 // verwendet.
                 return new Regex(pattern,
                                  options,
-                                 wildcardTimeout == 0 ? Regex.InfiniteMatchTimeout 
+                                 wildcardTimeout == 0 ? Regex.InfiniteMatchTimeout
                                                       : TimeSpan.FromMilliseconds(wildcardTimeout));
             }
 #endif

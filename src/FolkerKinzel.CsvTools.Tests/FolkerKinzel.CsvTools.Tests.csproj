@@ -14,6 +14,9 @@
   <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
     <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Helpers\CsvIndexPropertyTest.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.0.3">

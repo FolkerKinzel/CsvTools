@@ -15,7 +15,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
         public void CsvIndexPropertyTest1()
         {
             const string propertyName = "myProp";
-            var prop = new CsvIndexProperty(propertyName, 0, new StringConverter(true, false, false));
+            var prop = new CsvProperty(propertyName, 0, new StringConverter(true, false, false));
 
             Assert.IsNotNull(prop);
             Assert.AreEqual(prop.PropertyName, propertyName);
@@ -24,40 +24,40 @@ namespace FolkerKinzel.CsvTools.Helpers.Tests
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CsvIndexPropertyTest2() => _ = new CsvIndexProperty("propertyName", -1, new StringConverter(true, false, false));
+        public void CsvIndexPropertyTest2() => _ = new CsvProperty("propertyName", -1, new StringConverter(true, false, false));
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CsvIndexPropertyTest3() => _ = new CsvIndexProperty(null!, 17, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
+        public void CsvIndexPropertyTest3() => _ = new CsvProperty(null!, 17, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
 
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CsvIndexPropertyTest4() => _ = new CsvIndexProperty("Prop", 17, null!);
+        public void CsvIndexPropertyTest4() => _ = new CsvProperty("Prop", 17, null!);
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void CsvIndexPropertyTest5() => _ = new CsvIndexProperty("Ähh", 17, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
+        public void CsvIndexPropertyTest5() => _ = new CsvProperty("Ähh", 17, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
        
 
-        [TestMethod()]
-        [Obsolete("Obsolete")]
-        public void CloneTest()
-        {
-            const string propName = "Prop";
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
+        //[TestMethod()]
+        //[Obsolete("Obsolete")]
+        //public void CloneTest()
+        //{
+        //    const string propName = "Prop";
+        //    ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
 
 
-            var prop = new CsvIndexProperty(propName, 42, conv);
+        //    var prop = new CsvIndexProperty(propName, 42, conv);
 
-            Assert.IsInstanceOfType(prop, typeof(CsvIndexProperty));
+        //    Assert.IsInstanceOfType(prop, typeof(CsvIndexProperty));
 
-            var clone = (CsvIndexProperty)prop.Clone();
+        //    var clone = (CsvIndexProperty)prop.Clone();
 
-            Assert.AreNotSame(prop, clone);
-            Assert.AreEqual(propName, prop.PropertyName, clone.PropertyName);
-            CollectionAssert.AreEqual(prop.ColumnNameAliases, clone.ColumnNameAliases);
-            Assert.AreSame(prop.Converter, clone.Converter);
-        }
+        //    Assert.AreNotSame(prop, clone);
+        //    Assert.AreEqual(propName, prop.PropertyName, clone.PropertyName);
+        //    CollectionAssert.AreEqual(prop.ColumnNameAliases, clone.ColumnNameAliases);
+        //    Assert.AreSame(prop.Converter, clone.Converter);
+        //}
     }
 }

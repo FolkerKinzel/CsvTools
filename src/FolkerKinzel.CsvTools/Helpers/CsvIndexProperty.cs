@@ -11,15 +11,18 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// Spezialisierung der <see cref="CsvProperty"/>-Klasse zur Bearbeitung von CSV-Dateien ohne Kopfzeile.
     /// </summary>
     /// <threadsafety static="true" instance="false"/>
-    public sealed class CsvIndexProperty : CsvProperty, ICloneable
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [Browsable(false)]
+    [Obsolete("This class will be removed.", true)]
+    public sealed class CsvIndexProperty : CsvProperty
     {
-        [Obsolete("This constructor will be removed in the next major update.", false)]
+        [Obsolete("This constructor will be removed.", true)]
         private CsvIndexProperty(CsvIndexProperty source) : base(source)
         {
 
         }
 
-        
+
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvIndexProperty"/>-Objekt.
         /// </summary>
@@ -35,14 +38,14 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <paramref name="converter"/> ist <c>null</c>.</exception>
         /// 
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0.</exception>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [Obsolete("This ctor will be removed.", true)]
         public CsvIndexProperty(
-            string propertyName, int csvColumnIndex, ICsvTypeConverter converter) : 
-            base(propertyName, new string[] { AutoColumnName.Create(csvColumnIndex) }, converter)
+            string propertyName, int csvColumnIndex, ICsvTypeConverter converter) :
+            base(propertyName, csvColumnIndex, converter)
         {
-            if(csvColumnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(csvColumnIndex));
-            }
+
         }
 
 
@@ -61,7 +64,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="csvColumnIndex"/> ist kleiner als 0.</exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Browsable(false)]
-        [Obsolete("Remove the argument for wildcardTimeout!", false)]
+        [Obsolete("Remove the argument for wildcardTimeout!", true)]
         public CsvIndexProperty(
             string propertyName, int csvColumnIndex, ICsvTypeConverter converter, int wildcardTimeout) :
             this(propertyName, csvColumnIndex, converter)
@@ -71,8 +74,10 @@ namespace FolkerKinzel.CsvTools.Helpers
 
 
         /// <inheritdoc cref="ICloneable.Clone" />
-        [Obsolete("This method will be removed in the next major update.")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [Obsolete("This method will be removed.", true)]
         public override object Clone() => new CsvIndexProperty(this);
-        
+
     }
 }

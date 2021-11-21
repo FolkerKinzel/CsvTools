@@ -272,10 +272,10 @@ namespace FolkerKinzel.CsvTools
 
 
         /// <summary>
-        /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zu derselben CSV-Datei
+        /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zum selben Lese- oder Schreibvorgang
         /// gehören, identisch ist. (Wird von <see cref="CsvProperty"/> verwendet, um festzustellen,
         /// ob das aktuelle <see cref="CsvRecord"/>-Objekt zu derselben CSV-Datei gehört, mit der das
-        /// Alias-Lookup erstellt wurde.)
+        /// <see cref="CsvProperty.ColumnAliasesLookup"/> erstellt wurde.)
         /// </summary>
         internal int Identifier => _lookupDictionary.GetHashCode();
 

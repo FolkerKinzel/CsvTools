@@ -79,6 +79,7 @@ CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</Packag
     <Compile Remove="Helpers\Converters\NullConverter.cs" />
     <Compile Remove="Helpers\Converters\NumberConverters.cs" />
     <Compile Remove="Helpers\Converters\ObjectConverter.cs" />
+    <Compile Remove="Helpers\CsvIndexProperty.cs" />
     <Compile Remove="Helpers\ObjectToStringConverter.cs" />
     <Compile Remove="Helpers\ThrowHelper.cs" />
     <Compile Remove="KeyedCollection2.cs" />

@@ -2,9 +2,11 @@
 ## Roadmap
 
 ### 2.0.0
-- [ ] Mark the usage of all obsolete symbols as errors.
-- [ ] Remove the interface ICloneable from CsvProperty and CsvIndexProperty.
-- [ ] CsvProperty and CsvIndexProperty should internally use the column index to target CsvRecord.
+- [x] Remove all obsolete symbols.
+- [x] Remove the interface ICloneable from CsvProperty and CsvIndexProperty.
+- [x] Remove CsvIndexProperty.
+- [x] Add a new constructor to CsvProperty that takes the desired column index as argument (instead of
+column name aliases). This is for CSV files without header row.
+- [x] Add new properties DesiredCsvColumnIndex and ReferredCsvColumnIndex to CsvProperty.
+- [x] CsvProperty should internally use the column index to target CsvRecord.
 
-### 2.0.1
-- [ ] Cleanup: Remove all obsolete symbols that are marked as errors.

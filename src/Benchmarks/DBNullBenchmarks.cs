@@ -3,6 +3,7 @@ using BenchmarkDotNet.Attributes;
 
 namespace Benchmarks
 {
+    [MemoryDiagnoser]
     public class DBNullBenchmarks
     {
         private readonly object _o = DBNull.Value;
