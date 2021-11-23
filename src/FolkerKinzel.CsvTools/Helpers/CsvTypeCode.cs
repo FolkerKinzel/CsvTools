@@ -1,4 +1,4 @@
-﻿namespace FolkerKinzel.CsvTools.Helpers.Converters
+﻿namespace FolkerKinzel.CsvTools.Helpers
 {
     /// <summary>
     /// Benannte Konstanten, um den Datentyp auszuwählen, den ein <see cref="ICsvTypeConverter"/>-Objekts umwandeln kann.

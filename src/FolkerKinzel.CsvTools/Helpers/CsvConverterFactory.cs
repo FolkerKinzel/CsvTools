@@ -1,9 +1,9 @@
-﻿using FolkerKinzel.CsvTools.Helpers.Converters.Intls;
-using FolkerKinzel.CsvTools.Helpers.Converters.Specialized;
+﻿using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.Helpers.Converters.Intls;
 using System;
 using System.Globalization;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers
 {
     /// <summary>
     /// Statische Klasse, die Methoden veröffentlicht, um <see cref="ICsvTypeConverter"/>-Objekte für alle elementaren

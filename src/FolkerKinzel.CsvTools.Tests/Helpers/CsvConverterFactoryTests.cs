@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Globalization;
+using FolkerKinzel.CsvTools.Helpers.Converters;
 using FolkerKinzel.CsvTools.Helpers.Converters.Intls;
-using FolkerKinzel.CsvTools.Helpers.Converters.Specialized;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Tests
 {
     [TestClass()]
     public class CsvConverterFactoryTests

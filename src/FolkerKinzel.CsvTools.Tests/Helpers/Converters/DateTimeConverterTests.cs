@@ -1,11 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FolkerKinzel.CsvTools.Helpers.Converters.Specialized;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
 {
     [TestClass()]
     public class DateTimeConverterTests

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters
+namespace FolkerKinzel.CsvTools.Helpers
 {
     /// <summary>
     /// Definiert eine Schnittstelle zur Umwandlung eines <see cref="string"/>-Objekts in einen anderen Datentyp und 

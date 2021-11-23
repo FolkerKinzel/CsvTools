@@ -2,7 +2,7 @@
 using System;
 using System.Globalization;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized
+namespace FolkerKinzel.CsvTools.Helpers.Converters
 {
     /// <summary>
     /// Implementiert das Interface <see cref="ICsvTypeConverter"/> für die Umwandlung

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FolkerKinzel.CsvTools.Helpers.Converters.Specialized.Tests
+namespace FolkerKinzel.CsvTools.Helpers.Converters.Tests
 {
     [TestClass()]
     public class GuidConverterTests
