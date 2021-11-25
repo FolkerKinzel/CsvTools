@@ -24,13 +24,6 @@ namespace FolkerKinzel.CsvTools.Helpers
     /// deklariert ist.
     /// </summary>
     /// <remarks>
-    /// <note type="important">
-    /// Es ist nicht empfehlenswert, dieselben <see cref="CsvProperty"/>-Objekte zum Lesen von 
-    /// CSV-Dateien mit verschiedenen Kopfzeilen zu verwenden - selbst wenn die zugewiesenen Spalten-Aliase dies ermöglichen würden.
-    /// Der Grund dafür ist, dass beim ersten Lesen der geeignetste Alias ausgesucht und dann für alle
-    /// nachfolgenden Lesevorgänge verwendet wird. Die Methode <see cref="CsvProperty.Clone">CsvProperty.Clone()</see> erstellt eine frische
-    /// Kopie eines <see cref="CsvProperty"/>-Objekts, die zum Lesen einer anderen CSV-Datei verwendet werden kann.
-    /// </note>
     /// <para>Nachdem ein <see cref="CsvRecordWrapper"/>-Objekt initialisiert wurde, müssen bei ihm mit der Methode 
     /// <see cref="AddProperty(CsvProperty)"/>&#160;<see cref="CsvProperty"/>-Objekte registriert werden, die dynamische Eigenschaften
     /// des <see cref="CsvRecordWrapper"/>-Objekts darstellen und Typkonvertierungen für die im zugrundeliegenden <see cref="CsvRecord"/>-Objekt

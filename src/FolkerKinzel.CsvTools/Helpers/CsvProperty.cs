@@ -9,6 +9,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+# if NETSTANDARD2_0 || NET461
+using FolkerKinzel.Strings.Polyfills;
+#endif
+
 namespace FolkerKinzel.CsvTools.Helpers
 {
     /// <summary>
@@ -65,9 +69,9 @@ namespace FolkerKinzel.CsvTools.Helpers
             this.Converter = converter;
         }
 
-//#if NET40
-//#pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
-//#endif
+#if NET40
+#pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
+#endif
         /// <summary>
         /// Initialisiert ein neues <see cref="CsvProperty"/>-Objekt.
         /// </summary>
@@ -93,9 +97,9 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// 
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 0.</exception>
         public CsvProperty(
-//#if NET40
-//#pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
-//#endif
+#if NET40
+#pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
+#endif
             string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10)
         {
             ValidatePropertyName(propertyName);

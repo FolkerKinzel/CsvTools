@@ -2,6 +2,9 @@
 ## Roadmap
 
 ### 2.0.0
+- [x] Add .NET 6.0 support.
+- [x] Add .NET Standard 2.0 support.
+- [x] Add .NET Framework 4.6.1 support.
 - [x] Remove all obsolete symbols.
 - [x] Reduce namespaces to increase the usability.
 - [x] Remove the interface ICloneable from CsvProperty and CsvIndexProperty.

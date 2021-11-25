@@ -6,6 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
+#if NETSTANDARD2_0 || NET461
+using FolkerKinzel.Strings.Polyfills;
+#endif
+
 namespace FolkerKinzel.CsvTools
 {
     /// <summary>
