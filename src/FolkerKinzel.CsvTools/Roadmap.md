@@ -7,12 +7,13 @@
 - [x] Add .NET Framework 4.6.1 support.
 - [x] Remove all obsolete symbols.
 - [x] Reduce namespaces to increase the usability.
-- [x] Remove the interface ICloneable from CsvProperty and CsvIndexProperty.
+- [x] Remove the interface ICloneable from CsvProperty.
 - [x] Remove CsvIndexProperty.
 - [x] Add a new constructor to CsvProperty that takes the desired column index as argument (instead of
 column name aliases). This is for CSV files without header row.
 - [x] Add new properties DesiredCsvColumnIndex and ReferredCsvColumnIndex to CsvProperty.
 - [x] CsvProperty should internally use the column index to target CsvRecord (for performance).
+- [ ] Add CsvMultiColumnConverter.
 
 ### 2.1.0
 - [ ] Add a BigIntegerConverter.
