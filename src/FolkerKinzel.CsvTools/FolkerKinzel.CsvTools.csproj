@@ -9,7 +9,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>1.5.0</Version>
-    <FileVersion>1.5.0.55</FileVersion>
+    <FileVersion>1.5.0.59</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>
 			Adds a .NET 5.0 dll to the package.

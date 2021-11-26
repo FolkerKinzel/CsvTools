@@ -44,7 +44,7 @@ namespace Benchmarks
 
                 for (int i = 0; i < _indexWrapper.Count; i++)
                 {
-                    letters += ((string)_indexWrapper[i]).Length;
+                    letters += ((string?)_indexWrapper[i])!.Length;
                 }
             }
 
@@ -63,7 +63,7 @@ namespace Benchmarks
 
                 for (int i = 0; i < _nameWrapper.Count; i++)
                 {
-                    letters += ((string)_nameWrapper[i]).Length;
+                    letters += ((string?)_nameWrapper[i])!.Length;
                 }
             }
 
