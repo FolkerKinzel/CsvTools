@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net5.0;netcoreapp3.1;net45</TargetFrameworks>
+		<TargetFrameworks>net6.0;net5.0;netcoreapp3.1;netcoreapp2.1;net461;net45</TargetFrameworks>
 		<LangVersion>10.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -10,7 +10,9 @@
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 		<NeutralLanguage>en</NeutralLanguage>
 	</PropertyGroup>
-
+	<ItemGroup>
+		<Using Remove="System.Net.Http" />
+	</ItemGroup>
 	
 
 	<!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.5 -->
