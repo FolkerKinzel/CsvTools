@@ -8,8 +8,6 @@
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <Version>1.5.0</Version>
     <FileVersion>1.5.0.55</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>

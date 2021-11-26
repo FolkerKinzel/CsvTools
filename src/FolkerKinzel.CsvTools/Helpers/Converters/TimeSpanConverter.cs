@@ -1,6 +1,5 @@
-﻿using FolkerKinzel.CsvTools.Resources;
-using System;
-using System.Globalization;
+﻿using System.Globalization;
+using FolkerKinzel.CsvTools.Resources;
 
 namespace FolkerKinzel.CsvTools.Helpers.Converters
 {
@@ -137,7 +136,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
             {
                 string tmp = TimeSpan.Zero.ToString(format, formatProvider);
 
-                if(parseExact)
+                if (parseExact)
                 {
                     _ = TimeSpan.ParseExact(tmp, format, formatProvider, styles);
                 }
@@ -209,7 +208,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
                        });
         }
 
-        
+
         /// <inheritdoc/>
         public object? FallbackValue { get; }
 
@@ -219,11 +218,11 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         /// </summary>
         public Type Type { get; }
 
-        
+
         /// <inheritdoc/>
         public bool ThrowsOnParseErrors { get; }
 
-        
+
         /// <inheritdoc/>
         /// <exception cref="FormatException"><paramref name="value"/> weist kein kompatibles Format auf. Die Ausnahme wird
         /// nur geworfen, wenn das im Konstruktor so konfiguriert wurde - anderenfalls wird <see cref="FallbackValue"/> zurückgegeben.</exception>
@@ -233,7 +232,7 @@ namespace FolkerKinzel.CsvTools.Helpers.Converters
         public object? Parse(string? value) => _parser(value);
 
 
-        
+
         /// <inheritdoc/>
         public string? ConvertToString(object? value) => _toStringConverter(value);
 
