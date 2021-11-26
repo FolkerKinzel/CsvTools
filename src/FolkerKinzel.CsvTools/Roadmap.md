@@ -14,3 +14,13 @@ column name aliases). This is for CSV files without header row.
 - [x] Add new properties DesiredCsvColumnIndex and ReferredCsvColumnIndex to CsvProperty.
 - [x] CsvProperty should internally use the column index to target CsvRecord (for performance).
 
+### 2.1.0
+- [ ] Add a BigIntegerConverter.
+- [ ] Add a UriConverter.
+- [ ] Add a VersionConverter.
+
+### 3.0.0
+- [ ] Remove .NET Framework 4.0 support.
+- [ ] Add a DateOnlyConverter.
+- [ ] Add a TimeOnlyConverter.
+
