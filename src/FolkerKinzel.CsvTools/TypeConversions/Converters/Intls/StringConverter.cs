@@ -24,7 +24,7 @@ internal sealed class StringConverter : ICsvTypeConverter
 
 
     /// <summary>
-    /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> kein Zugriffsziel
+    /// Wert, der zurückgegeben wird, wenn <see cref="CsvColumnNameProperty"/> kein Zugriffsziel
     /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn der Eingabewert
     /// von <see cref="Parse(string)"/>&#160;<c>null</c> ist.
     /// </summary>

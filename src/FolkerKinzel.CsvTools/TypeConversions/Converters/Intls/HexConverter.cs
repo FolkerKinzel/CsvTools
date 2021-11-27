@@ -45,7 +45,7 @@ internal class HexConverter<T> : ICsvTypeConverter where T : struct, IConvertibl
     }
 
     /// <summary>
-    /// Wert, der zurückgegeben wird, wenn <see cref="CsvProperty"/> keine Daten
+    /// Wert, der zurückgegeben wird, wenn <see cref="CsvColumnNameProperty"/> keine Daten
     /// in den Spalten der CSV-Datei (repräsentiert duch <see cref="CsvRecord"/>) findet oder wenn
     /// von <see cref="Parse(string)"/> scheitert.
     /// </summary>

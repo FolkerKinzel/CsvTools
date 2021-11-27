@@ -21,24 +21,24 @@ namespace FolkerKinzel.CsvTools.TypeConversions;
 /// </summary>
 /// <remarks>
 /// <para>Nachdem ein <see cref="CsvRecordWrapper"/>-Objekt initialisiert wurde, müssen bei ihm mit der Methode 
-/// <see cref="AddProperty(CsvProperty)"/>&#160;<see cref="CsvProperty"/>-Objekte registriert werden, die dynamische Eigenschaften
+/// <see cref="AddProperty(CsvColumnNameProperty)"/>&#160;<see cref="CsvColumnNameProperty"/>-Objekte registriert werden, die dynamische Eigenschaften
 /// des <see cref="CsvRecordWrapper"/>-Objekts darstellen und Typkonvertierungen für die im zugrundeliegenden <see cref="CsvRecord"/>-Objekt
 /// gespeicherten <see cref="string"/>s übernehmen. Die Reihenfolge, in der die Eigenschaften registriert sind, bestimmt die
 /// Reihenfolge, in der die Rückgabewerte dieser Eigenschaften zurückgegeben werden, wenn das <see cref="CsvRecordWrapper"/>-Objekt
 /// mit einer <c>foreach</c>-Schleife durchlaufen wird oder wenn mit dem Indexer <see cref="this[int]"/> darauf zugegriffen wird. Da
-/// die <see cref="CsvProperty"/>-Objekte über den CSV-Spaltenname auf das zugundeliegende <see cref="CsvRecord"/>-Objekt zugreifen,
-/// müssen Anzahl und Reihenfolge der im <see cref="CsvRecordWrapper"/>-Objekt registrierten <see cref="CsvProperty"/>-Objekte nicht
+/// die <see cref="CsvColumnNameProperty"/>-Objekte über den CSV-Spaltenname auf das zugundeliegende <see cref="CsvRecord"/>-Objekt zugreifen,
+/// müssen Anzahl und Reihenfolge der im <see cref="CsvRecordWrapper"/>-Objekt registrierten <see cref="CsvColumnNameProperty"/>-Objekte nicht
 /// mit den Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts übereinstimmen.
 /// </para>
 /// <para>Mit den folgenden Methoden kann jederzeit auf die Reihenfolge der registrierten Eigenschaften Einfluss genommen werden:</para>
 /// <list type="bullet">
-/// <item><see cref="InsertProperty(int, CsvProperty)"/></item>
-/// <item><see cref="ReplaceProperty(string, CsvProperty)"/></item>
-/// <item><see cref="ReplacePropertyAt(int, CsvProperty)"/></item>
+/// <item><see cref="InsertProperty(int, CsvColumnNameProperty)"/></item>
+/// <item><see cref="ReplaceProperty(string, CsvColumnNameProperty)"/></item>
+/// <item><see cref="ReplacePropertyAt(int, CsvColumnNameProperty)"/></item>
 /// <item><see cref="RemoveProperty(string)"/></item>
 /// <item><see cref="RemovePropertyAt(int)"/></item>
 /// </list>
-/// <para>Mit <see cref="Contains(string)"/> können Sie überprüfen, ob ein <see cref="CsvProperty"/>-Objekt mit dem angegebenen Namen
+/// <para>Mit <see cref="Contains(string)"/> können Sie überprüfen, ob ein <see cref="CsvColumnNameProperty"/>-Objekt mit dem angegebenen Namen
 /// bereits registriert ist.</para>
 /// <para>
 /// Auf die Indexer <see cref="this[int]"/> und <see cref="this[string]"/> kann zwar auch zugegriffen werden, wenn die 
@@ -47,7 +47,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions;
 /// </para>
 /// <para>Wenn die <see cref="CsvRecordWrapper"/>-Instanz einer Variablen zugewiesen ist, die mit dem Schlüsselwort <c>dynamic</c>
 /// deklariert wurde, übernimmt die Runtime die notwendigen Casts. Überdies ist es dann möglich, die registrierten 
-/// <see cref="CsvProperty"/>-Objekte wie normale Eigenschaften über ihren Namen anzusprechen (<see cref="CsvProperty.PropertyName"/>).
+/// <see cref="CsvColumnNameProperty"/>-Objekte wie normale Eigenschaften über ihren Namen anzusprechen (<see cref="CsvColumnNameProperty.PropertyName"/>).
 /// Der Nachteil ist, dass Visual Studio auf dynamischen Variablen keinerlei "IntelliSense" bieten kann.
 /// </para>
 /// <para>Wenn eine CSV-Datei mit <see cref="CsvWriter"/> geschrieben wird, genügt es, <see cref="CsvRecordWrapper"/> das <see cref="CsvRecord"/>-Objekt,
@@ -95,7 +95,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
 
     /// <summary>
-    /// Gibt die Anzahl der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Objekte
+    /// Gibt die Anzahl der im <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvColumnNameProperty"/>-Objekte
     /// zurück.
     /// </summary>
     public int Count => _dynProps.Count;
@@ -110,8 +110,8 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// <summary>
     /// Gibt eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten zurück.
     /// </summary>
-    /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+    /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
     /// Ausnahme wirft.</exception>
     /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
     /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
@@ -122,10 +122,10 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// <summary>
     /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
     /// über einen nullbasierten Index. Der Index entspricht der Reihenfolge, in der die
-    /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
+    /// <see cref="CsvColumnNameProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
     /// </summary>
-    /// <param name="index">Nullbasierter Index der registrierten <see cref="CsvProperty"/>-Objekte.</param>
-    /// <returns>Rückgabewert der bei <paramref name="index"/> registrierten <see cref="CsvProperty"/>.</returns>
+    /// <param name="index">Nullbasierter Index der registrierten <see cref="CsvColumnNameProperty"/>-Objekte.</param>
+    /// <returns>Rückgabewert der bei <paramref name="index"/> registrierten <see cref="CsvColumnNameProperty"/>.</returns>
     /// <exception cref = "InvalidOperationException" > Der Indexer wurde aufgerufen, bevor dem <see cref= "CsvRecordWrapper" />
     /// ein <see cref="CsvRecord"/>-Objekt zugewiesen wurde.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
@@ -138,8 +138,8 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// </para>
     /// <para>- oder -</para>
     /// <para>
-    /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+    /// der Rückgabewert der indexierten <see cref="CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
     /// Ausnahme wirft.
     /// </para></exception>
     /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
@@ -167,15 +167,15 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
     /// <summary>
     /// Ermöglicht den Zugriff auf die im <see cref="CsvRecordWrapper"/> registrierten Eigenschaften
-    /// über den Wert der Eigenschaft <see cref="CsvProperty.PropertyName"/>.
+    /// über den Wert der Eigenschaft <see cref="CsvColumnNameProperty.PropertyName"/>.
     /// </summary>
-    /// <param name="propertyName">Name der registrierten Eigenschaft. (Entspricht <see cref="CsvProperty.PropertyName"/>.) Der
+    /// <param name="propertyName">Name der registrierten Eigenschaft. (Entspricht <see cref="CsvColumnNameProperty.PropertyName"/>.) Der
     /// Vergleich erfolgt case-sensitiv.</param>
-    /// <returns>Rückgabewert der registrierten <see cref="CsvProperty"/>, deren Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/>
+    /// <returns>Rückgabewert der registrierten <see cref="CsvColumnNameProperty"/>, deren Eigenschaft <see cref="CsvColumnNameProperty.PropertyName"/>&#160;<paramref name="propertyName"/>
     /// entspricht. Der Vergleich ist case-sensitiv.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> ist <c>null</c>.</exception>
-    /// <exception cref="ArgumentException">Es wurde unter den bei <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvProperty"/>-Eigenschaften kein
-    /// <see cref="CsvProperty"/>-Objekt gefunden, dessen Eigenschaft <see cref="CsvProperty.PropertyName"/>&#160;<paramref name="propertyName"/> entspricht.</exception>
+    /// <exception cref="ArgumentException">Es wurde unter den bei <see cref="CsvRecordWrapper"/> registrierten <see cref="CsvColumnNameProperty"/>-Eigenschaften kein
+    /// <see cref="CsvColumnNameProperty"/>-Objekt gefunden, dessen Eigenschaft <see cref="CsvColumnNameProperty.PropertyName"/>&#160;<paramref name="propertyName"/> entspricht.</exception>
     /// <exception cref="InvalidCastException">
     /// <para>
     /// Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
@@ -183,8 +183,8 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// </para>
     /// <para>- oder -</para>
     /// <para>
-    /// der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+    /// der Rückgabewert der indexierten <see cref="CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
     /// Ausnahme wirft.
     /// </para></exception>
     /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
@@ -203,7 +203,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
                 throw new ArgumentNullException(nameof(propertyName));
             }
 
-            return this._dynProps.TryGetValue(propertyName, out CsvProperty? prop)
+            return this._dynProps.TryGetValue(propertyName, out CsvPropertyBase? prop)
                 ? prop.GetValue(this.Record)
                 : throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
         }
@@ -221,7 +221,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             }
 
 
-            if (this._dynProps.TryGetValue(propertyName, out CsvProperty? prop))
+            if (this._dynProps.TryGetValue(propertyName, out CsvPropertyBase? prop))
             {
                 prop.SetValue(this.Record, value);
             }
@@ -236,13 +236,13 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
 
     /// <summary>
-    /// Registriert eine <see cref="CsvProperty"/> am Ende der Auflistung der registrierten Eigenschaften.
+    /// Registriert eine <see cref="CsvColumnNameProperty"/> am Ende der Auflistung der registrierten Eigenschaften.
     /// </summary>
-    /// <param name="property">Die anzufügende <see cref="CsvProperty"/>.</param>
+    /// <param name="property">Die anzufügende <see cref="CsvColumnNameProperty"/>.</param>
     /// <exception cref="ArgumentNullException"><paramref name="property"/> ist <c>null</c>.</exception>
-    /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvProperty"/> mit demselben
-    /// <see cref="CsvProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
-    public void AddProperty(CsvProperty property)
+    /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvColumnNameProperty"/> mit demselben
+    /// <see cref="CsvColumnNameProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
+    public void AddProperty(CsvPropertyBase property)
     {
         if (property is null)
         {
@@ -254,22 +254,22 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
 
     /// <summary>
-    /// Entfernt die <see cref="CsvProperty"/> mit dem angegebenen <see cref="CsvProperty.PropertyName"/>
+    /// Entfernt die <see cref="CsvColumnNameProperty"/> mit dem angegebenen <see cref="CsvColumnNameProperty.PropertyName"/>
     /// aus der Auflistung der registrierten Eigenschaften.
     /// </summary>
-    /// <param name="propertyName">Der <see cref="CsvProperty.PropertyName"/> der zu entfernenden
-    /// <see cref="CsvProperty"/>.</param>
-    /// <returns><c>true</c>, wenn die gesuchte <see cref="CsvProperty"/> in der Auflistung enthalten war
+    /// <param name="propertyName">Der <see cref="CsvColumnNameProperty.PropertyName"/> der zu entfernenden
+    /// <see cref="CsvColumnNameProperty"/>.</param>
+    /// <returns><c>true</c>, wenn die gesuchte <see cref="CsvColumnNameProperty"/> in der Auflistung enthalten war
     /// und entfernt werden konnte.</returns>
     public bool RemoveProperty(string? propertyName)
-        => !(propertyName is null) && _dynProps.Remove(propertyName);
+        => propertyName is not null && _dynProps.Remove(propertyName);
 
 
     /// <summary>
-    /// Entfernt die <see cref="CsvProperty"/> am angegebenen <paramref name="index"/> aus der
+    /// Entfernt die <see cref="CsvColumnNameProperty"/> am angegebenen <paramref name="index"/> aus der
     /// Auflistung der registrierten Eigenschaften.
     /// </summary>
-    /// <param name="index">Der nullbasierte Index, an dem die <see cref="CsvProperty"/> entfernt werden soll.</param>
+    /// <param name="index">Der nullbasierte Index, an dem die <see cref="CsvColumnNameProperty"/> entfernt werden soll.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
     /// größer oder gleich <see cref="Count"/>.</exception>
     public void RemovePropertyAt(int index) => _dynProps.RemoveAt(index);
@@ -279,13 +279,13 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// Fügt <paramref name="property"/> am <paramref name="index"/> der registrierten Eigenschaften ein.
     /// </summary>
     /// <param name="index">Der nullbasierte Index, an dem <paramref name="property"/> eingefügt werden soll.</param>
-    /// <param name="property">Die einzufügende <see cref="CsvProperty"/>.</param>
+    /// <param name="property">Die einzufügende <see cref="CsvColumnNameProperty"/>.</param>
     /// <exception cref="ArgumentNullException"><paramref name="property"/> ist <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
     /// größer als <see cref="Count"/>.</exception>
-    /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvProperty"/> mit demselben
-    /// <see cref="CsvProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
-    public void InsertProperty(int index, CsvProperty property)
+    /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvColumnNameProperty"/> mit demselben
+    /// <see cref="CsvColumnNameProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
+    public void InsertProperty(int index, CsvPropertyBase property)
     {
         if (property is null)
         {
@@ -298,18 +298,18 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
 
     /// <summary>
-    /// Ersetzt die <see cref="CsvProperty"/> am angegebenen Index der Auflistung der registrierten Eigenschaften
+    /// Ersetzt die <see cref="CsvColumnNameProperty"/> am angegebenen Index der Auflistung der registrierten Eigenschaften
     /// durch <paramref name="property"/>.
     /// </summary>
     /// <param name="index">Der nullbasierte Index, an dem das in der Auflistung vorhandene
-    /// <see cref="CsvProperty"/>-Objekt durch <paramref name="property"/> ersetzt wird.</param>
-    /// <param name="property">Ein <see cref="CsvProperty"/>-Objekt.</param>
+    /// <see cref="CsvColumnNameProperty"/>-Objekt durch <paramref name="property"/> ersetzt wird.</param>
+    /// <param name="property">Ein <see cref="CsvColumnNameProperty"/>-Objekt.</param>
     /// <exception cref="ArgumentNullException"><paramref name="property"/> ist <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
     /// größer oder gleich <see cref="Count"/>.</exception>
-    /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvProperty"/> mit demselben
-    /// <see cref="CsvProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
-    public void ReplacePropertyAt(int index, CsvProperty property)
+    /// <exception cref="ArgumentException">Es ist bereits eine <see cref="CsvColumnNameProperty"/> mit demselben
+    /// <see cref="CsvColumnNameProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
+    public void ReplacePropertyAt(int index, CsvPropertyBase property)
     {
         if (property is null)
         {
@@ -321,18 +321,18 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
 
     /// <summary>
-    /// Ersetzt die registrierte Eigenschaft, deren <see cref="CsvProperty.PropertyName"/> gleich <paramref name="propertyName"/>
+    /// Ersetzt die registrierte Eigenschaft, deren <see cref="CsvColumnNameProperty.PropertyName"/> gleich <paramref name="propertyName"/>
     /// ist durch <paramref name="property"/>.
     /// </summary>
     /// <param name="propertyName">Bezeichner der registrierten Eigenschaft, die ersetzt werden soll.</param>
-    /// <param name="property"><see cref="CsvProperty"/>-Objekt, mit dem ersetzt werden soll.</param>
+    /// <param name="property"><see cref="CsvColumnNameProperty"/>-Objekt, mit dem ersetzt werden soll.</param>
     /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="property"/>
     /// ist <c>null</c>.</exception>
     /// <exception cref="ArgumentException">Es ist keine Eigenschaft unter der Bezeichnung <paramref name="propertyName"/>
     /// registriert - oder - in der Auflistung der registrierten Eigenschaften befindet sich bereits ein 
-    /// <see cref="CsvProperty"/>-Objekt dessen <see cref="CsvProperty.PropertyName"/>-Eigenschaft identisch
+    /// <see cref="CsvColumnNameProperty"/>-Objekt dessen <see cref="CsvColumnNameProperty.PropertyName"/>-Eigenschaft identisch
     /// mit der von <paramref name="property"/> ist. Prüfen Sie das vorher mit <see cref="Contains(string)"/>!</exception>
-    public void ReplaceProperty(string propertyName, CsvProperty property)
+    public void ReplaceProperty(string propertyName, CsvPropertyBase property)
     {
         if (propertyName is null)
         {
@@ -356,22 +356,22 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     }
 
     /// <summary>
-    /// Untersucht, ob ein <see cref="CsvProperty"/>-Objekt im <see cref="CsvRecordWrapper"/> unter dem mit
+    /// Untersucht, ob ein <see cref="CsvColumnNameProperty"/>-Objekt im <see cref="CsvRecordWrapper"/> unter dem mit
     /// <paramref name="propertyName"/> angegebenen Namen registriert ist.
     /// </summary>
-    /// <param name="propertyName">Der <see cref="CsvProperty.PropertyName"/> der zu suchenden
-    /// <see cref="CsvProperty"/>.</param>
-    /// <returns><c>true</c>, wenn ein <see cref="CsvProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
+    /// <param name="propertyName">Der <see cref="CsvColumnNameProperty.PropertyName"/> der zu suchenden
+    /// <see cref="CsvColumnNameProperty"/>.</param>
+    /// <returns><c>true</c>, wenn ein <see cref="CsvColumnNameProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
     /// angegebenen Namen registriert ist.</returns>
     public bool Contains(string? propertyName) => !(propertyName is null) && _dynProps.Contains(propertyName);
 
 
     /// <summary>
-    /// Gibt den Index der Eigenschaft zurück, die den Eigenschaftsnamen (<see cref="CsvProperty.PropertyName"/>) der 
+    /// Gibt den Index der Eigenschaft zurück, die den Eigenschaftsnamen (<see cref="CsvColumnNameProperty.PropertyName"/>) der 
     /// <paramref name="propertyName"/> entspricht oder -1, wenn eine solche Eigenschaft nicht in <see cref="CsvRecordWrapper"/> registriert ist.
     /// </summary>
-    /// <param name="propertyName">Der Eigenschaftsname der zu suchenden <see cref="CsvProperty"/>.</param>
-    /// <returns>Der Index der Eigenschaft, die <paramref name="propertyName"/> als Eigenschaftsnamen (<see cref="CsvProperty.PropertyName"/>) hat
+    /// <param name="propertyName">Der Eigenschaftsname der zu suchenden <see cref="CsvColumnNameProperty"/>.</param>
+    /// <returns>Der Index der Eigenschaft, die <paramref name="propertyName"/> als Eigenschaftsnamen (<see cref="CsvColumnNameProperty.PropertyName"/>) hat
     /// oder -1, wenn eine solche Eigenschaft nicht in <see cref="CsvRecordWrapper"/> registriert ist.</returns>
     public int IndexOf(string? propertyName) => propertyName is null ? -1 : _dynProps.Contains(propertyName) ? _dynProps.IndexOf(_dynProps[propertyName]) : -1;
 
@@ -382,7 +382,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// </summary>
     /// <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
     /// <param name="value">Das Objekt, das der dynamisch implementierten Eigenschaft zugewiesen wird.</param>
-    /// <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvProperty"/>
+    /// <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvColumnNameProperty"/>
     /// im <see cref="CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
     /// wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
@@ -404,7 +404,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
         }
 
-        if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
+        if (this._dynProps.TryGetValue(binder.Name, out CsvPropertyBase? prop))
         {
             prop.SetValue(this.Record, value);
             return true;
@@ -419,12 +419,12 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// </summary>
     /// <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
     /// <param name="result">Das Objekt, das den Rückgabewert der dynamisch implementierten Eigenschaft darstellt.</param>
-    /// <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvProperty"/>
+    /// <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="CsvColumnNameProperty"/>
     /// im <see cref="CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
     /// wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
-    /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+    /// <exception cref="Exception">Der Rückgabewert der indexierten <see cref="CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
     /// Ausnahme wirft.</exception>
     /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
     /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
@@ -441,7 +441,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
         }
 
-        if (this._dynProps.TryGetValue(binder.Name, out CsvProperty? prop))
+        if (this._dynProps.TryGetValue(binder.Name, out CsvPropertyBase? prop))
         {
             result = prop.GetValue(Record);
             return true;
@@ -531,11 +531,11 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// Gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, object?&gt;&gt;</see> zurück, mit dem die Rückgabewerte der 
     /// dynamisch implementierten Eigenschaften durchlaufen werden. Die Reihenfolge
     /// entspricht der Reihenfolge, in der die
-    /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
+    /// <see cref="CsvColumnNameProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
     /// </summary>
     /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, object?&gt;&gt;</see>.</returns>
-    /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+    /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
     /// Ausnahme wirft.</exception>
     /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
     /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
@@ -547,7 +547,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
         }
 
 
-        foreach (CsvProperty? prop in this._dynProps)
+        foreach (CsvPropertyBase? prop in this._dynProps)
         {
             yield return new KeyValuePair<string, object?>(prop.PropertyName, prop.GetValue(Record));
         }
@@ -558,11 +558,11 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// Gibt einen <see cref="IEnumerator"/> zurück, mit dem die Rückgabewerte der 
     /// dynamisch implementierten Eigenschaften durchlaufen werden können. Die Reihenfolge
     /// entspricht der Reihenfolge, in der die
-    /// <see cref="CsvProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
+    /// <see cref="CsvColumnNameProperty"/>-Objekte im <see cref="CsvRecordWrapper"/> registriert sind.
     /// </summary>
     /// <returns>Ein <see cref="IEnumerator"/>.</returns>
-    /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvProperty"/> konnte nicht erfolgreich geparst werden und 
-    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvProperty"/> war so konfiguriert, dass er in diesem Fall eine
+    /// <exception cref="InvalidCastException">Der Rückgabewert einer indexierten <see cref="CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+    /// der <see cref="ICsvTypeConverter"/> dieser <see cref="CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
     /// Ausnahme wirft.</exception>
     /// <exception cref="InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
     /// ein <see cref="CsvRecord"/>-Objekt zugewiesen war.</exception>
@@ -611,9 +611,9 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
     /// ////////////////////////////////////////////////////////////////////////
 
-    private class PropertyCollection : KeyedCollection<string, CsvProperty>
+    private class PropertyCollection : KeyedCollection<string, CsvPropertyBase>
     {
-        protected override string GetKeyForItem(CsvProperty item) => item.PropertyName;
+        protected override string GetKeyForItem(CsvPropertyBase item) => item.PropertyName;
 
         public PropertyCollection() : base(StringComparer.Ordinal) { }
     }
