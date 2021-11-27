@@ -14,6 +14,7 @@ column name aliases). This is for CSV files without header row.
 - [x] Add new properties DesiredCsvColumnIndex and ReferredCsvColumnIndex to CsvProperty.
 - [x] CsvProperty should internally use the column index to target CsvRecord (for performance).
 - [ ] Add CsvMultiColumnConverter.
+- [x] Rename FolkerKinzel.CsvTools.Helpers to FolkerKinzel.CsvTools.TypeConversions
 
 ### 2.1.0
 - [ ] Add a BigIntegerConverter.

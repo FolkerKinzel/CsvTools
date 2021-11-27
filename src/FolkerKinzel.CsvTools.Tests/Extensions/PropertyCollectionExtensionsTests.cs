@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.ObjectModel;
-using FolkerKinzel.CsvTools.Helpers;
-using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.TypeConversions;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace FolkerKinzel.CsvTools.Extensions.Tests
 {

@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;

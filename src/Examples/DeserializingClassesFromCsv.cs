@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using FolkerKinzel.CsvTools;
-using FolkerKinzel.CsvTools.Helpers;
-using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.TypeConversions;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace Examples
 {

@@ -1,4 +1,4 @@
-﻿using FolkerKinzel.CsvTools.Helpers;
+﻿using FolkerKinzel.CsvTools.TypeConversions;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools;
 using BenchmarkDotNet.Attributes;
 using System.IO;
