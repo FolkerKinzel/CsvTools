@@ -65,26 +65,26 @@ namespace Examples
 
             wrapper.AddProperty
                 (
-                    new CsvProperty("Name",
+                    new CsvColumnNameProperty("Name",
                                     new string[] { "*name" },
                                     stringConverter)
                 );
             wrapper.AddProperty
                 (
-                    new CsvProperty("Subject",
+                    new CsvColumnNameProperty("Subject",
                                     new string[] { "*subject", "*fach" },
                                     stringConverter)
                 );
             wrapper.AddProperty
                 (
-                    new CsvProperty("LessonDay",
+                    new CsvColumnNameProperty("LessonDay",
                                     new string[] { "*day", "*tag" },
                                     CsvConverterFactory
                                         .CreateEnumConverter<DayOfWeek>(nullable: true))
                 );
             wrapper.AddProperty
                 (
-                    new CsvProperty("LessonBegin",
+                    new CsvColumnNameProperty("LessonBegin",
                                     new string[] { "*begin?" },
                                     CsvConverterFactory
                                         .CreateConverter(CsvTypeCode.TimeSpan, nullable: true))

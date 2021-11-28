@@ -12,7 +12,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions;
 /// implementiert wird.
 /// </summary>
 /// <remarks>
-/// <see cref="CsvColumnNameProperty"/> kapselt Informationen über Zugriff und die Typkonvertierung, die <see cref="CsvRecordWrapper"/> benötigt,
+/// <see cref="CsvPropertyBase"/> kapselt Informationen, die <see cref="CsvRecordWrapper"/> benötigt,
 /// um auf die Daten des ihm zugrundeliegenden <see cref="CsvRecord"/>-Objekts zuzugreifen.
 /// </remarks>
 public abstract class CsvPropertyBase
@@ -26,9 +26,8 @@ public abstract class CsvPropertyBase
     /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
     /// ASCII-Zeichen).</exception>
     /// 
-    /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
-    /// <paramref name="converter"/> ist <c>null</c>.</exception>
-    public CsvPropertyBase(string propertyName)
+    /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> ist <c>null</c>.
+    protected CsvPropertyBase(string propertyName)
     {
         if (propertyName is null)
         {
@@ -50,17 +49,22 @@ public abstract class CsvPropertyBase
     public string PropertyName { get; }
 
     /// <summary>
+    /// Das <see cref="CsvRecord"/>-Objekt, über das der Zugriff auf die CSV-Datei erfolgt.
+    /// </summary>
+    protected internal abstract CsvRecord? Record { get; internal set; }
+
+    /// <summary>
     /// Extrahiert Daten eines bestimmten Typs aus <see cref="CsvRecord"/>.
     /// </summary>
     /// <param name="record">Das <see cref="CsvRecord"/>-Objekt, aus dem gelesen wird.</param>
-    /// <returns></returns>
-    internal abstract object? GetValue(CsvRecord record);
+    /// <returns>Die extrahierten Daten.</returns>
+    protected internal abstract object? GetValue();
 
     /// <summary>
     /// Speichert Daten eines bestimmten Typs in der CSV-Datei./>.
     /// </summary>
-    /// <param name="record"></param>
-    /// <param name="value"></param>
-    /// <exception cref="InvalidCastException"><paramref name="value"/> entsprach nicht dem Datentyp den <see cref="Converter"/> umwandeln kann.</exception>
-    internal abstract void SetValue(CsvRecord record, object? value);
+    /// <param name="record">Das <see cref="CsvRecord"/>-Objekt, in das die Daten hineingeschrieben werden.</param>
+    /// <param name="value">Das zu speichernde Objekt.</param>
+    /// <exception cref="InvalidCastException"><paramref name="value"/> entspricht nicht dem erwarteten Datentyp.</exception>
+    protected internal abstract void SetValue(object? value);
 }

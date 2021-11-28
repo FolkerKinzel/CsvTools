@@ -270,8 +270,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// <summary>
     /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zum selben Lese- oder Schreibvorgang
     /// gehören, identisch ist. (Wird von <see cref="CsvColumnNameProperty"/> verwendet, um festzustellen,
-    /// ob das aktuelle <see cref="CsvRecord"/>-Objekt zu derselben CSV-Datei gehört, mit der das
-    /// <see cref="CsvColumnNameProperty.UpdateReferredCsvColumnIndex"/> erstellt wurde.)
+    /// ob der Zugriffsindex aktuell ist.)
     /// </summary>
     internal int Identifier => _lookupDictionary.GetHashCode();
 

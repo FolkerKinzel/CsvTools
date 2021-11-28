@@ -101,26 +101,26 @@ namespace Examples
 
             wrapper.AddProperty
                 (
-                    new CsvProperty(PUPILS_NAME,
+                    new CsvColumnNameProperty(PUPILS_NAME,
                                     new string[] { PUPILS_NAME },
                                     stringConverter)
                 );
             wrapper.AddProperty
                 (
-                    new CsvProperty(SUBJECT,
+                    new CsvColumnNameProperty(SUBJECT,
                                     new string[] { SUBJECT },
                                     stringConverter)
                 );
             wrapper.AddProperty
                 (
-                    new CsvProperty(LESSON_DAY,
+                    new CsvColumnNameProperty(LESSON_DAY,
                                     new string[] { LESSON_DAY },
                                     CsvConverterFactory
                                         .CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true))
                 );
             wrapper.AddProperty
                 (
-                    new CsvProperty(LESSON_BEGIN,
+                    new CsvColumnNameProperty(LESSON_BEGIN,
                                     new string[] { LESSON_BEGIN },
                                     CsvConverterFactory
                                         .CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true))

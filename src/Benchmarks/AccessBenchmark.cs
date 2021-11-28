@@ -22,14 +22,14 @@ namespace Benchmarks
             _csv = Properties.Resources.Test1;
             ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
             _indexWrapper = new CsvRecordWrapper();
-            _indexWrapper.AddProperty(new CsvProperty("Column0", 0, conv));
-            _indexWrapper.AddProperty(new CsvProperty("Column1", 1, conv));
-            _indexWrapper.AddProperty(new CsvProperty("Column2", 2, conv));
+            _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column0", 0, conv));
+            _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column1", 1, conv));
+            _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column2", 2, conv));
 
             _nameWrapper = new CsvRecordWrapper();
-            _nameWrapper.AddProperty(new CsvProperty("Column0", new string[] { "Column0" }, conv));
-            _nameWrapper.AddProperty(new CsvProperty("Column1", new string[] { "Column1" }, conv));
-            _nameWrapper.AddProperty(new CsvProperty("Column2", new string[] { "Column2" }, conv));
+            _nameWrapper.AddProperty(new CsvColumnNameProperty("Column0", new string[] { "Column0" }, conv));
+            _nameWrapper.AddProperty(new CsvColumnNameProperty("Column1", new string[] { "Column1" }, conv));
+            _nameWrapper.AddProperty(new CsvColumnNameProperty("Column2", new string[] { "Column2" }, conv));
         }
 
         [Benchmark]

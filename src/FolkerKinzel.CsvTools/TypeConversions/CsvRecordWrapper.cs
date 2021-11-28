@@ -61,6 +61,10 @@ namespace FolkerKinzel.CsvTools.TypeConversions;
 /// bei jeder Iteration ein neues <see cref="CsvRecord"/>-Objekt zurück. (Das gilt nicht, wenn der <see cref="CsvReader"/> mit <see cref="CsvOptions.DisableCaching"/>
 /// initialisiert wurde.)
 /// </para>
+/// <para>
+/// Wenn <see cref="CsvMultiColumnProperty"/>-Objekte in <see cref="CsvRecordWrapper"/> eingefügt werden, erhalten die <see cref="CsvRecordWrapper"/>-Objekte
+/// ihrer <see cref="CsvMultiColumnTypeConverter"/> das aktuelle <see cref="CsvRecord"/>-Objekt automatisch über den Mutter-Wrapper, in den sie eingefügt sind.
+/// </para>
 /// </remarks>
 /// <example>
 /// <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
@@ -73,6 +77,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions;
 public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<string, object?>>
 {
     private readonly PropertyCollection _dynProps = new();
+    private CsvRecord? _record;
 
     #region ctors
 
@@ -91,7 +96,20 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// Das <see cref="CsvRecord"/>-Objekt, 
     /// auf dessen Daten <see cref="CsvRecordWrapper"/> zugreift.
     /// </summary>
-    public CsvRecord? Record { get; set; }
+    public CsvRecord? Record
+    {
+        get => _record;
+
+        set
+        {
+            _record = value;
+
+            for (int i = 0; i < _dynProps.Count; i++)
+            {
+                _dynProps[i].Record = value;
+            }
+        }
+    }
 
 
     /// <summary>
@@ -150,7 +168,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
         {
             return Record is null
                 ? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)))
-                : _dynProps[index].GetValue(this.Record);
+                : _dynProps[index].GetValue();
         }
 
         set
@@ -160,7 +178,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
             }
 
-            _dynProps[index].SetValue(this.Record, value);
+            _dynProps[index].SetValue(value);
         }
     }
 
@@ -204,7 +222,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             }
 
             return this._dynProps.TryGetValue(propertyName, out CsvPropertyBase? prop)
-                ? prop.GetValue(this.Record)
+                ? prop.GetValue()
                 : throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
         }
 
@@ -223,7 +241,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
             if (this._dynProps.TryGetValue(propertyName, out CsvPropertyBase? prop))
             {
-                prop.SetValue(this.Record, value);
+                prop.SetValue(value);
             }
             else
             {
@@ -250,6 +268,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
         }
 
         this._dynProps.Add(property);
+        property.Record = Record;
     }
 
 
@@ -265,6 +284,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
         => propertyName is not null && _dynProps.Remove(propertyName);
 
 
+
     /// <summary>
     /// Entfernt die <see cref="CsvColumnNameProperty"/> am angegebenen <paramref name="index"/> aus der
     /// Auflistung der registrierten Eigenschaften.
@@ -272,7 +292,8 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// <param name="index">Der nullbasierte Index, an dem die <see cref="CsvColumnNameProperty"/> entfernt werden soll.</param>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
     /// größer oder gleich <see cref="Count"/>.</exception>
-    public void RemovePropertyAt(int index) => _dynProps.RemoveAt(index);
+    public void RemovePropertyAt(int index)
+    => _dynProps.RemoveAt(index);
 
 
     /// <summary>
@@ -292,8 +313,8 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             throw new ArgumentNullException(nameof(property));
         }
 
-
         _dynProps.Insert(index, property);
+        property.Record = Record;
     }
 
 
@@ -320,6 +341,8 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     }
 
 
+
+
     /// <summary>
     /// Ersetzt die registrierte Eigenschaft, deren <see cref="CsvColumnNameProperty.PropertyName"/> gleich <paramref name="propertyName"/>
     /// ist durch <paramref name="property"/>.
@@ -344,15 +367,10 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             throw new ArgumentNullException(nameof(property));
         }
 
-        if (Contains(propertyName))
-        {
-            int index = _dynProps.IndexOf(_dynProps[propertyName]);
-            _dynProps[index] = property;
-        }
-        else
-        {
-            throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
-        }
+
+        int index = _dynProps.IndexOf(_dynProps[propertyName]);
+
+        _dynProps[index] = index >= 0 ? property : throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
     }
 
     /// <summary>
@@ -363,7 +381,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// <see cref="CsvColumnNameProperty"/>.</param>
     /// <returns><c>true</c>, wenn ein <see cref="CsvColumnNameProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
     /// angegebenen Namen registriert ist.</returns>
-    public bool Contains(string? propertyName) => !(propertyName is null) && _dynProps.Contains(propertyName);
+    public bool Contains(string? propertyName) => propertyName is not null && _dynProps.Contains(propertyName);
 
 
     /// <summary>
@@ -406,7 +424,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
         if (this._dynProps.TryGetValue(binder.Name, out CsvPropertyBase? prop))
         {
-            prop.SetValue(this.Record, value);
+            prop.SetValue(value);
             return true;
         }
 
@@ -443,7 +461,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
         if (this._dynProps.TryGetValue(binder.Name, out CsvPropertyBase? prop))
         {
-            result = prop.GetValue(Record);
+            result = prop.GetValue();
             return true;
         }
 
@@ -549,7 +567,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
         foreach (CsvPropertyBase? prop in this._dynProps)
         {
-            yield return new KeyValuePair<string, object?>(prop.PropertyName, prop.GetValue(Record));
+            yield return new KeyValuePair<string, object?>(prop.PropertyName, prop.GetValue());
         }
     }
 
@@ -607,7 +625,6 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
         return sb.ToString();
     }
-
 
     /// ////////////////////////////////////////////////////////////////////////
 

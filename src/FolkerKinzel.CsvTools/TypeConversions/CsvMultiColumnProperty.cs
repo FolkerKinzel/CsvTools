@@ -4,9 +4,24 @@ using FolkerKinzel.Strings.Polyfills;
 
 namespace FolkerKinzel.CsvTools.TypeConversions;
 
-public class CsvMultiColumnProperty<T> : CsvPropertyBase
+/// <summary>
+/// Abstrakte Basisklasse für Klassen, die eine Eigenschaft von <see cref="CsvRecordWrapper"/> repräsentieren, die dynamisch zur Laufzeit
+/// implementiert wird, und deren Daten aus verschiedenen Spalten der CSV-Datei stammen.
+/// </summary>
+public class CsvMultiColumnProperty : CsvPropertyBase
 {
-    protected CsvMultiColumnProperty(string propertyName, CsvMultiColumnTypeConverter<T> converter) : base(propertyName)
+    /// <summary>
+    /// Initialisiert ein neues <see cref="CsvMultiColumnProperty"/>-Objekt.
+    /// </summary>
+    /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
+    /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
+    /// <param name="converter">Ein von <see cref="CsvMultiColumnTypeConverter"/> abgeleitetes Objekt, das die Typkonvertierung durchführt.</param>
+    /// 
+    /// <exception cref="ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
+    /// ASCII-Zeichen).</exception>
+    /// 
+    /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="converter"/> ist <c>null</c>.
+    public CsvMultiColumnProperty(string propertyName, CsvMultiColumnTypeConverter converter) : base(propertyName)
     {
         if (converter is null)
         {
@@ -16,17 +31,19 @@ public class CsvMultiColumnProperty<T> : CsvPropertyBase
         this.Converter = converter;
     }
 
-    public CsvMultiColumnTypeConverter<T> Converter { get; }
+    /// <summary>
+    /// Ein von <see cref="CsvMultiColumnTypeConverter"/> abgeleitetes Objekt, das die Typkonvertierung durchführt.
+    /// </summary>
+    public CsvMultiColumnTypeConverter Converter { get; }
 
-    internal override object? GetValue(CsvRecord record)
-    {
-        Converter.Wrapper.Record = record;
-        return Converter.Create();
-    }
+    /// <summary>
+    /// Das <see cref="CsvRecord"/>-Objekt, über das der Zugriff auf die CSV-Datei erfolgt.
+    /// </summary>
+    protected internal override CsvRecord? Record { get => Converter.Wrapper.Record; internal set => Converter.Wrapper.Record = value; }
 
-    internal override void SetValue(CsvRecord record, object? value)
-    {
-        Converter.Wrapper.Record = record;
-        Converter.ToCsv((T?)value);
-    }
+    /// <inheritdoc/>
+    protected internal override object? GetValue() => Converter.Create();
+
+    /// <inheritdoc/>
+    protected internal override void SetValue(object? value) => Converter.ToCsv(value);
 }

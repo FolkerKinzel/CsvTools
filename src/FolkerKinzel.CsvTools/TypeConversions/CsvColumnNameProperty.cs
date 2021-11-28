@@ -15,7 +15,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions;
 /// <summary>
 /// Repräsentiert eine Eigenschaft, die von <see cref="CsvRecordWrapper"/> dynamisch zur Laufzeit implementiert wird ("späte Bindung").
 /// <see cref="CsvColumnNameProperty"/> kapselt Informationen über Zugriff und die Typkonvertierung, die <see cref="CsvRecordWrapper"/> benötigt,
-/// um auf die Daten des ihm zugrundeliegenden <see cref="CsvRecord"/>-Objekts zuzugreifen.
+/// um auf die Daten des ihm zugrundeliegenden <see cref="CsvRecord"/>-Objekts über den Spaltennamen zuzugreifen.
 /// </summary>
 /// <threadsafety static="true" instance="false"/>
 public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
@@ -36,12 +36,12 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
     /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
     /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
     /// <param name="columnNameAliases">Spaltennamen der CSV-Datei, auf die <see cref="CsvColumnNameProperty"/> zugreifen kann. Für den
-    /// Zugriff auf <see cref="CsvColumnNameProperty"/> wird der erste Alias verwendet, der eine Übereinstimmung 
+    /// Zugriff wird der erste Alias verwendet, der eine Übereinstimmung 
     /// mit einem Spaltennamen der CSV-Datei hat. Die Alias-Strings dürfen die Wildcard-Zeichen * und ? enthalten. Wenn ein 
     /// Wildcard-Alias mit mehreren Spalten der CSV-Datei eine Übereinstimmung hat, wird die Spalte mit dem niedrigsten Index referenziert.</param>
     /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
     /// <param name="wildcardTimeout">Timeout-Wert in Millisekunden oder 0, für <see cref="Regex.InfiniteMatchTimeout"/>. 
-    /// Ist der Wert größer als <see cref="MaxWildcardTimeout"/> wird er auf diesen Wert normalisiert.
+    /// Ist der Wert größer als <see cref="MaxWildcardTimeout"/>, wird er auf diesen Wert normalisiert.
     /// Wenn ein Alias in <paramref name="columnNameAliases"/> ein
     /// Wildcard-Zeichen enthält, wird innerhalb
     /// dieses Timeouts versucht, den Alias aufzulösen. Gelingt dies nicht, reagiert <see cref="CsvColumnNameProperty"/> so, als hätte sie
@@ -83,8 +83,7 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
 
     /// <summary>
     /// Sammlung von alternativen Spaltennamen der CSV-Datei, die <see cref="CsvRecordWrapper"/> für den Zugriff auf
-    /// auf eine Spalte von <see cref="CsvRecord"/> verwendet oder <c>null</c>, wenn im Konstruktor stattdessen ein Index
-    /// angegeben wurde.
+    /// auf eine Spalte von <see cref="CsvRecord"/> verwendet.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -98,21 +97,32 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
     /// </remarks>
     public ReadOnlyCollection<string> ColumnNameAliases { get; }
 
+    /// <summary>
+    /// Ein Hashcode, der für alle <see cref="CsvRecord"/>-Objekte, die zum selben Lese- oder Schreibvorgang
+    /// gehören, identisch ist. (Wird von <see cref="CsvColumnNameProperty"/> verwendet, um festzustellen,
+    /// ob der Zugriffsindex aktuell ist.)
+    /// </summary>
     private int CsvRecordIdentifier { get; set; }
 
-    protected override void UpdateReferredCsvColumnIndex(CsvRecord record)
+    
+    /// <inheritdoc/>
+    protected override void UpdateReferredCsvColumnIndex()
     {
-        if (CsvRecordIdentifier != record.Identifier)
+        Debug.Assert(Record is not null);
+        if (CsvRecordIdentifier != Record.Identifier)
         {
-            CsvRecordIdentifier = record.Identifier;
-            ReferredCsvColumnIndex = GetReferredIndex(record); ;
+            CsvRecordIdentifier = Record.Identifier;
+            ReferredCsvColumnIndex = GetReferredIndex(); ;
         }
     }
 
-    private int? GetReferredIndex(CsvRecord record)
+    #region private
+    private int? GetReferredIndex()
     {
-        IEqualityComparer<string>? comparer = record.Comparer;
-        ReadOnlyCollection<string>? columnNames = record.ColumnNames;
+        Debug.Assert(Record is not null);
+
+        IEqualityComparer<string>? comparer = Record.Comparer;
+        ReadOnlyCollection<string>? columnNames = Record.ColumnNames;
 
         for (int i = 0; i < ColumnNameAliases.Count; i++)
         {
@@ -225,5 +235,5 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
 #endif
 
 
-
+    #endregion
 }

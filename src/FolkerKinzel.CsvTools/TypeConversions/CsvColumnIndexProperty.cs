@@ -2,8 +2,16 @@
 using FolkerKinzel.Strings.Polyfills;
 #endif
 
+using System.Diagnostics;
+
 namespace FolkerKinzel.CsvTools.TypeConversions;
 
+/// <summary>
+/// Repräsentiert eine Eigenschaft, die von <see cref="CsvRecordWrapper"/> dynamisch zur Laufzeit implementiert wird ("späte Bindung").
+/// <see cref="CsvColumnIndexProperty"/> kapselt Informationen über Zugriff und die Typkonvertierung, die <see cref="CsvRecordWrapper"/> benötigt,
+/// um auf die Daten des ihm zugrundeliegenden <see cref="CsvRecord"/>-Objekts über den nullbasierten Spaltenindex zuzugreifen.
+/// </summary>
+/// <threadsafety static="true" instance="false"/>
 public sealed class CsvColumnIndexProperty : CsvSingleColumnProperty
 {
     /// <summary>
@@ -11,9 +19,9 @@ public sealed class CsvColumnIndexProperty : CsvSingleColumnProperty
     /// </summary>
     /// <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
     /// entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
-    /// <param name="desiredCsvColumnIndex">Nullbasierter Index der Spalte der CSV-Datei in die <see cref="CsvColumnNameProperty"/> schreiben soll bzw.
-    /// aus der <see cref="CsvColumnNameProperty"/> lesen soll. Wenn es den Index in der CSV-Datei nicht
-    /// gibt, wird die <see cref="CsvColumnNameProperty"/> beim Schreiben ignoriert. Beim Lesen wird in diesem Fall
+    /// <param name="desiredCsvColumnIndex">Nullbasierter Index der Spalte der CSV-Datei in die <see cref="CsvColumnIndexProperty"/> schreiben soll bzw.
+    /// aus der <see cref="CsvColumnIndexProperty"/> lesen soll. Wenn es den Index in der CSV-Datei nicht
+    /// gibt, wird die <see cref="CsvColumnIndexProperty"/> beim Schreiben ignoriert. Beim Lesen wird in diesem Fall
     /// <see cref="ICsvTypeConverter.FallbackValue"/> zurückgegeben.</param>
     /// <param name="converter">Der <see cref="ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
     /// 
@@ -36,11 +44,15 @@ public sealed class CsvColumnIndexProperty : CsvSingleColumnProperty
     }
 
     /// <summary>
-    /// Der Index der Spalte der CSV-Datei, auf die <see cref="CsvColumnNameProperty"/> zugreifen soll oder
-    /// <c>null</c>, wenn dieser im Konstruktor nicht angegeben wurde.
+    /// Der Index der Spalte der CSV-Datei, auf die <see cref="CsvColumnIndexProperty"/> zugreifen soll.
     /// </summary>
     public int DesiredCsvColumnIndex { get; }
 
-    protected override void UpdateReferredCsvColumnIndex(CsvRecord record)
-        => ReferredCsvColumnIndex = DesiredCsvColumnIndex < record.Count ? DesiredCsvColumnIndex : null;
+
+    /// <inheritdoc/>
+    protected override void UpdateReferredCsvColumnIndex()
+    {
+        Debug.Assert(Record is not null);
+        ReferredCsvColumnIndex = DesiredCsvColumnIndex < Record.Count ? DesiredCsvColumnIndex : null;
+    }
 }
