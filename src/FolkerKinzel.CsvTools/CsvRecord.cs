@@ -48,6 +48,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     internal CsvRecord(CsvRecord source)
     {
         _lookupDictionary = source._lookupDictionary;
+        Identifier = source.Identifier;
         _columnNames = source._columnNames;
         _values = new string?[Count];
     }
@@ -68,7 +69,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
             StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
 
         this._lookupDictionary = new Dictionary<string, int>(columnsCount, comparer);
-
+        Identifier = _lookupDictionary.GetHashCode();
 
         var keyArr = new string[columnsCount];
 
@@ -114,6 +115,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
             StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
 
         this._lookupDictionary = new Dictionary<string, int>(keys.Length, comparer);
+        Identifier = _lookupDictionary.GetHashCode();
 
         int defaultNameCounter = 0;
 
@@ -272,7 +274,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// gehören, identisch ist. (Wird von <see cref="CsvColumnNameProperty"/> verwendet, um festzustellen,
     /// ob der Zugriffsindex aktuell ist.)
     /// </summary>
-    internal int Identifier => _lookupDictionary.GetHashCode();
+    internal int Identifier { get; }
 
 
     /// <summary>
