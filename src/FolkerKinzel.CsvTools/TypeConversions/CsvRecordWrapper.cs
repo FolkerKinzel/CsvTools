@@ -347,7 +347,6 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     /// Ersetzt die registrierte Eigenschaft, deren <see cref="CsvColumnNameProperty.PropertyName"/> gleich <paramref name="propertyName"/>
     /// ist durch <paramref name="property"/>.
     /// </summary>
-    /// <param name="propertyName">Bezeichner der registrierten Eigenschaft, die ersetzt werden soll.</param>
     /// <param name="property"><see cref="CsvColumnNameProperty"/>-Objekt, mit dem ersetzt werden soll.</param>
     /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="property"/>
     /// ist <c>null</c>.</exception>
@@ -367,10 +366,15 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             throw new ArgumentNullException(nameof(property));
         }
 
-
-        int index = _dynProps.IndexOf(_dynProps[propertyName]);
-
-        _dynProps[index] = index >= 0 ? property : throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
+        try
+        { 
+            int index = _dynProps.IndexOf(_dynProps[propertyName]);
+            _dynProps[index] = property;
+        }
+        catch(KeyNotFoundException e)
+        {
+            throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName), e);
+        }
     }
 
     /// <summary>

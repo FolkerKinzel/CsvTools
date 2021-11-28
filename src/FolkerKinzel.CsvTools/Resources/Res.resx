@@ -133,6 +133,6 @@
     <value>You must not run this method twice.</value>
   </data>
   <data name="PropertyNotFound" xml:space="preserve">
-    <value>There is no property with this name!</value>
+    <value>No property with this name has been found.</value>
   </data>
 </root>
