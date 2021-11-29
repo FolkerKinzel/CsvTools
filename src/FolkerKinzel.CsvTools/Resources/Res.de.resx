@@ -133,6 +133,6 @@
     <value>Die Methode darf nicht mehrmals aufgerufen werden.</value>
   </data>
   <data name="PropertyNotFound" xml:space="preserve">
-    <value>Es wurde keine Eigenschaft mit dem angegebenen Namen gefunden.</value>
+    <value>Es wurde keine Eigenschaft mit dem Namen "{0}" gefunden.</value>
   </data>
 </root>

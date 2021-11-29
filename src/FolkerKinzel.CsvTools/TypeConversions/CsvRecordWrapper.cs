@@ -102,11 +102,14 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
         set
         {
-            _record = value;
-
-            for (int i = 0; i < _dynProps.Count; i++)
+            if (!object.ReferenceEquals(_record, value))
             {
-                _dynProps[i].Record = value;
+                _record = value;
+
+                for (int i = 0; i < _dynProps.Count; i++)
+                {
+                    _dynProps[i].Record = value;
+                }
             }
         }
     }
@@ -223,7 +226,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
             return this._dynProps.TryGetValue(propertyName, out CsvPropertyBase? prop)
                 ? prop.GetValue()
-                : throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
+                : throw new ArgumentException(string.Format(Res.PropertyNotFound, nameof(propertyName)), nameof(propertyName));
         }
 
         set
@@ -245,7 +248,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
             }
             else
             {
-                throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName));
+                throw new ArgumentException(string.Format(Res.PropertyNotFound, nameof(propertyName)), nameof(propertyName));
             }
         }
     }
@@ -373,7 +376,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
         }
         catch(KeyNotFoundException e)
         {
-            throw new ArgumentException(Res.PropertyNotFound, nameof(propertyName), e);
+            throw new ArgumentException(string.Format(Res.PropertyNotFound, nameof(propertyName)), nameof(propertyName), e);
         }
     }
 

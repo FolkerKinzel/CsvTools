@@ -106,7 +106,7 @@ namespace FolkerKinzel.CsvTools.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die No property with this name has been found. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die No property named &quot;{0}&quot; was found. ähnelt.
         /// </summary>
         internal static string PropertyNotFound {
             get {
