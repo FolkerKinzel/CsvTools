@@ -9,7 +9,26 @@ using System.Collections;
 
 namespace FolkerKinzel.CsvTools.Tests
 {
-    [TestClass()]
+    //public class CsvToolsTests<T>
+    //{
+    //    public virtual T? Test(T? val = default )
+    //    {
+    //        return val;
+    //    }
+    //}
+
+    //public class Foo : CsvToolsTests<int>
+    //{
+    //    public Foo()
+    //    {
+    //        this.Val = Test();
+    //    }
+
+    //    public int Val { get; }
+
+    //    public override int Test(int val = 0) => base.Test(val);
+    //}
+
     public class CsvReaderTests
     {
         [NotNull]
