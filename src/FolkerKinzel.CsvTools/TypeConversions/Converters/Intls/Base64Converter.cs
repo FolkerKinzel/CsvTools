@@ -22,7 +22,7 @@ internal class Base64Converter : ICsvTypeConverter
     internal Base64Converter(bool allowNull, bool maybeDBNull, bool throwOnParseErrors)
     {
 #if NET40
-            FallbackValue = maybeDBNull ? DBNull.Value : allowNull ? null : new byte[0];
+        FallbackValue = maybeDBNull ? DBNull.Value : allowNull ? null : new byte[0];
 #else
         FallbackValue = maybeDBNull ? DBNull.Value : allowNull ? null : Array.Empty<byte>();
 #endif

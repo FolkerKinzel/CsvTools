@@ -1,4 +1,6 @@
-﻿namespace FolkerKinzel.CsvTools.TypeConversions;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace FolkerKinzel.CsvTools.TypeConversions;
 
 /// <summary>
 /// Definiert eine Schnittstelle zur Umwandlung eines <see cref="string"/>-Objekts in einen anderen Datentyp und 
