@@ -13,14 +13,14 @@
 column name aliases). This is for CSV files without header row.
 - [x] Add new properties DesiredCsvColumnIndex and ReferredCsvColumnIndex to CsvProperty.
 - [x] CsvProperty should internally use the column index to target CsvRecord (for performance).
-- [ ] Add CsvMultiColumnConverter.
+- [ ] Add CsvMultiColumnConverter&lt;T&gt;.
 - [x] Rename FolkerKinzel.CsvTools.Helpers to FolkerKinzel.CsvTools.TypeConversions
 
 ### 2.1.0
 - [ ] Add a BigIntegerConverter.
 - [ ] Add a UriConverter.
 - [ ] Add a VersionConverter.
-- [ ] Replace NumberConverter<T> with Converters of specified Types to avoid unnecessary unboxing for performance.
+- [ ] Replace NumberConverter&lt;T&gt;by Converters of specified Types to avoid unnecessary unboxing for performance reasons.
 
 ### 3.0.0
 - [ ] Remove .NET Framework 4.0 support.
