@@ -20,6 +20,7 @@ column name aliases). This is for CSV files without header row.
 - [ ] Add a BigIntegerConverter.
 - [ ] Add a UriConverter.
 - [ ] Add a VersionConverter.
+- [ ] Replace NumberConverter<T> with Converters of specified Types to avoid unnecessary unboxing for performance.
 
 ### 3.0.0
 - [ ] Remove .NET Framework 4.0 support.
