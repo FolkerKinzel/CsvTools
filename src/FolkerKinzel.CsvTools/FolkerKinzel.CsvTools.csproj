@@ -1,16 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netstandard2.1;net40</TargetFrameworks>
-    <LangVersion>9.0</LangVersion>
+    <TargetFrameworks>net6.0;net5.0;netstandard2.1;netstandard2.0;net461;net40</TargetFrameworks>
+    <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <Version>1.5.0</Version>
-    <FileVersion>1.5.0.38</FileVersion>
+    <Version>1.6.0</Version>
+    <FileVersion>1.6.0.1</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>Adds a .NET 5.0 dll to the package.
 
@@ -49,8 +47,8 @@ CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</Packag
     <PackageIconUrl />
   </PropertyGroup>
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
-    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net461'  or '$(TargetFramework)' == 'netstandard2.0'">
+    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604;8618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -112,7 +110,32 @@ CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</Packag
       <LastGenOutput>Res.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="FolkerKinzel.Strings">
+      <Version>4.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="FolkerKinzel.Strings">
+      <Version>4.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="FolkerKinzel.Strings">
+      <Version>4.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="FolkerKinzel.Strings">
+      <Version>4.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="FolkerKinzel.Strings">
+      <Version>4.1.0</Version>
+    </PackageReference>
+  </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Release copy /v /b /y &quot;$(OutDir)$(ProjectName).xml&quot; &quot;$(OutDir)de/$(ProjectName).xml&quot;&#xD;&#xA;if $(ConfigurationName) == Release if '$(TargetFramework)' == 'netstandard2.1' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />
+    <Exec Command="if $(ConfigurationName) == Release copy /v /b /y &quot;$(OutDir)$(ProjectName).xml&quot; &quot;$(OutDir)de/$(ProjectName).xml&quot;&#xD;&#xA;if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net6.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />
   </Target>
 </Project>

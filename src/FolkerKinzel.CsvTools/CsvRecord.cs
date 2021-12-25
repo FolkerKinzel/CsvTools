@@ -255,7 +255,7 @@ namespace FolkerKinzel.CsvTools
         /// <returns>Eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see>.</returns>
         public Dictionary<string, string?> ToDictionary()
         {
-#if NET40
+#if NET40 || NET461 || NETSTANDARD2_0
             var dic = new Dictionary<string, string?>(this.Count, this._lookupDictionary.Comparer);
 
             foreach (KeyValuePair<string, string?> kvp in this)

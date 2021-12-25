@@ -8,6 +8,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
+#if NET461 || NETSTANDARD2_0
+using FolkerKinzel.Strings.Polyfills;
+#endif
+
 namespace FolkerKinzel.CsvTools.Helpers
 {
     /// <summary>
@@ -45,7 +49,7 @@ namespace FolkerKinzel.CsvTools.Helpers
             this._wildcardTimeout = source._wildcardTimeout;
         }
 
-#if NET40
+#if RELEASE && NET40
 #pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
 #endif
         /// <summary>
@@ -73,7 +77,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// 
         /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 0.</exception>
         public CsvProperty(
-#if NET40
+#if RELEASE && NET40
 #pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
 #endif
             string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10)
@@ -230,9 +234,9 @@ namespace FolkerKinzel.CsvTools.Helpers
 
             public string? ColumnName { get; private set; }
 
-#if NET40
-            [SuppressMessage("Usage", "CA1801:Nicht verwendete Parameter überprüfen", Justification = "<Ausstehend>")]
-#endif
+//#if NET40
+            //[SuppressMessage("Usage", "CA1801:Nicht verwendete Parameter überprüfen", Justification = "<Ausstehend>")]
+//#endif
             public ColumnAliasesLookup(CsvRecord record, ReadOnlyCollection<string> aliases, int wildcardTimeout)
             {
                 this.CsvRecordIdentifier = record.Identifier;

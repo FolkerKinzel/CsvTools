@@ -273,7 +273,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <returns><c>true</c>, wenn die gesuchte <see cref="CsvProperty"/> in der Auflistung enthalten war
         /// und entfernt werden konnte.</returns>
         public bool RemoveProperty(string? propertyName)
-            => !(propertyName is null) && _dynProps.Remove(propertyName);
+            => propertyName is not null && _dynProps.Remove(propertyName);
 
 
         /// <summary>
@@ -374,7 +374,7 @@ namespace FolkerKinzel.CsvTools.Helpers
         /// <see cref="CsvProperty"/>.</param>
         /// <returns><c>true</c>, wenn ein <see cref="CsvProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
         /// angegebenen Namen registriert ist.</returns>
-        public bool Contains(string? propertyName) => !(propertyName is null) && _dynProps.Contains(propertyName);
+        public bool Contains(string? propertyName) => propertyName is not null && _dynProps.Contains(propertyName);
 
 
         /// <summary>

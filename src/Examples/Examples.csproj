@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <FileVersion>1.0.0.40</FileVersion>
+    <FileVersion>1.0.0.41</FileVersion>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net5.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />

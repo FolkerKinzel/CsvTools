@@ -6,6 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
 
+#if NET461 || NETSTANDARD2_0
+using FolkerKinzel.Strings.Polyfills;
+#endif
+
 namespace FolkerKinzel.CsvTools
 {
     /// <summary>
@@ -147,9 +151,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
         /// <exception cref="ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
         /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
-#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         private CsvWriter(string?[] columnNames, char fieldSeparator, CsvOptions options)
-#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         {
             this._fieldSeparator = fieldSeparator;
             this._trimColumns = (options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns;
@@ -168,9 +170,7 @@ namespace FolkerKinzel.CsvTools
         /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
         /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         private CsvWriter(int columnsCount, char fieldSeparator, CsvOptions options)
-#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
         {
             this._isHeaderRowWritten = true;
             this._fieldSeparator = fieldSeparator;
