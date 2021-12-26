@@ -7,10 +7,10 @@
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <Version>1.6.0</Version>
-    <FileVersion>1.6.0.20</FileVersion>
+    <Version>1.6.1</Version>
+    <FileVersion>1.6.1.5</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/blob/master/docs/PackageReleaseNotes/1.6.0/ReleaseNotes.md</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/blob/master/docs/PackageReleaseNotes/1.6.1/ReleaseNotes.md</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
     <Description>.NET library to read and write CSV files.</Description>
     <Authors>Folker Kinzel</Authors>
@@ -84,11 +84,13 @@
       <LastGenOutput>Res.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <!--
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <PackageReference Include="FolkerKinzel.Strings">
       <Version>4.1.0</Version>
     </PackageReference>
   </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
     <PackageReference Include="FolkerKinzel.Strings">
       <Version>4.1.0</Version>
@@ -99,6 +101,7 @@
       <Version>4.1.0</Version>
     </PackageReference>
   </ItemGroup>
+  -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="FolkerKinzel.Strings">
       <Version>4.1.0</Version>
