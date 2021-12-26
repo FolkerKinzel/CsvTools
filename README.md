@@ -4,7 +4,7 @@
 
 .NET-library that allows to read and write CSV files. ("Comma-Separated Values", RFC 4180) 
 
-The library contains
+It contains
 * `CsvReader`: Reads CSV from files and streams. It enables you to perform Linq-Queries on CSV files.
 * `CsvWriter`: Writes CSV to files and stream.
 * `CsvRecordWrapper`: Maps the columns of the CSV file to the columns of your `DataTable` or to the 

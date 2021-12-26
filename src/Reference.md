@@ -1,7 +1,7 @@
 # FolkerKinzel.CsvTools
 .NET-library that allows to read and write CSV files. ("Comma-Separated Values", RFC 4180) 
 
-The library contains
+It contains
 * `CsvReader`: Reads CSV from files and streams. It enables you to perform Linq-Queries on CSV files.
 * `CsvWriter`: Writes CSV to files and streams.
 * `CsvRecordWrapper`: Maps the columns of the CSV file to the columns of your `DataTable` or to the properties of an `object` and performs type conversions. `CsvRecordWrapper` supports aliases with wildcards for CSV column names and ships with a lot of supporting classes - most are data type converters for the most needed data types and an easy to implement interface to create converters of whatever data type you need.
