@@ -6,7 +6,7 @@
   <T ID="BFEB3128DB7F4C5D">Writes data to a CSV file.</T>
   <T ID="994FACF04819064">Extension methods, which make working with the &lt;see cref="T:FolkerKinzel.CsvTools.CsvOptions" /&gt;-enum easier.</T>
   <T ID="D61CD91808A7EB58">Static class that publishes methods to instantiate &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; objects for all elementary data types.</T>
-  <T ID="9B731DCCE9FE6282">Defines an interface for converting a &lt;see cref="T:System.String" /&gt; object into another data type and back. Objects, whitch implement the interface, are required by the class &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvProperty" /&gt;.</T>
+  <T ID="9B731DCCE9FE6282">Defines an interface for converting a &lt;see cref="T:System.String" /&gt; object into another data type and back. Objects, which implement the interface, are required by the class &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.CsvProperty" /&gt;.</T>
   <T ID="99DCFE5E04C954AD">Implements the interface &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; for the conversion of the &lt;see cref="T:System.DateTime" /&gt; data type.</T>
   <T ID="CB6840FA41EEF4D7">Implements the interface &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; for the conversion of the &lt;see cref="T:System.DateTimeOffset" /&gt; data type.</T>
   <T ID="5509524449B6F322">Implements the interface &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter" /&gt; for the conversion of the &lt;see cref="T:System.Guid" /&gt; data type.</T>
@@ -38,7 +38,7 @@
              &lt;/note&gt;</T>
   <T ID="A12B43CAF2A7B0B2">If the flag is not set the class &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; interpretes the column names of the CSV file in a case-insensitive manner. This is the same behavior that &lt;see cref ="T:System.Data.DataColumnCollection"/&gt; shows.</T>
   <T ID="EF1B9D70D36EA84B">If the flag is set &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; and &lt;see cref ="T:FolkerKinzel.CsvTools.CsvWriter"/&gt; will handle all data tokens and the
-             column names with the &lt;see cref ="M:System.String.Trim"/&gt; method. That leads to a strong loss of performance and also can damage data where the leading and trailing white space has a meaning. Only set the flag for reading non-standard CSV files, whitch introduce additional padding.</T>
+             column names with the &lt;see cref ="M:System.String.Trim"/&gt; method. That leads to a strong loss of performance and also can damage data where the leading and trailing white space has a meaning. Only set the flag for reading non-standard CSV files, which introduce additional padding.</T>
   <T ID="98C887F8DBEBBAC6">Default setting. This is a combined value that forces &lt;see cref ="T:FolkerKinzel.CsvTools.CsvReader"/&gt; to throw an &lt;see cref ="T:FolkerKinzel.CsvTools.InvalidCsvException"/&gt;
              if the file to be read does not comply with the RFC 4180 standard. (Alternative column separators and newline characters are always tolerated.)</T>
   <T ID="F129A0C6E3C185CC">If the flag is set the same &lt;see cref ="T:FolkerKinzel.CsvTools.CsvRecord"/&gt; object is used for each data row when reading the CSV file (filled with new data).
@@ -257,7 +257,7 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
              fails. Otherwise &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt; is returned in this case.</T>
   <T ID="94F2DACCF1C9A89">Initializes a &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter"/&gt; object.</T>
   <T ID="F4B6543D7C6A2FCF">If &lt;c&gt;true&lt;/c&gt; only the date part is parsed and output.</T>
-  <T ID="A8AEB9FC3323C9FF">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; DateTime&amp;gt;&lt;/see&gt; is accepted and returned,
+  <T ID="A8AEB9FC3323C9FF">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; DateTime&amp;gt;&lt;/see&gt; is accepted and returned,
              otherwise &lt;see cref ="T:System.DateTime"/&gt;.</T>
   <T ID="7A55398F45E4D6A1">An &lt;see cref ="T:System.IFormatProvider"/&gt; object, which provides culture-specific formatting information, or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Globalization.CultureInfo.InvariantCulture"/&gt;.</T>
   <T ID="4CE43DABAEE7CA3A">If &lt;c&gt;true&lt;/c&gt; the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.Parse(System.String)"/&gt; throws an exception when parsing
@@ -265,7 +265,7 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
              otherwise it returns &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt; in this case.</T>
   <T ID="F57371EFB0D45909">A format string, which is used for the &lt;see cref ="T:System.String"/&gt; output of &lt;see cref ="T:System.DateTime"/&gt; values.
              If the option &lt;paramref name ="parseExact"/&gt; is selected this format string is also used for parsing.</T>
-  <T ID="B953C6C43323C9FF">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; DateTime&amp;gt;&lt;/see&gt; is accepted and returned,
+  <T ID="B953C6C43323C9FF">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; DateTime&amp;gt;&lt;/see&gt; is accepted and returned,
              otherwise &lt;see cref ="T:System.DateTime"/&gt;.</T>
   <T ID="DDC8C62445E4D6A1">An &lt;see cref ="T:System.IFormatProvider"/&gt; object, which provides culture-specific formatting information, or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Globalization.CultureInfo.InvariantCulture"/&gt;.</T>
   <T ID="ABEE96DDAEE7CA3A">If &lt;c&gt;true&lt;/c&gt; the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.Parse(System.String)"/&gt; throws an exception when parsing
@@ -282,33 +282,33 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
              thrown if this was configured in the constructor - otherwise &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt; is returned.</T>
   <T ID="97DF871D325013F1">The date and time is outside the range of dates that
              are supported by the calendar of the &lt;see cref ="T:System.Globalization.CultureInfo"/&gt;, assigned in the constructor.</T>
-  <T ID="70D14D620EBE990C">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="70D14D620EBE990C">If &lt;c&gt;true&lt;/c&gt;&amp;#160;&lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
-  <T ID="DEAD8FD60EBE990C">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="DEAD8FD60EBE990C">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
-  <T ID="5603374F0EBE990C">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="5603374F0EBE990C">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
-  <T ID="68B631DF0EBE990C">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="68B631DF0EBE990C">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.FallbackValue"/&gt;.</T>
-  <T ID="DC4BB26C9782CB08">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="DC4BB26C9782CB08">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Intls.EnumConverter`1.FallbackValue"/&gt;.</T>
-  <T ID="5B189C8E9782CB08">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="5B189C8E9782CB08">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Intls.EnumConverter`1.FallbackValue"/&gt;.</T>
-  <T ID="BC083F6E8BDEC4D">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="BC083F6E8BDEC4D">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt;.</T>
-  <T ID="7806486DE8BDEC4D">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="7806486DE8BDEC4D">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeConverter.FallbackValue"/&gt;.</T>
-  <T ID="26FF0D46C534B116">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="26FF0D46C534B116">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter.FallbackValue"/&gt;.</T>
-  <T ID="F63B5B9DC534B116">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="F63B5B9DC534B116">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter.FallbackValue"/&gt;.</T>
-  <T ID="EC6F8EF1F65C7A1E">If &lt;c&gt;true&lt;/c&gt;, &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="EC6F8EF1F65C7A1E">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter.FallbackValue"/&gt;.</T>
-  <T ID="F367FB7F65C7A1E">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="F367FB7F65C7A1E">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter.FallbackValue"/&gt;.</T>
-  <T ID="DA211DBF21734FE5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="DA211DBF21734FE5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter.FallbackValue"/&gt;.</T>
-  <T ID="B0A2C63121734FE5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
+  <T ID="B0A2C63121734FE5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="F:System.DBNull.Value"&gt;DBNull.Value&lt;/see&gt; is accepted as input and also forms the
              return value of &lt;see cref="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter.FallbackValue"/&gt;.</T>
   <T ID="97B46D38F4DE9817">If the CSV file did not have a header, column names of the type "Column1", "Column2" etc. are automatically assigned.</T>
   <T ID="E9AF797A27212D53">Converts &lt;paramref name ="value"/&gt; to a &lt;see cref ="T:System.String"/&gt;.</T>
@@ -321,7 +321,7 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="12455ABCFC4B26BB">An object of the data type returned by &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.ICsvTypeConverter.Type"/&gt;.</T>
   <T ID="7A139E0DF86B9285">A format string, which is used for the &lt;see cref ="T:System.String"/&gt; output of &lt;see cref="T:System.DateTimeOffset"/&gt; values.
              If the option &lt;paramref name ="parseExact"/&gt; is selected, this format string is also used for parsing.</T>
-  <T ID="28CE1A77CCB37A26">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="T:System.Nullable`1"&gt;Nullable&amp;lt;DateTimeOffset&amp;gt;&lt;/see&gt; is accepted and returned,
+  <T ID="28CE1A77CCB37A26">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="T:System.Nullable`1"&gt;Nullable&amp;lt;DateTimeOffset&amp;gt;&lt;/see&gt; is accepted and returned,
              otherwise &lt;see cref="T:System.DateTimeOffset"/&gt;.</T>
   <T ID="9405C3F045E4D6A1">An &lt;see cref ="T:System.IFormatProvider"/&gt; object, which provides culture-specific formatting information, or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Globalization.CultureInfo.InvariantCulture"/&gt;.</T>
   <T ID="337260C95E80F1B9">If &lt;c&gt;true&lt;/c&gt; the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.DateTimeOffsetConverter.Parse(System.String)"/&gt; throws an exception when parsing
@@ -342,10 +342,10 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="C3F8B365325013F1">The date and time are outside the range of dates that
              are supported by the calendar of the &lt;see cref ="T:System.Globalization.CultureInfo"/&gt; assigned in the constructor.</T>
   <T ID="560CA21F0DC5FE95">Initializes a new &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter"/&gt; object.</T>
-  <T ID="BBBB07AF2A5C44A5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="T:System.Nullable`1"&gt;Nullable&amp;lt;Guid&amp;gt;&lt;/see&gt; is accepted and returned,
+  <T ID="BBBB07AF2A5C44A5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="T:System.Nullable`1"&gt;Nullable&amp;lt;Guid&amp;gt;&lt;/see&gt; is accepted and returned,
              otherwise &lt;see cref="T:System.Guid"/&gt;.</T>
   <T ID="85057ECB02D7AB5F">A format string, which is used for the &lt;see cref ="T:System.String"/&gt; output of &lt;see cref="T:System.Guid"/&gt; values.</T>
-  <T ID="44549A62A5C44A5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="T:System.Nullable`1"&gt;Nullable&amp;lt;Guid&amp;gt;&lt;/see&gt; is accepted and returned,
+  <T ID="44549A62A5C44A5">If &lt;c&gt;true&lt;/c&gt; &lt;see cref="T:System.Nullable`1"&gt;Nullable&amp;lt;Guid&amp;gt;&lt;/see&gt; is accepted and returned,
              otherwise &lt;see cref="T:System.Guid"/&gt;.</T>
   <T ID="371B86F20D0791CE">If &lt;c&gt;true&lt;/c&gt; the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter.Parse(System.String)"/&gt; throws an exception when parsing
              fails,
@@ -358,11 +358,11 @@ The dictionary uses the same &lt;see cref ="T:System.StringComparer"/&gt; for th
   <T ID="923C9F18EA95953">&lt;paramref name ="value"/&gt; is not in a compatible format. The exception will only be
              thrown if this was configured in the constructor - otherwise &lt;see cref ="P:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.GuidConverter.FallbackValue"/&gt; is returned.</T>
   <T ID="723EDAE2CEFDB4EF">Initializes an &lt;see cref="T:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter"/&gt; object.</T>
-  <T ID="1F46271B67C8DC88">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; TimeSpan&amp;gt;&lt;/see&gt; is accepted and returned,
+  <T ID="1F46271B67C8DC88">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt; TimeSpan&amp;gt;&lt;/see&gt; is accepted and returned,
              otherwise &lt;see cref ="T:System.TimeSpan"/&gt;.</T>
   <T ID="9E7E7C817CCCFF92">A format string, which is used for the &lt;see cref ="T:System.String"/&gt; output of &lt;see cref ="T:System.TimeSpan"/&gt; values.
              If the option &lt;paramref name ="parseExact"/&gt; is selected, this format string is also used for parsing.</T>
-  <T ID="197C41EB67C8DC88">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt;TimeSpan&amp;gt;&lt;/see&gt; is accepted and returned,
+  <T ID="197C41EB67C8DC88">If &lt;c&gt;true&lt;/c&gt; &lt;see cref ="T:System.Nullable`1"&gt;Nullable&amp;lt;TimeSpan&amp;gt;&lt;/see&gt; is accepted and returned,
              otherwise &lt;see cref ="T:System.TimeSpan"/&gt;.</T>
   <T ID="2EA844DD45E4D6A1">An &lt;see cref ="T:System.IFormatProvider"/&gt; object that provides culture-specific formatting information, or &lt;c&gt;null&lt;/c&gt; for &lt;see cref ="P:System.Globalization.CultureInfo.InvariantCulture"/&gt;.</T>
   <T ID="CD4BA42DE88AD09F">If &lt;c&gt;true&lt;/c&gt;, the method &lt;see cref="M:FolkerKinzel.CsvTools.Helpers.Converters.Specialized.TimeSpanConverter.Parse(System.String)"/&gt; throws an exception when parsing
