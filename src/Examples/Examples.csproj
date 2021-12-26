@@ -1,17 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
-    <LangVersion>9.0</LangVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
-    <FileVersion>1.0.0.47</FileVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <FileVersion>1.0.0.49</FileVersion>
   </PropertyGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net5.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />
+    <Exec Command="if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net6.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="FolkerKinzel.CsvTools" Version="1.5.0" />
+    <ProjectReference Include="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
   </ItemGroup>
 </Project>
