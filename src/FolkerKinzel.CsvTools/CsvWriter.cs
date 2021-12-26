@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text;
@@ -151,8 +152,10 @@ namespace FolkerKinzel.CsvTools
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
         /// <exception cref="ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
         /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
+#pragma warning disable 8618
         private CsvWriter(string?[] columnNames, char fieldSeparator, CsvOptions options)
         {
+#pragma warning restore 8618
             this._fieldSeparator = fieldSeparator;
             this._trimColumns = (options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns;
             this.Record = new CsvRecord(
@@ -170,8 +173,10 @@ namespace FolkerKinzel.CsvTools
         /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
         /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
         /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+#pragma warning disable 8618
         private CsvWriter(int columnsCount, char fieldSeparator, CsvOptions options)
         {
+#pragma warning restore 8618
             this._isHeaderRowWritten = true;
             this._fieldSeparator = fieldSeparator;
             this._trimColumns = (options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns;

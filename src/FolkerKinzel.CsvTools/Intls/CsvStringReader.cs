@@ -37,8 +37,6 @@ namespace FolkerKinzel.CsvTools.Intls
         /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen in der CSV-Datei übersprungen.</param>
         internal CsvStringReader(TextReader reader, char fieldSeparator, bool skipEmptyLines)
         {
-            Debug.Assert(reader != null);
-
             this._skipEmptyLines = skipEmptyLines;
             this._reader = reader;
             this._fieldSeparator = fieldSeparator;

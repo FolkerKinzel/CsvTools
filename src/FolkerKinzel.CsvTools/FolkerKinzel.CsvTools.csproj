@@ -8,31 +8,9 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>1.6.0</Version>
-    <FileVersion>1.6.0.1</FileVersion>
+    <FileVersion>1.6.0.14</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>Adds a .NET 5.0 dll to the package.
-
-CsvProperty constructor has now the option, to set the Regex timout to Regex.InfiniteMatchTimeout.
-
-CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
-
-ToString() overload for CsvRecordWrapper.
-
-Fixes an issue in CsvAnalyzer, that invalid empty lines inside the CSV file where not recognized.
-
-Fixes an issue in CsvConverterFactory that HexConverter&lt;UInt32&gt; was not properly initialized.
-
-Fixes an issue with the property ThrowsOnParseErrors in StringConverter.
-      
-Fixes an issue that EnumConverter&lt;TEnum&gt; didn't show correctly the Type it converts.
-      
-Fixes an issue that some Converters handle DBNull.Value incorrectly.
-      
-CsvAnalyzer.ColumnNames returns ReadOnlyCollection&lt;string&gt; now instead of IList&lt;string&gt;.
-
-ToString() overload for CsvRecordWrapper.
-
-CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/blob/master/docs/PackageReleaseNotes/1.6.0/ReleaseNotes.md</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
     <Description>.NET library to read and write CSV files.</Description>
     <Authors>Folker Kinzel</Authors>
@@ -48,7 +26,7 @@ CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</Packag
   </PropertyGroup>
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net40' or '$(TargetFramework)' == 'net461'  or '$(TargetFramework)' == 'netstandard2.0'">
-    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604;8618</NoWarn>
+    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -92,10 +70,6 @@ CsvProperty.Clone() and CsvIndexProperty.Clone() are marked as Obsolete.</Packag
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-  <!-- Conditionally obtain references for the .NET Framework 4.0 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
-    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Res.Designer.cs">

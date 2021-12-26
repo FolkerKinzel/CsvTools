@@ -3,7 +3,7 @@
     /// <summary>
     /// Benannte Konstanten, um den Datentyp auszuwählen, den ein <see cref="ICsvTypeConverter"/>-Objekts umwandeln kann.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Bezeichner enthält Typnamen", Justification = "<Ausstehend>")]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Bezeichner enthält Typnamen", Justification = "<Ausstehend>")]
     public enum CsvTypeCode
     {
         /// <summary>

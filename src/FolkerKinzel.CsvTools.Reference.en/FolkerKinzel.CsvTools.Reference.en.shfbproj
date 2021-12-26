@@ -13,7 +13,7 @@
     <RootNamespace>FolkerKinzel.Csv.Doku</RootNamespace>
     <Name>FolkerKinzel.CsvTools.Doku.de</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
+    <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>FolkerKinzel.CsvTools.en</HtmlHelpName>
     <Language>en-US</Language>
@@ -27,8 +27,7 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\bin\Release\net40\FolkerKinzel.CsvTools.dll" />
-      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\bin\Release\net5.0\FolkerKinzel.CsvTools.xml" />
+      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
@@ -42,24 +41,23 @@
     <HelpTitle>FolkerKinzel.CsvTools</HelpTitle>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <RootNamespaceContainer>False</RootNamespaceContainer>
-    <NamespaceGrouping>False</NamespaceGrouping>
-    <MaximumGroupParts>6</MaximumGroupParts>
+    <NamespaceGrouping>True</NamespaceGrouping>
+    <MaximumGroupParts>2</MaximumGroupParts>
     <Preliminary>False</Preliminary>
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Classes, to read and write CSV files.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Extension methods to make working with CSV files more comfortable.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Classes, that make it easier to access data stored in CSV files.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Classes, that support type conversions.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers (Group)" isGroup="True" isDocumented="True">Classes, that make it easier to access data stored in CSV files.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters (Group)" isGroup="True" isDocumented="True">Classes, that support type conversions.</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters.Specialized" isDocumented="True">Some specialized implementations of the interface ICsvTypeConverter. For ordinary tasks you should use CsvConverterFactory to initialize ICsvTypeConverter instances.</NamespaceSummaryItem>
-    </NamespaceSummaries>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Classes to read and write CSV files.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Extension methods to make working with CSV files more comfortable.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Classes, which make it easier to access data stored in CSV files.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Classes that support type conversions.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers (Group)" isGroup="True" isDocumented="True">Classes, which make it easier to access data stored in CSV files.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters (Group)" isGroup="True" isDocumented="True">Classes that support type conversions.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters.Specialized" isDocumented="True">Some specialized implementations of the interface ICsvTypeConverter. For ordinary tasks you should use CsvConverterFactory to initialize ICsvTypeConverter instances.</NamespaceSummaryItem></NamespaceSummaries>
     <NamingMethod>Guid</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CopyrightText>Copyright &amp;#169%3b 2020 Folker Kinzel</CopyrightText>
-    <ProjectSummary>Classes, to read and write CSV files.</ProjectSummary>
+    <ProjectSummary>Classes to read and write CSV files.</ProjectSummary>
     <VisibleItems>ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, NonBrowsable</VisibleItems>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
