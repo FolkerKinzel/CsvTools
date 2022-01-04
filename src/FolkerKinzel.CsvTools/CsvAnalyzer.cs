@@ -3,7 +3,7 @@ using System.Text;
 using FolkerKinzel.CsvTools.Extensions;
 using FolkerKinzel.CsvTools.Intls;
 
-namespace FolkerKinzel.CsvTools.TypeConversions;
+namespace FolkerKinzel.CsvTools;
 
 /// <summary>
 /// <see cref="CsvAnalyzer"/> kann eine statistische Analyse auf einer CSV-Datei ausführen und
@@ -24,10 +24,8 @@ public class CsvAnalyzer
     /// <summary>
     /// Initialisiert ein neues <see cref="CsvAnalyzer"/>-Objekt.
     /// </summary>
-    public CsvAnalyzer()
-    {
+    public CsvAnalyzer() { }
 
-    }
 
     /// <summary>
     /// Analysiert die CSV-Datei, auf die <paramref name="fileName"/> verweist, und füllt die Eigenschaften des <see cref="CsvAnalyzer"/>-Objekts mit den

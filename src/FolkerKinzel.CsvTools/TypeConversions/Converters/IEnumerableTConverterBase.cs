@@ -78,8 +78,8 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters
                 throw new InvalidCastException();
             }
 
-            List<object> values = new List<object>();
-            var numerable = ((IEnumerable)value);
+            var values = new List<object>();
+            var numerable = (IEnumerable)value;
 
             foreach (var item in numerable)
             {

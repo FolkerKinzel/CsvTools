@@ -212,6 +212,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters
         /// <inheritdoc/>
         public object? FallbackValue { get; }
 
+
         /// <summary>
         /// Der Datentyp, den <see cref="TimeSpanConverter"/> parsen kann, bzw. den <see cref="TimeSpanConverter"/>
         /// in einen <see cref="string"/> umwandeln kann. (<c>typeof(TimeSpan)</c> oder <c>typeof(TimeSpan?)</c>)
