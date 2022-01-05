@@ -102,7 +102,7 @@ internal sealed class StringConverter2 : CsvTypeConverter<string?>
     public StringConverter2(string fallbackValue, bool throwOnParseErrors) : base(throwOnParseErrors, fallbackValue) { }
 
     protected override string? DoConvertToString(string? value) => value;
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out string? result)
+    protected override bool TryParseValue(string value, out string? result)
     {
         result = value;
         return true;
@@ -167,7 +167,7 @@ public class DateTimeConverter2 : CsvTypeConverter<DateTime>
     private readonly bool _parseExact;
     private readonly DateTimeStyles _styles;
 
-    internal DateTimeConverter2(bool isDate, IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors, default)
+    internal DateTimeConverter2(bool isDate, IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = isDate ? "d" : "s";
@@ -225,7 +225,7 @@ public class DateTimeOffsetConverter2 : CsvTypeConverter<DateTimeOffset>
     private readonly bool _parseExact;
     private readonly DateTimeStyles _styles;
 
-    internal DateTimeOffsetConverter2(IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors, default)
+    internal DateTimeOffsetConverter2(IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = "O";
@@ -284,7 +284,7 @@ public class TimeSpanConverter2 : CsvTypeConverter<TimeSpan>
     private readonly bool _parseExact;
     private readonly TimeSpanStyles _styles;
 
-    internal TimeSpanConverter2(IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors, default)
+    internal TimeSpanConverter2(IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = "g";
@@ -342,7 +342,7 @@ public class GuidConverter2 : CsvTypeConverter<Guid>
     private readonly bool _parseExact;
     private readonly TimeSpanStyles _styles;
 
-    internal GuidConverter2(bool throwOnParseErrors) : base(throwOnParseErrors, default) => _format = "D";
+    internal GuidConverter2(bool throwOnParseErrors) : base(throwOnParseErrors) => _format = "D";
 
 
     public GuidConverter2(
@@ -378,11 +378,11 @@ public class GuidConverter2 : CsvTypeConverter<Guid>
     }
 }
 
-public class NullableTConverter<T> : CsvTypeConverter<Nullable<T>> where T : struct
+public class NullableStructConverter<T> : CsvTypeConverter<Nullable<T>> where T : struct
 {
     private readonly CsvTypeConverter<T> _typeConverter;
 
-    public NullableTConverter(CsvTypeConverter<T> typeConverter) : base(false, null)
+    public NullableStructConverter(CsvTypeConverter<T> typeConverter) : base(false)
     {
         _typeConverter = typeConverter ?? throw new ArgumentNullException(nameof(typeConverter));
     }
@@ -396,22 +396,22 @@ public class NullableTConverter<T> : CsvTypeConverter<Nullable<T>> where T : str
     }
 }
 
-public class IEnumerableTConverter<T> : CsvTypeConverter<IEnumerable<T?>?>
+public class EnumerableConverter<TItem> : CsvTypeConverter<IEnumerable<TItem?>?>
 {
     private readonly char _separatorChar;
 
-    public IEnumerableTConverter(CsvTypeConverter<T> itemsConverter,
+    public EnumerableConverter(CsvTypeConverter<TItem?> itemsConverter,
                                 char fieldSeparator = ',',
-                                bool nullable = true) : base(false, null)
+                                bool nullable = true) : base(false)
     {
         ItemsConverter = itemsConverter ?? throw new ArgumentNullException(nameof(itemsConverter));
 
         _separatorChar = fieldSeparator;
     }
 
-    protected CsvTypeConverter<T> ItemsConverter { get; }
+    protected CsvTypeConverter<TItem?> ItemsConverter { get; }
 
-    protected override string? DoConvertToString(IEnumerable<T?>? value)
+    protected override string? DoConvertToString(IEnumerable<TItem?>? value)
     {
         if (value is null || !value.Any())
         {
@@ -427,9 +427,9 @@ public class IEnumerableTConverter<T> : CsvTypeConverter<IEnumerable<T?>?>
         return writer.ToString();
     }
 
-    protected override bool TryParseValue(string value, out IEnumerable<T?>? result)
+    protected override bool TryParseValue(string value, out IEnumerable<TItem?>? result)
     {
-        var list = new List<T>();
+        var list = new List<TItem?>();
 
         using var reader = new StringReader(value);
         using var csvReader = new CsvReader(reader, false, fieldSeparator: _separatorChar);
@@ -444,7 +444,7 @@ public class IEnumerableTConverter<T> : CsvTypeConverter<IEnumerable<T?>?>
 
         for (int i = 0; i < record.Count; i++)
         {
-            list.Add((T)ItemsConverter.Parse(record[i]));
+            list.Add(ItemsConverter.Parse(record[i]));
         }
 
         result = list;
@@ -453,9 +453,27 @@ public class IEnumerableTConverter<T> : CsvTypeConverter<IEnumerable<T?>?>
 }
 
 
-public abstract class CsvTypeConverter<T>
+public class DBNullConverter : CsvTypeConverter<object?>
 {
-    protected CsvTypeConverter(bool throwOnParseErrors, T? fallbackValue = default(T))
+    private readonly ICsvTypeConverter2 _valueConverter;
+
+    public DBNullConverter(ICsvTypeConverter2 valueConverter) : base(false, DBNull.Value)
+    {
+        _valueConverter = valueConverter ?? throw new ArgumentNullException(nameof(valueConverter));
+    }
+
+    protected override string? DoConvertToString(object? value) => value == DBNull.Value ? null : _valueConverter.ConvertToString(value);
+    protected override bool TryParseValue(string value, out object? result)
+    {
+        result = _valueConverter.Parse(value);
+        return true;
+    }
+}
+
+
+public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
+{
+    protected CsvTypeConverter(bool throwOnParseErrors, T? fallbackValue = default)
     {
         ThrowsOnParseErrors = throwOnParseErrors;
         FallbackValue = fallbackValue;
@@ -463,7 +481,11 @@ public abstract class CsvTypeConverter<T>
 
     public T? FallbackValue { get; }
 
+    object? ICsvTypeConverter2.FallbackValue => FallbackValue;
+
+
     public bool ThrowsOnParseErrors { get; }
+
 
     protected abstract bool TryParseValue(string value, out T result);
 
@@ -475,6 +497,7 @@ public abstract class CsvTypeConverter<T>
         {
             return null;
         }
+
 
         if (value is T t)
         {
@@ -490,7 +513,7 @@ public abstract class CsvTypeConverter<T>
     public string? ConvertToString(T value) => DoConvertToString(value);
 
 
-    public T Parse(string? value)
+    public T? Parse(string? value)
     {
         if (value is null)
         {
@@ -509,4 +532,15 @@ public abstract class CsvTypeConverter<T>
 
         return FallbackValue;
     }
+
+    object? ICsvTypeConverter2.Parse(string? value) => Parse(value);
+}
+
+public interface ICsvTypeConverter2
+{
+    object? Parse(string? value);
+
+    string? ConvertToString(object? value);
+
+    object? FallbackValue { get; }
 }

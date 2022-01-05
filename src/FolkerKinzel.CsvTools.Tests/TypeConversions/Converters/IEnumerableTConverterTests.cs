@@ -15,13 +15,20 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [TestMethod]
         public void MyTestMethod()
         {
-            int i = 7;
 
-            var list = new List<int>();
-            list.Add(i);
+            var list = new List<int?>();
+            list.Add(7);
+            list.Add(9);
+            list.Add(11);
 
-            var itemsConv = new NumberConverter2<int>(DBNull.Value, null, false);
-            var conv = new IEnumerableTConverter<int>(itemsConv);
+
+            var itemsConv = new NumberConverter2<int>(default, null, false);
+            var nullableConv = new NullableStructConverter<int>(itemsConv);
+            ICsvTypeConverter2 conv = new EnumerableConverter<int?>(nullableConv);
+
+            string? s = conv.ConvertToString(list);
+
+            IEnumerable<int?>? result = (IEnumerable<int?>?)conv.Parse(s);
         }
 
         [TestMethod()]
