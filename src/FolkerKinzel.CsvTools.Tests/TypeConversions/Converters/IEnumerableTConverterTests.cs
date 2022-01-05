@@ -5,12 +5,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FolkerKinzel.CsvTools.TypeConversions.Converters.Intls;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 {
     [TestClass()]
     public class IEnumerableTConverterTests
     {
+        [TestMethod]
+        public void MyTestMethod()
+        {
+            int i = 7;
+
+            var list = new List<int>();
+            list.Add(i);
+
+            var itemsConv = new NumberConverter2<int>(DBNull.Value, null, false);
+            var conv = new IEnumerableTConverter<int>(itemsConv);
+        }
+
         [TestMethod()]
         public void IEnumerableTConverterTest()
         {
