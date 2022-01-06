@@ -61,10 +61,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Exceptions\**" />
+    <Compile Remove="old\**" />
     <Compile Remove="Translations\**" />
     <EmbeddedResource Remove="Exceptions\**" />
+    <EmbeddedResource Remove="old\**" />
     <EmbeddedResource Remove="Translations\**" />
     <None Remove="Exceptions\**" />
+    <None Remove="old\**" />
     <None Remove="Translations\**" />
     <None Include="..\..\..\..\Nuget-Logo\Logo.png">
       <Pack>True</Pack>
@@ -143,6 +146,9 @@
     <PackageReference Include="FolkerKinzel.Strings">
       <Version>3.3.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="old\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Release copy /v /b /y &quot;$(OutDir)$(ProjectName).xml&quot; &quot;$(OutDir)de/$(ProjectName).xml&quot;&#xD;&#xA;if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net6.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />

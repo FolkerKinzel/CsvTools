@@ -20,7 +20,7 @@ namespace FolkerKinzel.CsvTools.Extensions.Tests
         {
             KeyedCollection<string, CsvPropertyBase> kColl = new TestCollection();
 
-            var prop1 = new CsvColumnNameProperty("Test", new string[0], CsvConverterFactory.CreateConverter(CsvTypeCode.Boolean));
+            var prop1 = new CsvColumnNameProperty("Test", new string[0], new BooleanConverter());
 
             kColl.Add(prop1); 
 

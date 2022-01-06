@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using FolkerKinzel.CsvTools.TypeConversions.Converters;
-using FolkerKinzel.CsvTools.TypeConversions.Converters.Intls;
 
 namespace FolkerKinzel.CsvTools.TypeConversions;
 

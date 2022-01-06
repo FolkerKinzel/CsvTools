@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlTypes;
 using System.Globalization;
 using FolkerKinzel.CsvTools.TypeConversions.Converters;
 using FolkerKinzel.CsvTools.TypeConversions.Converters.Intls;
@@ -11,7 +12,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
     {
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CreateConverterTest1() => _ = CsvConverterFactory.CreateConverter((CsvTypeCode)4711);
+        public void CreateConverterTest1() => _ = CsvConverterFactory2.CreateConverter((CsvTypeCode)4711);
 
         [DataTestMethod]
         [DataRow(CsvTypeCode.Byte, false, false, typeof(byte), default(byte))]
@@ -96,10 +97,22 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             Type converterType,
             object? fallBackValue)
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(typeCode, nullable, false, throwOnParseErrors: throwOnParseErrors);
+            CsvConverterOptions options = CsvConverterOptions.None;
 
-            Assert.AreEqual(converterType, conv.Type);
-            Assert.AreEqual(fallBackValue, conv.FallbackValue);
+            if (nullable)
+            {
+                options |= CsvConverterOptions.Nullable;
+            }
+
+            if (throwOnParseErrors)
+            {
+                options |= CsvConverterOptions.ThrowsOnParseErrors;
+            }
+
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(typeCode, options);
+
+            //Assert.AreEqual(converterType, conv.Type);
+            Assert.AreEqual(fallBackValue, conv.Parse(null));
             Assert.AreEqual(throwOnParseErrors, conv.ThrowsOnParseErrors);
         }
 
@@ -198,10 +211,22 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             bool throwOnParseErrors,
             Type converterType)
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(typeCode, nullable, true, throwOnParseErrors: throwOnParseErrors);
+            CsvConverterOptions options = CsvConverterOptions.AcceptsDBNull;
 
-            Assert.AreEqual(converterType, conv.Type);
-            Assert.IsTrue(Convert.IsDBNull(conv.FallbackValue));
+            if (nullable)
+            {
+                options |= CsvConverterOptions.Nullable;
+            }
+
+            if (throwOnParseErrors)
+            {
+                options |= CsvConverterOptions.ThrowsOnParseErrors;
+            }
+
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(typeCode, options);
+
+            //Assert.AreEqual(converterType, conv.Type);
+            Assert.IsTrue(Convert.IsDBNull(conv.Parse(null)));
             Assert.AreEqual(throwOnParseErrors, conv.ThrowsOnParseErrors);
         }
 
@@ -211,11 +236,11 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [DataRow(true)]
         public void CreateConverterTest4(bool throwsOnParseErrors)
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Decimal, false, false, throwOnParseErrors: throwsOnParseErrors);
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Decimal);
 
-            Assert.IsInstanceOfType(conv, typeof(NumberConverter<decimal>));
-            Assert.AreEqual(typeof(decimal), conv.Type);
-            Assert.AreEqual(default(decimal), conv.FallbackValue);
+            Assert.IsInstanceOfType(conv, typeof(DecimalConverter));
+            //Assert.AreEqual(typeof(decimal), conv.Type);
+            Assert.AreEqual(default(decimal), conv.Parse(null));
             Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
 
             decimal test = 57.839m;
@@ -234,11 +259,18 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [DataRow(true)]
         public void CreateConverterTest5(bool throwsOnParseErrors)
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Decimal, false, false, null, throwOnParseErrors: throwsOnParseErrors);
+            CsvConverterOptions options = CsvConverterOptions.None;
 
-            Assert.IsInstanceOfType(conv, typeof(NumberConverter<decimal>));
-            Assert.AreEqual(typeof(decimal), conv.Type);
-            Assert.AreEqual(default(decimal), conv.FallbackValue);
+            if (throwsOnParseErrors)
+            {
+                options |= CsvConverterOptions.ThrowsOnParseErrors;
+            }
+
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Decimal, options);
+
+            Assert.IsInstanceOfType(conv, typeof(DecimalConverter));
+            //Assert.AreEqual(typeof(decimal), conv.Type);
+            Assert.AreEqual(default(decimal), conv.Parse(null));
             Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
 
             decimal test = 57.839m;

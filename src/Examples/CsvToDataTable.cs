@@ -96,8 +96,7 @@ namespace Examples
 
             // Store the stringConverter because you can reuse the same 
             // converter for more than one property in CsvRecordWrapper.
-            ICsvTypeConverter stringConverter = 
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, maybeDBNull: true);
+            ICsvTypeConverter2 stringConverter = new StringConverter2("").AddDBNullAcceptance();
 
             wrapper.AddProperty
                 (
@@ -115,15 +114,13 @@ namespace Examples
                 (
                     new CsvColumnNameProperty(LESSON_DAY,
                                     new string[] { LESSON_DAY },
-                                    CsvConverterFactory
-                                        .CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true))
+                                    new EnumConverter2<DayOfWeek>(format: "G").AddDBNullAcceptance())
                 );
             wrapper.AddProperty
                 (
                     new CsvColumnNameProperty(LESSON_BEGIN,
                                     new string[] { LESSON_BEGIN },
-                                    CsvConverterFactory
-                                        .CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true))
+                                    new TimeSpanConverter2().AddDBNullAcceptance())
                 );
 
             return wrapper;

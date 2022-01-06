@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-# if NETSTANDARD2_0 || NET461
+#if NETSTANDARD2_0 || NET461
 using FolkerKinzel.Strings.Polyfills;
 #endif
 
@@ -24,7 +25,7 @@ public abstract class CsvSingleColumnProperty : CsvPropertyBase
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
     /// <paramref name="converter"/> ist <c>null</c>.</exception>
-    protected CsvSingleColumnProperty(string propertyName, ICsvTypeConverter converter) : base(propertyName)
+    protected CsvSingleColumnProperty(string propertyName, ICsvTypeConverter2 converter) : base(propertyName)
     {
         if (converter is null)
         {
@@ -37,7 +38,7 @@ public abstract class CsvSingleColumnProperty : CsvPropertyBase
     /// <summary>
     /// Ein <see cref="ICsvTypeConverter"/>-Objekt, das die Typkonvertierung durchführt.
     /// </summary>
-    public ICsvTypeConverter Converter { get; }
+    public ICsvTypeConverter2 Converter { get; }
 
     /// <summary>
     /// Das <see cref="CsvRecord"/>-Objekt, über das der Zugriff auf die CSV-Datei erfolgt.
@@ -65,7 +66,7 @@ public abstract class CsvSingleColumnProperty : CsvPropertyBase
 
         try
         {
-            return ReferredCsvColumnIndex.HasValue ? Converter.Parse(Record[ReferredCsvColumnIndex.Value]) : Converter.FallbackValue;
+            return ReferredCsvColumnIndex.HasValue ? Converter.Parse(Record[ReferredCsvColumnIndex.Value]) : Converter.Parse(null);
         }
         catch (Exception e)
         {

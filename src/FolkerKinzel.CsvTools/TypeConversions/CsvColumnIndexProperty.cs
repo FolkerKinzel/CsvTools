@@ -3,6 +3,7 @@ using FolkerKinzel.Strings.Polyfills;
 #endif
 
 using System.Diagnostics;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace FolkerKinzel.CsvTools.TypeConversions;
 
@@ -33,7 +34,7 @@ public sealed class CsvColumnIndexProperty : CsvSingleColumnProperty
     /// 
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="desiredCsvColumnIndex"/> ist kleiner als 0.</exception>
     public CsvColumnIndexProperty(
-        string propertyName, int desiredCsvColumnIndex, ICsvTypeConverter converter) : base(propertyName, converter)
+        string propertyName, int desiredCsvColumnIndex, ICsvTypeConverter2 converter) : base(propertyName, converter)
     {
         if (desiredCsvColumnIndex < 0)
         {

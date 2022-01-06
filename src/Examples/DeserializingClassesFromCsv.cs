@@ -60,8 +60,8 @@ namespace Examples
             var wrapper = new CsvRecordWrapper();
 
             // Reuse a converter for more than one property:
-            ICsvTypeConverter stringConverter =
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, nullable: true);
+            ICsvTypeConverter2 stringConverter =
+                new StringConverter2();
 
             wrapper.AddProperty
                 (
@@ -79,8 +79,7 @@ namespace Examples
                 (
                     new CsvColumnNameProperty("LessonDay",
                                     new string[] { "*day", "*tag" },
-                                    CsvConverterFactory
-                                        .CreateEnumConverter<DayOfWeek>(nullable: true))
+                                    new EnumConverter2<DayOfWeek>().MakeNullableStructConverter())
                 );
             wrapper.AddProperty
                 (

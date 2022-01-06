@@ -7,6 +7,7 @@ using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools;
 using BenchmarkDotNet.Attributes;
 using System.IO;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace Benchmarks
 {
@@ -20,7 +21,7 @@ namespace Benchmarks
         public AccessBenchmark()
         {
             _csv = Properties.Resources.Test1;
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
+            ICsvTypeConverter2 conv = new StringConverter2();
             _indexWrapper = new CsvRecordWrapper();
             _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column0", 0, conv));
             _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column1", 1, conv));

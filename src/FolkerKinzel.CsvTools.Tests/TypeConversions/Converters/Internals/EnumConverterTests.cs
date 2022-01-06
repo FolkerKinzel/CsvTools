@@ -9,31 +9,31 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void EnumConverterTest1()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>();
-            Assert.IsInstanceOfType(conv, typeof(EnumConverter<CsvTypeCode>));
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>();
+            Assert.IsInstanceOfType(conv, typeof(EnumConverter2<CsvTypeCode>));
         }
 
-        [TestMethod()]
-        public void EnumConverterTest2()
-        {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(null);
-            Assert.IsInstanceOfType(conv, typeof(EnumConverter<CsvTypeCode>));
-        }
+        //[TestMethod()]
+        //public void EnumConverterTest2()
+        //{
+        //    ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>();
+        //    Assert.IsInstanceOfType(conv, typeof(EnumConverter2<CsvTypeCode>));
+        //}
 
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
         public void EnumConverterTest3()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>("bla");
-            Assert.IsInstanceOfType(conv, typeof(EnumConverter<CsvTypeCode>));
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(format: "bla");
+            Assert.IsInstanceOfType(conv, typeof(EnumConverter2<CsvTypeCode>));
         }
 
         [TestMethod()]
         public void EnumConverterTest4()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>("F");
-            Assert.IsInstanceOfType(conv, typeof(EnumConverter<CsvTypeCode>));
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(format: "F");
+            Assert.IsInstanceOfType(conv, typeof(EnumConverter2<CsvTypeCode>));
         }
 
 
@@ -42,7 +42,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>();
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>();
 
             string? s = conv.ConvertToString(val);
             Assert.IsNotNull(s);
@@ -57,7 +57,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>("F");
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(format: "F");
 
             string? s = conv.ConvertToString(val);
             Assert.IsNotNull(s);
@@ -72,7 +72,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(ignoreCase: true);
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(ignoreCase: true);
 
             string? s = conv.ConvertToString(val);
             Assert.IsNotNull(s);
@@ -89,7 +89,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>("F", ignoreCase: true);
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(format: "F", ignoreCase: true);
 
             string? s = conv.ConvertToString(val);
             Assert.IsNotNull(s);
@@ -107,7 +107,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [ExpectedException(typeof(ArgumentException))]
         public void RoundtripTest5()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(ignoreCase: false, throwOnParseErrors: true);
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(ignoreCase: false);
 
             string s = CsvTypeCode.DateTimeOffset.ToString().ToUpperInvariant();
 
@@ -122,7 +122,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>("F", ignoreCase: false, throwOnParseErrors: true);
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(format: "F", ignoreCase: false);
 
             string? s = conv.ConvertToString(val);
             Assert.IsNotNull(s);
@@ -143,7 +143,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode? val = null;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>("F", true, false, throwOnParseErrors, ignoreCase);
+            CsvConverterOptions options = CsvConverterOptions.Nullable;
+
+            if (throwOnParseErrors)
+            {
+                options |= CsvConverterOptions.ThrowsOnParseErrors;
+            }
+
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(format: "F", options: options, ignoreCase: ignoreCase);
 
             string? s = conv.ConvertToString(val);
             Assert.IsNull(s);
@@ -159,9 +166,16 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [DataRow(true, true)]
         public void RoundtripTest8(bool throwOnParseErrors, bool ignoreCase)
         {
+            CsvConverterOptions options = CsvConverterOptions.Nullable;
+
+            if (throwOnParseErrors)
+            {
+                options |= CsvConverterOptions.ThrowsOnParseErrors;
+            }
+
             CsvTypeCode? val = null;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(true, false, throwOnParseErrors, ignoreCase);
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(options: options, ignoreCase: ignoreCase);
 
             string? s = conv.ConvertToString(val);
             Assert.IsNull(s);
@@ -180,7 +194,19 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [DataRow(true, true, true)]
         public void RoundtripTest9(bool throwOnParseErrors, bool ignoreCase, bool nullable)
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>("F", nullable, true, throwOnParseErrors, ignoreCase);
+            CsvConverterOptions options = CsvConverterOptions.AcceptsDBNull;
+
+            if (throwOnParseErrors)
+            {
+                options |= CsvConverterOptions.ThrowsOnParseErrors;
+            }
+
+            if (nullable)
+            {
+                options |= CsvConverterOptions.Nullable;
+            }
+
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(format: "F", options: options, ignoreCase: ignoreCase);
 
             string? s = conv.ConvertToString(DBNull.Value);
             Assert.IsNull(s);
@@ -200,7 +226,19 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [DataRow(true, true, true)]
         public void RoundtripTest10(bool throwOnParseErrors, bool ignoreCase, bool nullable)
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(nullable, true, throwOnParseErrors, ignoreCase);
+            CsvConverterOptions options = CsvConverterOptions.AcceptsDBNull;
+
+            if (throwOnParseErrors)
+            {
+                options |= CsvConverterOptions.ThrowsOnParseErrors;
+            }
+
+            if (nullable)
+            {
+                options |= CsvConverterOptions.Nullable;
+            }
+
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateEnumConverter<CsvTypeCode>(options: options, ignoreCase: ignoreCase);
 
             string? s = conv.ConvertToString(DBNull.Value);
             Assert.IsNull(s);

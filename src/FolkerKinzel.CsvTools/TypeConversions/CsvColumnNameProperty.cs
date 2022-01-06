@@ -1,4 +1,5 @@
 ﻿using FolkerKinzel.CsvTools.Resources;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -58,7 +59,7 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
 #if NET40
 #pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
 #endif
-            string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10) : base(propertyName, converter)
+            string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter2 converter, int wildcardTimeout = 10) : base(propertyName, converter)
     {
 
         if (columnNameAliases is null)

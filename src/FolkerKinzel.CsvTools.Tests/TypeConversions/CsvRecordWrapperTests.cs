@@ -26,14 +26,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop1Name = "Prop1";
             const string prop2Name = "Prop2";
 
-
+            var conv = new StringConverter2();
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop2);
             Assert.AreEqual(1, wrapper.Count);
@@ -56,7 +56,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                new StringConverter2());
 
 
             wrapper.InsertProperty(0, prop1);
@@ -85,7 +85,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                new StringConverter2());
 
 
             wrapper.InsertProperty(4711, prop1);
@@ -99,14 +99,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             const string prop1Name = "Prop1";
 
+            var conv = new StringConverter2();
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop2);
             wrapper.InsertProperty(0, prop1);
@@ -122,18 +123,20 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
+            var conv = new StringConverter2();
+
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop3 =
                 new CsvColumnNameProperty(prop3Name, new string[] { "Hallo3" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -159,18 +162,20 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop1Name = "Prop1";
             const string prop2Name = "Prop2";
 
+            var conv = new StringConverter2();
+
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop3 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo3" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -189,18 +194,19 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
+            var conv = new StringConverter2();
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop3 =
                 new CsvColumnNameProperty(prop3Name, new string[] { "Hallo3" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -219,7 +225,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                new StringConverter2());
 
 
             wrapper.AddProperty(prop1);
@@ -236,18 +242,20 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
+            var conv = new StringConverter2();
+
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop3 =
                 new CsvColumnNameProperty(prop3Name, new string[] { "Hallo3" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -273,17 +281,20 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop1Name = "Prop1";
             const string prop2Name = "Prop2";
 
+            var conv = new StringConverter2();
+
+
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop3 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo3" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -302,7 +313,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                new StringConverter2());
 
             wrapper.ReplaceProperty("bla", prop1);
         }
@@ -318,7 +329,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                new StringConverter2());
 
 
             wrapper.AddProperty(prop1);
@@ -338,7 +349,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                new StringConverter2());
 
 
             wrapper.AddProperty(prop1);
@@ -359,7 +370,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.Int32, true));
+                new Int32Converter().MakeNullableStructConverter());
 
             wrapper.AddProperty(prop1);
 
@@ -379,7 +390,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.Int32, true));
+                new Int32Converter().MakeNullableStructConverter());
 
             wrapper.AddProperty(prop1);
 
@@ -408,13 +419,13 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] {"Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.Int32, true));
+                new Int32Converter().MakeNullableStructConverter());
 
             wrapper.AddProperty(prop1);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] {"Blub", null!, "Bla*" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true),
+                new StringConverter2(),
                 wildcardTimeout);
 
             wrapper.AddProperty(prop2);
@@ -452,7 +463,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32, true);
+            ICsvTypeConverter2 conv = new Int32Converter().MakeNullableStructConverter();
 
             var prop1 =
                 new CsvColumnIndexProperty(prop1Name, 0, conv);
@@ -513,7 +524,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         {
             var wrapper = new CsvRecordWrapper();
 
-            wrapper.AddProperty(new CsvColumnNameProperty("Hallo", new string[] { "Hallo" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String, true)));
+            wrapper.AddProperty(new CsvColumnNameProperty("Hallo", new string[] { "Hallo" }, new StringConverter2()));
 
             Assert.AreEqual(0, wrapper.IndexOf("Hallo"));
             Assert.AreEqual(-1, wrapper.IndexOf("Wolli"));
@@ -526,7 +537,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         {
             var wrapper = new CsvRecordWrapper();
 
-            wrapper.AddProperty(new CsvColumnNameProperty("Hallo", new string[] { "Hallo" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String, true)));
+            wrapper.AddProperty(new CsvColumnNameProperty("Hallo", new string[] { "Hallo" }, new StringConverter2()));
 
             Assert.IsTrue(wrapper.Contains("Hallo"));
             Assert.IsFalse(wrapper.Contains("Wolli"));
@@ -544,7 +555,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop =
                 new CsvColumnNameProperty("Hallo", new string[] { "Hallo" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                new StringConverter2());
 
             wrapper.AddProperty(prop);
 
@@ -568,13 +579,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         {
             var wrapper = new CsvRecordWrapper();
 
+            var conv = new StringConverter2();
+
             var prop1 =
                 new CsvColumnNameProperty("Hallo", new string[] { "Hallo" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty("Hallo", new string[] { "Hallo" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -589,14 +602,16 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop1Name = "Prop1";
             const string prop2Name = "Prop2";
 
+            var conv = new StringConverter2();
+
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -628,13 +643,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop1Name = "Prop1";
             const string prop2Name = "Prop2";
 
+            var conv = new StringConverter2();
+
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             var prop2 =
                 new CsvColumnNameProperty(prop2Name, new string[] { "Hallo2" },
-                CsvConverterFactory.CreateConverter(CsvTypeCode.String, true));
+                conv);
 
             wrapper.AddProperty(prop1);
             wrapper.AddProperty(prop2);
@@ -668,7 +685,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var wrapper = new CsvRecordWrapper();
 
-            ICsvTypeConverter intConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter2 intConverter = CsvConverterFactory2.CreateConverter(CsvTypeCode.Int32);
 
             wrapper.AddProperty(new CsvColumnNameProperty(record.ColumnNames[0], new string[] { record.ColumnNames[0] }, intConverter));
             wrapper.AddProperty(new CsvColumnNameProperty(record.ColumnNames[1], new string[] { record.ColumnNames[1] }, intConverter));
@@ -718,11 +735,9 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32,
-                                                                                    false,
-                                                                                    true,
-                                                                                    CultureInfo.InvariantCulture,
-                                                                                    true);
+            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Int32,
+                                                                           CsvConverterOptions.ThrowsOnParseErrors | CsvConverterOptions.AcceptsDBNull);
+                                                                                   
 
             var prop1 =
                 new CsvColumnIndexProperty(prop1Name, 0, conv);
