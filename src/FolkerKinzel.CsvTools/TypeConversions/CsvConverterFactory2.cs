@@ -45,25 +45,25 @@ public static class CsvConverterFactory2
         => type switch
         {
             CsvTypeCode.Boolean => BooleanConverter.Create(options: options),
-            CsvTypeCode.Byte => ByteConverter.Create(options: options, formatProvider, hexConverter: false),
+            CsvTypeCode.Byte => ByteConverter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.Char => CharConverter.Create(options: options),
-            CsvTypeCode.Date => DateTimeConverter2.Create(isDate: true, options: options, formatProvider),
-            CsvTypeCode.DateTime => DateTimeConverter2.Create(isDate: false, options: options, formatProvider),
-            CsvTypeCode.Decimal => DecimalConverter.Create(options: options, formatProvider),
-            CsvTypeCode.Double => DoubleConverter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors),
-            CsvTypeCode.Int16 => Int16Converter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors, hexConverter: false),
-            CsvTypeCode.Int32 => Int32Converter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors, hexConverter: false),
-            CsvTypeCode.Int64 => Int64Converter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors, hexConverter: false),
-            CsvTypeCode.SByte => SByteConverter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors, hexConverter: false),
-            CsvTypeCode.Single => FloatConverter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors),
-            CsvTypeCode.String => StringConverter2.Create(nullable: nullable, acceptsDBNull: acceptsDBNull),
-            CsvTypeCode.UInt16 => UInt16Converter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors, hexConverter: false),
-            CsvTypeCode.UInt32 => UInt32Converter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors, hexConverter: false),
-            CsvTypeCode.UInt64 => UInt64Converter.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors, hexConverter: false),
-            CsvTypeCode.DateTimeOffset => DateTimeOffsetConverter2.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors),
-            CsvTypeCode.TimeSpan => TimeSpanConverter2.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, formatProvider, throwsOnParseErrors),
-            CsvTypeCode.ByteArray => Base64Converter2.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, throwsOnParseErrors),
-            CsvTypeCode.Guid => GuidConverter2.Create(nullable: nullable, acceptsDBNull: acceptsDBNull, throwsOnParseErrors),
+            CsvTypeCode.Date => DateTimeConverter2.Create(isDate: true, options: options, formatProvider: formatProvider),
+            CsvTypeCode.DateTime => DateTimeConverter2.Create(isDate: false, options: options, formatProvider: formatProvider),
+            CsvTypeCode.Decimal => DecimalConverter.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.Double => DoubleConverter.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.Int16 => Int16Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
+            CsvTypeCode.Int32 => Int32Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
+            CsvTypeCode.Int64 => Int64Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
+            CsvTypeCode.SByte => SByteConverter.Create(options: options, formatProvider: formatProvider,  hexConverter: false),
+            CsvTypeCode.Single => FloatConverter.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.String => StringConverter2.Create(options: options),
+            CsvTypeCode.UInt16 => UInt16Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
+            CsvTypeCode.UInt32 => UInt32Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
+            CsvTypeCode.UInt64 => UInt64Converter.Create(options: options, formatProvider: formatProvider,  hexConverter: false),
+            CsvTypeCode.DateTimeOffset => DateTimeOffsetConverter2.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.TimeSpan => TimeSpanConverter2.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.ByteArray => Base64Converter2.Create(options: options),
+            CsvTypeCode.Guid => GuidConverter2.Create(options: options),
             _ => throw new ArgumentOutOfRangeException(nameof(type))
         };
 
@@ -87,12 +87,11 @@ public static class CsvConverterFactory2
     /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung des Enum-Datentyps <typeparamref name="TEnum"/>.</returns>
     /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring für Enum-Datentypen.</exception>
     public static ICsvTypeConverter2 CreateEnumConverter<TEnum>(
-        bool nullable = false,
-        bool acceptsDBNull = false,
+        CsvConverterOptions options = default,
         TEnum fallbackValue = default,
-        bool throwsOnParseErrors = false,
         bool ignoreCase = true,
-        string? format = "D") where TEnum : struct, Enum => EnumConverter2<TEnum>.Create(nullable, acceptsDBNull, throwsOnParseErrors, ignoreCase, format, fallbackValue);
+        string? format = "D") where TEnum : struct, Enum 
+        => EnumConverter2<TEnum>.Create(options: options, ignoreCase: ignoreCase, format, fallbackValue: fallbackValue);
 
 
     ///// <summary>
@@ -142,18 +141,16 @@ public static class CsvConverterFactory2
     /// </exception>
     public static ICsvTypeConverter2 CreateHexConverter(
         CsvTypeCode type,
-        bool nullable = false,
-        bool acceptsDBNull = false,
-        bool throwsOnParseErrors = false) => type switch
+        CsvConverterOptions options = CsvConverterOptions.Default) => type switch
         {
-            CsvTypeCode.Byte => ByteConverter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
-            CsvTypeCode.UInt16 => UInt16Converter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
-            CsvTypeCode.UInt32 => UInt32Converter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
-            CsvTypeCode.UInt64 => UInt64Converter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
-            CsvTypeCode.SByte => SByteConverter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
-            CsvTypeCode.Int16 => Int16Converter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
-            CsvTypeCode.Int32 => Int32Converter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
-            CsvTypeCode.Int64 => Int64Converter.Create(nullable: nullable, acceptsDBNull, null, throwsOnParseErrors, true),
+            CsvTypeCode.Byte => ByteConverter.Create(options: options, formatProvider: null, hexConverter: true),
+            CsvTypeCode.UInt16 => UInt16Converter.Create(options: options, formatProvider: null, hexConverter: true),
+            CsvTypeCode.UInt32 => UInt32Converter.Create(options: options, formatProvider: null, hexConverter: true),
+            CsvTypeCode.UInt64 => UInt64Converter.Create(options: options, formatProvider: null, hexConverter: true),
+            CsvTypeCode.SByte => SByteConverter.Create(options: options, formatProvider: null, hexConverter: true),
+            CsvTypeCode.Int16 => Int16Converter.Create(options: options, formatProvider: null, hexConverter: true),
+            CsvTypeCode.Int32 => Int32Converter.Create(options: options, formatProvider: null, hexConverter: true),
+            CsvTypeCode.Int64 => Int64Converter.Create(options: options, formatProvider: null, hexConverter: true),
             _ => throw new ArgumentOutOfRangeException(nameof(type))
         };
 

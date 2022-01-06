@@ -10,17 +10,17 @@ public sealed class Base64Converter2 : CsvTypeConverter<byte[]?>
 {
     public Base64Converter2(bool throwsOnParseErrors, byte[]? fallbackValue) : base(throwsOnParseErrors, fallbackValue) { }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, bool throwsOnParseErrors)
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
     {
 #if NET40
-            byte[]? fallbackValue = nullable ? null : new byte[0];
+            byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : new byte[0];
 #else
-        byte[]? fallbackValue = nullable ? null : Array.Empty<byte>();
+        byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : Array.Empty<byte>();
 #endif
 
-        var conv = new Base64Converter2(throwsOnParseErrors, fallbackValue);
+        var conv = new Base64Converter2(options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors), fallbackValue);
 
-        return acceptsDBNull ? conv.AddDBNullAcceptance() : conv;
+        return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? conv.AddDBNullAcceptance() : conv;
     }
 
     protected override string? DoConvertToString(byte[]? value) => value is null ? null : Convert.ToBase64String(value, Base64FormattingOptions.None);
@@ -55,8 +55,9 @@ public sealed class EnumConverter2<TEnum> : CsvTypeConverter<TEnum> where TEnum 
         this.Format = format;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, bool throwsOnParseErrors, bool ignoreCase, string? format, TEnum fallbackValue)
-        => new EnumConverter2<TEnum>(ignoreCase, format, throwsOnParseErrors, fallbackValue).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, bool ignoreCase, string? format, TEnum fallbackValue)
+        => new EnumConverter2<TEnum>(ignoreCase, format, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors), fallbackValue)
+        .HandleNullableAndDBNullAcceptance(options);
 
     private static void ValidateFormat(string? format)
     {
@@ -136,15 +137,13 @@ public sealed class Int64Converter : CsvTypeConverter<long>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable,
-                                              bool acceptsDBNull,
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
-                                              bool throwsOnParseErrors,
                                               bool hexConverter)
         => new Int64Converter(formatProvider,
-                              throwsOnParseErrors,
+                              options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-           .HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+           .HandleNullableAndDBNullAcceptance(options);
 
     protected override string? DoConvertToString(long value) => value.ToString(_format, _formatProvider);
 
@@ -172,15 +171,13 @@ public sealed class Int32Converter : CsvTypeConverter<int>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable,
-                                              bool acceptsDBNull,
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
-                                              bool throwsOnParseErrors,
                                               bool hexConverter)
         => new Int32Converter(formatProvider,
-                              throwsOnParseErrors,
+                              options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-           .HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+           .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(int value) => value.ToString(_format, _formatProvider);
@@ -209,15 +206,13 @@ public sealed class Int16Converter : CsvTypeConverter<int>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable,
-                                              bool acceptsDBNull,
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
-                                              bool throwsOnParseErrors,
                                               bool hexConverter)
         => new Int16Converter(formatProvider,
-                              throwsOnParseErrors,
+                              options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-           .HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+           .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(int value) => value.ToString(_format, _formatProvider);
@@ -247,15 +242,13 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable,
-                                              bool acceptsDBNull,
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
-                                              bool throwsOnParseErrors,
                                               bool hexConverter)
         => new SByteConverter(formatProvider,
-                              throwsOnParseErrors,
+                              options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-          .HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+          .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(sbyte value) => value.ToString(_format, _formatProvider);
@@ -283,11 +276,11 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors, bool hexConverter)
-        => new UInt64Converter(formatProvider, 
-                               throwsOnParseErrors,
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
+        => new UInt64Converter(formatProvider,
+                               options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
                                hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-           .HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+           .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(ulong value) => value.ToString(_format, _formatProvider);
@@ -317,15 +310,13 @@ public sealed class UInt32Converter : CsvTypeConverter<uint>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable,
-                                              bool acceptsDBNull,
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
-                                              bool throwsOnParseErrors,
                                               bool hexConverter)
         => new UInt32Converter(formatProvider,
-                               throwsOnParseErrors,
+                               options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
                                hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-           .HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+           .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(uint value) => value.ToString(_format, _formatProvider);
@@ -355,15 +346,13 @@ public sealed class UInt16Converter : CsvTypeConverter<ushort>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable,
-                                              bool acceptsDBNull,
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
-                                              bool throwsOnParseErrors,
                                               bool hexConverter)
         => new UInt16Converter(formatProvider,
-                               throwsOnParseErrors,
+                               options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
                                hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-            .HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+            .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(ushort value) => value.ToString(_format, _formatProvider);
@@ -414,7 +403,8 @@ public sealed class DecimalConverter : CsvTypeConverter<decimal>
     }
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new DecimalConverter(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors).HandleNullableAndDBNullAcceptance(options);
+        => new DecimalConverter(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+          .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(decimal value) => value.ToString(_formatProvider);
@@ -435,8 +425,8 @@ public sealed class DoubleConverter : CsvTypeConverter<double>
         _styles = styles;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
-        => new DoubleConverter(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+        => new DoubleConverter(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors)).HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(double value) => value.ToString(_formatProvider);
@@ -458,8 +448,9 @@ public sealed class FloatConverter : CsvTypeConverter<float>
         _styles = styles;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
-        => new FloatConverter(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+        => new FloatConverter(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(float value) => value.ToString(_formatProvider);
@@ -508,13 +499,13 @@ public sealed class StringConverter2 : CsvTypeConverter<string?>
 {
     public StringConverter2(string? fallbackValue = null) : base(false, fallbackValue) { }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull)
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
     {
-        string? fallbackValue = nullable ? null : string.Empty;
+        string? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : string.Empty;
 
         var conv = new StringConverter2(fallbackValue);
 
-        return acceptsDBNull ? conv.AddDBNullAcceptance() : conv;
+        return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? conv.AddDBNullAcceptance() : conv;
     }
 
     protected override string? DoConvertToString(string? value) => value;
@@ -723,8 +714,9 @@ public sealed class DateTimeOffsetConverter2 : CsvTypeConverter<DateTimeOffset>
         _styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
-        => new DateTimeOffsetConverter2(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+        => new DateTimeOffsetConverter2(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        .HandleNullableAndDBNullAcceptance(options);
 
 
     public DateTimeOffsetConverter2(
@@ -785,8 +777,9 @@ public sealed class TimeSpanConverter2 : CsvTypeConverter<TimeSpan>
         _format = "g";
     }
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
-       => new TimeSpanConverter2(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+       => new TimeSpanConverter2(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        .HandleNullableAndDBNullAcceptance(options);
 
 
     public TimeSpanConverter2(
@@ -840,8 +833,9 @@ public sealed class GuidConverter2 : CsvTypeConverter<Guid>
 
     private GuidConverter2(bool throwsOnParseErrors) : base(throwsOnParseErrors) => _format = "D";
 
-    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, bool throwsOnParseErrors)
-        => new GuidConverter2(throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+    internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
+        => new GuidConverter2(options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        .HandleNullableAndDBNullAcceptance(options);
 
 
     public GuidConverter2(
