@@ -22,13 +22,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             list.Add(11);
 
 
-            var itemsConv = new NumberConverter2<int>(default, null, false);
-            var nullableConv = new NullableStructConverter<int>(itemsConv);
-            ICsvTypeConverter2 conv = new EnumerableConverter<int?>(nullableConv);
+            ICsvTypeConverter2 conv = new Int32Converter().MakeNullableStructConverter().MakeIEnumerableConverter();
+            
 
             string? s = conv.ConvertToString(list);
 
-            IEnumerable<int?>? result = (IEnumerable<int?>?)conv.Parse(s);
+            var result = (IEnumerable<int?>?)conv.Parse(s);
+            Assert.IsNotNull(result);
+            CollectionAssert.AreEqual(list, result!.ToList());
         }
 
         [TestMethod()]

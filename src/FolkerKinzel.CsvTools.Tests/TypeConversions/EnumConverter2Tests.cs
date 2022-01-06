@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FolkerKinzel.CsvTools.TypeConversions.Converters.Intls;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 {
@@ -15,9 +16,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [TestMethod()]
         public void EnumConverter2Test()
         {
-            var conv = new EnumConverter2<DayOfWeek>(true, "D", DayOfWeek.Monday, false);
+            var conv = new EnumConverter2<DayOfWeek>();
 
             string? outp = (string?)conv.ConvertToString(null);
+            Assert.IsNotNull(outp);
+
+            DayOfWeek res = conv.Parse(outp);
+
+            Assert.AreEqual(default, res);
         }
     }
 }
