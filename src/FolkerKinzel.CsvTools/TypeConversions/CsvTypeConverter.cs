@@ -1,546 +1,603 @@
 ﻿using System;
+using System.Data.SqlTypes;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
-namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls;
-
-internal class Base64Converter2 : CsvTypeConverter<byte[]?>
+namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls
 {
-    public Base64Converter2(bool throwOnParseErrors, byte[]? fallbackValue) : base(throwOnParseErrors, fallbackValue) { }
 
-    protected override string? DoConvertToString(byte[]? value) => value is null ? null : Convert.ToBase64String(value, Base64FormattingOptions.None);
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out byte[]? result)
+    internal sealed class Base64Converter2 : CsvTypeConverter<byte[]?>
     {
-        try
-        {
-            result = (byte[])Convert.FromBase64String(value);
-            return true;
-        }
-        catch (FormatException)
-        {
-            result = null;
-            return false;
-        }
-    }
-}
+        private Base64Converter2(bool throwsOnParseErrors, byte[]? fallbackValue) : base(throwsOnParseErrors, fallbackValue) { }
 
-internal class EnumConverter2<TEnum> : CsvTypeConverter<TEnum> where TEnum : struct, Enum
-{
-    internal EnumConverter2(
-        bool ignoreCase,
-        string? format,
-        TEnum fallbackValue,
-        bool throwOnParseErrors)
-        : base(throwOnParseErrors, fallbackValue)
-    {
-        ValidateFormat(format);
-        this.IgnoreCase = ignoreCase;
-        this.Format = format;
-    }
-
-    private static void ValidateFormat(string? format)
-    {
-        if (format is null || format.Length == 0)
+        internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, bool throwsOnParseErrors)
         {
-            return;
+#if NET40
+            byte[]? fallbackValue = nullable ? null : new byte[0];
+#else
+        byte[]? fallbackValue = nullable ? null : Array.Empty<byte>();
+#endif
+
+            var conv = new Base64Converter2(throwsOnParseErrors, fallbackValue);
+
+            return acceptsDBNull ? conv.AddDBNullAcceptance() : conv;
         }
 
-        if (format.Length == 1)
+        protected override string? DoConvertToString(byte[]? value) => value is null ? null : Convert.ToBase64String(value, Base64FormattingOptions.None);
+
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out byte[]? result)
         {
-            switch (char.ToUpperInvariant(format[0]))
+            try
             {
-                case 'G':
-                case 'D':
-                case 'X':
-                case 'F':
-                    return;
+                result = (byte[])Convert.FromBase64String(value);
+                return true;
+            }
+            catch (FormatException)
+            {
+                result = null;
+                return false;
+            }
+        }
+    }
+
+    internal sealed class EnumConverter2<TEnum> : CsvTypeConverter<TEnum> where TEnum : struct, Enum
+    {
+        private EnumConverter2(
+            bool ignoreCase,
+            string? format,
+            bool throwsOnParseErrors,
+            TEnum fallbackValue)
+            : base(throwsOnParseErrors, fallbackValue)
+        {
+            ValidateFormat(format);
+            this.IgnoreCase = ignoreCase;
+            this.Format = format;
+        }
+
+        internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, bool throwsOnParseErrors, bool ignoreCase, string? format, TEnum fallbackValue)
+            => new EnumConverter2<TEnum>(ignoreCase, format, throwsOnParseErrors, fallbackValue).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+
+        private static void ValidateFormat(string? format)
+        {
+            if (format is null || format.Length == 0)
+            {
+                return;
+            }
+
+            if (format.Length == 1)
+            {
+                switch (char.ToUpperInvariant(format[0]))
+                {
+                    case 'G':
+                    case 'D':
+                    case 'X':
+                    case 'F':
+                        return;
+                }
+            }
+
+            throw new ArgumentException("Invalid format.", nameof(format));
+        }
+
+        internal bool IgnoreCase { get; }
+        internal string? Format { get; }
+
+        protected override string? DoConvertToString(TEnum value) => value.ToString(Format);
+
+        protected override bool TryParseValue(string value, out TEnum result) => Enum.TryParse<TEnum>(value, IgnoreCase, out result);
+    }
+
+
+    internal sealed class NumberConverter2<T> : CsvTypeConverter<T> where T : struct, IConvertible
+    {
+        private NumberConverter2(IFormatProvider? formatProvider, bool throwsOnParseErrors)
+            : base(throwsOnParseErrors) => FormatProvider = formatProvider;
+
+        internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
+            => new NumberConverter2<T>(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+
+        internal IFormatProvider? FormatProvider { get; }
+
+        protected override string? DoConvertToString(T value) => Convert.ToString(value, FormatProvider);
+
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out T result)
+        {
+            try
+            {
+                result = (T)Convert.ChangeType(value, typeof(T), FormatProvider);
+                return true;
+            }
+            catch
+            {
+                result = default;
+                return false;
             }
         }
 
-        throw new ArgumentException("Invalid format.", nameof(format));
     }
 
-    internal bool IgnoreCase { get; }
-    internal string? Format { get; }
 
-    protected override string? DoConvertToString(TEnum value) => value.ToString(Format);
-
-    protected override bool TryParseValue(string value, out TEnum result) => Enum.TryParse<TEnum>(value, IgnoreCase, out result);
-}
-
-
-internal sealed class NumberConverter2<T> : CsvTypeConverter<T> where T : struct, IConvertible
-{
-    internal NumberConverter2(T fallbackValue, IFormatProvider? formatProvider, bool throwOnParseErrors)
-        : base(throwOnParseErrors, fallbackValue) => FormatProvider = formatProvider;
-
-    internal IFormatProvider? FormatProvider { get; }
-
-    protected override string? DoConvertToString(T value) => Convert.ToString(value, FormatProvider);
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out T result)
+    internal sealed class StringConverter2 : CsvTypeConverter<string?>
     {
-        try
+        private StringConverter2(string? fallbackValue) : base(false, fallbackValue) { }
+
+        internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull)
         {
-            result = (T)Convert.ChangeType(value, typeof(T), FormatProvider);
+            string? fallbackValue = nullable ? null : string.Empty;
+
+            var conv = new StringConverter2(fallbackValue);
+
+            return acceptsDBNull ? conv.AddDBNullAcceptance() : conv;
+        }
+
+        protected override string? DoConvertToString(string? value) => value;
+        protected override bool TryParseValue(string value, out string? result)
+        {
+            result = value;
             return true;
         }
-        catch
+    }
+
+
+    internal sealed class HexConverter2<T> : CsvTypeConverter<T> where T : struct, IConvertible
+    {
+        private readonly bool _signed;
+
+        private HexConverter2(bool signed, bool throwsOnParseErrors) : base(throwsOnParseErrors, default)
+            //=> _signed = Convert.ToBoolean(typeof(T).GetField("MinValue")?.GetValue(null));
+            => _signed = signed;
+
+        internal static ICsvTypeConverter2 Create(bool signed, bool nullable, bool acceptsDBNull, bool throwOnParseErrors)
+            => new HexConverter2<T>(signed, throwOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+
+
+        protected override string? DoConvertToString(T value)
         {
+            const string format = "X";
+
+            if (_signed)
+            {
+                long l = Convert.ToInt64(value, CultureInfo.InvariantCulture);
+                return l.ToString(format, CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                ulong l = Convert.ToUInt64(value, CultureInfo.InvariantCulture);
+                return l.ToString(format, CultureInfo.InvariantCulture);
+            }
+        }
+
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out T result)
+        {
+            const NumberStyles styles = NumberStyles.HexNumber;
+
+            if (_signed)
+            {
+                if (long.TryParse(value, styles, CultureInfo.InvariantCulture, out long res))
+                {
+                    result = (T)Convert.ChangeType(res, typeof(T), CultureInfo.InvariantCulture);
+                    return true;
+                }
+            }
+            else
+            {
+                if (ulong.TryParse(value, styles, CultureInfo.InvariantCulture, out ulong res))
+                {
+                    result = (T)Convert.ChangeType(res, typeof(T), CultureInfo.InvariantCulture);
+                    return true;
+                }
+            }
+
             result = default;
             return false;
         }
     }
 
-}
 
-
-internal sealed class StringConverter2 : CsvTypeConverter<string?>
-{
-    public StringConverter2(string fallbackValue, bool throwOnParseErrors) : base(throwOnParseErrors, fallbackValue) { }
-
-    protected override string? DoConvertToString(string? value) => value;
-    protected override bool TryParseValue(string value, out string? result)
+    internal sealed class NullableStructConverter<T> : CsvTypeConverter<Nullable<T>> where T : struct
     {
-        result = value;
-        return true;
-    }
-}
+        private readonly CsvTypeConverter<T> _typeConverter;
 
-
-internal sealed class HexConverter2<T> : CsvTypeConverter<T> where T : struct, IConvertible
-{
-    private readonly bool _signed;
-
-    public HexConverter2(bool throwOnParseErrors) : base(throwOnParseErrors, default)
-        => _signed = Convert.ToBoolean(typeof(T).GetField("MinValue")?.GetValue(null));
-
-    protected override string? DoConvertToString(T value)
-    {
-        const string format = "X";
-
-        if (_signed)
+        internal NullableStructConverter(CsvTypeConverter<T> converter) : base(false)
         {
-            long l = Convert.ToInt64(value, CultureInfo.InvariantCulture);
-            return l.ToString(format, CultureInfo.InvariantCulture);
-        }
-        else
-        {
-            ulong l = Convert.ToUInt64(value, CultureInfo.InvariantCulture);
-            return l.ToString(format, CultureInfo.InvariantCulture);
-        }
-    }
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out T result)
-    {
-        const NumberStyles styles = NumberStyles.HexNumber;
-
-        if (_signed)
-        {
-            if (long.TryParse(value, styles, CultureInfo.InvariantCulture, out long res))
-            {
-                result = (T)Convert.ChangeType(res, typeof(T), CultureInfo.InvariantCulture);
-                return true;
-            }
-        }
-        else
-        {
-            if (ulong.TryParse(value, styles, CultureInfo.InvariantCulture, out ulong res))
-            {
-                result = (T)Convert.ChangeType(res, typeof(T), CultureInfo.InvariantCulture);
-                return true;
-            }
+            _typeConverter = converter ?? throw new ArgumentNullException(nameof(converter));
         }
 
-        result = default;
-        return false;
-    }
-}
+        protected override string? DoConvertToString(T? value) => value.HasValue ? _typeConverter.ConvertToString(value.Value) : null;
 
-
-public class DateTimeConverter2 : CsvTypeConverter<DateTime>
-{
-    private readonly IFormatProvider _formatProvider;
-    private readonly string _format;
-    private readonly bool _parseExact;
-    private readonly DateTimeStyles _styles;
-
-    internal DateTimeConverter2(bool isDate, IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _format = isDate ? "d" : "s";
-        _styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
-    }
-
-    public DateTimeConverter2(
-        string? format,
-        IFormatProvider? formatProvider = null,
-        DateTime fallbackValue = default,
-        bool throwOnParseErrors = false,
-        DateTimeStyles styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind,
-        bool parseExact = false) : base(throwOnParseErrors, fallbackValue)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _styles = styles;
-        _format = format ?? string.Empty;
-        _parseExact = parseExact;
-        ExamineFormat();
-    }
-
-
-    protected override string? DoConvertToString(DateTime value) => value.ToString(_format, _formatProvider);
-
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out DateTime result)
-        => _parseExact
-            ? DateTime.TryParseExact(value, _format, _formatProvider, _styles, out result)
-            : DateTime.TryParse(value, _formatProvider, _styles, out result);
-
-
-    private void ExamineFormat()
-    {
-        try
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out T? result)
         {
-            string tmp = DateTime.Now.ToString(_format, _formatProvider);
-
-            if (_parseExact)
-            {
-                _ = DateTime.ParseExact(tmp, _format, _formatProvider, _styles);
-            }
-        }
-        catch (FormatException e)
-        {
-            throw new ArgumentException(e.Message, e);
-        }
-    }
-}
-
-
-public class DateTimeOffsetConverter2 : CsvTypeConverter<DateTimeOffset>
-{
-    private readonly IFormatProvider _formatProvider;
-    private readonly string _format;
-    private readonly bool _parseExact;
-    private readonly DateTimeStyles _styles;
-
-    internal DateTimeOffsetConverter2(IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _format = "O";
-        _styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
-    }
-
-    public DateTimeOffsetConverter2(
-        string? format,
-
-        IFormatProvider? formatProvider = null,
-        DateTimeOffset fallbackValue = default,
-        bool throwOnParseErrors = false,
-        DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind,
-        bool parseExact = false) : base(throwOnParseErrors, fallbackValue)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _styles = styles;
-        _format = format ?? string.Empty;
-        _parseExact = parseExact;
-        ExamineFormat();
-    }
-
-
-    protected override string? DoConvertToString(DateTimeOffset value) => value.ToString(_format, _formatProvider);
-
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out DateTimeOffset result)
-        => _parseExact
-            ? DateTimeOffset.TryParseExact(value, _format, _formatProvider, _styles, out result)
-            : DateTimeOffset.TryParse(value, _formatProvider, _styles, out result);
-
-
-    private void ExamineFormat()
-    {
-        try
-        {
-            string tmp = DateTimeOffset.Now.ToString(_format, _formatProvider);
-
-            if (_parseExact)
-            {
-                _ = DateTimeOffset.ParseExact(tmp, _format, _formatProvider, _styles);
-            }
-        }
-        catch (FormatException e)
-        {
-            throw new ArgumentException(e.Message, e);
-        }
-    }
-}
-
-
-public class TimeSpanConverter2 : CsvTypeConverter<TimeSpan>
-{
-    private readonly IFormatProvider _formatProvider;
-    private readonly string _format;
-    private readonly bool _parseExact;
-    private readonly TimeSpanStyles _styles;
-
-    internal TimeSpanConverter2(IFormatProvider? formatProvider, bool throwOnParseErrors) : base(throwOnParseErrors)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _format = "g";
-    }
-
-
-    public TimeSpanConverter2(
-        string? format,
-        IFormatProvider? formatProvider = null,
-        TimeSpan fallbackValue = default,
-        bool throwOnParseErrors = false,
-        TimeSpanStyles styles = TimeSpanStyles.None,
-        bool parseExact = false) : base(throwOnParseErrors, fallbackValue)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _styles = styles;
-        _format = format ?? string.Empty;
-        _parseExact = parseExact;
-        ExamineFormat();
-    }
-
-
-    protected override string? DoConvertToString(TimeSpan value) => value.ToString(_format, _formatProvider);
-
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out TimeSpan result)
-        => _parseExact
-            ? TimeSpan.TryParseExact(value, _format, _formatProvider, _styles, out result)
-            : TimeSpan.TryParse(value, _formatProvider, out result);
-
-
-    private void ExamineFormat()
-    {
-        try
-        {
-            string tmp = TimeSpan.Zero.ToString(_format, _formatProvider);
-
-            if (_parseExact)
-            {
-                _ = TimeSpan.ParseExact(tmp, _format, _formatProvider, _styles);
-            }
-        }
-        catch (FormatException e)
-        {
-            throw new ArgumentException(e.Message, e);
-        }
-    }
-}
-
-
-
-public class GuidConverter2 : CsvTypeConverter<Guid>
-{
-    private readonly string _format;
-    private readonly bool _parseExact;
-    private readonly TimeSpanStyles _styles;
-
-    internal GuidConverter2(bool throwOnParseErrors) : base(throwOnParseErrors) => _format = "D";
-
-
-    public GuidConverter2(
-        string? format,
-        bool throwOnParseErrors = false,
-        TimeSpanStyles styles = TimeSpanStyles.None,
-        bool parseExact = false) : base(throwOnParseErrors, default)
-    {
-        _styles = styles;
-        _format = format ?? string.Empty;
-        _parseExact = parseExact;
-        ExamineFormat(nameof(format));
-    }
-
-
-    protected override string? DoConvertToString(Guid value) => value.ToString(_format, CultureInfo.InvariantCulture);
-
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out Guid result)
-        => Guid.TryParse(value, out result);
-
-
-    private void ExamineFormat(string parameterName)
-    {
-        try
-        {
-            _ = Guid.Empty.ToString(_format, CultureInfo.InvariantCulture);
-        }
-        catch (FormatException e)
-        {
-            throw new ArgumentException(e.Message, parameterName, e);
-        }
-    }
-}
-
-public class NullableStructConverter<T> : CsvTypeConverter<Nullable<T>> where T : struct
-{
-    private readonly CsvTypeConverter<T> _typeConverter;
-
-    public NullableStructConverter(CsvTypeConverter<T> typeConverter) : base(false)
-    {
-        _typeConverter = typeConverter ?? throw new ArgumentNullException(nameof(typeConverter));
-    }
-
-    protected override string? DoConvertToString(T? value) => value.HasValue ? _typeConverter.ConvertToString(value.Value) : null;
-
-    protected override bool TryParseValue(string value, [NotNullWhen(true)] out T? result)
-    {
-        result = _typeConverter.Parse(value);
-        return true;
-    }
-}
-
-public class EnumerableConverter<TItem> : CsvTypeConverter<IEnumerable<TItem?>?>
-{
-    private readonly char _separatorChar;
-
-    public EnumerableConverter(CsvTypeConverter<TItem?> itemsConverter,
-                                char fieldSeparator = ',',
-                                bool nullable = true) : base(false)
-    {
-        ItemsConverter = itemsConverter ?? throw new ArgumentNullException(nameof(itemsConverter));
-
-        _separatorChar = fieldSeparator;
-    }
-
-    protected CsvTypeConverter<TItem?> ItemsConverter { get; }
-
-    protected override string? DoConvertToString(IEnumerable<TItem?>? value)
-    {
-        if (value is null || !value.Any())
-        {
-            return null;
-        }
-        var sb = new StringBuilder();
-        using var writer = new StringWriter(sb);
-        using (var csvWriter = new CsvWriter(writer, value.Count(), fieldSeparator: _separatorChar))
-        {
-            csvWriter.Record.Fill(value.Select(x => ItemsConverter.ConvertToString(x)));
-            csvWriter.WriteRecord();
-        }
-        return writer.ToString();
-    }
-
-    protected override bool TryParseValue(string value, out IEnumerable<TItem?>? result)
-    {
-        var list = new List<TItem?>();
-
-        using var reader = new StringReader(value);
-        using var csvReader = new CsvReader(reader, false, fieldSeparator: _separatorChar);
-
-        CsvRecord? record = csvReader.Read().FirstOrDefault();
-
-        if (record is null || record.Count == 0)
-        {
-            result = list!;
+            result = _typeConverter.Parse(value);
             return true;
         }
+    }
 
-        for (int i = 0; i < record.Count; i++)
+    internal sealed class DBNullConverter : CsvTypeConverter<object?>
+    {
+        private readonly ICsvTypeConverter2 _valueConverter;
+
+        public DBNullConverter(ICsvTypeConverter2 converter) : base(false, DBNull.Value)
+            => _valueConverter = converter ?? throw new ArgumentNullException(nameof(converter));
+
+        protected override string? DoConvertToString(object? value) => value == DBNull.Value ? null : _valueConverter.ConvertToString(value);
+        protected override bool TryParseValue(string value, out object? result)
         {
-            list.Add(ItemsConverter.Parse(record[i]));
+            result = _valueConverter.Parse(value);
+            return true;
         }
-
-        result = list;
-        return true;
     }
 }
 
-
-public class DBNullConverter : CsvTypeConverter<object?>
+namespace FolkerKinzel.CsvTools.TypeConversions.Converters
 {
-    private readonly ICsvTypeConverter2 _valueConverter;
 
-    public DBNullConverter(ICsvTypeConverter2 valueConverter) : base(false, DBNull.Value)
+    public sealed class DateTimeConverter2 : CsvTypeConverter<DateTime>
     {
-        _valueConverter = valueConverter ?? throw new ArgumentNullException(nameof(valueConverter));
+        private readonly IFormatProvider _formatProvider;
+        private readonly string _format;
+        private readonly bool _parseExact;
+        private readonly DateTimeStyles _styles;
+
+        private DateTimeConverter2(bool isDate, IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
+        {
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            _format = isDate ? "d" : "s";
+            _styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
+        }
+
+        internal static ICsvTypeConverter2 Create(bool isDate, bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwOnParseErrors)
+            => new DateTimeConverter2(isDate, formatProvider, throwOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+
+        public DateTimeConverter2(
+            string? format,
+            IFormatProvider? formatProvider = null,
+            DateTime fallbackValue = default,
+            bool throwsOnParseErrors = false,
+            DateTimeStyles styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind,
+            bool parseExact = false) : base(throwsOnParseErrors, fallbackValue)
+        {
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            _styles = styles;
+            _format = format ?? string.Empty;
+            _parseExact = parseExact;
+            ExamineFormat();
+        }
+
+
+        protected override string? DoConvertToString(DateTime value) => value.ToString(_format, _formatProvider);
+
+
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out DateTime result)
+            => _parseExact
+                ? DateTime.TryParseExact(value, _format, _formatProvider, _styles, out result)
+                : DateTime.TryParse(value, _formatProvider, _styles, out result);
+
+
+        private void ExamineFormat()
+        {
+            try
+            {
+                string tmp = DateTime.Now.ToString(_format, _formatProvider);
+
+                if (_parseExact)
+                {
+                    _ = DateTime.ParseExact(tmp, _format, _formatProvider, _styles);
+                }
+            }
+            catch (FormatException e)
+            {
+                throw new ArgumentException(e.Message, e);
+            }
+        }
     }
 
-    protected override string? DoConvertToString(object? value) => value == DBNull.Value ? null : _valueConverter.ConvertToString(value);
-    protected override bool TryParseValue(string value, out object? result)
+
+    public sealed class DateTimeOffsetConverter2 : CsvTypeConverter<DateTimeOffset>
     {
-        result = _valueConverter.Parse(value);
-        return true;
+        private readonly IFormatProvider _formatProvider;
+        private readonly string _format;
+        private readonly bool _parseExact;
+        private readonly DateTimeStyles _styles;
+
+        private DateTimeOffsetConverter2(IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
+        {
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            _format = "O";
+            _styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
+        }
+
+        internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
+            => new DateTimeOffsetConverter2(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+
+
+        public DateTimeOffsetConverter2(
+            string? format,
+
+            IFormatProvider? formatProvider = null,
+            DateTimeOffset fallbackValue = default,
+            bool throwOnParseErrors = false,
+            DateTimeStyles styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind,
+            bool parseExact = false) : base(throwOnParseErrors, fallbackValue)
+        {
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            _styles = styles;
+            _format = format ?? string.Empty;
+            _parseExact = parseExact;
+            ExamineFormat();
+        }
+
+
+        protected override string? DoConvertToString(DateTimeOffset value) => value.ToString(_format, _formatProvider);
+
+
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out DateTimeOffset result)
+            => _parseExact
+                ? DateTimeOffset.TryParseExact(value, _format, _formatProvider, _styles, out result)
+                : DateTimeOffset.TryParse(value, _formatProvider, _styles, out result);
+
+
+        private void ExamineFormat()
+        {
+            try
+            {
+                string tmp = DateTimeOffset.Now.ToString(_format, _formatProvider);
+
+                if (_parseExact)
+                {
+                    _ = DateTimeOffset.ParseExact(tmp, _format, _formatProvider, _styles);
+                }
+            }
+            catch (FormatException e)
+            {
+                throw new ArgumentException(e.Message, e);
+            }
+        }
     }
+
+
+    public sealed class TimeSpanConverter2 : CsvTypeConverter<TimeSpan>
+    {
+        private readonly IFormatProvider _formatProvider;
+        private readonly string _format;
+        private readonly bool _parseExact;
+        private readonly TimeSpanStyles _styles;
+
+        private TimeSpanConverter2(IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
+        {
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            _format = "g";
+        }
+
+        internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
+           => new TimeSpanConverter2(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+
+
+        public TimeSpanConverter2(
+            string? format,
+            IFormatProvider? formatProvider = null,
+            TimeSpan fallbackValue = default,
+            bool throwOnParseErrors = false,
+            TimeSpanStyles styles = TimeSpanStyles.None,
+            bool parseExact = false) : base(throwOnParseErrors, fallbackValue)
+        {
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+            _styles = styles;
+            _format = format ?? string.Empty;
+            _parseExact = parseExact;
+            ExamineFormat();
+        }
+
+
+        protected override string? DoConvertToString(TimeSpan value) => value.ToString(_format, _formatProvider);
+
+
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out TimeSpan result)
+            => _parseExact
+                ? TimeSpan.TryParseExact(value, _format, _formatProvider, _styles, out result)
+                : TimeSpan.TryParse(value, _formatProvider, out result);
+
+
+        private void ExamineFormat()
+        {
+            try
+            {
+                string tmp = TimeSpan.Zero.ToString(_format, _formatProvider);
+
+                if (_parseExact)
+                {
+                    _ = TimeSpan.ParseExact(tmp, _format, _formatProvider, _styles);
+                }
+            }
+            catch (FormatException e)
+            {
+                throw new ArgumentException(e.Message, e);
+            }
+        }
+    }
+
+
+
+    public sealed class GuidConverter2 : CsvTypeConverter<Guid>
+    {
+        private readonly string _format;
+        private readonly bool _parseExact;
+        private readonly TimeSpanStyles _styles;
+
+        private GuidConverter2(bool throwsOnParseErrors) : base(throwsOnParseErrors) => _format = "D";
+
+        internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, bool throwsOnParseErrors)
+            => new GuidConverter2(throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
+
+
+        public GuidConverter2(
+            string? format,
+            bool throwOnParseErrors = false,
+            TimeSpanStyles styles = TimeSpanStyles.None,
+            bool parseExact = false) : base(throwOnParseErrors, default)
+        {
+            _styles = styles;
+            _format = format ?? string.Empty;
+            _parseExact = parseExact;
+            ExamineFormat(nameof(format));
+        }
+
+
+        protected override string? DoConvertToString(Guid value) => value.ToString(_format, CultureInfo.InvariantCulture);
+
+
+        protected override bool TryParseValue(string value, [NotNullWhen(true)] out Guid result)
+            => Guid.TryParse(value, out result);
+
+
+        private void ExamineFormat(string parameterName)
+        {
+            try
+            {
+                _ = Guid.Empty.ToString(_format, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException e)
+            {
+                throw new ArgumentException(e.Message, parameterName, e);
+            }
+        }
+    }
+
+
+
+
+    public class EnumerableConverter<TItem> : CsvTypeConverter<IEnumerable<TItem?>?>
+    {
+        private readonly char _separatorChar;
+
+        public EnumerableConverter(CsvTypeConverter<TItem?> itemsConverter,
+                                    char fieldSeparator = ',',
+                                    bool nullable = true) : base(false)
+        {
+            ItemsConverter = itemsConverter ?? throw new ArgumentNullException(nameof(itemsConverter));
+
+            _separatorChar = fieldSeparator;
+        }
+
+        protected CsvTypeConverter<TItem?> ItemsConverter { get; }
+
+        protected override string? DoConvertToString(IEnumerable<TItem?>? value)
+        {
+            if (value is null || !value.Any())
+            {
+                return null;
+            }
+            var sb = new StringBuilder();
+            using var writer = new StringWriter(sb);
+            using (var csvWriter = new CsvWriter(writer, value.Count(), fieldSeparator: _separatorChar))
+            {
+                csvWriter.Record.Fill(value.Select(x => ItemsConverter.ConvertToString(x)));
+                csvWriter.WriteRecord();
+            }
+            return writer.ToString();
+        }
+
+        protected override bool TryParseValue(string value, out IEnumerable<TItem?>? result)
+        {
+            var list = new List<TItem?>();
+
+            using var reader = new StringReader(value);
+            using var csvReader = new CsvReader(reader, false, fieldSeparator: _separatorChar);
+
+            CsvRecord? record = csvReader.Read().FirstOrDefault();
+
+            if (record is null || record.Count == 0)
+            {
+                result = list!;
+                return true;
+            }
+
+            for (int i = 0; i < record.Count; i++)
+            {
+                list.Add(ItemsConverter.Parse(record[i]));
+            }
+
+            result = list;
+            return true;
+        }
+    }
+
 }
 
 
-public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
+namespace FolkerKinzel.CsvTools.TypeConversions
 {
-    protected CsvTypeConverter(bool throwOnParseErrors, T? fallbackValue = default)
+    public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
     {
-        ThrowsOnParseErrors = throwOnParseErrors;
-        FallbackValue = fallbackValue;
-    }
-
-    public T? FallbackValue { get; }
-
-    object? ICsvTypeConverter2.FallbackValue => FallbackValue;
-
-
-    public bool ThrowsOnParseErrors { get; }
-
-
-    protected abstract bool TryParseValue(string value, out T result);
-
-    protected abstract string? DoConvertToString(T value);
-
-    public string? ConvertToString(object? value)
-    {
-        if (value is null)
+        protected CsvTypeConverter(bool throwsOnParseErrors, T? fallbackValue = default)
         {
-            return null;
+            ThrowsOnParseErrors = throwsOnParseErrors;
+            FallbackValue = fallbackValue;
+        }
+
+        public T? FallbackValue { get; }
+
+        object? ICsvTypeConverter2.FallbackValue => FallbackValue;
+
+
+        public bool ThrowsOnParseErrors { get; }
+
+
+        protected abstract bool TryParseValue(string value, out T result);
+
+        protected abstract string? DoConvertToString(T value);
+
+        public string? ConvertToString(object? value)
+        {
+            if (value is null)
+            {
+                return null;
+            }
+
+
+            if (value is T t)
+            {
+                return DoConvertToString(t);
+            }
+            else
+            {
+                throw new InvalidCastException("Assignment of an incompliant Type.");
+            }
         }
 
 
-        if (value is T t)
+        public string? ConvertToString(T value) => DoConvertToString(value);
+
+
+        public T? Parse(string? value)
         {
-            return DoConvertToString(t);
-        }
-        else
-        {
-            throw new InvalidCastException("Assignment of an incompliant Type.");
-        }
-    }
+            if (value is null)
+            {
+                return FallbackValue;
+            }
 
+            if (TryParseValue(value, out T? result))
+            {
+                return result;
+            }
 
-    public string? ConvertToString(T value) => DoConvertToString(value);
+            if (ThrowsOnParseErrors)
+            {
+                throw new ArgumentException(string.Format("Cannot convert {0} to {1}", value is null ? "null" : $"\"value\"", typeof(T)), nameof(value));
+            }
 
-
-    public T? Parse(string? value)
-    {
-        if (value is null)
-        {
             return FallbackValue;
         }
 
-        if (TryParseValue(value, out T? result))
-        {
-            return result;
-        }
-
-        if (ThrowsOnParseErrors)
-        {
-            throw new ArgumentException(string.Format("Cannot convert {0} to {1}", value is null ? "null" : $"\"value\"", typeof(T)), nameof(value));
-        }
-
-        return FallbackValue;
+        object? ICsvTypeConverter2.Parse(string? value) => Parse(value);
     }
 
-    object? ICsvTypeConverter2.Parse(string? value) => Parse(value);
-}
+    public interface ICsvTypeConverter2
+    {
+        object? Parse(string? value);
 
-public interface ICsvTypeConverter2
-{
-    object? Parse(string? value);
+        string? ConvertToString(object? value);
 
-    string? ConvertToString(object? value);
-
-    object? FallbackValue { get; }
+        object? FallbackValue { get; }
+    }
 }
