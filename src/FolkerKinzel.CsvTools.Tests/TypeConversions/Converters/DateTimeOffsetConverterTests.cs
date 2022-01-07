@@ -52,7 +52,11 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             var conv = new DateTimeOffsetConverter("D");
             Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter));
         }
-        
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DateTimeOffsetConverterTest7() => _ = new DateTimeOffsetConverter(null!, parseExact: true);
+
 
         [TestMethod()]
         public void Roundtrip1()

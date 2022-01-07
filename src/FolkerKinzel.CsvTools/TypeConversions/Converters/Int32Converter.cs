@@ -13,7 +13,7 @@ public sealed class Int32Converter : CsvTypeConverter<int>
     private const string HEX_FORMAT = "X";
     private const string? DEFAULT_FORMAT = null;
 
-    public Int32Converter(bool hexConverter = false, bool throwing = true, IFormatProvider? formatProvider = null)
+    public Int32Converter(bool throwing = true, bool hexConverter = false, IFormatProvider? formatProvider = null)
         : base(throwing)
     {
         if (hexConverter)
@@ -31,8 +31,8 @@ public sealed class Int32Converter : CsvTypeConverter<int>
     }
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-        => new Int32Converter(hexConverter,
-                             options.HasFlag(CsvConverterOptions.Throwing),
+        => new Int32Converter(options.HasFlag(CsvConverterOptions.Throwing),
+                             hexConverter,
                              formatProvider)
            .HandleNullableAndDBNullAcceptance(options);
 

@@ -5,22 +5,22 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 public sealed class DecimalConverter : CsvTypeConverter<decimal>
 {
     private readonly IFormatProvider? _formatProvider;
-    private readonly NumberStyles _styles;
 
-    public DecimalConverter(IFormatProvider? formatProvider = null, bool throwing = true, NumberStyles styles = NumberStyles.Any, decimal fallbackValue = default)
-        : base(throwing, fallbackValue)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _styles = styles;
-    }
+    private const string FORMAT = "G";
+    private const NumberStyles STYLE = NumberStyles.Any;
+
+
+    public DecimalConverter(bool throwing = true, IFormatProvider? formatProvider = null)
+        : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new DecimalConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
+        => new DecimalConverter(options.HasFlag(CsvConverterOptions.Throwing), formatProvider)
           .HandleNullableAndDBNullAcceptance(options);
 
 
-    protected override string? DoConvertToString(decimal value) => value.ToString(_formatProvider);
+    protected override string? DoConvertToString(decimal value) => value.ToString(FORMAT, _formatProvider);
 
 
-    public override bool TryParseValue(string value, out decimal result) => decimal.TryParse(value, _styles, _formatProvider, out result);
+    public override bool TryParseValue(string value, out decimal result) => decimal.TryParse(value, STYLE, _formatProvider, out result);
 }

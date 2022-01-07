@@ -32,7 +32,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         public void Int32ConverterTest_Hex()
         {
             const int val = -4711;
-            var conv = new Int32Converter(formatProvider: CultureInfo.CreateSpecificCulture("de-DE"), styles: NumberStyles.HexNumber);
+            var conv = new Int32Converter(formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
 
             string? s = conv.ConvertToString(val);
 

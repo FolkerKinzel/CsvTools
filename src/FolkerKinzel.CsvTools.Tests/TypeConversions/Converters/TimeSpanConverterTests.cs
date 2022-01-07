@@ -36,6 +36,10 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter));
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TimeSpanConverterTest6() => _ = new TimeSpanConverter(null!, parseExact: true);
+
         [TestMethod()]
         public void Roundtrip1()
         {

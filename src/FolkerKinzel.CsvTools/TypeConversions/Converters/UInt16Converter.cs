@@ -14,7 +14,7 @@ public sealed class UInt16Converter : CsvTypeConverter<ushort>
     private const string HEX_FORMAT = "X";
     private const string? DEFAULT_FORMAT = null;
 
-    public UInt16Converter(bool hexConverter = false, bool throwing = true, IFormatProvider? formatProvider = null)
+    public UInt16Converter(bool throwing = true, bool hexConverter = false, IFormatProvider? formatProvider = null)
         : base(throwing)
     {
         if (hexConverter)
@@ -32,8 +32,8 @@ public sealed class UInt16Converter : CsvTypeConverter<ushort>
     }
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-        => new UInt16Converter(hexConverter,
-                             options.HasFlag(CsvConverterOptions.Throwing),
+        => new UInt16Converter(options.HasFlag(CsvConverterOptions.Throwing),
+                             hexConverter,
                              formatProvider)
            .HandleNullableAndDBNullAcceptance(options);
 

@@ -2,14 +2,11 @@
 
 public sealed class StringConverter : CsvTypeConverter<string?>
 {
-    public StringConverter(string? fallbackValue = null) : base(false, fallbackValue) { }
+    public StringConverter(bool nullable = true) : base(false, nullable ? null : string.Empty) { }
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options)
     {
-        string? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : string.Empty;
-
-        var conv = new StringConverter(fallbackValue);
-
+        var conv = new StringConverter(options.HasFlag(CsvConverterOptions.Nullable));
         return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? conv.AsDBNullEnabled() : conv;
     }
 

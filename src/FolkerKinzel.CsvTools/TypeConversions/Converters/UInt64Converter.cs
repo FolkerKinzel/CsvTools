@@ -14,7 +14,7 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
     private const string HEX_FORMAT = "X";
     private const string? DEFAULT_FORMAT = null;
 
-    public UInt64Converter(bool hexConverter = false, bool throwing = true, IFormatProvider? formatProvider = null)
+    public UInt64Converter(bool throwing = true, bool hexConverter = false, IFormatProvider? formatProvider = null)
         : base(throwing)
     {
         if (hexConverter)
@@ -32,8 +32,8 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
     }
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-        => new UInt64Converter(hexConverter,
-                             options.HasFlag(CsvConverterOptions.Throwing),
+        => new UInt64Converter(options.HasFlag(CsvConverterOptions.Throwing),
+                             hexConverter,
                              formatProvider)
            .HandleNullableAndDBNullAcceptance(options);
 

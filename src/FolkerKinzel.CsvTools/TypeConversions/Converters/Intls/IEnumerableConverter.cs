@@ -8,8 +8,14 @@ internal sealed class IEnumerableConverter<TItem> : CsvTypeConverter<IEnumerable
     private readonly CsvTypeConverter<TItem?> _itemsConverter;
 
 
-    public IEnumerableConverter(CsvTypeConverter<TItem?> itemsConverter, char fieldSeparator, IEnumerable<TItem?>? fallbackValue)
-        : base(false, fallbackValue)
+    internal IEnumerableConverter(CsvTypeConverter<TItem?> itemsConverter, bool nullable, char fieldSeparator)
+        : base(false,
+#if NET40
+               nullable ? null : new TItem[0]
+#else
+               nullable ? null : Array.Empty<TItem>()
+#endif
+            )
     {
         _itemsConverter = itemsConverter ?? throw new ArgumentNullException(nameof(itemsConverter));
         _separatorChar = fieldSeparator;

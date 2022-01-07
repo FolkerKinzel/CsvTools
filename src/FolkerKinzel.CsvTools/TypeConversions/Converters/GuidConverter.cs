@@ -7,20 +7,19 @@ public sealed class GuidConverter : CsvTypeConverter<Guid>
 {
     private readonly string _format;
 
-    private GuidConverter(bool throwing) : base(throwing) => _format = "D";
-
-    internal static ICsvTypeConverter Create(CsvConverterOptions options)
-        => new GuidConverter(options.HasFlag(CsvConverterOptions.Throwing))
-        .HandleNullableAndDBNullAcceptance(options);
-
+    public GuidConverter(bool throwing) : base(throwing) => _format = "D";
 
     public GuidConverter(
         string? format,
-        bool throwOnParseErrors = false) : base(throwOnParseErrors, default)
+        bool throwing = true) : base(throwing, default)
     {
         _format = format ?? string.Empty;
         ExamineFormat(nameof(format));
     }
+
+    internal static ICsvTypeConverter Create(CsvConverterOptions options)
+        => new GuidConverter(options.HasFlag(CsvConverterOptions.Throwing))
+        .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(Guid value) => value.ToString(_format, CultureInfo.InvariantCulture);

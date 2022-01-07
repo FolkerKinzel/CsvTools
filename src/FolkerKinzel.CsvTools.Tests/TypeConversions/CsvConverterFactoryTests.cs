@@ -311,7 +311,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [DataRow(true)]
         public void CreateConverterTest7(bool throwsOnParseErrors)
         {
-            var conv = new DecimalConverter(formatProvider: CultureInfo.CreateSpecificCulture("de-DE"), throwing: throwsOnParseErrors);
+            var conv = new DecimalConverter(throwing: throwsOnParseErrors, formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
 
             //Assert.IsInstanceOfType(conv, typeof(NumberConverter<decimal>));
             //Assert.AreEqual(typeof(decimal), conv.Type);

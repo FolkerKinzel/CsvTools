@@ -104,7 +104,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters
         /// bereitstellt oder <c>null</c> für <see cref="CultureInfo.InvariantCulture"/>.</param>
         /// <param name="throwOnParseErrors">Wenn <c>true</c>, wirft die Methode <see cref="Parse"/> eine Ausnahme, wenn das Parsen misslingt,
         /// anderenfalls gibt sie in diesem Fall <see cref="FallbackValue"/> zurück.</param>
-        /// <param name="styles">Ein Wert der <see cref="TimeSpanStyles"/>-Enum, der zusätzliche Informationen für das Parsen bereitstellt. Wird
+        /// <param name="styles">Ein Wert der <see cref="TimeSpanStyles"/>-Enumeration, der zusätzliche Informationen für das Parsen bereitstellt. Wird
         /// nur ausgewertet, wenn <paramref name="parseExact"/>&#160;<c>true</c> ist.</param>
         /// <param name="parseExact">Wenn <c>true</c>, muss der Text in der CSV-Datei exakt dem mit <paramref name="format"/> angegebenen
         /// Formatstring entsprechen.</param>

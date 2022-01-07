@@ -29,17 +29,17 @@ namespace FolkerKinzel.CsvTools.TypeConversions
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public static CsvTypeConverter<Nullable<T>> AsNullable<T>(this CsvTypeConverter<T> converter) 
+        public static CsvTypeConverter<Nullable<T>> AsNullableConverter<T>(this CsvTypeConverter<T> converter) 
             where T : struct => new NullableStructConverter<T>(converter);
 
 
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public static CsvTypeConverter<IEnumerable<TItem?>?> MakeIEnumerableConverter<TItem>(this CsvTypeConverter<TItem?> itemsConverter,
-                                                                                     char fieldSeparator = ',',
-                                                                                     IEnumerable<TItem?>? fallbackValue = null)
-            => new IEnumerableConverter<TItem>(itemsConverter, fieldSeparator, fallbackValue);
+        public static CsvTypeConverter<IEnumerable<TItem?>?> AsIEnumerableConverter<TItem>(this CsvTypeConverter<TItem?> itemsConverter,
+                                                                                     bool nullable = true,
+                                                                                     char fieldSeparator = ',')
+            => new IEnumerableConverter<TItem>(itemsConverter, nullable, fieldSeparator);
 
 
 
@@ -47,7 +47,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions
         {
             if (options.HasFlag(CsvConverterOptions.Nullable))
             {
-                CsvTypeConverter<T?> nullableConv = converter.AsNullable();
+                CsvTypeConverter<T?> nullableConv = converter.AsNullableConverter();
 
                 return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? nullableConv.AsDBNullEnabled() : nullableConv;
             }

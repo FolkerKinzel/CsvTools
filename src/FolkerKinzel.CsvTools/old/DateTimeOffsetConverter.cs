@@ -13,7 +13,7 @@ public sealed class DateTimeOffsetConverter : ICsvTypeConverter
     private readonly Converter<object?, string?> _toStringConverter;
 
     /// <summary>
-    /// Initialisiert ein <see cref="DateTimeOffsetConverter"/>-Objekt.
+    /// Initialisiert ein neues <see cref="DateTimeOffsetConverter"/>-Objekt.
     /// </summary>
     /// <param name="nullable">Wenn <c>true</c>, wird <see cref="Nullable{T}">Nullable&lt;DateTimeOffset&gt;</see> akzeptiert und zurückgegeben,
     /// sonst <see cref="DateTimeOffset"/>.</param>

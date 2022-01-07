@@ -5,22 +5,21 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 public sealed class SingleConverter : CsvTypeConverter<float>
 {
     private readonly IFormatProvider? _formatProvider;
-    private readonly NumberStyles _styles;
 
-    public SingleConverter(IFormatProvider? formatProvider = null, bool throwing = true, NumberStyles styles = NumberStyles.Any, float fallbackValue = default)
-        : base(throwing, fallbackValue)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _styles = styles;
-    }
+    private const string FORMAT = "G9";
+    private const NumberStyles STYLE = NumberStyles.Any;
+
+
+    public SingleConverter(bool throwing = true, IFormatProvider? formatProvider = null)
+        : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new SingleConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
+        => new SingleConverter(options.HasFlag(CsvConverterOptions.Throwing), formatProvider)
         .HandleNullableAndDBNullAcceptance(options);
 
 
-    protected override string? DoConvertToString(float value) => value.ToString(_formatProvider);
+    protected override string? DoConvertToString(float value) => value.ToString(FORMAT, _formatProvider);
 
 
-    public override bool TryParseValue(string value, out float result) => float.TryParse(value, _styles, _formatProvider, out result);
+    public override bool TryParseValue(string value, out float result) => float.TryParse(value, STYLE, _formatProvider, out result);
 }

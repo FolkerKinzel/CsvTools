@@ -14,7 +14,7 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
     private const string HEX_FORMAT = "X";
     private const string? DEFAULT_FORMAT = null;
 
-    public SByteConverter(bool hexConverter = false, bool throwing = true, IFormatProvider? formatProvider = null)
+    public SByteConverter(bool throwing = true, bool hexConverter = false, IFormatProvider? formatProvider = null)
         : base(throwing)
     {
         if (hexConverter)
@@ -32,8 +32,8 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
     }
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-        => new SByteConverter(hexConverter,
-                             options.HasFlag(CsvConverterOptions.Throwing),
+        => new SByteConverter(options.HasFlag(CsvConverterOptions.Throwing),
+                             hexConverter,
                              formatProvider)
            .HandleNullableAndDBNullAcceptance(options);
 

@@ -22,7 +22,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             list.Add(11);
 
 
-            ICsvTypeConverter conv = new Int32Converter().AsNullable().MakeIEnumerableConverter();
+            ICsvTypeConverter conv = new Int32Converter().AsNullableConverter().AsIEnumerableConverter();
             
 
             string? s = conv.ConvertToString(list);
@@ -36,7 +36,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         public void IEnumerableTConverterTest()
         {
             IEnumerable<int> arr1 = new int[] { 1, 2, 3 };
-            var conv = new Int32Converter().MakeIEnumerableConverter();
+            var conv = new Int32Converter().AsIEnumerableConverter();
 
             var wrapper = new CsvRecordWrapper();
             var prop = new CsvColumnIndexProperty("TestProp", 0, conv);

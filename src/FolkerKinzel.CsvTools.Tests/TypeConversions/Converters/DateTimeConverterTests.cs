@@ -50,6 +50,11 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DateTimeConverterTest7() => _ = new DateTimeConverter(null!, parseExact: true);
+
+
         [TestMethod()]
         public void Roundtrip1()
         {
@@ -75,7 +80,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             now = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, DateTimeKind.Utc);
 
-            var conv = new DateTimeConverter("F", styles: DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal);
+            var conv = new DateTimeConverter("F");
 
             string? tmp = conv.ConvertToString(now);
 
