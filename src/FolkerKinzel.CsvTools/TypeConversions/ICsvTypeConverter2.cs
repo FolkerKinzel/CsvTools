@@ -6,7 +6,7 @@ public interface ICsvTypeConverter2
 
     string? ConvertToString(object? value);
 
-    bool ThrowsOnParseErrors { get; }
+    bool Throwing { get; }
 
     object? FallbackValue { get; }
 }

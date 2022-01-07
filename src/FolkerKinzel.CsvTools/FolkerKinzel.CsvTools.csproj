@@ -54,7 +54,7 @@
   </ItemGroup>
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'">
-    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604;8618</NoWarn>
+    <NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

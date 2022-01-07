@@ -3,14 +3,14 @@ using System.Globalization;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public sealed class DateTimeConverter2 : CsvTypeConverter<DateTime>
+public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
 {
     private readonly IFormatProvider _formatProvider;
     private readonly string _format;
     private readonly bool _parseExact;
     private readonly DateTimeStyles _styles;
 
-    private DateTimeConverter2(bool isDate, IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
+    private DateTimeConverter(bool isDate, IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = isDate ? "d" : "s";
@@ -18,10 +18,10 @@ public sealed class DateTimeConverter2 : CsvTypeConverter<DateTime>
     }
 
     internal static ICsvTypeConverter2 Create(bool isDate, CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new DateTimeConverter2(isDate, formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        => new DateTimeConverter(isDate, formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
             .HandleNullableAndDBNullAcceptance(options);
 
-    public DateTimeConverter2(
+    public DateTimeConverter(
         string? format,
         IFormatProvider? formatProvider = null,
         DateTime fallbackValue = default,

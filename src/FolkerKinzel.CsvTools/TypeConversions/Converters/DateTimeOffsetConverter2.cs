@@ -18,7 +18,7 @@ public sealed class DateTimeOffsetConverter2 : CsvTypeConverter<DateTimeOffset>
     }
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new DateTimeOffsetConverter2(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        => new DateTimeOffsetConverter2(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
         .HandleNullableAndDBNullAcceptance(options);
 
 

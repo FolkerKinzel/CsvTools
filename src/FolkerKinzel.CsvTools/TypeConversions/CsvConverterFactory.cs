@@ -8,16 +8,16 @@ public enum CsvConverterOptions
 {
     None = 0,
     Nullable = 1,
-    AcceptsDBNull = 2,
-    ThrowsOnParseErrors = 4,
-    Default = ThrowsOnParseErrors
+    DBNullEnabled = 2,
+    Throwing = 4,
+    Default = Throwing
 }
 
 /// <summary>
 /// Statische Klasse, die Methoden veröffentlicht, um <see cref="ICsvTypeConverter"/>-Objekte für alle elementaren
 /// Datentypen zu instanziieren.
 /// </summary>
-public static class CsvConverterFactory2
+public static class CsvConverterFactory
 {
     /// <summary>
     /// Initialisiert einen neues <see cref="ICsvTypeConverter"/>-Objekt für den angegebenen Datentyp.
@@ -46,8 +46,8 @@ public static class CsvConverterFactory2
             CsvTypeCode.Boolean => BooleanConverter.Create(options: options),
             CsvTypeCode.Byte => ByteConverter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.Char => CharConverter.Create(options: options),
-            CsvTypeCode.Date => DateTimeConverter2.Create(isDate: true, options: options, formatProvider: formatProvider),
-            CsvTypeCode.DateTime => DateTimeConverter2.Create(isDate: false, options: options, formatProvider: formatProvider),
+            CsvTypeCode.Date => DateTimeConverter.Create(isDate: true, options: options, formatProvider: formatProvider),
+            CsvTypeCode.DateTime => DateTimeConverter.Create(isDate: false, options: options, formatProvider: formatProvider),
             CsvTypeCode.Decimal => DecimalConverter.Create(options: options, formatProvider: formatProvider),
             CsvTypeCode.Double => DoubleConverter.Create(options: options, formatProvider: formatProvider),
             CsvTypeCode.Int16 => Int16Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
@@ -55,14 +55,14 @@ public static class CsvConverterFactory2
             CsvTypeCode.Int64 => Int64Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.SByte => SByteConverter.Create(options: options, formatProvider: formatProvider,  hexConverter: false),
             CsvTypeCode.Single => FloatConverter.Create(options: options, formatProvider: formatProvider),
-            CsvTypeCode.String => StringConverter2.Create(options: options),
+            CsvTypeCode.String => StringConverter.Create(options: options),
             CsvTypeCode.UInt16 => UInt16Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.UInt32 => UInt32Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.UInt64 => UInt64Converter.Create(options: options, formatProvider: formatProvider,  hexConverter: false),
             CsvTypeCode.DateTimeOffset => DateTimeOffsetConverter2.Create(options: options, formatProvider: formatProvider),
-            CsvTypeCode.TimeSpan => TimeSpanConverter2.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.TimeSpan => TimeSpanConverter.Create(options: options, formatProvider: formatProvider),
             CsvTypeCode.ByteArray => Base64Converter2.Create(options: options),
-            CsvTypeCode.Guid => GuidConverter2.Create(options: options),
+            CsvTypeCode.Guid => GuidConverter.Create(options: options),
             _ => throw new ArgumentOutOfRangeException(nameof(type))
         };
 
@@ -90,7 +90,7 @@ public static class CsvConverterFactory2
         TEnum fallbackValue = default,
         bool ignoreCase = true,
         string? format = "D") where TEnum : struct, Enum 
-        => EnumConverter2<TEnum>.Create(options: options, ignoreCase: ignoreCase, format, fallbackValue: fallbackValue);
+        => EnumConverter<TEnum>.Create(options: options, ignoreCase: ignoreCase, format, fallbackValue: fallbackValue);
 
 
     ///// <summary>

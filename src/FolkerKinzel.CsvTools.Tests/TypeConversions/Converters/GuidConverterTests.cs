@@ -9,8 +9,8 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [TestMethod()]
         public void GuidConverterTest1()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Guid);
-            Assert.IsInstanceOfType(conv, typeof(GuidConverter2));
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Guid);
+            Assert.IsInstanceOfType(conv, typeof(GuidConverter));
         }
 
         [DataTestMethod()]
@@ -18,22 +18,22 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [DataRow("")]
         public void GuidConverterTest2(string? format)
         {
-            var conv = new GuidConverter2(format);
-            Assert.IsInstanceOfType(conv, typeof(GuidConverter2));
+            var conv = new GuidConverter(format);
+            Assert.IsInstanceOfType(conv, typeof(GuidConverter));
         }
 
         
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void GuidConverterTest4() => _ = new GuidConverter2("bla");
+        public void GuidConverterTest4() => _ = new GuidConverter("bla");
 
 
         [TestMethod()]
         public void GuidConverterTest5()
         {
-            var conv = new GuidConverter2("B");
-            Assert.IsInstanceOfType(conv, typeof(GuidConverter2));
+            var conv = new GuidConverter("B");
+            Assert.IsInstanceOfType(conv, typeof(GuidConverter));
         }
 
         [TestMethod()]
@@ -41,7 +41,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             var guid = Guid.NewGuid();
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Guid);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Guid);
 
             string? tmp = conv.ConvertToString(guid);
 
@@ -57,7 +57,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             var guid = Guid.NewGuid();
 
-            var conv = new GuidConverter2("B");
+            var conv = new GuidConverter("B");
 
             string? tmp = conv.ConvertToString(guid);
 

@@ -15,6 +15,7 @@ column name aliases). This is for CSV files without header row.
 - [x] `CsvProperty` should internally use the column index to target `CsvRecord` (for performance).
 - [x] Add `CsvMultiColumnTypeConverter`.
 - [x] Rename `FolkerKinzel.CsvTools.Helpers` to `FolkerKinzel.CsvTools.TypeConversions`.
+- [ ] Replace `CsvConverterFactory` by a fluent API.
 - [ ] Don't allow `CsvWriter` to terminate the last row in a CSV file.
 - [ ] Let `CsvReader` implement `IEnumerable<CsvRecord>`.
 - [ ] Let `CsvReader.Read()` return the next `CsvRecord` or `null` if EOF is reached.

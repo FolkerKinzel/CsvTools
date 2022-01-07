@@ -3,25 +3,25 @@ using System.Globalization;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public sealed class TimeSpanConverter2 : CsvTypeConverter<TimeSpan>
+public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
 {
     private readonly IFormatProvider _formatProvider;
     private readonly string _format;
     private readonly bool _parseExact;
     private readonly TimeSpanStyles _styles;
 
-    public TimeSpanConverter2(IFormatProvider? formatProvider = null, bool throwsOnParseErrors = true) : base(throwsOnParseErrors)
+    public TimeSpanConverter(IFormatProvider? formatProvider = null, bool throwsOnParseErrors = true) : base(throwsOnParseErrors)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = "g";
     }
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-       => new TimeSpanConverter2(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+       => new TimeSpanConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
         .HandleNullableAndDBNullAcceptance(options);
 
 
-    public TimeSpanConverter2(
+    public TimeSpanConverter(
         string format,
         IFormatProvider? formatProvider = null,
         TimeSpan fallbackValue = default,

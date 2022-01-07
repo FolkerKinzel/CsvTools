@@ -61,7 +61,7 @@ namespace Examples
 
             // Reuse a converter for more than one property:
             ICsvTypeConverter2 stringConverter =
-                new StringConverter2();
+                new StringConverter();
 
             wrapper.AddProperty
                 (
@@ -79,13 +79,13 @@ namespace Examples
                 (
                     new CsvColumnNameProperty("LessonDay",
                                     new string[] { "*day", "*tag" },
-                                    new EnumConverter2<DayOfWeek>().AsNullable())
+                                    new EnumConverter<DayOfWeek>().AsNullable())
                 );
             wrapper.AddProperty
                 (
                     new CsvColumnNameProperty("LessonBegin",
                                     new string[] { "*begin?" },
-                                    new TimeSpanConverter2().AsNullable())
+                                    new TimeSpanConverter().AsNullable())
                 );
 
             // Analyze the CSV file to determine the right parameters

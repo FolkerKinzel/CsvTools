@@ -10,30 +10,30 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [TestMethod()]
         public void TimeSpanConverterTest1()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.TimeSpan);
-            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter2));
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan);
+            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter));
         }
 
         [TestMethod()]
         public void TimeSpanConverterTest2()
         {
-            var conv = new TimeSpanConverter2("");
-            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter2));
+            var conv = new TimeSpanConverter("");
+            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter));
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void TimeSpanConverterTest3() => _ = new TimeSpanConverter2("", parseExact: true);
+        public void TimeSpanConverterTest3() => _ = new TimeSpanConverter("", parseExact: true);
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void TimeSpanConverterTest4() => _ = new TimeSpanConverter2("bla");
+        public void TimeSpanConverterTest4() => _ = new TimeSpanConverter("bla");
 
         [TestMethod()]
         public void TimeSpanConverterTest5()
         {
-            var conv = new TimeSpanConverter2("G");
-            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter2));
+            var conv = new TimeSpanConverter("G");
+            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter));
         }
 
         [TestMethod()]
@@ -41,7 +41,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             TimeSpan now = DateTime.UtcNow.TimeOfDay;
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.TimeSpan);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan);
 
             string? tmp = conv.ConvertToString(now);
 
@@ -57,7 +57,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             TimeSpan now = DateTime.UtcNow.TimeOfDay;
 
-            var conv = new TimeSpanConverter2("G");
+            var conv = new TimeSpanConverter("G");
 
             string? tmp = conv.ConvertToString(now);
 

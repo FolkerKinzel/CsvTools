@@ -82,7 +82,7 @@ internal sealed class NullableStructConverter<T> : CsvTypeConverter<Nullable<T>>
     private readonly CsvTypeConverter<T> _typeConverter;
 
     internal NullableStructConverter(CsvTypeConverter<T> converter)
-        : base((converter ?? throw new ArgumentNullException(nameof(converter))).ThrowsOnParseErrors) => _typeConverter = converter;
+        : base((converter ?? throw new ArgumentNullException(nameof(converter))).Throwing) => _typeConverter = converter;
 
     protected override string? DoConvertToString(T? value) => value.HasValue ? _typeConverter.ConvertToString(value.Value) : null;
 

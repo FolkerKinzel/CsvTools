@@ -21,7 +21,7 @@ namespace Benchmarks
         public AccessBenchmark()
         {
             _csv = Properties.Resources.Test1;
-            ICsvTypeConverter2 conv = new StringConverter2();
+            ICsvTypeConverter2 conv = new StringConverter();
             _indexWrapper = new CsvRecordWrapper();
             _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column0", 0, conv));
             _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column1", 1, conv));

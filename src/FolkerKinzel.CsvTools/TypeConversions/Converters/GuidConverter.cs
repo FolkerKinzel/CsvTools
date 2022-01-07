@@ -3,18 +3,18 @@ using System.Globalization;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public sealed class GuidConverter2 : CsvTypeConverter<Guid>
+public sealed class GuidConverter : CsvTypeConverter<Guid>
 {
     private readonly string _format;
 
-    private GuidConverter2(bool throwsOnParseErrors) : base(throwsOnParseErrors) => _format = "D";
+    private GuidConverter(bool throwsOnParseErrors) : base(throwsOnParseErrors) => _format = "D";
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
-        => new GuidConverter2(options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        => new GuidConverter(options.HasFlag(CsvConverterOptions.Throwing))
         .HandleNullableAndDBNullAcceptance(options);
 
 
-    public GuidConverter2(
+    public GuidConverter(
         string? format,
         bool throwOnParseErrors = false) : base(throwOnParseErrors, default)
     {

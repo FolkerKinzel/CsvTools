@@ -14,9 +14,9 @@ public sealed class Base64Converter2 : CsvTypeConverter<byte[]?>
         byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : Array.Empty<byte>();
 #endif
 
-        var conv = new Base64Converter2(options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors), fallbackValue);
+        var conv = new Base64Converter2(options.HasFlag(CsvConverterOptions.Throwing), fallbackValue);
 
-        return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? conv.AsDBNullEnabled() : conv;
+        return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? conv.AsDBNullEnabled() : conv;
     }
 
     protected override string? DoConvertToString(byte[]? value) => value is null ? null : Convert.ToBase64String(value, Base64FormattingOptions.None);

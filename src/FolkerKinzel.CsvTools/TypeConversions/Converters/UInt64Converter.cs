@@ -22,7 +22,7 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
         => new UInt64Converter(formatProvider,
-                               options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
+                               options.HasFlag(CsvConverterOptions.Throwing),
                                hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
            .HandleNullableAndDBNullAcceptance(options);
 

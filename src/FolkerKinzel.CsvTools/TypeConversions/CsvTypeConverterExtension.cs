@@ -49,10 +49,10 @@ namespace FolkerKinzel.CsvTools.TypeConversions
             {
                 CsvTypeConverter<T?> nullableConv = converter.AsNullable();
 
-                return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? nullableConv.AsDBNullEnabled() : nullableConv;
+                return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? nullableConv.AsDBNullEnabled() : nullableConv;
             }
 
-            return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? converter.AsDBNullEnabled() : converter;
+            return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? converter.AsDBNullEnabled() : converter;
         }
         
     }

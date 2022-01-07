@@ -53,7 +53,7 @@ public sealed class Int64Converter : CsvTypeConverter<long>
                                               IFormatProvider? formatProvider,
                                               bool hexConverter)
         => new Int64Converter(formatProvider,
-                              options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
+                              options.HasFlag(CsvConverterOptions.Throwing),
                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
            .HandleNullableAndDBNullAcceptance(options);
 

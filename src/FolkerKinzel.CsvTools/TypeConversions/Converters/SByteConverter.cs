@@ -27,7 +27,7 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
                                               IFormatProvider? formatProvider,
                                               bool hexConverter)
         => new SByteConverter(formatProvider,
-                              options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
+                              options.HasFlag(CsvConverterOptions.Throwing),
                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
           .HandleNullableAndDBNullAcceptance(options);
 

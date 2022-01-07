@@ -12,7 +12,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
     {
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CreateConverterTest1() => _ = CsvConverterFactory2.CreateConverter((CsvTypeCode)4711);
+        public void CreateConverterTest1() => _ = CsvConverterFactory.CreateConverter((CsvTypeCode)4711);
 
         [DataTestMethod]
         [DataRow(CsvTypeCode.Byte, false, false, typeof(byte), default(byte))]
@@ -106,14 +106,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(typeCode, options);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(typeCode, options);
 
             //Assert.AreEqual(converterType, conv.Type);
             Assert.AreEqual(fallBackValue, conv.Parse(null));
-            Assert.AreEqual(throwOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwOnParseErrors, conv.Throwing);
         }
 
 
@@ -211,7 +211,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             bool throwOnParseErrors,
             Type converterType)
         {
-            CsvConverterOptions options = CsvConverterOptions.AcceptsDBNull;
+            CsvConverterOptions options = CsvConverterOptions.DBNullEnabled;
 
             if (nullable)
             {
@@ -220,14 +220,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(typeCode, options);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(typeCode, options);
 
             //Assert.AreEqual(converterType, conv.Type);
             Assert.IsTrue(Convert.IsDBNull(conv.Parse(null)));
-            Assert.AreEqual(throwOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwOnParseErrors, conv.Throwing);
         }
 
 
@@ -236,12 +236,12 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [DataRow(true)]
         public void CreateConverterTest4(bool throwsOnParseErrors)
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Decimal);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Decimal);
 
             Assert.IsInstanceOfType(conv, typeof(DecimalConverter));
             //Assert.AreEqual(typeof(decimal), conv.Type);
             Assert.AreEqual(default(decimal), conv.Parse(null));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             decimal test = 57.839m;
             string? s = conv.ConvertToString(test);
@@ -263,15 +263,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Decimal, options);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Decimal, options);
 
             Assert.IsInstanceOfType(conv, typeof(DecimalConverter));
             //Assert.AreEqual(typeof(decimal), conv.Type);
             Assert.AreEqual(default(decimal), conv.Parse(null));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             decimal test = 57.839m;
             string? s = conv.ConvertToString(test);
@@ -294,7 +294,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             Assert.IsInstanceOfType(conv, typeof(DecimalConverter));
             //Assert.AreEqual(typeof(decimal), conv.Type);
             Assert.AreEqual(default, conv.FallbackValue);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             decimal test = 57.839m;
             string? s = conv.ConvertToString(test);
@@ -316,7 +316,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             //Assert.IsInstanceOfType(conv, typeof(NumberConverter<decimal>));
             //Assert.AreEqual(typeof(decimal), conv.Type);
             Assert.AreEqual(default, conv.FallbackValue);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             decimal test = 57.839m;
             string? s = conv.ConvertToString(test);
@@ -337,14 +337,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            var conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.ByteArray, options: options);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, options: options);
 
             Assert.IsInstanceOfType(conv, typeof(Base64Converter2));
             //Assert.AreEqual(typeof(byte[]), conv.Type);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             if (conv.Parse(null) is byte[] bts)
             {
@@ -373,14 +373,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Guid, options: options);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Guid, options: options);
 
-            Assert.IsInstanceOfType(conv, typeof(GuidConverter2));
+            Assert.IsInstanceOfType(conv, typeof(GuidConverter));
             //Assert.AreEqual(typeof(Guid), conv.Type);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
             Assert.AreEqual(default(Guid), conv.FallbackValue);
 
             var test1 = Guid.NewGuid();
@@ -401,15 +401,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Date, options: options, formatProvider: CultureInfo.InvariantCulture);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date, options: options, formatProvider: CultureInfo.InvariantCulture);
 
-            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter2));
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
             //Assert.AreEqual(typeof(DateTime), conv.Type);
             Assert.AreEqual(default(DateTime), conv.Parse(null));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new DateTime(1956, 12, 24);
             string? s = conv.ConvertToString(test);
@@ -430,15 +430,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.Date, options: options, CultureInfo.CreateSpecificCulture("de-DE"));
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date, options: options, CultureInfo.CreateSpecificCulture("de-DE"));
 
-            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter2));
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
             //Assert.AreEqual(typeof(DateTime), conv.Type);
             Assert.AreEqual(default(DateTime), conv.Parse(null));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new DateTime(1956, 12, 24);
             string? s = conv.ConvertToString(test);
@@ -459,15 +459,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.DateTime, options: options, CultureInfo.InvariantCulture);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime, options: options, CultureInfo.InvariantCulture);
 
-            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter2));
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
             //Assert.AreEqual(typeof(DateTime), conv.Type);
             Assert.AreEqual(default(DateTime), conv.Parse(null));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new DateTime(1956, 12, 24, 14, 27, 32);
             string? s = conv.ConvertToString(test);
@@ -488,15 +488,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.DateTime, options: options, formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime, options: options, formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
 
-            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter2));
+            Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
             //Assert.AreEqual(typeof(DateTime), conv.Type);
             Assert.AreEqual(default(DateTime), conv.Parse(null));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new DateTime(1956, 12, 24, 14, 27, 32);
             string? s = conv.ConvertToString(test);
@@ -517,15 +517,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.DateTimeOffset, options: options, formatProvider: CultureInfo.InvariantCulture);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset, options: options, formatProvider: CultureInfo.InvariantCulture);
 
             Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter2));
             //Assert.AreEqual(typeof(DateTimeOffset), conv.Type);
             Assert.AreEqual(default(DateTimeOffset), conv.Parse(null));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new DateTimeOffset(1956, 12, 24, 14, 27, 32, TimeSpan.FromHours(3));
             string? s = conv.ConvertToString(test);
@@ -546,15 +546,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.DateTimeOffset, options: options, formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset, options: options, formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
 
             Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter2));
             //Assert.AreEqual(typeof(DateTimeOffset), conv.Type);
             Assert.AreEqual(default(DateTimeOffset), conv.FallbackValue);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new DateTimeOffset(1956, 12, 24, 14, 27, 32, TimeSpan.FromHours(3));
             string? s = conv.ConvertToString(test);
@@ -575,14 +575,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.TimeSpan, options: options, formatProvider: CultureInfo.InvariantCulture);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, options: options, formatProvider: CultureInfo.InvariantCulture);
 
-            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter2));
+            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter));
             //Assert.AreEqual(typeof(TimeSpan), conv.Type);
             Assert.AreEqual(default(TimeSpan), conv.FallbackValue);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new TimeSpan(16, 24, 53);
             string? s = conv.ConvertToString(test);
@@ -603,15 +603,15 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateConverter(CsvTypeCode.TimeSpan, options: options, formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.TimeSpan, options: options, formatProvider: CultureInfo.CreateSpecificCulture("de-DE"));
 
-            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter2));
+            Assert.IsInstanceOfType(conv, typeof(TimeSpanConverter));
             //Assert.AreEqual(typeof(TimeSpan), conv.Type);
             Assert.AreEqual(default(TimeSpan), conv.FallbackValue);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
 
             var test = new TimeSpan(16, 24, 53);
             string? s = conv.ConvertToString(test);
@@ -675,14 +675,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateHexConverter(typeCode, options);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(typeCode, options);
 
             //Assert.AreEqual(converterType, conv.Type);
             Assert.AreEqual(fallBackValue, conv.FallbackValue);
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
         }
 
 
@@ -728,7 +728,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             bool throwsOnParseErrors,
             Type converterType)
         {
-            CsvConverterOptions options = CsvConverterOptions.AcceptsDBNull;
+            CsvConverterOptions options = CsvConverterOptions.DBNullEnabled;
 
             if (nullable)
             {
@@ -737,19 +737,19 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             if (throwsOnParseErrors)
             {
-                options |= CsvConverterOptions.ThrowsOnParseErrors;
+                options |= CsvConverterOptions.Throwing;
             }
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateHexConverter(typeCode, options);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(typeCode, options);
 
             //Assert.AreEqual(converterType, conv.Type);
             Assert.IsTrue(Convert.IsDBNull(conv.FallbackValue));
-            Assert.AreEqual(throwsOnParseErrors, conv.ThrowsOnParseErrors);
+            Assert.AreEqual(throwsOnParseErrors, conv.Throwing);
         }
 
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CreateHexConverterTest3() => _ = CsvConverterFactory2.CreateHexConverter(CsvTypeCode.Double);
+        public void CreateHexConverterTest3() => _ = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Double);
 
     }
 }

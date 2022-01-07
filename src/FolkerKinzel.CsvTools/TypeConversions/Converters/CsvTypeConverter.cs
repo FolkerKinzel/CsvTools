@@ -10,7 +10,7 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
 {
     protected CsvTypeConverter(bool throwsOnParseErrors, T? fallbackValue = default)
     {
-        ThrowsOnParseErrors = throwsOnParseErrors;
+        Throwing = throwsOnParseErrors;
         FallbackValue = fallbackValue;
     }
 
@@ -19,7 +19,7 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
     object? ICsvTypeConverter2.FallbackValue => FallbackValue;
 
 
-    public bool ThrowsOnParseErrors { get; }
+    public bool Throwing { get; }
 
 
     public abstract bool TryParseValue(string value, out T result);
@@ -60,7 +60,7 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
             return result;
         }
 
-        if (ThrowsOnParseErrors)
+        if (Throwing)
         {
             throw new ArgumentException(string.Format("Cannot convert {0} to {1}", value is null ? "null" : $"\"value\"", typeof(T)), nameof(value));
         }

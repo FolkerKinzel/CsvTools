@@ -37,8 +37,8 @@ public sealed class CsvWriter : IDisposable
     private readonly char _fieldSeparator;
     private readonly bool _trimColumns;
 
-    [NotNull]
-    private readonly TextWriter? _writer;
+    //[NotNull]
+    private readonly TextWriter _writer;
 
 
     #region ctors
@@ -151,9 +151,9 @@ public sealed class CsvWriter : IDisposable
     /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
     /// <exception cref="ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
     /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
-//#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
     private CsvWriter(string?[] columnNames, char fieldSeparator, CsvOptions options)
-//#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
     {
         this._fieldSeparator = fieldSeparator;
         this._trimColumns = (options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns;

@@ -15,7 +15,7 @@ public sealed class DoubleConverter : CsvTypeConverter<double>
     }
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new DoubleConverter(formatProvider, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors)).HandleNullableAndDBNullAcceptance(options);
+        => new DoubleConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing)).HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(double value) => value.ToString(_formatProvider);

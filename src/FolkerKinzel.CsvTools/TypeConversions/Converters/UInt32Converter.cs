@@ -27,7 +27,7 @@ public sealed class UInt32Converter : CsvTypeConverter<uint>
                                               IFormatProvider? formatProvider,
                                               bool hexConverter)
         => new UInt32Converter(formatProvider,
-                               options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
+                               options.HasFlag(CsvConverterOptions.Throwing),
                                hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
            .HandleNullableAndDBNullAcceptance(options);
 

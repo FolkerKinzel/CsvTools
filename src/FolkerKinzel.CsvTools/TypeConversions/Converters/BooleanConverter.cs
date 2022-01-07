@@ -7,7 +7,7 @@ public sealed class BooleanConverter : CsvTypeConverter<bool>
     
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
-        => new BooleanConverter(options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        => new BooleanConverter(options.HasFlag(CsvConverterOptions.Throwing))
            .HandleNullableAndDBNullAcceptance(options);
 
 

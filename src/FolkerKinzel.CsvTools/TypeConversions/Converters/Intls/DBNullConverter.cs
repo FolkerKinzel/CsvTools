@@ -5,7 +5,7 @@ internal sealed class DBNullConverter<T> : CsvTypeConverter<object>
     private readonly CsvTypeConverter<T> _valueConverter;
 
     internal DBNullConverter(CsvTypeConverter<T> converter)
-        : base((converter ?? throw new ArgumentNullException(nameof(converter))).ThrowsOnParseErrors, DBNull.Value)
+        : base((converter ?? throw new ArgumentNullException(nameof(converter))).Throwing, DBNull.Value)
         => _valueConverter = converter;
 
     protected override string? DoConvertToString(object? value) => value == DBNull.Value ? null : _valueConverter.ConvertToString(value);

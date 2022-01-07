@@ -9,13 +9,13 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void HexConverterTest1()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateHexConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
             Assert.IsInstanceOfType(conv, typeof(Int32Converter));
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void HexConverterTest2() => _ = CsvConverterFactory2.CreateHexConverter(CsvTypeCode.Double);
+        public void HexConverterTest2() => _ = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Double);
 
 
         [TestMethod]
@@ -23,7 +23,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             int i = 123456789;
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateHexConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
 
             string? s = conv.ConvertToString(i);
             Assert.IsNotNull(s);
@@ -40,7 +40,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             int i = 123456789;
 
-            ICsvTypeConverter2 conv = CsvConverterFactory2.CreateHexConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
 
             string? s = conv.ConvertToString(i)?.ToLowerInvariant();
             Assert.IsNotNull(s);

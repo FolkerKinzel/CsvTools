@@ -16,7 +16,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [TestMethod()]
         public void EnumConverter2Test()
         {
-            var conv = new EnumConverter2<DayOfWeek>();
+            var conv = new EnumConverter<DayOfWeek>();
 
             string? outp = (string?)conv.ConvertToString(null);
             Assert.IsNotNull(outp);

@@ -7,7 +7,7 @@ public sealed class CharConverter : CsvTypeConverter<char>
 
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
-        => new CharConverter(options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors))
+        => new CharConverter(options.HasFlag(CsvConverterOptions.Throwing))
             .HandleNullableAndDBNullAcceptance(options);
 
 

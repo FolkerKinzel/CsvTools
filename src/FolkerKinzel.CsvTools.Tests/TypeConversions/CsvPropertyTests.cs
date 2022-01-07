@@ -11,18 +11,18 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [TestMethod()]
         public void CsvPropertyTest1()
         {
-            var prop = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory2.CreateConverter(CsvTypeCode.String));
+            var prop = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
             Assert.IsInstanceOfType(prop, typeof(CsvColumnNameProperty));
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CsvPropertyTest2() => _ = new CsvColumnNameProperty(null!, new string[] { "Col1" }, CsvConverterFactory2.CreateConverter(CsvTypeCode.String));
+        public void CsvPropertyTest2() => _ = new CsvColumnNameProperty(null!, new string[] { "Col1" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
 
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CsvPropertyTest3() => _ = new CsvColumnNameProperty("Prop", null!, CsvConverterFactory2.CreateConverter(CsvTypeCode.String));
+        public void CsvPropertyTest3() => _ = new CsvColumnNameProperty("Prop", null!, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
 
 
         [TestMethod()]
@@ -32,41 +32,41 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
         public void CsvPropertyTest5()
-            => _ = new CsvColumnNameProperty("Ähh", new string[] { "Col1" }, CsvConverterFactory2.CreateConverter(CsvTypeCode.String));
+            => _ = new CsvColumnNameProperty("Ähh", new string[] { "Col1" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CsvPropertyTest6() 
-            => _ = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory2.CreateConverter(CsvTypeCode.String), -7);
+            => _ = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String), -7);
 
 
         [TestMethod()]
         public void CsvPropertyTest7()
-            => _ = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory2.CreateConverter(CsvTypeCode.String), CsvColumnNameProperty.MaxWildcardTimeout + 1);
+            => _ = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String), CsvColumnNameProperty.MaxWildcardTimeout + 1);
 
         [TestMethod()]
         public void CsvPropertyTest8() 
-            => _ = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory2.CreateConverter(CsvTypeCode.String), 0);
+            => _ = new CsvColumnNameProperty("Prop", new string[] { "Col1" }, CsvConverterFactory.CreateConverter(CsvTypeCode.String), 0);
 
 
         [TestMethod()]
         public void CsvIndexPropertyTest9()
         {
             const string propertyName = "myProp";
-            var prop = new CsvColumnIndexProperty(propertyName, 0, new StringConverter2());
+            var prop = new CsvColumnIndexProperty(propertyName, 0, new StringConverter());
 
             Assert.IsNotNull(prop);
             Assert.AreEqual(prop.PropertyName, propertyName);
-            Assert.IsInstanceOfType(prop.Converter, typeof(StringConverter2));
+            Assert.IsInstanceOfType(prop.Converter, typeof(StringConverter));
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void CsvPropertyTest10() => _ = new CsvColumnIndexProperty("propertyName", -1, new StringConverter2());
+        public void CsvPropertyTest10() => _ = new CsvColumnIndexProperty("propertyName", -1, new StringConverter());
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CsvPropertyTest11() => _ = new CsvColumnIndexProperty(null!, 17, CsvConverterFactory2.CreateConverter(CsvTypeCode.String));
+        public void CsvPropertyTest11() => _ = new CsvColumnIndexProperty(null!, 17, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
 
 
         [TestMethod()]
@@ -75,7 +75,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void CsvPropertyTest13() => _ = new CsvColumnIndexProperty("Ähh", 17, CsvConverterFactory2.CreateConverter(CsvTypeCode.String));
+        public void CsvPropertyTest13() => _ = new CsvColumnIndexProperty("Ähh", 17, CsvConverterFactory.CreateConverter(CsvTypeCode.String));
        
 
 

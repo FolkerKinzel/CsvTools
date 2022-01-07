@@ -1,8 +1,8 @@
 ﻿namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public sealed class EnumConverter2<TEnum> : CsvTypeConverter<TEnum> where TEnum : struct, Enum
+public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum : struct, Enum
 {
-    public EnumConverter2(
+    public EnumConverter(
         bool ignoreCase = true,
         string? format = "D",
         bool throwsOnParseErrors = true,
@@ -15,7 +15,7 @@ public sealed class EnumConverter2<TEnum> : CsvTypeConverter<TEnum> where TEnum 
     }
 
     internal static ICsvTypeConverter2 Create(CsvConverterOptions options, bool ignoreCase, string? format, TEnum fallbackValue)
-        => new EnumConverter2<TEnum>(ignoreCase, format, options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors), fallbackValue)
+        => new EnumConverter<TEnum>(ignoreCase, format, options.HasFlag(CsvConverterOptions.Throwing), fallbackValue)
         .HandleNullableAndDBNullAcceptance(options);
 
     private static void ValidateFormat(string? format)

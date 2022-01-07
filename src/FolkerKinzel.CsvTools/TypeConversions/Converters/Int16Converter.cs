@@ -26,7 +26,7 @@ public sealed class Int16Converter : CsvTypeConverter<int>
                                               IFormatProvider? formatProvider,
                                               bool hexConverter)
         => new Int16Converter(formatProvider,
-                              options.HasFlag(CsvConverterOptions.ThrowsOnParseErrors),
+                              options.HasFlag(CsvConverterOptions.Throwing),
                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
            .HandleNullableAndDBNullAcceptance(options);
 
