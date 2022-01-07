@@ -9,27 +9,33 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
     private readonly NumberStyles _styles;
     private readonly string? _format;
 
-    private const NumberStyles DEFAULT_NUMBER_STYLE = NumberStyles.Any;
+    private const NumberStyles DEFAULT_STYLE = NumberStyles.Any;
+    private const NumberStyles HEX_STYLE = NumberStyles.HexNumber;
+    private const string HEX_FORMAT = "X";
+    private const string? DEFAULT_FORMAT = null;
 
-
-    public SByteConverter(IFormatProvider? formatProvider = null,
-                          bool throwing = true,
-                          NumberStyles styles = DEFAULT_NUMBER_STYLE,
-                          sbyte fallbackValue = default)
-        : base(throwing, fallbackValue)
+    public SByteConverter(bool hexConverter = false, bool throwing = true, IFormatProvider? formatProvider = null)
+        : base(throwing)
     {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _styles = styles;
-        _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
+        if (hexConverter)
+        {
+            _styles = HEX_STYLE;
+            _format = HEX_FORMAT;
+            _formatProvider = CultureInfo.InvariantCulture;
+        }
+        else
+        {
+            _styles = DEFAULT_STYLE;
+            _format = DEFAULT_FORMAT;
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+        }
     }
 
-    internal static ICsvTypeConverter Create(CsvConverterOptions options,
-                                              IFormatProvider? formatProvider,
-                                              bool hexConverter)
-        => new SByteConverter(formatProvider,
-                              options.HasFlag(CsvConverterOptions.Throwing),
-                              hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
-          .HandleNullableAndDBNullAcceptance(options);
+    internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
+        => new SByteConverter(hexConverter,
+                             options.HasFlag(CsvConverterOptions.Throwing),
+                             formatProvider)
+           .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(sbyte value) => value.ToString(_format, _formatProvider);

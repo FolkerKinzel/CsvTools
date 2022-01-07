@@ -9,21 +9,32 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
     private readonly NumberStyles _styles;
     private readonly string? _format;
 
-    private const NumberStyles DEFAULT_NUMBER_STYLE = NumberStyles.Any;
+    private const NumberStyles DEFAULT_STYLE = NumberStyles.Any;
+    private const NumberStyles HEX_STYLE = NumberStyles.HexNumber;
+    private const string HEX_FORMAT = "X";
+    private const string? DEFAULT_FORMAT = null;
 
-
-    public UInt64Converter(IFormatProvider? formatProvider = null, bool throwing = true, NumberStyles styles = DEFAULT_NUMBER_STYLE, ulong fallbackValue = default)
-        : base(throwing, fallbackValue)
+    public UInt64Converter(bool hexConverter = false, bool throwing = true, IFormatProvider? formatProvider = null)
+        : base(throwing)
     {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _styles = styles;
-        _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
+        if (hexConverter)
+        {
+            _styles = HEX_STYLE;
+            _format = HEX_FORMAT;
+            _formatProvider = CultureInfo.InvariantCulture;
+        }
+        else
+        {
+            _styles = DEFAULT_STYLE;
+            _format = DEFAULT_FORMAT;
+            _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+        }
     }
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-        => new UInt64Converter(formatProvider,
-                               options.HasFlag(CsvConverterOptions.Throwing),
-                               hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)
+        => new UInt64Converter(hexConverter,
+                             options.HasFlag(CsvConverterOptions.Throwing),
+                             formatProvider)
            .HandleNullableAndDBNullAcceptance(options);
 
 

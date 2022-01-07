@@ -11,6 +11,7 @@ public sealed class ByteConverter : CsvTypeConverter<byte>
     private const NumberStyles DEFAULT_STYLE = NumberStyles.Any;
     private const NumberStyles HEX_STYLE = NumberStyles.HexNumber;
     private const string HEX_FORMAT = "X";
+    private const string? DEFAULT_FORMAT = null;
 
     public ByteConverter(bool hexConverter = false, bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing)
@@ -24,7 +25,7 @@ public sealed class ByteConverter : CsvTypeConverter<byte>
         else
         {
             _styles = DEFAULT_STYLE;
-            _format = null;
+            _format = DEFAULT_FORMAT;
             _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         }
     }
