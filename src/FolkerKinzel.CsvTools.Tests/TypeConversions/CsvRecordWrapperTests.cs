@@ -370,7 +370,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                new Int32Converter().MakeNullableStructConverter());
+                new Int32Converter().AsNullable());
 
             wrapper.AddProperty(prop1);
 
@@ -390,7 +390,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] { "Hallo1" },
-                new Int32Converter().MakeNullableStructConverter());
+                new Int32Converter().AsNullable());
 
             wrapper.AddProperty(prop1);
 
@@ -419,7 +419,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var prop1 =
                 new CsvColumnNameProperty(prop1Name, new string[] {"Hallo1" },
-                new Int32Converter().MakeNullableStructConverter());
+                new Int32Converter().AsNullable());
 
             wrapper.AddProperty(prop1);
 
@@ -463,7 +463,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
-            ICsvTypeConverter2 conv = new Int32Converter().MakeNullableStructConverter();
+            ICsvTypeConverter2 conv = new Int32Converter().AsNullable();
 
             var prop1 =
                 new CsvColumnIndexProperty(prop1Name, 0, conv);

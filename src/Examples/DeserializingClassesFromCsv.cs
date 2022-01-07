@@ -79,14 +79,13 @@ namespace Examples
                 (
                     new CsvColumnNameProperty("LessonDay",
                                     new string[] { "*day", "*tag" },
-                                    new EnumConverter2<DayOfWeek>().MakeNullableStructConverter())
+                                    new EnumConverter2<DayOfWeek>().AsNullable())
                 );
             wrapper.AddProperty
                 (
                     new CsvColumnNameProperty("LessonBegin",
                                     new string[] { "*begin?" },
-                                    CsvConverterFactory
-                                        .CreateConverter(CsvTypeCode.TimeSpan, nullable: true))
+                                    new TimeSpanConverter2().AsNullable())
                 );
 
             // Analyze the CSV file to determine the right parameters

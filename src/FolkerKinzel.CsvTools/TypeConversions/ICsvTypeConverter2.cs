@@ -8,5 +8,5 @@ public interface ICsvTypeConverter2
 
     bool ThrowsOnParseErrors { get; }
 
-    //object? FallbackValue { get; }
+    object? FallbackValue { get; }
 }

@@ -22,7 +22,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             list.Add(11);
 
 
-            ICsvTypeConverter2 conv = new Int32Converter().MakeNullableStructConverter().MakeIEnumerableConverter();
+            ICsvTypeConverter2 conv = new Int32Converter().AsNullable().MakeIEnumerableConverter();
             
 
             string? s = conv.ConvertToString(list);

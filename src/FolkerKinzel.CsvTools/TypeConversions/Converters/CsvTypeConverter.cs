@@ -16,7 +16,7 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
 
     public T? FallbackValue { get; }
 
-    //object? ICsvTypeConverter2.FallbackValue => FallbackValue;
+    object? ICsvTypeConverter2.FallbackValue => FallbackValue;
 
 
     public bool ThrowsOnParseErrors { get; }

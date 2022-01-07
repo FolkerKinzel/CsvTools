@@ -10,7 +10,7 @@ public sealed class StringConverter2 : CsvTypeConverter<string?>
 
         var conv = new StringConverter2(fallbackValue);
 
-        return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? conv.AddDBNullAcceptance() : conv;
+        return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? conv.AsDBNullEnabled() : conv;
     }
 
     protected override string? DoConvertToString(string? value) => value;

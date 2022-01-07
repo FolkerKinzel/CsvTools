@@ -66,7 +66,7 @@ public abstract class CsvSingleColumnProperty : CsvPropertyBase
 
         try
         {
-            return ReferredCsvColumnIndex.HasValue ? Converter.Parse(Record[ReferredCsvColumnIndex.Value]) : Converter.Parse(null);
+            return ReferredCsvColumnIndex.HasValue ? Converter.Parse(Record[ReferredCsvColumnIndex.Value]) : Converter.FallbackValue;
         }
         catch (Exception e)
         {

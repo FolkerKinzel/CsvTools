@@ -15,7 +15,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public static CsvTypeConverter<object> AddDBNullAcceptance<T>(this CsvTypeConverter<T> converter)
+        public static CsvTypeConverter<object> AsDBNullEnabled<T>(this CsvTypeConverter<T> converter)
         {
             if (converter is CsvTypeConverter<object> result && Convert.IsDBNull(result.FallbackValue))
             {
@@ -29,7 +29,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        public static CsvTypeConverter<Nullable<T>> MakeNullableStructConverter<T>(this CsvTypeConverter<T> converter) 
+        public static CsvTypeConverter<Nullable<T>> AsNullable<T>(this CsvTypeConverter<T> converter) 
             where T : struct => new NullableStructConverter<T>(converter);
 
 
@@ -47,12 +47,12 @@ namespace FolkerKinzel.CsvTools.TypeConversions
         {
             if (options.HasFlag(CsvConverterOptions.Nullable))
             {
-                CsvTypeConverter<T?> nullableConv = converter.MakeNullableStructConverter();
+                CsvTypeConverter<T?> nullableConv = converter.AsNullable();
 
-                return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? nullableConv.AddDBNullAcceptance() : nullableConv;
+                return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? nullableConv.AsDBNullEnabled() : nullableConv;
             }
 
-            return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? converter.AddDBNullAcceptance() : converter;
+            return options.HasFlag(CsvConverterOptions.AcceptsDBNull) ? converter.AsDBNullEnabled() : converter;
         }
         
     }

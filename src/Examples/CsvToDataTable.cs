@@ -86,7 +86,7 @@ namespace Examples
             // Content of the refilled DataTable:
             // Susi Meyer      Piano           3               14:30:00
             // Carl Czerny     Piano           4               15:15:00
-            // Frederic Chopin <DBNull>        < DBNull >      < DBNull >
+            // Frederic Chopin <DBNull>        <DBNull>       <DBNull>
         }
 
 
@@ -96,7 +96,7 @@ namespace Examples
 
             // Store the stringConverter because you can reuse the same 
             // converter for more than one property in CsvRecordWrapper.
-            ICsvTypeConverter2 stringConverter = new StringConverter2("").AddDBNullAcceptance();
+            ICsvTypeConverter2 stringConverter = new StringConverter2("").AsDBNullEnabled();
 
             wrapper.AddProperty
                 (
@@ -114,13 +114,13 @@ namespace Examples
                 (
                     new CsvColumnNameProperty(LESSON_DAY,
                                     new string[] { LESSON_DAY },
-                                    new EnumConverter2<DayOfWeek>(format: "G").AddDBNullAcceptance())
+                                    new EnumConverter2<DayOfWeek>(format: "G").AsDBNullEnabled())
                 );
             wrapper.AddProperty
                 (
                     new CsvColumnNameProperty(LESSON_BEGIN,
                                     new string[] { LESSON_BEGIN },
-                                    new TimeSpanConverter2().AddDBNullAcceptance())
+                                    new TimeSpanConverter2().AsDBNullEnabled())
                 );
 
             return wrapper;
