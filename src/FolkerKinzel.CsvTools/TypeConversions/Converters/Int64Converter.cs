@@ -2,33 +2,6 @@
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-//public sealed class NumberConverter2<T> : CsvTypeConverter<T> where T : struct, IConvertible
-//{
-//    public NumberConverter2(IFormatProvider? formatProvider, bool throwsOnParseErrors, T fallbackValue = default)
-//        : base(throwsOnParseErrors, fallbackValue) => FormatProvider = formatProvider;
-
-//    internal static ICsvTypeConverter2 Create(bool nullable, bool acceptsDBNull, IFormatProvider? formatProvider, bool throwsOnParseErrors)
-//        => new NumberConverter2<T>(formatProvider, throwsOnParseErrors).HandleNullableAndDBNullAcceptance(nullable, acceptsDBNull);
-
-//    internal IFormatProvider? FormatProvider { get; }
-
-//    protected override string? DoConvertToString(T value) => Convert.ToString(value, FormatProvider);
-
-//    public override bool TryParseValue(string value, [NotNullWhen(true)] out T result)
-//    {
-//        try
-//        {
-//            result = (T)Convert.ChangeType(value, typeof(T), FormatProvider);
-//            return true;
-//        }
-//        catch
-//        {
-//            result = default;
-//            return false;
-//        }
-//    }
-//}
-
 public sealed class Int64Converter : CsvTypeConverter<long>
 {
     private readonly IFormatProvider? _formatProvider;
