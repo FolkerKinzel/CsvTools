@@ -16,7 +16,7 @@ public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
         _format = "g";
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
        => new TimeSpanConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
         .HandleNullableAndDBNullAcceptance(options);
 

@@ -96,7 +96,7 @@ namespace Examples
 
             // Store the stringConverter because you can reuse the same 
             // converter for more than one property in CsvRecordWrapper.
-            ICsvTypeConverter2 stringConverter = new StringConverter("").AsDBNullEnabled();
+            ICsvTypeConverter stringConverter = new StringConverter("").AsDBNullEnabled();
 
             wrapper.AddProperty
                 (

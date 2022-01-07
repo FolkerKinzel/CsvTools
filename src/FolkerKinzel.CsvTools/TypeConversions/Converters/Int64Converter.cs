@@ -49,7 +49,7 @@ public sealed class Int64Converter : CsvTypeConverter<long>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
+    internal static ICsvTypeConverter Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
                                               bool hexConverter)
         => new Int64Converter(formatProvider,

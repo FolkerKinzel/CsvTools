@@ -1,6 +1,6 @@
 ﻿namespace FolkerKinzel.CsvTools.TypeConversions;
 
-public interface ICsvTypeConverter2
+public interface ICsvTypeConverter
 {
     object? Parse(string? value);
 

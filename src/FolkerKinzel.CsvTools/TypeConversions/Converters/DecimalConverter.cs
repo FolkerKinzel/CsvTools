@@ -14,7 +14,7 @@ public sealed class DecimalConverter : CsvTypeConverter<decimal>
         _styles = styles;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
         => new DecimalConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
           .HandleNullableAndDBNullAcceptance(options);
 

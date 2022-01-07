@@ -18,7 +18,7 @@ public sealed class ByteConverter : CsvTypeConverter<byte>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
         => new ByteConverter(formatProvider,
                              options.HasFlag(CsvConverterOptions.Throwing),
                              hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)

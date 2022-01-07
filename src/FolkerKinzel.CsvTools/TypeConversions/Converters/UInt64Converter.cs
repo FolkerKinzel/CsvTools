@@ -20,7 +20,7 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
         => new UInt64Converter(formatProvider,
                                options.HasFlag(CsvConverterOptions.Throwing),
                                hexConverter ? NumberStyles.HexNumber : DEFAULT_NUMBER_STYLE)

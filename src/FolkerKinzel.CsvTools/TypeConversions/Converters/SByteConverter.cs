@@ -23,7 +23,7 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
+    internal static ICsvTypeConverter Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
                                               bool hexConverter)
         => new SByteConverter(formatProvider,

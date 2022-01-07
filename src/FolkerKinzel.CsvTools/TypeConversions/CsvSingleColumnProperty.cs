@@ -25,7 +25,7 @@ public abstract class CsvSingleColumnProperty : CsvPropertyBase
     /// 
     /// <exception cref="ArgumentNullException"><paramref name="propertyName"/> oder 
     /// <paramref name="converter"/> ist <c>null</c>.</exception>
-    protected CsvSingleColumnProperty(string propertyName, ICsvTypeConverter2 converter) : base(propertyName)
+    protected CsvSingleColumnProperty(string propertyName, ICsvTypeConverter converter) : base(propertyName)
     {
         if (converter is null)
         {
@@ -38,7 +38,7 @@ public abstract class CsvSingleColumnProperty : CsvPropertyBase
     /// <summary>
     /// Ein <see cref="ICsvTypeConverter"/>-Objekt, das die Typkonvertierung durchführt.
     /// </summary>
-    public ICsvTypeConverter2 Converter { get; }
+    public ICsvTypeConverter Converter { get; }
 
     /// <summary>
     /// Das <see cref="CsvRecord"/>-Objekt, über das der Zugriff auf die CSV-Datei erfolgt.

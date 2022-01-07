@@ -22,7 +22,7 @@ public sealed class Int32Converter : CsvTypeConverter<int>
         _format = styles.HasFlag(NumberStyles.AllowHexSpecifier) ? "X" : null;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options,
+    internal static ICsvTypeConverter Create(CsvConverterOptions options,
                                               IFormatProvider? formatProvider,
                                               bool hexConverter)
         => new Int32Converter(formatProvider,

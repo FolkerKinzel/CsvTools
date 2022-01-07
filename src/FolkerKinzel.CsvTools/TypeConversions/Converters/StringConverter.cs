@@ -4,7 +4,7 @@ public sealed class StringConverter : CsvTypeConverter<string?>
 {
     public StringConverter(string? fallbackValue = null) : base(false, fallbackValue) { }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options)
     {
         string? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : string.Empty;
 

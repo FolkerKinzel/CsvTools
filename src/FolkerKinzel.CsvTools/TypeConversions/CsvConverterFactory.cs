@@ -37,7 +37,7 @@ public static class CsvConverterFactory
     /// 
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="type"/> ist keiner der definierten Werte der 
     /// <see cref="CsvTypeCode"/>-Enum.</exception>
-    public static ICsvTypeConverter2 CreateConverter(
+    public static ICsvTypeConverter CreateConverter(
         CsvTypeCode type,
         CsvConverterOptions options = default,
         IFormatProvider? formatProvider = null)
@@ -59,9 +59,9 @@ public static class CsvConverterFactory
             CsvTypeCode.UInt16 => UInt16Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.UInt32 => UInt32Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.UInt64 => UInt64Converter.Create(options: options, formatProvider: formatProvider,  hexConverter: false),
-            CsvTypeCode.DateTimeOffset => DateTimeOffsetConverter2.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.DateTimeOffset => DateTimeOffsetConverter.Create(options: options, formatProvider: formatProvider),
             CsvTypeCode.TimeSpan => TimeSpanConverter.Create(options: options, formatProvider: formatProvider),
-            CsvTypeCode.ByteArray => Base64Converter2.Create(options: options),
+            CsvTypeCode.ByteArray => ByteArrayConverter.Create(options: options),
             CsvTypeCode.Guid => GuidConverter.Create(options: options),
             _ => throw new ArgumentOutOfRangeException(nameof(type))
         };
@@ -85,7 +85,7 @@ public static class CsvConverterFactory
     /// <param name="format">Ein Formatstring, der für die <see cref="string"/>-Ausgabe von <typeparamref name="TEnum"/> verwendet wird.</param>
     /// <returns>Ein <see cref="ICsvTypeConverter"/>-Objekt zur Umwandlung des Enum-Datentyps <typeparamref name="TEnum"/>.</returns>
     /// <exception cref="ArgumentException"><paramref name="format"/> ist kein gültiger Formatstring für Enum-Datentypen.</exception>
-    public static ICsvTypeConverter2 CreateEnumConverter<TEnum>(
+    public static ICsvTypeConverter CreateEnumConverter<TEnum>(
         CsvConverterOptions options = default,
         TEnum fallbackValue = default,
         bool ignoreCase = true,
@@ -138,7 +138,7 @@ public static class CsvConverterFactory
     /// <see cref="CsvTypeCode.Byte"/>, <see cref="CsvTypeCode.UInt16"/>, <see cref=" CsvTypeCode.UInt32"/>, <see cref="CsvTypeCode.UInt64"/>,
     /// <see cref="CsvTypeCode.SByte"/>, <see cref="CsvTypeCode.Int16"/>, <see cref=" CsvTypeCode.Int32"/> und <see cref="CsvTypeCode.Int64"/>.)
     /// </exception>
-    public static ICsvTypeConverter2 CreateHexConverter(
+    public static ICsvTypeConverter CreateHexConverter(
         CsvTypeCode type,
         CsvConverterOptions options = CsvConverterOptions.Default) => type switch
         {

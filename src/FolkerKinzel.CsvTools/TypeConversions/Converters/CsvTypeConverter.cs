@@ -6,7 +6,7 @@ using System.Text;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
+public abstract class CsvTypeConverter<T> : ICsvTypeConverter
 {
     protected CsvTypeConverter(bool throwsOnParseErrors, T? fallbackValue = default)
     {
@@ -16,7 +16,7 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
 
     public T? FallbackValue { get; }
 
-    object? ICsvTypeConverter2.FallbackValue => FallbackValue;
+    object? ICsvTypeConverter.FallbackValue => FallbackValue;
 
 
     public bool Throwing { get; }
@@ -68,5 +68,5 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter2
         return FallbackValue;
     }
 
-    object? ICsvTypeConverter2.Parse(string? value) => Parse(value);
+    object? ICsvTypeConverter.Parse(string? value) => Parse(value);
 }

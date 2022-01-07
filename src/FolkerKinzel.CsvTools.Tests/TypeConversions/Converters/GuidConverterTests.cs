@@ -9,7 +9,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [TestMethod()]
         public void GuidConverterTest1()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Guid);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Guid);
             Assert.IsInstanceOfType(conv, typeof(GuidConverter));
         }
 
@@ -41,7 +41,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             var guid = Guid.NewGuid();
 
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Guid);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Guid);
 
             string? tmp = conv.ConvertToString(guid);
 

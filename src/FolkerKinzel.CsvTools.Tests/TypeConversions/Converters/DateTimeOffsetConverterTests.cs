@@ -10,9 +10,9 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [TestMethod()]
         public void DateTimeOffsetConverterTest0()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset);
 
-            Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter2));
+            Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter));
 
             var dt = new DateTime(1975, 07, 14);
 
@@ -31,26 +31,26 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [DataRow("")]
         public void DateTimeOffsetConverterTest3(string? format)
         {
-            var conv = new DateTimeOffsetConverter2(format);
-            Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter2));
+            var conv = new DateTimeOffsetConverter(format);
+            Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter));
         }
 
         [DataTestMethod()]
         [DataRow(null)]
         [DataRow("")]
         [ExpectedException(typeof(ArgumentException))]
-        public void DateTimeOffsetConverterTest4(string? format) => _ = new DateTimeOffsetConverter2(format, parseExact: true);
+        public void DateTimeOffsetConverterTest4(string? format) => _ = new DateTimeOffsetConverter(format, parseExact: true);
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
         public void DateTimeOffsetConverterTest5()
-            => _ = new DateTimeOffsetConverter2("Ä");
+            => _ = new DateTimeOffsetConverter("Ä");
 
         [TestMethod()]
         public void DateTimeOffsetConverterTest6()
         {
-            var conv = new DateTimeOffsetConverter2("D");
-            Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter2));
+            var conv = new DateTimeOffsetConverter("D");
+            Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter));
         }
         
 
@@ -59,7 +59,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             DateTimeOffset now = new DateTime(2021, 3, 1, 17, 25, 38, DateTimeKind.Local);
 
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset);
 
             string? tmp = conv.ConvertToString(now);
 
@@ -79,7 +79,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             DateTimeOffset now = new DateTime(tmp.Year, tmp.Month, tmp.Day, tmp.Hour, tmp.Minute, tmp.Second, DateTimeKind.Utc);
 
 
-            var conv = new DateTimeOffsetConverter2("R");
+            var conv = new DateTimeOffsetConverter("R");
 
             string? tmp1 = conv.ConvertToString(now);
 

@@ -9,7 +9,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void HexConverterTest1()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
             Assert.IsInstanceOfType(conv, typeof(Int32Converter));
         }
 
@@ -23,7 +23,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             int i = 123456789;
 
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
 
             string? s = conv.ConvertToString(i);
             Assert.IsNotNull(s);
@@ -40,7 +40,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             int i = 123456789;
 
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateHexConverter(CsvTypeCode.Int32);
 
             string? s = conv.ConvertToString(i)?.ToLowerInvariant();
             Assert.IsNotNull(s);

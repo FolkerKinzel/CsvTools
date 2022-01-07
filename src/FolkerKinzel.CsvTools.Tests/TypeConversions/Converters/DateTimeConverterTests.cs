@@ -12,14 +12,14 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [TestMethod()]
         public void DateTimeConverterTest1()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
             Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
         }
 
         [TestMethod()]
         public void DateTimeConverterTest2()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date);
             Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
         }
 
@@ -55,7 +55,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             var now = new DateTime(2021, 3, 1, 17, 25, 38, DateTimeKind.Unspecified);
 
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
 
             string? tmp = conv.ConvertToString(now);
 
@@ -92,7 +92,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [DataRow("1972/01/31")]
         public void ParseTest(string s)
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
 
             var dt = conv.Parse(s);
 
@@ -103,7 +103,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         public void ConvertToStringTest1()
         {
             var dt = new DateTime(1972, 01, 31);
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Date);
 
             //dt = dt.ToLocalTime();
 
@@ -117,7 +117,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         public void ConvertToStringTest2()
         {
             var dt = new DateTime(1972, 01, 31);
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTime);
 
             //dt = dt.ToLocalTime();
 

@@ -60,7 +60,7 @@ namespace Examples
             var wrapper = new CsvRecordWrapper();
 
             // Reuse a converter for more than one property:
-            ICsvTypeConverter2 stringConverter =
+            ICsvTypeConverter stringConverter =
                 new StringConverter();
 
             wrapper.AddProperty

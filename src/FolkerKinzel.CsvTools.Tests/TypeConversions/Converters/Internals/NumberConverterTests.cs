@@ -8,7 +8,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod]
         public void NumberConverterTest1()
         {
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Double);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Double);
             Assert.IsInstanceOfType(conv, typeof(DoubleConverter));
         }
 
@@ -17,7 +17,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             double d = 72.81;
 
-            ICsvTypeConverter2 conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Double);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Double);
 
             string? s = conv.ConvertToString(d);
             Assert.IsNotNull(s);

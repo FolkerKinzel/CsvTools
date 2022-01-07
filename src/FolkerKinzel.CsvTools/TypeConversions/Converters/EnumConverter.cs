@@ -14,7 +14,7 @@ public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum :
         this.Format = format;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, bool ignoreCase, string? format, TEnum fallbackValue)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options, bool ignoreCase, string? format, TEnum fallbackValue)
         => new EnumConverter<TEnum>(ignoreCase, format, options.HasFlag(CsvConverterOptions.Throwing), fallbackValue)
         .HandleNullableAndDBNullAcceptance(options);
 

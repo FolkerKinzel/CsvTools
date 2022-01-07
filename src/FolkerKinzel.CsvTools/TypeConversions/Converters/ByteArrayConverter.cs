@@ -2,11 +2,11 @@
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public sealed class Base64Converter2 : CsvTypeConverter<byte[]?>
+public sealed class ByteArrayConverter : CsvTypeConverter<byte[]?>
 {
-    public Base64Converter2(bool throwsOnParseErrors, byte[]? fallbackValue) : base(throwsOnParseErrors, fallbackValue) { }
+    public ByteArrayConverter(bool throwsOnParseErrors, byte[]? fallbackValue) : base(throwsOnParseErrors, fallbackValue) { }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options)
     {
 #if NET40
             byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : new byte[0];
@@ -14,7 +14,7 @@ public sealed class Base64Converter2 : CsvTypeConverter<byte[]?>
         byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : Array.Empty<byte>();
 #endif
 
-        var conv = new Base64Converter2(options.HasFlag(CsvConverterOptions.Throwing), fallbackValue);
+        var conv = new ByteArrayConverter(options.HasFlag(CsvConverterOptions.Throwing), fallbackValue);
 
         return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? conv.AsDBNullEnabled() : conv;
     }

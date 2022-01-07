@@ -17,7 +17,7 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
         _styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
     }
 
-    internal static ICsvTypeConverter2 Create(bool isDate, CsvConverterOptions options, IFormatProvider? formatProvider)
+    internal static ICsvTypeConverter Create(bool isDate, CsvConverterOptions options, IFormatProvider? formatProvider)
         => new DateTimeConverter(isDate, formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
             .HandleNullableAndDBNullAcceptance(options);
 

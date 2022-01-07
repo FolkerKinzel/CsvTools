@@ -9,7 +9,7 @@ public sealed class GuidConverter : CsvTypeConverter<Guid>
 
     private GuidConverter(bool throwsOnParseErrors) : base(throwsOnParseErrors) => _format = "D";
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options)
+    internal static ICsvTypeConverter Create(CsvConverterOptions options)
         => new GuidConverter(options.HasFlag(CsvConverterOptions.Throwing))
         .HandleNullableAndDBNullAcceptance(options);
 

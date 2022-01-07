@@ -3,26 +3,26 @@ using System.Globalization;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public sealed class DateTimeOffsetConverter2 : CsvTypeConverter<DateTimeOffset>
+public sealed class DateTimeOffsetConverter : CsvTypeConverter<DateTimeOffset>
 {
     private readonly IFormatProvider _formatProvider;
     private readonly string _format;
     private readonly bool _parseExact;
     private readonly DateTimeStyles _styles;
 
-    private DateTimeOffsetConverter2(IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
+    private DateTimeOffsetConverter(IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = "O";
         _styles = DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
     }
 
-    internal static ICsvTypeConverter2 Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new DateTimeOffsetConverter2(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
+    internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+        => new DateTimeOffsetConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
         .HandleNullableAndDBNullAcceptance(options);
 
 
-    public DateTimeOffsetConverter2(
+    public DateTimeOffsetConverter(
         string? format,
 
         IFormatProvider? formatProvider = null,
