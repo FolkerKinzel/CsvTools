@@ -13,10 +13,10 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
 
 
     public SByteConverter(IFormatProvider? formatProvider = null,
-                          bool throwsOnParseErrors = true,
+                          bool throwing = true,
                           NumberStyles styles = DEFAULT_NUMBER_STYLE,
                           sbyte fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

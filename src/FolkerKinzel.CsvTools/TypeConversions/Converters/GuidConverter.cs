@@ -7,7 +7,7 @@ public sealed class GuidConverter : CsvTypeConverter<Guid>
 {
     private readonly string _format;
 
-    private GuidConverter(bool throwsOnParseErrors) : base(throwsOnParseErrors) => _format = "D";
+    private GuidConverter(bool throwing) : base(throwing) => _format = "D";
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options)
         => new GuidConverter(options.HasFlag(CsvConverterOptions.Throwing))

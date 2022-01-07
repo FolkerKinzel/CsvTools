@@ -10,7 +10,7 @@ public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
     private readonly bool _parseExact;
     private readonly TimeSpanStyles _styles;
 
-    public TimeSpanConverter(IFormatProvider? formatProvider = null, bool throwsOnParseErrors = true) : base(throwsOnParseErrors)
+    public TimeSpanConverter(IFormatProvider? formatProvider = null, bool throwing = true) : base(throwing)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = "g";

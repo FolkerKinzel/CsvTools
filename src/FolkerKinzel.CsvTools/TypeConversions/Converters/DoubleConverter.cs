@@ -7,8 +7,8 @@ public sealed class DoubleConverter : CsvTypeConverter<double>
     private readonly IFormatProvider? _formatProvider;
     private readonly NumberStyles _styles;
 
-    public DoubleConverter(IFormatProvider? formatProvider = null, bool throwsOnParseErrors = true, NumberStyles styles = NumberStyles.Any, double fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+    public DoubleConverter(IFormatProvider? formatProvider = null, bool throwing = true, NumberStyles styles = NumberStyles.Any, double fallbackValue = default)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

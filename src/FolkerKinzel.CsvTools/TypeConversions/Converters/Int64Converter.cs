@@ -39,10 +39,10 @@ public sealed class Int64Converter : CsvTypeConverter<long>
 
 
     public Int64Converter(IFormatProvider? formatProvider = null,
-                          bool throwsOnParseErrors = true,
+                          bool throwing = true,
                           NumberStyles styles = DEFAULT_NUMBER_STYLE,
                           long fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

@@ -7,8 +7,8 @@ public sealed class DecimalConverter : CsvTypeConverter<decimal>
     private readonly IFormatProvider? _formatProvider;
     private readonly NumberStyles _styles;
 
-    public DecimalConverter(IFormatProvider? formatProvider = null, bool throwsOnParseErrors = true, NumberStyles styles = NumberStyles.Any, decimal fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+    public DecimalConverter(IFormatProvider? formatProvider = null, bool throwing = true, NumberStyles styles = NumberStyles.Any, decimal fallbackValue = default)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

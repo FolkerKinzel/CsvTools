@@ -12,10 +12,10 @@ public sealed class Int16Converter : CsvTypeConverter<int>
 
 
     public Int16Converter(IFormatProvider? formatProvider = null,
-                          bool throwsOnParseErrors = true,
+                          bool throwing = true,
                           NumberStyles styles = DEFAULT_NUMBER_STYLE,
                           int fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

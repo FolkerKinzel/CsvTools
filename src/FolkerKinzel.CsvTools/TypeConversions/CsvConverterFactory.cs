@@ -54,7 +54,7 @@ public static class CsvConverterFactory
             CsvTypeCode.Int32 => Int32Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.Int64 => Int64Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.SByte => SByteConverter.Create(options: options, formatProvider: formatProvider,  hexConverter: false),
-            CsvTypeCode.Single => FloatConverter.Create(options: options, formatProvider: formatProvider),
+            CsvTypeCode.Single => SingleConverter.Create(options: options, formatProvider: formatProvider),
             CsvTypeCode.String => StringConverter.Create(options: options),
             CsvTypeCode.UInt16 => UInt16Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),
             CsvTypeCode.UInt32 => UInt32Converter.Create(options: options, formatProvider: formatProvider, hexConverter: false),

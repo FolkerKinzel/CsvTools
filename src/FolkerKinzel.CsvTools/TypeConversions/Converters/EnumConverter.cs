@@ -5,9 +5,9 @@ public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum :
     public EnumConverter(
         bool ignoreCase = true,
         string? format = "D",
-        bool throwsOnParseErrors = true,
+        bool throwing = true,
         TEnum fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+        : base(throwing, fallbackValue)
     {
         ValidateFormat(format);
         this.IgnoreCase = ignoreCase;

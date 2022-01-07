@@ -4,17 +4,25 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 public sealed class ByteArrayConverter : CsvTypeConverter<byte[]?>
 {
-    public ByteArrayConverter(bool throwsOnParseErrors, byte[]? fallbackValue) : base(throwsOnParseErrors, fallbackValue) { }
+    public ByteArrayConverter(bool throwing = true, bool nullable = true) 
+        : base(throwing,
+#if NET40
+               nullable ? null : new byte[0];
+#else
+               nullable ? null : Array.Empty<byte>()
+#endif
+            ) { }
+    
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options)
     {
-#if NET40
-            byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : new byte[0];
-#else
-        byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : Array.Empty<byte>();
-#endif
+//#if NET40
+//            byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : new byte[0];
+//#else
+//        byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : Array.Empty<byte>();
+//#endif
 
-        var conv = new ByteArrayConverter(options.HasFlag(CsvConverterOptions.Throwing), fallbackValue);
+        var conv = new ByteArrayConverter(options.HasFlag(CsvConverterOptions.Throwing), options.HasFlag(CsvConverterOptions.Nullable));
 
         return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? conv.AsDBNullEnabled() : conv;
     }

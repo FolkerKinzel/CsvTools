@@ -2,20 +2,20 @@
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-public sealed class FloatConverter : CsvTypeConverter<float>
+public sealed class SingleConverter : CsvTypeConverter<float>
 {
     private readonly IFormatProvider? _formatProvider;
     private readonly NumberStyles _styles;
 
-    public FloatConverter(IFormatProvider? formatProvider = null, bool throwsOnParseErrors = true, NumberStyles styles = NumberStyles.Any, float fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+    public SingleConverter(IFormatProvider? formatProvider = null, bool throwing = true, NumberStyles styles = NumberStyles.Any, float fallbackValue = default)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;
     }
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-        => new FloatConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
+        => new SingleConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
         .HandleNullableAndDBNullAcceptance(options);
 
 

@@ -13,10 +13,10 @@ public sealed class UInt16Converter : CsvTypeConverter<ushort>
 
 
     public UInt16Converter(IFormatProvider? formatProvider = null,
-                           bool throwsOnParseErrors = true,
+                           bool throwing = true,
                            NumberStyles styles = DEFAULT_NUMBER_STYLE,
                            ushort fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

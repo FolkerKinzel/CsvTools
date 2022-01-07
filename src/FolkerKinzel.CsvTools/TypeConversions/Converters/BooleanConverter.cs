@@ -2,8 +2,8 @@
 
 public sealed class BooleanConverter : CsvTypeConverter<bool>
 {
-    public BooleanConverter(bool throwsOnParseErrors = true, bool fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue) { }
+    public BooleanConverter(bool throwing = true, bool fallbackValue = default)
+        : base(throwing, fallbackValue) { }
     
 
     internal static ICsvTypeConverter Create(CsvConverterOptions options)

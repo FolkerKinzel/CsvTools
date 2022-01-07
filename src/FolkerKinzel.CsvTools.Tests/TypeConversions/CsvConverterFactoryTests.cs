@@ -289,7 +289,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [DataRow(true)]
         public void CreateConverterTest6(bool throwsOnParseErrors)
         {
-            var conv = new DecimalConverter(throwsOnParseErrors: throwsOnParseErrors);
+            var conv = new DecimalConverter(throwing: throwsOnParseErrors);
 
             Assert.IsInstanceOfType(conv, typeof(DecimalConverter));
             //Assert.AreEqual(typeof(decimal), conv.Type);
@@ -311,7 +311,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [DataRow(true)]
         public void CreateConverterTest7(bool throwsOnParseErrors)
         {
-            var conv = new DecimalConverter(formatProvider: CultureInfo.CreateSpecificCulture("de-DE"), throwsOnParseErrors: throwsOnParseErrors);
+            var conv = new DecimalConverter(formatProvider: CultureInfo.CreateSpecificCulture("de-DE"), throwing: throwsOnParseErrors);
 
             //Assert.IsInstanceOfType(conv, typeof(NumberConverter<decimal>));
             //Assert.AreEqual(typeof(decimal), conv.Type);

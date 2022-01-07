@@ -12,8 +12,8 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
     private const NumberStyles DEFAULT_NUMBER_STYLE = NumberStyles.Any;
 
 
-    public UInt64Converter(IFormatProvider? formatProvider = null, bool throwsOnParseErrors = true, NumberStyles styles = DEFAULT_NUMBER_STYLE, ulong fallbackValue = default)
-        : base(throwsOnParseErrors, fallbackValue)
+    public UInt64Converter(IFormatProvider? formatProvider = null, bool throwing = true, NumberStyles styles = DEFAULT_NUMBER_STYLE, ulong fallbackValue = default)
+        : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

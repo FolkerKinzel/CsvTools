@@ -10,7 +10,7 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
     private readonly bool _parseExact;
     private readonly DateTimeStyles _styles;
 
-    private DateTimeConverter(bool isDate, IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
+    private DateTimeConverter(bool isDate, IFormatProvider? formatProvider, bool throwing) : base(throwing)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = isDate ? "d" : "s";
@@ -25,9 +25,9 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
         string? format,
         IFormatProvider? formatProvider = null,
         DateTime fallbackValue = default,
-        bool throwsOnParseErrors = false,
+        bool throwing = false,
         DateTimeStyles styles = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind,
-        bool parseExact = false) : base(throwsOnParseErrors, fallbackValue)
+        bool parseExact = false) : base(throwing, fallbackValue)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _styles = styles;

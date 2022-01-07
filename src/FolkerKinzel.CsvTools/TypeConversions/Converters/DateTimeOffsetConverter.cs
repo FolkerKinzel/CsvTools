@@ -10,7 +10,7 @@ public sealed class DateTimeOffsetConverter : CsvTypeConverter<DateTimeOffset>
     private readonly bool _parseExact;
     private readonly DateTimeStyles _styles;
 
-    private DateTimeOffsetConverter(IFormatProvider? formatProvider, bool throwsOnParseErrors) : base(throwsOnParseErrors)
+    private DateTimeOffsetConverter(IFormatProvider? formatProvider, bool throwing) : base(throwing)
     {
         _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
         _format = "O";
