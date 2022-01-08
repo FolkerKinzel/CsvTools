@@ -6,9 +6,9 @@ public sealed class CharConverter : CsvTypeConverter<char>
         : base(throwing, fallbackValue) { }
 
 
-    internal static ICsvTypeConverter Create(CsvConverterOptions options)
-        => new CharConverter(options.HasFlag(CsvConverterOptions.Throwing))
-            .HandleNullableAndDBNullAcceptance(options);
+    //internal static ICsvTypeConverter Create(CsvConverterOptions options)
+    //    => new CharConverter(options.HasFlag(CsvConverterOptions.Throwing))
+    //        .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(char value) => value.ToString();

@@ -2,21 +2,29 @@
 
 public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum : struct, Enum
 {
+    private const string DEFAULT_FORMAT = "D";
+
     public EnumConverter(
-        bool ignoreCase = true,
+        bool throwing = true,
+        TEnum fallbackValue = default,
+        bool ignoreCase = true)
+        : base(throwing, fallbackValue) => IgnoreCase = ignoreCase;
+
+    public EnumConverter(
         string? format = "D",
         bool throwing = true,
-        TEnum fallbackValue = default)
+        TEnum fallbackValue = default,
+        bool ignoreCase = true)
         : base(throwing, fallbackValue)
     {
         ValidateFormat(format);
-        this.IgnoreCase = ignoreCase;
-        this.Format = format;
+        IgnoreCase = ignoreCase;
+        Format = format;
     }
 
-    internal static ICsvTypeConverter Create(CsvConverterOptions options, bool ignoreCase, string? format, TEnum fallbackValue)
-        => new EnumConverter<TEnum>(ignoreCase, format, options.HasFlag(CsvConverterOptions.Throwing), fallbackValue)
-        .HandleNullableAndDBNullAcceptance(options);
+    //internal static ICsvTypeConverter Create(CsvConverterOptions options, bool ignoreCase, string? format, TEnum fallbackValue)
+    //    => new EnumConverter<TEnum>(format, options.HasFlag(CsvConverterOptions.Throwing), fallbackValue, ignoreCase)
+    //    .HandleNullableAndDBNullAcceptance(options);
 
     private static void ValidateFormat(string? format)
     {
@@ -40,8 +48,8 @@ public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum :
         throw new ArgumentException("Invalid format string.", nameof(format));
     }
 
-    internal bool IgnoreCase { get; }
-    internal string? Format { get; }
+    public bool IgnoreCase { get; }
+    public string? Format { get; } = DEFAULT_FORMAT;
 
     protected override string? DoConvertToString(TEnum value) => value.ToString(Format);
 

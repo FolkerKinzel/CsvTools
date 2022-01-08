@@ -43,16 +43,16 @@ namespace FolkerKinzel.CsvTools.TypeConversions
 
 
 
-        internal static ICsvTypeConverter HandleNullableAndDBNullAcceptance<T>(this CsvTypeConverter<T> converter, CsvConverterOptions options) where T : struct
+        internal static ICsvTypeConverter HandleNullableAndDBNullAcceptance<T>(this CsvTypeConverter<T> converter, bool nullable, bool dbNullEnabled) where T : struct
         {
-            if (options.HasFlag(CsvConverterOptions.Nullable))
+            if (nullable)
             {
                 CsvTypeConverter<T?> nullableConv = converter.AsNullableConverter();
 
-                return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? nullableConv.AsDBNullEnabled() : nullableConv;
+                return dbNullEnabled ? nullableConv.AsDBNullEnabled() : nullableConv;
             }
 
-            return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? converter.AsDBNullEnabled() : converter;
+            return dbNullEnabled ? converter.AsDBNullEnabled() : converter;
         }
         
     }

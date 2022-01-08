@@ -5,16 +5,16 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
 {
+    private const string DEFAULT_FORMAT = "g";
+
     private readonly IFormatProvider _formatProvider;
-    private readonly string _format;
+    private readonly string _format = DEFAULT_FORMAT;
     private readonly bool _parseExact;
     private readonly TimeSpanStyles _styles;
 
-    public TimeSpanConverter(IFormatProvider? formatProvider = null, bool throwing = true) : base(throwing)
-    {
-        _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-        _format = "g";
-    }
+    public TimeSpanConverter(bool throwing = true, IFormatProvider? formatProvider = null) : base(throwing)
+        => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
+
 
     /// <summary>
     /// Initialisiert ein neues <see cref="TimeSpanConverter"/>-Objekt.
@@ -47,9 +47,9 @@ public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
         ExamineFormat();
     }
 
-    internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-       => new TimeSpanConverter(formatProvider, options.HasFlag(CsvConverterOptions.Throwing))
-        .HandleNullableAndDBNullAcceptance(options);
+    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
+    //   => new TimeSpanConverter(options.HasFlag(CsvConverterOptions.Throwing), formatProvider)
+    //    .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(TimeSpan value) => value.ToString(_format, _formatProvider);

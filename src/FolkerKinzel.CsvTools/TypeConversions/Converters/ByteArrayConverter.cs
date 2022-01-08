@@ -14,18 +14,18 @@ public sealed class ByteArrayConverter : CsvTypeConverter<byte[]?>
             ) { }
     
 
-    internal static ICsvTypeConverter Create(CsvConverterOptions options)
-    {
-//#if NET40
-//            byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : new byte[0];
-//#else
-//        byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : Array.Empty<byte>();
-//#endif
+//    internal static ICsvTypeConverter Create(CsvConverterOptions options)
+//    {
+////#if NET40
+////            byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : new byte[0];
+////#else
+////        byte[]? fallbackValue = options.HasFlag(CsvConverterOptions.Nullable) ? null : Array.Empty<byte>();
+////#endif
 
-        var conv = new ByteArrayConverter(options.HasFlag(CsvConverterOptions.Throwing), options.HasFlag(CsvConverterOptions.Nullable));
+//        var conv = new ByteArrayConverter(options.HasFlag(CsvConverterOptions.Throwing), options.HasFlag(CsvConverterOptions.Nullable));
 
-        return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? conv.AsDBNullEnabled() : conv;
-    }
+//        return options.HasFlag(CsvConverterOptions.DBNullEnabled) ? conv.AsDBNullEnabled() : conv;
+//    }
 
     protected override string? DoConvertToString(byte[]? value) => value is null ? null : Convert.ToBase64String(value, Base64FormattingOptions.None);
 

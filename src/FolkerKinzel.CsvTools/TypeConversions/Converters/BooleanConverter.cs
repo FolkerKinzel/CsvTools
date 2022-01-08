@@ -6,9 +6,9 @@ public sealed class BooleanConverter : CsvTypeConverter<bool>
         : base(throwing, fallbackValue) { }
     
 
-    internal static ICsvTypeConverter Create(CsvConverterOptions options)
-        => new BooleanConverter(options.HasFlag(CsvConverterOptions.Throwing))
-           .HandleNullableAndDBNullAcceptance(options);
+    //internal static ICsvTypeConverter Create(CsvConverterOptions options)
+    //    => new BooleanConverter(options.HasFlag(CsvConverterOptions.Throwing))
+    //       .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(bool value) => value.ToString();

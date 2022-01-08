@@ -32,7 +32,13 @@ internal sealed class CsvStringReader : IEnumerable<IEnumerable<string?>>, IDisp
     /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
     /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
     /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen in der CSV-Datei übersprungen.</param>
+#if NET40 || NET461 || NETSTANDARD2_0
+#pragma warning disable CS8618 // Ein Non-Nullable-Feld muss beim Beenden des Konstruktors einen Wert ungleich NULL enthalten. Erwägen Sie die Deklaration als Nullable.
+#endif
     internal CsvStringReader(TextReader reader, char fieldSeparator, bool skipEmptyLines)
+#if NET40 || NET461 || NETSTANDARD2_0
+#pragma warning restore CS8618 // Ein Non-Nullable-Feld muss beim Beenden des Konstruktors einen Wert ungleich NULL enthalten. Erwägen Sie die Deklaration als Nullable.
+#endif
     {
         Debug.Assert(reader != null);
 

@@ -48,9 +48,11 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
     public string? ConvertToString(T? value) => value is null ? null : DoConvertToString(value);
 
 
+    protected virtual bool CsvHasValue([NotNullWhen(true)] string? csvInput) => !string.IsNullOrWhiteSpace(csvInput);
+
     public T? Parse(string? value)
     {
-        if (value is null)
+        if (!CsvHasValue(value))
         {
             return FallbackValue;
         }

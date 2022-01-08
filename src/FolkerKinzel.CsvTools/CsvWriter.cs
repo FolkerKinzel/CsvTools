@@ -172,9 +172,9 @@ public sealed class CsvWriter : IDisposable
     /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
     /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
     /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-//#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
     private CsvWriter(int columnsCount, char fieldSeparator, CsvOptions options)
-//#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
     {
         this._isHeaderRowWritten = true;
         this._fieldSeparator = fieldSeparator;
