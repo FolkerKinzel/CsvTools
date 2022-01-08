@@ -23,20 +23,16 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
         }
 
-        [DataTestMethod()]
-        [DataRow(null)]
-        [DataRow("")]
-        public void DateTimeConverterTest3(string? format)
+        [TestMethod()]
+        public void DateTimeConverterTest3()
         {
-            var conv = new DateTimeConverter(format);
+            var conv = new DateTimeConverter("");
             Assert.IsInstanceOfType(conv, typeof(DateTimeConverter));
         }
 
-        [DataTestMethod()]
-        [DataRow(null)]
-        [DataRow("")]
+        [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void DateTimeConverterTest4(string? format) => _ = new DateTimeConverter(format, parseExact: true);
+        public void DateTimeConverterTest4() => _ = new DateTimeConverter("", parseExact: true);
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]

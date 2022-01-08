@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod]
         public void ParseTest1()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, CsvConverterOptions.Nullable);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true);
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
             Assert.IsNull(conv.Parse(null));
@@ -29,7 +29,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [ExpectedException(typeof(FormatException))]
         public void ParseTest2()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, CsvConverterOptions.Nullable | CsvConverterOptions.Throwing);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true);
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
             Assert.IsNull(conv.Parse(null));
@@ -40,7 +40,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod]
         public void ParseTest3()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, CsvConverterOptions.Nullable);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true);
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
             Assert.IsNull(conv.Parse(null));

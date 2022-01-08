@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void ParseTest()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, CsvConverterOptions.Nullable);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, true);
 
             Assert.IsNull(conv.Parse(null));
 
@@ -35,7 +35,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void ConvertToStringTest()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, CsvConverterOptions.Nullable | CsvConverterOptions.DBNullEnabled);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, true, true);
 
             Assert.IsNull(conv.ConvertToString(DBNull.Value));
 

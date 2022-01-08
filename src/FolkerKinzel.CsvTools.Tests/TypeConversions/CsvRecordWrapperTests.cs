@@ -735,8 +735,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32,
-                                                                           CsvConverterOptions.Throwing | CsvConverterOptions.DBNullEnabled);
+            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32, false, true);
                                                                                    
 
             var prop1 =

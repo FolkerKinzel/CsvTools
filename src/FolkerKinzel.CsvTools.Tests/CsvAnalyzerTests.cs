@@ -5,7 +5,7 @@ using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FolkerKinzel.CsvTools.TypeConversions.Tests
+namespace FolkerKinzel.CsvTools.Tests
 {
     [TestClass()]
     public class CsvAnalyzerTests

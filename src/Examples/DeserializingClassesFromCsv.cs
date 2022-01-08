@@ -60,8 +60,7 @@ namespace Examples
             var wrapper = new CsvRecordWrapper();
 
             // Reuse a converter for more than one property:
-            ICsvTypeConverter stringConverter =
-                new StringConverter();
+            ICsvTypeConverter stringConverter = new StringConverter();
 
             wrapper.AddProperty
                 (
@@ -149,5 +148,6 @@ Name:        Frederic Chopin
 Subject:     <null>
 LessonDay:   <null>
 LessonBegin: <null>
+
 .
 */

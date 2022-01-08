@@ -11,7 +11,7 @@ public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum :
         : base(throwing, fallbackValue) => IgnoreCase = ignoreCase;
 
     public EnumConverter(
-        string? format = "D",
+        string? format,
         bool throwing = true,
         TEnum fallbackValue = default,
         bool ignoreCase = true)
