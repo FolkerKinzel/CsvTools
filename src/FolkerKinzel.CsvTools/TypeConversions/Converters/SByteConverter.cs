@@ -27,11 +27,6 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
         return this;
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-    //    => new SByteConverter(options.HasFlag(CsvConverterOptions.Throwing),
-    //                         formatProvider)
-    //       .HandleNullableAndDBNullAcceptance(options);
-
 
     protected override string? DoConvertToString(sbyte value) => value.ToString(_format, _formatProvider);
 

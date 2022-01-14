@@ -17,10 +17,6 @@ public sealed class DateTimeOffsetConverter : CsvTypeConverter<DateTimeOffset>
         _format = "O";
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-    //    => new DateTimeOffsetConverter(options.HasFlag(CsvConverterOptions.Throwing), formatProvider)
-    //    .HandleNullableAndDBNullAcceptance(options);
-
 
     /// <summary>
     /// Initialisiert ein neues <see cref="DateTimeOffsetConverter"/>-Objekt.

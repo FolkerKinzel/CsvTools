@@ -52,13 +52,6 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
         return this;
     }
 
-    //internal static ICsvTypeConverter Create(bool isDate, CsvConverterOptions options, IFormatProvider? formatProvider)
-    //{
-    //    var conv = new DateTimeConverter(options.HasFlag(CsvConverterOptions.Throwing), formatProvider);
-    //    return isDate ? conv.AsDateConverter().HandleNullableAndDBNullAcceptance(options)
-    //                  : conv.HandleNullableAndDBNullAcceptance(options);
-    //}
-
 
     protected override string? DoConvertToString(DateTime value) => value.ToString(_format, _formatProvider);
 

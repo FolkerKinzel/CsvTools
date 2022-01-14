@@ -17,10 +17,6 @@ public sealed class GuidConverter : CsvTypeConverter<Guid>
         ExamineFormat(nameof(format));
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options)
-    //    => new GuidConverter(options.HasFlag(CsvConverterOptions.Throwing))
-    //    .HandleNullableAndDBNullAcceptance(options);
-
 
     protected override string? DoConvertToString(Guid value) => value.ToString(_format, CultureInfo.InvariantCulture);
 

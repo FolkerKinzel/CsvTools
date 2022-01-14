@@ -26,12 +26,6 @@ public sealed class UInt16Converter : CsvTypeConverter<ushort>
         return this;
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-    //    => new UInt16Converter(options.HasFlag(CsvConverterOptions.Throwing),
-    //                         formatProvider)
-    //       .HandleNullableAndDBNullAcceptance(options);
-
-
 
     protected override string? DoConvertToString(ushort value) => value.ToString(_format, _formatProvider);
 

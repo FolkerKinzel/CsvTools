@@ -47,10 +47,6 @@ public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
         ExamineFormat();
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-    //   => new TimeSpanConverter(options.HasFlag(CsvConverterOptions.Throwing), formatProvider)
-    //    .HandleNullableAndDBNullAcceptance(options);
-
 
     protected override string? DoConvertToString(TimeSpan value) => value.ToString(_format, _formatProvider);
 

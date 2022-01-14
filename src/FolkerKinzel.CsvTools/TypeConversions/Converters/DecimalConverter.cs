@@ -14,11 +14,6 @@ public sealed class DecimalConverter : CsvTypeConverter<decimal>
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider)
-    //    => new DecimalConverter(options.HasFlag(CsvConverterOptions.Throwing), formatProvider)
-    //      .HandleNullableAndDBNullAcceptance(options);
-
-
     protected override string? DoConvertToString(decimal value) => value.ToString(FORMAT, _formatProvider);
 
 

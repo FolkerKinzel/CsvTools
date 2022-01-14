@@ -25,10 +25,6 @@ public sealed class Int64Converter : CsvTypeConverter<long>
         return this;
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-    //    => new Int64Converter(options.HasFlag(CsvConverterOptions.Throwing),
-    //                         formatProvider)
-    //       .HandleNullableAndDBNullAcceptance(options);
 
     protected override string? DoConvertToString(long value) => value.ToString(_format, _formatProvider);
 

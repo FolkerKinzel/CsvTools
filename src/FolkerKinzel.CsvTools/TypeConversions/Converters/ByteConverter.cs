@@ -13,8 +13,6 @@ public sealed class ByteConverter : CsvTypeConverter<byte>
     private  NumberStyles _styles = DEFAULT_STYLE;
     private  string? _format = DEFAULT_FORMAT;
 
-    
-
     public ByteConverter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
@@ -25,11 +23,6 @@ public sealed class ByteConverter : CsvTypeConverter<byte>
         _format = HEX_FORMAT;
         return this;
     }
-
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-    //    => new ByteConverter(options.HasFlag(CsvConverterOptions.Throwing),
-    //                         formatProvider)
-    //       .HandleNullableAndDBNullAcceptance(options);
 
 
     protected override string? DoConvertToString(byte value) => value.ToString(_format, _formatProvider);

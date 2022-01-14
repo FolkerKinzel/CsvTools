@@ -22,9 +22,6 @@ public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum :
         Format = format;
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, bool ignoreCase, string? format, TEnum fallbackValue)
-    //    => new EnumConverter<TEnum>(format, options.HasFlag(CsvConverterOptions.Throwing), fallbackValue, ignoreCase)
-    //    .HandleNullableAndDBNullAcceptance(options);
 
     private static void ValidateFormat(string? format)
     {

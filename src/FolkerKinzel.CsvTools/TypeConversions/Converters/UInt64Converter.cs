@@ -25,11 +25,6 @@ public sealed class UInt64Converter : CsvTypeConverter<ulong>
         return this;
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-    //    => new UInt64Converter(options.HasFlag(CsvConverterOptions.Throwing),
-    //                         formatProvider)
-    //       .HandleNullableAndDBNullAcceptance(options);
-
 
     protected override string? DoConvertToString(ulong value) => value.ToString(_format, _formatProvider);
 

@@ -26,10 +26,6 @@ public sealed class Int32Converter : CsvTypeConverter<int>
         return this;
     }
 
-    //internal static ICsvTypeConverter Create(CsvConverterOptions options, IFormatProvider? formatProvider, bool hexConverter)
-    //    => new Int32Converter(options.HasFlag(CsvConverterOptions.Throwing),
-    //                         formatProvider)
-    //       .HandleNullableAndDBNullAcceptance(options);
 
     protected override string? DoConvertToString(int value) => value.ToString(_format, _formatProvider);
 
