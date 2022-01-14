@@ -10,16 +10,18 @@ using FolkerKinzel.CsvTools.TypeConversions.Converters.Intls;
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 {
     [TestClass()]
-    public class IEnumerableTConverterTests
+    public class IEnumerableConverterTests
     {
         [TestMethod]
         public void MyTestMethod()
         {
 
-            var list = new List<int?>();
-            list.Add(7);
-            list.Add(9);
-            list.Add(11);
+            var list = new List<int?>
+            {
+                7,
+                9,
+                11
+            };
 
 
             ICsvTypeConverter conv = new Int32Converter().AsNullableConverter().AsIEnumerableConverter();
@@ -36,7 +38,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         public void IEnumerableTConverterTest()
         {
             IEnumerable<int> arr1 = new int[] { 1, 2, 3 };
-            var conv = new Int32Converter().AsIEnumerableConverter();
+            CsvTypeConverter<IEnumerable<int>?> conv = new Int32Converter().AsIEnumerableConverter();
 
             var wrapper = new CsvRecordWrapper();
             var prop = new CsvColumnIndexProperty("TestProp", 0, conv);
@@ -55,7 +57,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             using var reader = new StringReader(csv);
             using var csvReader = new CsvReader(reader, false);
 
-            wrapper.Record = csvReader.Read().First();
+            wrapper.Record = csvReader.First();
 
             dynamic dynWrapper = wrapper;
 

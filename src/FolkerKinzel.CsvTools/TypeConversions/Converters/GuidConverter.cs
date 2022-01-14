@@ -7,7 +7,7 @@ public sealed class GuidConverter : CsvTypeConverter<Guid>
 {
     private readonly string _format;
 
-    public GuidConverter(bool throwing) : base(throwing) => _format = "D";
+    public GuidConverter(bool throwing = true) : base(throwing) => _format = "D";
 
     public GuidConverter(
         string? format,

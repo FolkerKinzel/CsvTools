@@ -113,7 +113,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
             using var reader = new CsvReader(FILENAME_STANDARD);
 
-            Assert.AreEqual(VALUE1, reader.Read().First()[Key1]);
+            Assert.AreEqual(VALUE1, reader.First()[Key1]);
         }
 
 
@@ -140,7 +140,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
             using var reader = new CsvReader(FILENAME_STANDARD, hasHeaderRow: false);
 
-            Assert.AreEqual(VALUE1, reader.Read().First()[0]);
+            Assert.AreEqual(VALUE1, reader.First()[0]);
         }
 
 

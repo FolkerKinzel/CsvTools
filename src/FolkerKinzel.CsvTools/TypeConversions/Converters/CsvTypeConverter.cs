@@ -64,7 +64,10 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
 
         if (Throwing)
         {
-            throw new ArgumentException(string.Format("Cannot convert {0} to {1}", value is null ? "null" : $"\"value\"", typeof(T)), nameof(value));
+            throw new FormatException(
+                string.Format("Cannot convert {0} into {1}.",
+                value is null ? "null" : value.Length > 40 ? nameof(value) : $"\"{value}\"",
+                typeof(T)));
         }
 
         return FallbackValue;

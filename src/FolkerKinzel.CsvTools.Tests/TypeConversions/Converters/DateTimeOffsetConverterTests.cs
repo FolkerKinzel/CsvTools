@@ -10,7 +10,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         [TestMethod()]
         public void DateTimeOffsetConverterTest0()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset);
+            ICsvTypeConverter conv = new DateTimeOffsetConverter();
 
             Assert.IsInstanceOfType(conv, typeof(DateTimeOffsetConverter));
 
@@ -59,7 +59,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             DateTimeOffset now = new DateTime(2021, 3, 1, 17, 25, 38, DateTimeKind.Local);
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.DateTimeOffset);
+            ICsvTypeConverter conv = new DateTimeOffsetConverter();
 
             string? tmp = conv.ConvertToString(now);
 

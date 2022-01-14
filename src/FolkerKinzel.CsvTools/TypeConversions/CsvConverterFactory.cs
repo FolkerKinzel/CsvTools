@@ -51,7 +51,7 @@ public static class CsvConverterFactory
             CsvTypeCode.Boolean => new BooleanConverter(throwing).HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),
             CsvTypeCode.Byte => new ByteConverter(throwing, formatProvider).HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),
             CsvTypeCode.Char => new CharConverter(throwing).HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),
-            CsvTypeCode.Date => new DateTimeConverter(throwing, formatProvider).AsDateConverter().HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),
+            CsvTypeCode.Date => DateTimeConverter.CreateDateConverter(throwing, formatProvider).HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),
             CsvTypeCode.DateTime => new DateTimeConverter(throwing, formatProvider).HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),
             CsvTypeCode.Decimal => new DecimalConverter(throwing, formatProvider).HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),
             CsvTypeCode.Double => new DoubleConverter(throwing, formatProvider).HandleNullableAndDBNullAcceptance(nullable, dbNullEnabled),

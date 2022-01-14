@@ -51,6 +51,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Using Remove="System.Net.Http" />
+	  <Using Include="System.Runtime.CompilerServices" />
+	  <Using Include="System.Diagnostics.CodeAnalysis" />
+	  <Using Include="System.Diagnostics" />
   </ItemGroup>
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'">
@@ -81,11 +84,13 @@
     <Compile Remove="CsvModeEnum.cs" />
     <Compile Remove="CsvReader_alt.cs" />
     <Compile Remove="CsvWriter_alt.cs" />
+    <Compile Remove="Intls\CsvRecordCollection.cs" />
     <Compile Remove="TypeConversions\Converters\DBNullConverter.cs" />
     <Compile Remove="TypeConversions\Converters\Int32Converter_alt.cs" />
     <Compile Remove="TypeConversions\Converters\NullConverter.cs" />
     <Compile Remove="TypeConversions\Converters\NumberConverters.cs" />
     <Compile Remove="TypeConversions\Converters\ObjectConverter.cs" />
+    <Compile Remove="TypeConversions\CsvConverterFactory.cs" />
     <Compile Remove="TypeConversions\CsvIndexProperty.cs" />
     <Compile Remove="TypeConversions\ObjectToStringConverter.cs" />
     <Compile Remove="TypeConversions\ThrowHelper.cs" />

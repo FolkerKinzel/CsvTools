@@ -5,12 +5,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
 {
     [TestClass()]
-    public class Base64ConverterTests
+    public class ByteArrayConverterTests
     {
         [TestMethod()]
         public void Base64ConverterTest1()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray);
+            ICsvTypeConverter conv = new ByteArrayConverter();
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
         }
 
@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod]
         public void ParseTest1()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true);
+            ICsvTypeConverter conv = new ByteArrayConverter();
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
             Assert.IsNull(conv.Parse(null));
@@ -29,7 +29,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [ExpectedException(typeof(FormatException))]
         public void ParseTest2()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true);
+            ICsvTypeConverter conv = new ByteArrayConverter();
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
             Assert.IsNull(conv.Parse(null));
@@ -40,7 +40,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod]
         public void ParseTest3()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray, true);
+            ICsvTypeConverter conv = new ByteArrayConverter(false);
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
             Assert.IsNull(conv.Parse(null));
@@ -55,7 +55,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             using var rnd = RandomNumberGenerator.Create();
             rnd.GetBytes(bytes);
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray);
+            ICsvTypeConverter conv = new ByteArrayConverter();
 
             string? s = conv.ConvertToString(bytes);
             Assert.IsNotNull(s);
@@ -67,12 +67,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
 
         [TestMethod]
         [ExpectedException(typeof(InvalidCastException))]
-        public void MyTestMethod()
-        {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.ByteArray);
-
-            _ = conv.ConvertToString(4711);
-        }
+        public void MyTestMethod() => _ = new ByteArrayConverter().ConvertToString(4711);
 
     }
 }

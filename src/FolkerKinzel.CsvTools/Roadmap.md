@@ -17,17 +17,18 @@ column name aliases). This is for CSV files without header row.
 - [x] `CsvProperty` should internally use the column index to target `CsvRecord` (for performance).
 - [x] Add `CsvMultiColumnTypeConverter`.
 - [x] Rename `FolkerKinzel.CsvTools.Helpers` to `FolkerKinzel.CsvTools.TypeConversions`.
-- [ ] Replace `CsvConverterFactory` by a fluent API.
+- [x] Replace `CsvConverterFactory` by a fluent API.
 - [ ] Don't allow `CsvWriter` to terminate the last row in a CSV file.
-- [ ] Let `CsvReader` implement `IEnumerable<CsvRecord>`.
+- [x] Let `CsvReader` implement `IEnumerable<CsvRecord>`.
 - [ ] Let `CsvReader.Read()` return the next `CsvRecord` or `null` if EOF is reached.
-- [ ] Make `DateTimeConverster.AsDateConverter()` a static method `DateTimeConverster.CreateDateConverter()`
+- [x] Make `DateTimeConverster.AsDateConverter()` a static method `DateTimeConverster.CreateDateConverter()`
 - [ ] Let `CsvRecord` return `ReadOnlyMemory<Char>` instead of `String`.
+- [ ] Add a DateOnlyConverter.
+- [ ] Add a TimeOnlyConverter.
 
 ### 2.1.0
 - [ ] Add a BigIntegerConverter.
 - [ ] Add a UriConverter.
 - [ ] Add a VersionConverter.
-- [ ] Add a DateOnlyConverter.
-- [ ] Add a TimeOnlyConverter.
-
+- [ ] Add a System.Half Converter.
+- [ ] Add a System.Drawing.Color Converter.

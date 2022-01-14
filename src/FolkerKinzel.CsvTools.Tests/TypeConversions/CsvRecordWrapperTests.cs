@@ -685,7 +685,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
 
             var wrapper = new CsvRecordWrapper();
 
-            ICsvTypeConverter intConverter = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32);
+            ICsvTypeConverter intConverter = new Int32Converter();
 
             wrapper.AddProperty(new CsvColumnNameProperty(record.ColumnNames[0], new string[] { record.ColumnNames[0] }, intConverter));
             wrapper.AddProperty(new CsvColumnNameProperty(record.ColumnNames[1], new string[] { record.ColumnNames[1] }, intConverter));
@@ -735,7 +735,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             const string prop2Name = "Prop2";
             const string prop3Name = "Prop3";
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.Int32, false, true);
+            ICsvTypeConverter conv = new Int32Converter().AsNullableConverter();
                                                                                    
 
             var prop1 =

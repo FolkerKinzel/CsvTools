@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 
@@ -9,7 +10,7 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
     private const string DATE_FORMAT = "d";
 
     private readonly IFormatProvider _formatProvider;
-    private string _format = DEFAULT_FORMAT;
+    private readonly string _format = DEFAULT_FORMAT;
     private readonly bool _parseExact;
 
     private const DateTimeStyles STYLE = DateTimeStyles.NoCurrentDateDefault | DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.RoundtripKind;
@@ -46,11 +47,9 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
         ExamineFormat();
     }
 
-    public DateTimeConverter AsDateConverter()
-    {
-        _format = DATE_FORMAT;
-        return this;
-    }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static DateTimeConverter CreateDateConverter(bool throwing = true, IFormatProvider? formatProvider = null, bool parseExact = false)
+        => new(DATE_FORMAT, throwing, formatProvider, parseExact);
 
 
     protected override string? DoConvertToString(DateTime value) => value.ToString(_format, _formatProvider);

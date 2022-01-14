@@ -10,6 +10,12 @@
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 		<NeutralLanguage>en</NeutralLanguage>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="reports\**" />
+	  <EmbeddedResource Remove="reports\**" />
+	  <None Remove="reports\**" />
+	</ItemGroup>
 	<ItemGroup>
 		<Using Remove="System.Net.Http" />
 	</ItemGroup>
@@ -20,6 +26,7 @@
 		<NoWarn>$(NoWarn);8600;8601;8602;8603;8604</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
+		<Compile Remove="TypeConversions\CsvConverterFactoryTests.cs" />
 		<Compile Remove="TypeConversions\CsvIndexPropertyTest.cs" />
 	</ItemGroup>
 

@@ -9,7 +9,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void StringConverterTest()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
+            ICsvTypeConverter conv = new StringConverter(false);
 
             Assert.IsNotNull(conv.Parse(null));
             Assert.AreEqual(typeof(StringConverter), conv.GetType());
@@ -18,11 +18,11 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void ParseTest()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, true);
+            ICsvTypeConverter conv = new StringConverter();
 
             Assert.IsNull(conv.Parse(null));
 
-            conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
+            conv = new StringConverter(false);
 
             Assert.IsNotNull(conv.Parse(null));
 
@@ -35,7 +35,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void ConvertToStringTest()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String, true, true);
+            ICsvTypeConverter conv = new StringConverter().AsDBNullEnabled();
 
             Assert.IsNull(conv.ConvertToString(DBNull.Value));
 
@@ -50,7 +50,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void ConvertToStringTest_ThrowOnInvalidType()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
+            ICsvTypeConverter conv = new StringConverter();
 
             _ = conv.ConvertToString(4711);
 
@@ -59,11 +59,6 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
 
         [ExpectedException(typeof(InvalidCastException))]
         [TestMethod()]
-        public void ConvertToStringTest_ThrowOnDBNull()
-        {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
-
-            _ = conv.ConvertToString(DBNull.Value);
-        }
+        public void ConvertToStringTest_ThrowOnDBNull() => _ = new StringConverter().ConvertToString(DBNull.Value);
     }
 }

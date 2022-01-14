@@ -5,6 +5,7 @@ using System.Text;
 using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
+using System.Collections;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -34,7 +35,7 @@ namespace FolkerKinzel.CsvTools;
 /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
 /// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
 /// </example>
-public sealed class CsvReader : IDisposable
+public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
 {
     private readonly CsvStringReader _reader;
     private readonly CsvOptions _options;
@@ -98,19 +99,41 @@ public sealed class CsvReader : IDisposable
 
     #region public Methods
 
+    ///// <summary>
+    ///// Gibt ein <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>-Objekt zurück, mit dem über die Datensätze der CSV-Datei
+    ///// iteriert werden kann.
+    ///// </summary>
+    ///// <returns>Ein <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>, mit dem über die Datensätze der CSV-Datei
+    ///// iteriert werden kann.</returns>
+    ///// <exception cref="InvalidOperationException">Die Methode wurde mehr als einmal aufgerufen.</exception>
+    ///// <exception cref="ObjectDisposedException">Der <see cref="Stream"/> war bereits geschlossen.</exception>
+    ///// <exception cref="IOException">Fehler beim Zugriff auf den Datenträger.</exception>
+    ///// <exception cref="InvalidCsvException">Ungültige CSV-Datei. Die Interpretation ist abhängig vom <see cref="CsvOptions"/>-Wert,
+    ///// der im Konstruktor angegeben wurde.</exception>
+    //[MethodImpl(MethodImplOptions.AggressiveInlining)]
+    //public IEnumerable<CsvRecord> Read()
+    //{
+    //    if (!_firstRun)
+    //    {
+    //        ThrowInvalidOperationException();
+    //    }
+
+    //    _firstRun = false;
+
+    //    return new CsvRecordCollection(this);
+    //}
+
+
     /// <summary>
-    /// Gibt ein <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>-Objekt zurück, mit dem über die Datensätze der CSV-Datei
-    /// iteriert werden kann.
+    /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
     /// </summary>
-    /// <returns>Ein <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>, mit dem über die Datensätze der CSV-Datei
-    /// iteriert werden kann.</returns>
-    /// <exception cref="InvalidOperationException">Die Methode wurde mehr als einmal aufgerufen.</exception>
-    /// <exception cref="ObjectDisposedException">Der <see cref="Stream"/> war bereits geschlossen.</exception>
-    /// <exception cref="IOException">Fehler beim Zugriff auf den Datenträger.</exception>
-    /// <exception cref="InvalidCsvException">Ungültige CSV-Datei. Die Interpretation ist abhängig vom <see cref="CsvOptions"/>-Wert,
-    /// der im Konstruktor angegeben wurde.</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public IEnumerable<CsvRecord> Read()
+    public void Dispose() => _reader.Dispose();
+
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+
+    public IEnumerator<CsvRecord> GetEnumerator()
     {
         if (!_firstRun)
         {
@@ -119,22 +142,6 @@ public sealed class CsvReader : IDisposable
 
         _firstRun = false;
 
-        return new CsvRecordCollection(this);
-    }
-
-
-    /// <summary>
-    /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
-    /// </summary>
-    public void Dispose() => _reader.Dispose();
-
-    #endregion
-
-
-    #region internal
-
-    internal IEnumerator<CsvRecord> GetEnumerator()
-    {
         CsvRecord? record = null; // Schablone für weitere CsvRecord-Objekte
         CsvRecord? clone = null;
 
@@ -244,6 +251,11 @@ public sealed class CsvReader : IDisposable
         }// Fill()
 
     }// GetEnumerator()
+
+    #endregion
+
+
+    #region internal
 
 
     /// <summary>

@@ -9,7 +9,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [TestMethod()]
         public void EnumConverterTest1()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>();
+            ICsvTypeConverter conv = new EnumConverter<CsvTypeCode>();
             Assert.IsInstanceOfType(conv, typeof(EnumConverter<CsvTypeCode>));
         }
 
@@ -42,7 +42,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>();
+            ICsvTypeConverter conv = new EnumConverter<CsvTypeCode>();
 
             string? s = conv.ConvertToString(val);
             Assert.IsNotNull(s);
@@ -72,7 +72,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
 
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(ignoreCase: true);
+            ICsvTypeConverter conv = new EnumConverter<CsvTypeCode>(ignoreCase: true);
 
             string? s = conv.ConvertToString(val);
             Assert.IsNotNull(s);
@@ -104,20 +104,19 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
 
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(FormatException))]
         public void RoundtripTest5()
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(ignoreCase: false);
+            ICsvTypeConverter conv = new EnumConverter<CsvTypeCode>(ignoreCase: false);
 
             string s = CsvTypeCode.DateTimeOffset.ToString().ToUpperInvariant();
 
             _ = (CsvTypeCode?)conv.Parse(s);
-
         }
 
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(FormatException))]
         public void RoundtripTest6()
         {
             CsvTypeCode val = CsvTypeCode.DateTimeOffset;
@@ -128,11 +127,9 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             Assert.IsNotNull(s);
 
             s = s!.ToUpperInvariant();
-
-
             _ = (CsvTypeCode?)conv.Parse(s);
-
         }
+
 
         [DataTestMethod]
         [DataRow(false, false)]
@@ -202,7 +199,8 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
         [DataRow(true, true, true)]
         public void RoundtripTest10(bool throwOnParseErrors, bool ignoreCase, bool nullable)
         {
-            ICsvTypeConverter conv = CsvConverterFactory.CreateEnumConverter<CsvTypeCode>(nullable, true, throwOnParseErrors, ignoreCase: ignoreCase);
+            CsvTypeConverter<object> conv = nullable ? new EnumConverter<CsvTypeCode>(throwOnParseErrors, ignoreCase: ignoreCase).AsNullableConverter().AsDBNullEnabled() :
+                                  new EnumConverter<CsvTypeCode>(throwOnParseErrors, ignoreCase: ignoreCase).AsDBNullEnabled();
 
             string? s = conv.ConvertToString(DBNull.Value);
             Assert.IsNull(s);
