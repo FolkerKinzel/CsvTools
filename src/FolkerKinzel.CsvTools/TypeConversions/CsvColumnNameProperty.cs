@@ -28,9 +28,7 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
 
     private readonly int _wildcardTimeout;
 
-#if NET40
-#pragma warning disable CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
-#endif
+
     /// <summary>
     /// Initialisiert ein neues <see cref="CsvColumnNameProperty"/>-Objekt.
     /// </summary>
@@ -55,11 +53,11 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
     /// ASCII-Zeichen).</exception>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 0.</exception>
-    public CsvColumnNameProperty(
-#if NET40
-#pragma warning restore CS1574 // XML-Kommentar weist ein cref-Attribut auf, das nicht aufgelöst werden konnte.
-#endif
-            string propertyName, IEnumerable<string> columnNameAliases, ICsvTypeConverter converter, int wildcardTimeout = 10) : base(propertyName, converter)
+    public CsvColumnNameProperty(string propertyName,
+                                 IEnumerable<string> columnNameAliases,
+                                 ICsvTypeConverter converter,
+                                 int wildcardTimeout = 10)
+        : base(propertyName, converter)
     {
 
         if (columnNameAliases is null)
@@ -105,7 +103,7 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
     /// </summary>
     private int CsvRecordIdentifier { get; set; }
 
-    
+
     /// <inheritdoc/>
     protected override void UpdateReferredCsvColumnIndex()
     {
@@ -136,11 +134,7 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
 
             if (HasWildcard(alias))
             {
-#if NET40
-                Regex regex = InitRegex(comparer, alias);
-#else
                 Regex regex = InitRegex(comparer, alias, _wildcardTimeout);
-#endif
 
                 for (int k = 0; k < columnNames.Count; k++) // Die Wildcard könnte auf alle keys passen.
                 {
@@ -155,9 +149,7 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
                     }
                     catch (TimeoutException)
                     {
-#if !NET40
-                            Debug.WriteLine(nameof(RegexMatchTimeoutException));
-#endif
+                        Debug.WriteLine(nameof(RegexMatchTimeoutException));
                     }
                 }
             }
@@ -194,14 +186,13 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
     }
 
 
-#if NET40
-    private static Regex InitRegex(IEqualityComparer<string> comparer, string alias)
+    private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
     {
         string pattern = "^" +
             Regex
             .Escape(alias)
-            .Replace("\\?", ".")
-            .Replace("\\*", ".*?") + "$";
+            .Replace("\\?", ".", StringComparison.Ordinal)
+            .Replace("\\*", ".*?", StringComparison.Ordinal) + "$";
 
         RegexOptions options = comparer.Equals(StringComparer.OrdinalIgnoreCase) ?
             RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline :
@@ -209,31 +200,11 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
 
         // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
         // verwendet.
-        return new Regex(pattern, options);
+        return new Regex(pattern,
+                         options,
+                         wildcardTimeout == 0 ? Regex.InfiniteMatchTimeout
+                                              : TimeSpan.FromMilliseconds(wildcardTimeout));
     }
-
-#else
-
-        private static Regex InitRegex(IEqualityComparer<string> comparer, string alias, int wildcardTimeout)
-        {
-            string pattern = "^" +
-                Regex
-                .Escape(alias)
-                .Replace("\\?", ".", StringComparison.Ordinal)
-                .Replace("\\*", ".*?", StringComparison.Ordinal) + "$";
-
-            RegexOptions options = comparer.Equals(StringComparer.OrdinalIgnoreCase) ?
-                RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Singleline :
-                                          RegexOptions.CultureInvariant | RegexOptions.Singleline;
-
-            // Da das Regex nicht wiederverwendbar ist, wird die Instanzmethode
-            // verwendet.
-            return new Regex(pattern,
-                             options,
-                             wildcardTimeout == 0 ? Regex.InfiniteMatchTimeout
-                                                  : TimeSpan.FromMilliseconds(wildcardTimeout));
-        }
-#endif
 
 
     #endregion

@@ -9,13 +9,7 @@ internal sealed class IEnumerableConverter<TItem> : CsvTypeConverter<IEnumerable
 
 
     internal IEnumerableConverter(CsvTypeConverter<TItem?> itemsConverter, bool nullable, char fieldSeparator)
-        : base(false,
-#if NET40
-               nullable ? null : new TItem[0]
-#else
-               nullable ? null : Array.Empty<TItem>()
-#endif
-            )
+        : base(false, nullable ? null : Array.Empty<TItem>())
     {
         _itemsConverter = itemsConverter ?? throw new ArgumentNullException(nameof(itemsConverter));
         _separatorChar = fieldSeparator;

@@ -5,13 +5,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters;
 public sealed class ByteArrayConverter : CsvTypeConverter<byte[]?>
 {
     public ByteArrayConverter(bool throwing = true, bool nullable = true) 
-        : base(throwing,
-#if NET40
-               nullable ? null : new byte[0]
-#else
-               nullable ? null : Array.Empty<byte>()
-#endif
-            ) { }
+        : base(throwing, nullable ? null : Array.Empty<byte>()) { }
     
 
 //    internal static ICsvTypeConverter Create(CsvConverterOptions options)

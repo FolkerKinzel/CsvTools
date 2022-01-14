@@ -22,12 +22,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
 {
     #region fields
 
-#if NET40
-        private static readonly string?[] _defaultArr = new string?[0];
-        private readonly string?[] _values = _defaultArr;
-#else
     private readonly string?[] _values = Array.Empty<string?>();
-#endif
 
     private readonly Dictionary<string, int> _lookupDictionary;
     private readonly ReadOnlyCollection<string> _columnNames;
@@ -42,9 +37,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// das die unveränderlichen Teile der Vorlage referenziert bzw. kopiert. (Ctor der von <see cref="CsvReader"/> verwendet wird.)
     /// </summary>
     /// <param name="source"><see cref="CsvRecord"/>-Objekt, das als Vorlage dient.</param>
-#if !NET40
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
     internal CsvRecord(CsvRecord source)
     {
         _lookupDictionary = source._lookupDictionary;
@@ -253,7 +246,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// <returns>Eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see>.</returns>
     public Dictionary<string, string?> ToDictionary()
     {
-#if NET40 || NETSTANDARD2_0 || NET461
+#if NETSTANDARD2_0 || NET461
         var dic = new Dictionary<string, string?>(this.Count, this._lookupDictionary.Comparer);
 
         foreach (KeyValuePair<string, string?> kvp in this)

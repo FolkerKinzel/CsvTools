@@ -206,10 +206,6 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ObjectDisposedException">Die Resourcen waren bereits freigegeben.</exception>
     public void WriteRecord()
     {
-#if NET40
-        string fieldSeparatorString = new(_fieldSeparator, 1);
-#endif
-
         int recordLength = Record.Count;
 
         if (!_isHeaderRowWritten)
@@ -291,16 +287,10 @@ public sealed class CsvWriter : IDisposable
             }
         }
 
-#if NET40
-            bool NeedsToBeQuoted(string s) => s.Contains(fieldSeparatorString) ||
-                                                  s.Contains("\"") ||
-                                                  s.Contains(Environment.NewLine); 
-#else
+
         bool NeedsToBeQuoted(string s) => s.Contains(_fieldSeparator, StringComparison.Ordinal) ||
                                                   s.Contains('"', StringComparison.Ordinal) ||
                                                   s.Contains(Environment.NewLine, StringComparison.Ordinal);
-#endif
-
     }
 
 

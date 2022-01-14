@@ -5,7 +5,7 @@
 - [x] Add .NET 6.0 support.
 - [x] Add .NET Standard 2.0 support.
 - [x] Add .NET Framework 4.6.1 support.
-- [ ] Remove .NET Framework 4.0 support.
+- [x] Remove .NET Framework 4.0 support.
 - [ ] Split the package into FolkerKinzel.CsvTools and FolkerKinzel.CsvTools.TypeConverters
 - [x] Remove all obsolete symbols.
 - [x] Reduce namespaces to increase the usability.
@@ -22,7 +22,6 @@ column name aliases). This is for CSV files without header row.
 - [ ] Let `CsvReader` implement `IEnumerable<CsvRecord>`.
 - [ ] Let `CsvReader.Read()` return the next `CsvRecord` or `null` if EOF is reached.
 - [ ] Make `DateTimeConverster.AsDateConverter()` a static method `DateTimeConverster.CreateDateConverter()`
-- [ ] Let `CsvMultiColumnProperty` have only that `CsvRecordWrapper` into which is it inserted.
 - [ ] Let `CsvRecord` return `ReadOnlyMemory<Char>` instead of `String`.
 
 ### 2.1.0

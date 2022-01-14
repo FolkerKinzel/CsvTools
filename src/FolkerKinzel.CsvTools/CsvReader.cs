@@ -109,9 +109,7 @@ public sealed class CsvReader : IDisposable
     /// <exception cref="IOException">Fehler beim Zugriff auf den Datenträger.</exception>
     /// <exception cref="InvalidCsvException">Ungültige CSV-Datei. Die Interpretation ist abhängig vom <see cref="CsvOptions"/>-Wert,
     /// der im Konstruktor angegeben wurde.</exception>
-#if !NET40
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
     public IEnumerable<CsvRecord> Read()
     {
         if (!_firstRun)

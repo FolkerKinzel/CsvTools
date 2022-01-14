@@ -15,9 +15,7 @@ public static class CsvOptionsExtension
     /// <see cref="CsvOptions"/>-Werten.</param>
     /// <returns>Ein <see cref="CsvOptions"/>-Wert, auf dem sämtliche in <paramref name="value"/> und <paramref name="flags"/>
     /// gesetzten Flags gesetzt sind.</returns>
-#if !NET40
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
     public static CsvOptions Set(this CsvOptions value, CsvOptions flags) => value | flags;
 
 
@@ -32,9 +30,7 @@ public static class CsvOptionsExtension
     /// <returns><c>true</c>, wenn sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
     /// gesetzt sind. (Wenn <paramref name="flags"/>&#160;<see cref="CsvOptions.None"/> ist, wird nur dann <c>true</c> zurückgegeben,
     /// wenn auch <paramref name="value"/>&#160;<see cref="CsvOptions.None"/> ist.</returns>
-#if !NET40
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
     public static bool IsSet(this CsvOptions value, CsvOptions flags)
         => flags == CsvOptions.None ? value == flags : (value & flags) == flags;
 
@@ -47,8 +43,6 @@ public static class CsvOptionsExtension
     /// <see cref="CsvOptions"/>-Werten.</param>
     /// <returns>Ein <see cref="CsvOptions"/>-Wert, auf dem sämtliche in <paramref name="flags"/>
     /// gesetzten Flags entfernt sind.</returns>
-#if !NET40
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
     public static CsvOptions Unset(this CsvOptions value, CsvOptions flags) => value & ~flags;
 }

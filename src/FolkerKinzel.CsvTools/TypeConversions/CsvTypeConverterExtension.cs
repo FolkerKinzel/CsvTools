@@ -12,9 +12,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions
 {
     public static class CsvTypeConverterExtension
     {
-#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
         public static CsvTypeConverter<object> AsDBNullEnabled<T>(this CsvTypeConverter<T> converter)
         {
             if (converter is CsvTypeConverter<object> result && Convert.IsDBNull(result.FallbackValue))
@@ -26,16 +24,12 @@ namespace FolkerKinzel.CsvTools.TypeConversions
         }
 
 
-#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
         public static CsvTypeConverter<Nullable<T>> AsNullableConverter<T>(this CsvTypeConverter<T> converter) 
             where T : struct => new NullableStructConverter<T>(converter);
 
 
-#if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#endif
         public static CsvTypeConverter<IEnumerable<TItem?>?> AsIEnumerableConverter<TItem>(this CsvTypeConverter<TItem?> itemsConverter,
                                                                                      bool nullable = true,
                                                                                      char fieldSeparator = ',')

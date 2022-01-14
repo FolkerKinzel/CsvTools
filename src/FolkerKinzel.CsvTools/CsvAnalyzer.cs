@@ -61,16 +61,7 @@ public class CsvAnalyzer
 
             bool firstLine = true;
 
-#if NET40
-                char[] sepChars = new char[] { ',', ';', '#',  '\t', ' '};
-
-                int sepCharsLength = sepChars.Length;
-
-                int[] firstLineOccurrence = new int[sepCharsLength];
-                int[] sameOccurrence = new int[sepCharsLength];
-                int[] currentLineOccurrence = new int[sepCharsLength];
-#else
-            ReadOnlySpan<char> sepChars = stackalloc[] { ',', ';', '#', '\t', ' ' };
+            const string sepChars = ",;#\t ";
             int sepCharsLength = sepChars.Length;
             Span<int> firstLineOccurrence = stackalloc int[sepCharsLength];
             firstLineOccurrence.Clear();
@@ -78,7 +69,6 @@ public class CsvAnalyzer
             sameOccurrence.Clear();
             Span<int> currentLineOccurrence = stackalloc int[sepCharsLength];
             currentLineOccurrence.Clear();
-#endif
 
             for (int i = 0; i < analyzedLinesCount; i++)
             {
