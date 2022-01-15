@@ -5,15 +5,15 @@ using System.Text;
 namespace FolkerKinzel.CsvTools.Intls;
 
 /// <summary>
-/// Liest eine Csv-Datei vorwärts und ermöglicht es, über die enthaltenen <see cref="string"/>s zu iterieren.
-/// Da <see cref="CsvStringReader"/>&#160;<see cref="IEnumerable"/> direkt implementiert, kann über das
-/// <see cref="CsvStringReader"/>-Objekt mit einer doppelten foreach-Schleife iteriert werden. (Eine foreach-Schleife 
-/// für die Datensätze (Zeilen) und eine innere foreach-Schleife für die Felder der einzelnen Datensätze.)
+/// Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>" zurück.
 /// </summary>
-internal sealed class CsvStringReader : IEnumerable<IEnumerable<string?>>, IDisposable
+internal sealed class CsvStringReader : IDisposable
 {
     private readonly TextReader _reader;
     private readonly char _fieldSeparator;
+
+    private const int INITIAL_COLUMNS_COUNT = 32;
+    private readonly List<ReadOnlyMemory<char>> _row = new(INITIAL_COLUMNS_COUNT);
 
     private readonly StringBuilder _sb = new();
     private readonly bool _skipEmptyLines;
@@ -48,25 +48,21 @@ internal sealed class CsvStringReader : IEnumerable<IEnumerable<string?>>, IDisp
     }
 
 
-    /// <summary>
-    /// Gibt einen Iterator zurück, mit dem über die Zeilen der csv-Datei iteriert werden kann.
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator<IEnumerable<string?>> GetEnumerator()
+    internal IList<ReadOnlyMemory<char>>? Read()
     {
         while ((_currentLine = _reader.ReadLine()) != null)
         {
             if (_currentLine.Length == 0 && _skipEmptyLines)
             {
+                LineNumber++;
                 continue;
             }
 
-            yield return GetNextRecord();
+            return GetNextRecord();
         }
+
+        return null;
     }
-
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 
     /// <summary>
@@ -76,14 +72,15 @@ internal sealed class CsvStringReader : IEnumerable<IEnumerable<string?>>, IDisp
     /// <returns>Die nächste Datenzeile als <see cref="IEnumerable{T}">IEnumerable&lt;string?&gt;</see>.</returns>
     /// <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind und wirft keine <see cref="Exception"/>,
     /// wenn es in einer Zeile zu viele oder zu wenige sind.</remarks>
-    private IEnumerable<string?> GetNextRecord()
+    private List<ReadOnlyMemory<char>> GetNextRecord()
     {
+        _row.Clear();
         LineNumber++;
         LineIndex = 0;
 
         do
         {
-            yield return GetField();
+            _row.Add(GetField());
         }
         while (LineIndex < _currentLine?.Length);
 
@@ -95,15 +92,17 @@ internal sealed class CsvStringReader : IEnumerable<IEnumerable<string?>>, IDisp
             {
                 // ergänzt das fehlende letzte Feld, wenn die Zeile mit dem
                 // Feldtrennzeichen endet:
-                yield return null;
+                _row.Add(default);
             }
 
             _currentLine = null;
         }
 
+        return _row;
+
         //////////////////////////////////////////////////
 
-        string? GetField()
+        ReadOnlyMemory<char> GetField()
         {
             int startIndex = LineIndex;
             bool isQuoted = false;
@@ -223,12 +222,9 @@ internal sealed class CsvStringReader : IEnumerable<IEnumerable<string?>>, IDisp
 
             }// while
 
-
-            string? InitField()
-            {
-                string field = _sb.ToString();
-                return (field.Length == 0) ? null : field;
-            }
+            //////////////////////////////////////////
+            
+            ReadOnlyMemory<char> InitField() => _sb.ToString().AsMemory();
         }
     }
 

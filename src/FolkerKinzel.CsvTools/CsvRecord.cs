@@ -18,14 +18,14 @@ namespace FolkerKinzel.CsvTools;
 /// Mit der Klasse <see cref="CsvRecordWrapper"/> kann die Reihenfolge der Datenspalten zur Laufzeit auf die evtl. andere Spaltenreihenfolge 
 /// einer <see cref="DataTable"/> gemappt werden und es können damit auch Typkonvertierungen durchgeführt werden.
 /// </remarks>
-public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
+public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<char>>>
 {
     #region fields
 
-    private readonly string?[] _values = Array.Empty<string?>();
+    private readonly ReadOnlyMemory<char>[] _values = Array.Empty<ReadOnlyMemory<char>>();
 
     private readonly Dictionary<string, int> _lookupDictionary;
-    private readonly ReadOnlyCollection<string> _columnNames;
+
 
     #endregion
 
@@ -42,8 +42,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     {
         _lookupDictionary = source._lookupDictionary;
         Identifier = source.Identifier;
-        _columnNames = source._columnNames;
-        _values = new string?[Count];
+        ColumnNames = source.ColumnNames;
+        _values = new ReadOnlyMemory<char>[Count];
     }
 
 
@@ -55,7 +55,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv behandelt.</param>
     /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
     /// für weitere <see cref="CsvRecord"/>-Objekte. (Wird von <see cref="CsvReader"/> verwendet.)</param>
-    internal CsvRecord(int columnsCount, bool caseSensitive, bool initArr)
+    internal CsvRecord(int columnsCount, bool caseSensitive) //, bool initArr)
     {
         IEqualityComparer<string> comparer =
             caseSensitive ?
@@ -64,23 +64,21 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
         this._lookupDictionary = new Dictionary<string, int>(columnsCount, comparer);
         Identifier = _lookupDictionary.GetHashCode();
 
-        var keyArr = new string[columnsCount];
-
+        var columnNames = new string[columnsCount];
 
         for (int i = 0; i < columnsCount; i++)
         {
             string keyName = AutoColumnName.Create(i);
-
-            keyArr[i] = keyName;
             this._lookupDictionary.Add(keyName, i);
+            columnNames[i] = keyName;
         }
 
-        this._columnNames = new ReadOnlyCollection<string>(keyArr);
+        ColumnNames = new ReadOnlyCollection<string>(columnNames);
 
-        if (initArr)
-        {
-            _values = new string?[columnsCount];
-        }
+        //if (initArr)
+        //{
+            _values = new ReadOnlyMemory<char>[columnsCount];
+        //}
     }
 
 
@@ -119,34 +117,30 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
             if (key is null)
             {
                 key = GetDefaultName();
-                _lookupDictionary.Add(key, i);
-                keys[i] = key;
-                continue;
             }
-
-            if (trimColumns)
+            else
             {
-                key = key.Trim();
-            }
+                if (trimColumns)
+                {
+                    key = key.Trim();
+                }
 
-            if (!throwException && _lookupDictionary.ContainsKey(key))
-            {
-                key = MakeUnique(key);
+                if (!throwException && _lookupDictionary.ContainsKey(key))
+                {
+                    key = MakeUnique(key);
+                }
             }
 
             _lookupDictionary.Add(key, i);
             keys[i] = key;
+        }//for
 
-        }
-
-        this._columnNames = new ReadOnlyCollection<string>(keys!);
+        ColumnNames = new ReadOnlyCollection<string>(keys!);
 
         if (initArr)
         {
-            _values = new string?[Count];
+            _values = new ReadOnlyMemory<char>[Count];
         }
-
-
 
         ///////////////////////////////////////////////////
 
@@ -190,7 +184,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// <param name="index">Der nullbasierte Index der Spalte der CSV-Datei, deren Wert abgerufen oder festgelegt wird.</param>
     /// <returns>Das Element am angegebenen Index.</returns>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="Count"/>.</exception>
-    public string? this[int index]
+    public ReadOnlyMemory<char> this[int index]
     {
         get => _values[index];
         set => _values[index] = value;
@@ -203,7 +197,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// <returns>Der dem angegebenen Schlüssel zugeordnete Wert.</returns>
     /// <exception cref="KeyNotFoundException">Der mit <paramref name="columnName"/> angegebene Spaltenname existiert nicht.</exception>
     /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
-    public string? this[string columnName]
+    public ReadOnlyMemory<char> this[string columnName]
     {
         get => _values[_lookupDictionary[columnName]];
         set => _values[_lookupDictionary[columnName]] = value;
@@ -213,13 +207,13 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// <summary>
     /// Gibt die Anzahl der Spalten in <see cref="CsvRecord"/> zurück.
     /// </summary>
-    public int Count => _columnNames.Count;
+    public int Count => _lookupDictionary.Count;
 
     /// <summary>
     /// Gibt <c>true</c> zurück, wenn <see cref="Count"/> 0 ist oder wenn alle
     /// Felder den Wert <c>null</c> haben.
     /// </summary>
-    public bool IsEmpty => Count == 0 || _values.All(x => x is null);
+    public bool IsEmpty => Count == 0 || _values.All(x => x.IsEmpty);
 
 
 
@@ -227,15 +221,15 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// Gibt die in <see cref="CsvRecord"/> gespeicherten Spaltennamen zurück.
     /// </summary>
     /// <remarks>Wenn die CSV-Datei keine Kopfzeile hatte, werden automatisch Spaltennamen der Art "Column1", "Column2" etc. vergeben.</remarks>
-    public ReadOnlyCollection<string> ColumnNames => _columnNames;
+    public ReadOnlyCollection<string> ColumnNames { get; }
 
 
 
     /// <summary>
-    /// Gibt die <see cref="string"/>-Collection der in <see cref="CsvRecord"/> gespeicherten Daten zurück. Die 
+    /// Gibt die <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see>-Collection der in <see cref="CsvRecord"/> gespeicherten Daten zurück. Die 
     /// Werte können verändert werden.
     /// </summary>
-    public IList<string?> Values => _values;
+    public IList<ReadOnlyMemory<char>> Values => _values;
 
 
 
@@ -244,19 +238,19 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// für den Schlüsselvergleich denselben <see cref="StringComparer"/> verwendet, mit dem <see cref="CsvRecord"/> erstellt wurde.
     /// </summary>
     /// <returns>Eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see>.</returns>
-    public Dictionary<string, string?> ToDictionary()
+    public Dictionary<string, ReadOnlyMemory<char>> ToDictionary()
     {
 #if NETSTANDARD2_0 || NET461
-        var dic = new Dictionary<string, string?>(this.Count, this._lookupDictionary.Comparer);
+        var dic = new Dictionary<string, ReadOnlyMemory<char>>(this.Count, this._lookupDictionary.Comparer);
 
-        foreach (KeyValuePair<string, string?> kvp in this)
+        foreach (KeyValuePair<string, ReadOnlyMemory<char>> kvp in this)
         {
             dic.Add(kvp.Key, kvp.Value);
         }
 
         return dic;
 #else
-            return new Dictionary<string, string?>(this, this._lookupDictionary.Comparer);
+            return new Dictionary<string, ReadOnlyMemory<char>>(this, this._lookupDictionary.Comparer);
 #endif
     }
 
@@ -293,7 +287,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// initialisiert übergeben.</param>
     /// <returns><c>true</c>, wenn ein Spaltenname mit dem Wert von <paramref name="columnName"/> enthalten ist.</returns>
     /// <exception cref="ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
-    public bool TryGetValue(string columnName, out string? value)
+    public bool TryGetValue(string columnName, out ReadOnlyMemory<char> value)
     {
         if (columnName is null)
         {
@@ -307,7 +301,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
         }
         else
         {
-            value = null;
+            value = default;
             return false;
         }
     }
@@ -321,7 +315,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// zugeordnet ist, wenn der Spaltenindex existiert, oder andernfalls <c>null</c>. Dieser Parameter wird nicht
     /// initialisiert übergeben.</param>
     /// <returns><c>true</c>, wenn ein Spaltenindex mit dem Wert von <paramref name="columnIndex"/> in der CSV-Datei existiert.</returns>
-    public bool TryGetValue(int columnIndex, out string? value)
+    public bool TryGetValue(int columnIndex, out ReadOnlyMemory<char> value)
     {
         if (columnIndex >= 0 && columnIndex < Count)
         {
@@ -330,7 +324,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
         }
         else
         {
-            value = null;
+            value = default;
             return false;
         }
     }
@@ -346,28 +340,27 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// als <see cref="CsvRecord.Count"/>.</exception>
     /// <remarks>Wenn <paramref name="data"/> weniger Einträge als <see cref="CsvRecord.Count"/> hat,
     /// werden die restlichen Felder von <see cref="CsvRecord"/> mit <c>null</c>-Werten gefüllt.</remarks>
-    public void Fill(IEnumerable<string?> data)
+    public void Fill(IList<ReadOnlyMemory<char>> data)
     {
         if (data is null)
         {
             throw new ArgumentNullException(nameof(data));
         }
 
-        int dataIndex = 0;
-
-        foreach (string? item in data)
+        int i;
+        for (i = 0; i < data.Count; i++)
         {
-            if (dataIndex >= _values.Length)
+            if (i >= _values.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(data));
             }
 
-            _values[dataIndex++] = item;
+            _values[i] = data[i];
         }
 
-        for (int i = dataIndex; i < _values.Length; i++)
+        for (int j = i; j < _values.Length; j++)
         {
-            _values[i] = null;
+            _values[j] = default;
         }
     }
 
@@ -406,14 +399,12 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
     /// den Spaltennamen als <see cref="KeyValuePair{TKey, TValue}.Key"/> und den Inhalt der Spalte als <see cref="KeyValuePair{TKey, TValue}.Value"/>.
     /// </summary>
     /// <returns>Ein <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see>.</returns>
-    public IEnumerator<KeyValuePair<string, string?>> GetEnumerator()
+    public IEnumerator<KeyValuePair<string, ReadOnlyMemory<char>>> GetEnumerator()
     {
-
         for (int i = 0; i < Count; i++)
         {
-            yield return new KeyValuePair<string, string?>(ColumnNames[i], Values[i]);
+            yield return new KeyValuePair<string, ReadOnlyMemory<char>>(ColumnNames[i], Values[i]);
         }
-
     }
 
 
@@ -427,9 +418,9 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, string?>>
 
         var sb = new StringBuilder();
 
-        foreach (var key in _columnNames)
+        foreach (var key in ColumnNames)
         {
-            _ = sb.Append(key).Append(": ").Append(this[key] ?? "<null>").Append(", ");
+            _ = sb.Append(key).Append(": ").Append(this[key]).Append(", ");
         }
 
         if (sb.Length >= 2)

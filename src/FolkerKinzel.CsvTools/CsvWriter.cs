@@ -3,8 +3,9 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
+using FolkerKinzel.CsvTools.Intls;
 
-#if NETSTANDARD2_0 || NET461
+#if NETSTANDARD2_1 || NETSTANDARD2_0 || NET461
 using FolkerKinzel.Strings.Polyfills;
 #endif
 
@@ -64,7 +65,7 @@ public sealed class CsvWriter : IDisposable
     /// gewählt werden, ob der Vergleich der Spaltennamen case-sensitiv erfolgt.</para></exception>
     /// <exception cref="IOException">E/A-Fehler.</exception>
     public CsvWriter(
-        string fileName, string[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
+        string fileName, string?[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
          : this(columnNames, fieldSeparator, options) => _writer = InitStreamWriter(fileName, textEncoding);
 
 
@@ -99,7 +100,7 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
     /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
     public CsvWriter(
-        TextWriter writer, string[] columnNames, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
+        TextWriter writer, string?[] columnNames, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
         : this(columnNames, fieldSeparator, options)
     {
         if (writer is null)
@@ -156,12 +157,14 @@ public sealed class CsvWriter : IDisposable
 #pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
     {
         this._fieldSeparator = fieldSeparator;
-        this._trimColumns = (options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns;
+        this._trimColumns = options.HasFlag(CsvOptions.TrimColumns);
+
         this.Record = new CsvRecord(
             columnNames,
-            (options & CsvOptions.CaseSensitiveKeys) == CsvOptions.CaseSensitiveKeys,
+            options.HasFlag(CsvOptions.CaseSensitiveKeys),
             _trimColumns,
-            true, true);
+            initArr: true,
+            throwException: true);
     }
 
 
@@ -178,12 +181,10 @@ public sealed class CsvWriter : IDisposable
     {
         this._isHeaderRowWritten = true;
         this._fieldSeparator = fieldSeparator;
-        this._trimColumns = (options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns;
+        this._trimColumns = options.HasFlag(CsvOptions.TrimColumns);
         this.Record = new CsvRecord(
             columnsCount,
-            (options & CsvOptions.CaseSensitiveKeys) == CsvOptions.CaseSensitiveKeys,
-            true);
-
+            options.HasFlag(CsvOptions.CaseSensitiveKeys));
     }
 
 
@@ -226,9 +227,10 @@ public sealed class CsvWriter : IDisposable
 
         for (int j = 0; j < recordLength - 1; j++)
         {
-            if (Record[j] is string s) // sonst null
+            ReadOnlyMemory<char> mem = Record[j];
+            if (!mem.IsEmpty) // sonst null
             {
-                WriteField(s);
+                WriteField(mem.Span);
 
                 Record[j] = null;
             }
@@ -236,9 +238,10 @@ public sealed class CsvWriter : IDisposable
             _writer.Write(_fieldSeparator);
         }
 
-        if (Record[recordLength - 1] is string lastString) // sonst null
+        ReadOnlyMemory<char> lastString = Record[recordLength - 1];
+        if (!Record[recordLength - 1].IsEmpty)
         {
-            WriteField(lastString);
+            WriteField(lastString.Span);
 
             Record[recordLength - 1] = null;
         }
@@ -246,7 +249,7 @@ public sealed class CsvWriter : IDisposable
 
         /////////////////////////////////////////////
 
-        void WriteField(string field)
+        void WriteField(ReadOnlySpan<char> field)
         {
             if (_trimColumns)
             {
@@ -288,8 +291,8 @@ public sealed class CsvWriter : IDisposable
         }
 
 
-        bool NeedsToBeQuoted(string s) => s.Contains(_fieldSeparator, StringComparison.Ordinal) ||
-                                                  s.Contains('"', StringComparison.Ordinal) ||
+        bool NeedsToBeQuoted(ReadOnlySpan<char> s) => s.Contains(_fieldSeparator) ||
+                                                  s.Contains('"') ||
                                                   s.Contains(Environment.NewLine, StringComparison.Ordinal);
     }
 

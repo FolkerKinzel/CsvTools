@@ -6,6 +6,11 @@ using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
 using System.Collections;
+using System.Numerics;
+
+#if NET461 || NETSTANDARD2_0 || NETSTANDARD2_1
+using FolkerKinzel.Strings.Polyfills;
+#endif
 
 namespace FolkerKinzel.CsvTools;
 
@@ -41,6 +46,22 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
     private readonly CsvOptions _options;
     private readonly bool _hasHeaderRow;
     private bool _firstRun = true;
+
+    private CsvRecord? _record = null; // Schablone für weitere CsvRecord-Objekte
+    private bool _eof;
+
+    public bool Eof 
+    {
+        get => _eof;
+        private set
+        {
+            _eof = true;
+            _reader.Dispose();
+        }
+    }
+
+    //private CsvRecord? _clone = null;
+
 
     #region ctors
 
@@ -130,75 +151,69 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
     public void Dispose() => _reader.Dispose();
 
 
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-
-    public IEnumerator<CsvRecord> GetEnumerator()
+    public CsvRecord? ReadRecord()
     {
-        if (!_firstRun)
+        if (Eof)
         {
-            ThrowInvalidOperationException();
+            return null;
         }
 
-        _firstRun = false;
+        IList<ReadOnlyMemory<char>>? row = _reader.Read();
 
-        CsvRecord? record = null; // Schablone für weitere CsvRecord-Objekte
-        CsvRecord? clone = null;
-
-        foreach (IEnumerable<string?> row in _reader)
+        if (row is null)
         {
-            if (record is null)
+            Eof = true;
+            return null;
+        }
+
+        if (_record is null)
+        {
+            bool caseSensitiveColumns = (_options & CsvOptions.CaseSensitiveKeys) == CsvOptions.CaseSensitiveKeys;
+
+            if (_hasHeaderRow)
             {
-                bool caseSensitiveColumns = (_options & CsvOptions.CaseSensitiveKeys) == CsvOptions.CaseSensitiveKeys;
+                bool trimColumns = _options.HasFlag(CsvOptions.TrimColumns);
+                string?[] columnNames = trimColumns ? row.Select(TrimConvert).ToArray() : row.Select(x => x.IsEmpty ? null : x.ToString()).ToArray();
 
-                if (_hasHeaderRow)
-                {
-                    record = new CsvRecord(row.ToArray(),
-                        caseSensitiveColumns,
-                        (_options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns,
-                        false, false);
-                    continue;
-                }
-                else
-                {
-                    string?[]? arr = row.ToArray();
-
-                    if (arr.Length == 0)
-                    {
-                        continue; // Leerzeile am Anfang
-                    }
-
-                    record = new CsvRecord(arr.Length, caseSensitiveColumns, false);
-                    clone = new CsvRecord(record);
-                    Fill(clone, arr, _reader);
-                }
+                _record = new CsvRecord(columnNames,
+                    caseSensitiveColumns,
+                    trimColumns,
+                    initArr: false,
+                    throwException: false);
+                return ReadRecord();
             }
             else
             {
-                if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
-                {
-                    clone ??= new CsvRecord(record);
-                }
-                else
-                {
-                    clone = new CsvRecord(record);
-                }
-
-                Fill(clone, row, _reader);
+                _record = new CsvRecord(row.Count, caseSensitiveColumns);
+                Fill(row, _reader);
+                return _record;
             }
-
-            yield return clone;
         }
+
+
+        if (!_options.HasFlag(CsvOptions.DisableCaching))
+        {
+            _record = new CsvRecord(_record);
+        }
+
+        Fill(row, _reader);
+
+        return _record;
 
         /////////////////////////////////////////////////////////////////////
 
-        void Fill(CsvRecord clone, IEnumerable<string?> data, CsvStringReader reader)
+        static string? TrimConvert(ReadOnlyMemory<char> value)
         {
-            int dataIndex = 0;
+            ReadOnlySpan<char> span = value.Span.Trim();
+            return span.IsEmpty ? null : span.ToString();
+        }
 
-            foreach (string? item in data)
+        void Fill(IList<ReadOnlyMemory<char>> data, CsvStringReader reader)
+        {
+            int i;
+            for (i = 0; i < data.Count; i++)
             {
-                if (dataIndex >= clone.Count)
+                if (i >= _record.Count)
                 {
                     if ((_options & CsvOptions.ThrowOnTooMuchFields) == CsvOptions.ThrowOnTooMuchFields)
                     {
@@ -210,27 +225,24 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
                     }
                 }
 
-                if (item != null && (_options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns)
+                ReadOnlyMemory<char> item = data[i];
+
+                if (item.Length != 0 && (_options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns)
                 {
-                    string? trimmed = item.Trim();
+                    ReadOnlyMemory<char> trimmed = item.Trim();
 
-                    if (trimmed.Length == 0)
-                    {
-                        trimmed = null;
-                    }
-
-                    clone[dataIndex++] = trimmed;
+                    _record[i] = trimmed;
                 }
                 else
                 {
-                    clone[dataIndex++] = item;
+                    _record[i] = item;
                 }
             }
 
 
-            if (dataIndex < clone.Count)
+            if (i < _record.Count)
             {
-                if (dataIndex == 0 && (_options & CsvOptions.ThrowOnEmptyLines) == CsvOptions.ThrowOnEmptyLines)
+                if (i == 0 && (_options & CsvOptions.ThrowOnEmptyLines) == CsvOptions.ThrowOnEmptyLines)
                 {
                     throw new InvalidCsvException("Unmasked empty line.", reader.LineNumber, 0);
                 }
@@ -242,13 +254,145 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
 
                 if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
                 {
-                    for (int i = dataIndex; i < clone.Count; i++)
+                    for (int j = i; j < _record.Count; j++)
                     {
-                        clone[i] = null;
+                        _record[j] = default;
                     }
                 }
             }
         }// Fill()
+    }
+
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+
+    public IEnumerator<CsvRecord> GetEnumerator()
+    {
+        if (!_firstRun)
+        {
+            throw new InvalidOperationException(Res.NotTwice);
+        }
+
+        _firstRun = false;
+
+        CsvRecord record;
+        while ((record = ReadRecord()) != null)
+        {
+            yield return record;
+        }
+
+        //CsvRecord? clone = null;
+
+            //IList<ReadOnlyMemory<char>>? row;
+            //while ((row = _reader.Read()) != null)
+            //{
+            //    if (_record is null)
+            //    {
+            //        bool caseSensitiveColumns = (_options & CsvOptions.CaseSensitiveKeys) == CsvOptions.CaseSensitiveKeys;
+
+            //        if (_hasHeaderRow)
+            //        {
+            //            bool trimColumns = _options.HasFlag(CsvOptions.TrimColumns);
+            //            string?[] columnNames = trimColumns ? row.Select(TrimConvert).ToArray() : row.Select(x => x.IsEmpty ? null : x.ToString()).ToArray();
+
+            //            _record = new CsvRecord(columnNames,
+            //                caseSensitiveColumns,
+            //                trimColumns,
+            //                initArr: false,
+            //                throwException: false);
+            //            continue;
+            //        }
+            //        else
+            //        {
+            //            if (row.Count == 0)
+            //            {
+            //                continue; // Leerzeile am Anfang
+            //            }
+
+            //            _record = new CsvRecord(row.Count, caseSensitiveColumns);
+            //            clone = new CsvRecord(_record);
+            //            Fill(clone, row, _reader);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
+            //        {
+            //            clone ??= new CsvRecord(_record);
+            //        }
+            //        else
+            //        {
+            //            clone = new CsvRecord(_record);
+            //        }
+
+            //        Fill(clone, row, _reader);
+            //    }
+
+            //    yield return clone;
+            //}
+
+            ///////////////////////////////////////////////////////////////////////
+
+            //static string? TrimConvert(ReadOnlyMemory<char> value)
+            //{
+            //    ReadOnlySpan<char> span = value.Span.Trim();
+            //    return span.IsEmpty ? null : span.ToString();
+            //}
+
+            //void Fill(CsvRecord clone, IList<ReadOnlyMemory<char>> data, CsvStringReader reader)
+            //{
+            //    int i;
+            //    for (i = 0; i < data.Count; i++)
+            //    {
+            //        if (i >= clone.Count)
+            //        {
+            //            if ((_options & CsvOptions.ThrowOnTooMuchFields) == CsvOptions.ThrowOnTooMuchFields)
+            //            {
+            //                throw new InvalidCsvException("Too much fields in a record.", reader.LineNumber, reader.LineIndex);
+            //            }
+            //            else
+            //            {
+            //                return;
+            //            }
+            //        }
+
+            //        ReadOnlyMemory<char> item = data[i];
+
+            //        if (item.Length != 0 && (_options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns)
+            //        {
+            //            ReadOnlyMemory<char> trimmed = item.Trim();
+
+            //            clone[i] = trimmed;
+            //        }
+            //        else
+            //        {
+            //            clone[i] = item;
+            //        }
+            //    }
+
+
+            //    if (i < clone.Count)
+            //    {
+            //        if (i == 0 && (_options & CsvOptions.ThrowOnEmptyLines) == CsvOptions.ThrowOnEmptyLines)
+            //        {
+            //            throw new InvalidCsvException("Unmasked empty line.", reader.LineNumber, 0);
+            //        }
+
+            //        if ((_options & CsvOptions.ThrowOnTooFewFields) == CsvOptions.ThrowOnTooFewFields)
+            //        {
+            //            throw new InvalidCsvException("Too few fields in a record.", reader.LineNumber, reader.LineIndex);
+            //        }
+
+            //        if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
+            //        {
+            //            for (int j = i; j < clone.Count; j++)
+            //            {
+            //                clone[j] = default;
+            //            }
+            //        }
+            //    }
+            //}// Fill()
 
     }// GetEnumerator()
 
@@ -307,10 +451,10 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
     #endregion
 
 
-    #region private
+    //#region private
 
-    [DoesNotReturn]
-    private static void ThrowInvalidOperationException() => throw new InvalidOperationException(Res.NotTwice);
+    //[DoesNotReturn]
+    //private static void ThrowInvalidOperationException() => throw new InvalidOperationException(Res.NotTwice);
 
-    #endregion
+    //#endregion
 }
