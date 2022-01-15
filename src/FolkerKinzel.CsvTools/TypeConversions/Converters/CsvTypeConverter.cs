@@ -22,7 +22,7 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
     public bool Throwing { get; }
 
 
-    public abstract bool TryParseValue(string value, out T result);
+    public abstract bool TryParseValue(ReadOnlySpan<char> value, out T result);
 
     protected abstract string? DoConvertToString(T value);
 
@@ -48,9 +48,9 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
     public string? ConvertToString(T? value) => value is null ? null : DoConvertToString(value);
 
 
-    protected virtual bool CsvHasValue([NotNullWhen(true)] string? csvInput) => !string.IsNullOrWhiteSpace(csvInput);
+    protected virtual bool CsvHasValue(ReadOnlySpan<char> csvInput) => !csvInput.IsWhiteSpace();
 
-    public T? Parse(string? value)
+    public T? Parse(ReadOnlySpan<char> value)
     {
         if (!CsvHasValue(value))
         {
@@ -66,12 +66,12 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
         {
             throw new FormatException(
                 string.Format("Cannot convert {0} into {1}.",
-                value is null ? "null" : value.Length > 40 ? nameof(value) : $"\"{value}\"",
+                value.Length > 40 ? nameof(value) : $"\"{value.ToString()}\"",
                 typeof(T)));
         }
 
         return FallbackValue;
     }
 
-    object? ICsvTypeConverter.Parse(string? value) => Parse(value);
+    object? ICsvTypeConverter.Parse(ReadOnlySpan<char> value) => Parse(value);
 }

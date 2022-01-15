@@ -101,7 +101,7 @@ namespace Examples
 
             var pupilsList = new List<Pupil>();
 
-            foreach (CsvRecord record in reader.Read())
+            foreach (CsvRecord record in reader)
             {
                 wrapper.Record = record;
 

@@ -55,10 +55,16 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
     protected override string? DoConvertToString(DateTime value) => value.ToString(_format, _formatProvider);
 
 
-    public override bool TryParseValue(string value, [NotNullWhen(true)] out DateTime result)
+    public override bool TryParseValue(ReadOnlySpan<char> value, [NotNullWhen(true)] out DateTime result)
+#if NET461 || NETSTANDARD2_0
+        => _parseExact
+            ? DateTime.TryParseExact(value.ToString(), _format, _formatProvider, STYLE, out result)
+            : DateTime.TryParse(value.ToString(), _formatProvider, STYLE, out result);
+#else
         => _parseExact
             ? DateTime.TryParseExact(value, _format, _formatProvider, STYLE, out result)
             : DateTime.TryParse(value, _formatProvider, STYLE, out result);
+#endif
 
 
     private void ExamineFormat()

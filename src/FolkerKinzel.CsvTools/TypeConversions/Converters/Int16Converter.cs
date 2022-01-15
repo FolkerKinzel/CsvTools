@@ -28,5 +28,10 @@ public sealed class Int16Converter : CsvTypeConverter<int>
 
     protected override string? DoConvertToString(int value) => value.ToString(_format, _formatProvider);
 
-    public override bool TryParseValue(string value, out int result) => int.TryParse(value, _styles, _formatProvider, out result);
+    public override bool TryParseValue(ReadOnlySpan<char> value, out int result)
+#if NET461 || NETSTANDARD2_0
+        => int.TryParse(value.ToString(), _styles, _formatProvider, out result);
+#else
+        => int.TryParse(value, _styles, _formatProvider, out result);
+#endif
 }

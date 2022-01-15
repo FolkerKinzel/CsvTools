@@ -17,5 +17,10 @@ public sealed class DoubleConverter : CsvTypeConverter<double>
     protected override string? DoConvertToString(double value) => value.ToString(FORMAT, _formatProvider);
 
 
-    public override bool TryParseValue(string value, out double result) => double.TryParse(value, STYLE, _formatProvider, out result);
+    public override bool TryParseValue(ReadOnlySpan<char> value, out double result)
+#if NET461 || NETSTANDARD2_0
+        => double.TryParse(value.ToString(), STYLE, _formatProvider, out result);
+#else
+        => double.TryParse(value, STYLE, _formatProvider, out result);
+#endif
 }

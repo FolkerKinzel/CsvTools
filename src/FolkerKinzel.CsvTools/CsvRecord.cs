@@ -340,22 +340,22 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// als <see cref="CsvRecord.Count"/>.</exception>
     /// <remarks>Wenn <paramref name="data"/> weniger Einträge als <see cref="CsvRecord.Count"/> hat,
     /// werden die restlichen Felder von <see cref="CsvRecord"/> mit <c>null</c>-Werten gefüllt.</remarks>
-    public void Fill(IList<ReadOnlyMemory<char>> data)
+    public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
     {
         if (data is null)
         {
             throw new ArgumentNullException(nameof(data));
         }
 
-        int i;
-        for (i = 0; i < data.Count; i++)
+        int i = 0;
+        foreach (ReadOnlyMemory<char> item in data)
         {
             if (i >= _values.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(data));
             }
 
-            _values[i] = data[i];
+            _values[i++] = item;
         }
 
         for (int j = i; j < _values.Length; j++)

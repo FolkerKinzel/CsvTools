@@ -2,7 +2,7 @@
 
 public interface ICsvTypeConverter
 {
-    object? Parse(string? value);
+    object? Parse(ReadOnlySpan<char> value);
 
     string? ConvertToString(object? value);
 

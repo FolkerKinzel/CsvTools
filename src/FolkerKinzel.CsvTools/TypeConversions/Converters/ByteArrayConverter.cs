@@ -9,11 +9,11 @@ public sealed class ByteArrayConverter : CsvTypeConverter<byte[]?>
     
     protected override string? DoConvertToString(byte[]? value) => value is null ? null : Convert.ToBase64String(value, Base64FormattingOptions.None);
 
-    public override bool TryParseValue(string value, [NotNullWhen(true)] out byte[]? result)
+    public override bool TryParseValue(ReadOnlySpan<char> value, [NotNullWhen(true)] out byte[]? result)
     {
         try
         {
-            result = (byte[])Convert.FromBase64String(value);
+            result = (byte[])Convert.FromBase64String(value.ToString());
             return true;
         }
         catch (FormatException)

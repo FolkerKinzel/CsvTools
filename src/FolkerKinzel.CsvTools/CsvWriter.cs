@@ -215,11 +215,11 @@ public sealed class CsvWriter : IDisposable
 
             for (int i = 0; i < recordLength - 1; i++)
             {
-                WriteField(columns[i]);
+                WriteField(columns[i].AsSpan());
                 _writer.Write(_fieldSeparator);
             }
 
-            WriteField(columns[recordLength - 1]);
+            WriteField(columns[recordLength - 1].AsSpan());
             _writer.WriteLine();
 
             _isHeaderRowWritten = true;
@@ -228,7 +228,7 @@ public sealed class CsvWriter : IDisposable
         for (int j = 0; j < recordLength - 1; j++)
         {
             ReadOnlyMemory<char> mem = Record[j];
-            if (!mem.IsEmpty) // sonst null
+            if (!mem.IsEmpty)
             {
                 WriteField(mem.Span);
 

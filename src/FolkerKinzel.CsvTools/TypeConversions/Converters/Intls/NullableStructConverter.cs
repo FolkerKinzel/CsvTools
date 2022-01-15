@@ -12,7 +12,7 @@ internal sealed class NullableStructConverter<T> : CsvTypeConverter<Nullable<T>>
 
     protected override string? DoConvertToString(T? value) => value.HasValue ? _typeConverter.ConvertToString(value.Value) : null;
 
-    public override bool TryParseValue(string value, [NotNullWhen(true)] out T? result)
+    public override bool TryParseValue(ReadOnlySpan<char> value, [NotNullWhen(true)] out T? result)
     {
         if (_typeConverter.TryParseValue(value, out T tmp))
         {

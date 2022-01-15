@@ -31,5 +31,10 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
     protected override string? DoConvertToString(sbyte value) => value.ToString(_format, _formatProvider);
 
 
-    public override bool TryParseValue(string value, out sbyte result) => sbyte.TryParse(value, _styles, _formatProvider, out result);
+    public override bool TryParseValue(ReadOnlySpan<char> value, out sbyte result)
+#if NET461 || NETSTANDARD2_0
+        => sbyte.TryParse(value.ToString(), _styles, _formatProvider, out result);
+#else
+        => sbyte.TryParse(value, _styles, _formatProvider, out result);
+#endif
 }

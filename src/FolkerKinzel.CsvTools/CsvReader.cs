@@ -60,9 +60,6 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
         }
     }
 
-    //private CsvRecord? _clone = null;
-
-
     #region ctors
 
     /// <summary>
@@ -276,7 +273,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
 
         _firstRun = false;
 
-        CsvRecord record;
+        CsvRecord? record;
         while ((record = ReadRecord()) != null)
         {
             yield return record;

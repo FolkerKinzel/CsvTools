@@ -25,17 +25,17 @@ internal sealed class IEnumerableConverter<TItem> : CsvTypeConverter<IEnumerable
         using var writer = new StringWriter(sb);
         using (var csvWriter = new CsvWriter(writer, value.Count(), fieldSeparator: _separatorChar))
         {
-            csvWriter.Record.Fill(value.Select(x => _itemsConverter.ConvertToString(x)));
+            csvWriter.Record.Fill(value.Select(x => _itemsConverter.ConvertToString(x).AsMemory()));
             csvWriter.WriteRecord();
         }
         return writer.ToString();
     }
 
-    public override bool TryParseValue(string value, out IEnumerable<TItem?>? result)
+    public override bool TryParseValue(ReadOnlySpan<char> value, out IEnumerable<TItem?>? result)
     {
         var list = new List<TItem?>();
 
-        using var reader = new StringReader(value);
+        using var reader = new StringReader(value.ToString());
         using var csvReader = new CsvReader(reader, false, fieldSeparator: _separatorChar);
 
         CsvRecord? record = csvReader.FirstOrDefault();
@@ -48,7 +48,7 @@ internal sealed class IEnumerableConverter<TItem> : CsvTypeConverter<IEnumerable
 
         for (int i = 0; i < record.Count; i++)
         {
-            list.Add(_itemsConverter.Parse(record[i]));
+            list.Add(_itemsConverter.Parse(record[i].Span));
         }
 
         result = list;

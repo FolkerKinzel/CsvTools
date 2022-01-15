@@ -6,9 +6,19 @@ public sealed class CharConverter : CsvTypeConverter<char>
         : base(throwing, fallbackValue) { }
 
 
-
     protected override string? DoConvertToString(char value) => value.ToString();
 
 
-    public override bool TryParseValue(string value, out char result) => char.TryParse(value, out result);
+    public override bool TryParseValue(ReadOnlySpan<char> value, out char result)
+    {
+        if (value.Trim().Length == 1)
+        {
+            result = value[0];
+            return true;
+        }
+
+        result = default;
+        return false;
+    }
+
 }

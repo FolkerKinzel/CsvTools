@@ -51,10 +51,16 @@ public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
     protected override string? DoConvertToString(TimeSpan value) => value.ToString(_format, _formatProvider);
 
 
-    public override bool TryParseValue(string value, [NotNullWhen(true)] out TimeSpan result)
+    public override bool TryParseValue(ReadOnlySpan<char> value, [NotNullWhen(true)] out TimeSpan result)
+#if NET461 || NETSTANDARD2_0
+        => _parseExact
+            ? TimeSpan.TryParseExact(value.ToString(), _format, _formatProvider, _styles, out result)
+            : TimeSpan.TryParse(value.ToString(), _formatProvider, out result);
+#else
         => _parseExact
             ? TimeSpan.TryParseExact(value, _format, _formatProvider, _styles, out result)
             : TimeSpan.TryParse(value, _formatProvider, out result);
+#endif
 
 
     private void ExamineFormat()

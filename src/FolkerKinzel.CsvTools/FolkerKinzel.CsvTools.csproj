@@ -92,6 +92,7 @@
     <Compile Remove="TypeConversions\Converters\ObjectConverter.cs" />
     <Compile Remove="TypeConversions\CsvConverterFactory.cs" />
     <Compile Remove="TypeConversions\CsvIndexProperty.cs" />
+    <Compile Remove="TypeConversions\CsvTypeCode.cs" />
     <Compile Remove="TypeConversions\ObjectToStringConverter.cs" />
     <Compile Remove="TypeConversions\ThrowHelper.cs" />
     <Compile Remove="KeyedCollection2.cs" />
@@ -144,7 +145,7 @@
   -->
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461'">
     <PackageReference Include="FolkerKinzel.Strings">
-      <Version>4.1.0</Version>
+      <Version>4.2.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

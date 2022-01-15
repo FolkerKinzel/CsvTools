@@ -30,5 +30,10 @@ public sealed class UInt32Converter : CsvTypeConverter<uint>
     protected override string? DoConvertToString(uint value) => value.ToString(_format, _formatProvider);
 
 
-    public override bool TryParseValue(string value, out uint result) => uint.TryParse(value, _styles, _formatProvider, out result);
+    public override bool TryParseValue(ReadOnlySpan<char> value, out uint result)
+#if NET461 || NETSTANDARD2_0
+        => uint.TryParse(value.ToString(), _styles, _formatProvider, out result);
+#else
+        => uint.TryParse(value, _styles, _formatProvider, out result);
+#endif
 }

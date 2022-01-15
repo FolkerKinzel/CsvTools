@@ -3,6 +3,10 @@ using System.Text;
 using FolkerKinzel.CsvTools.Extensions;
 using FolkerKinzel.CsvTools.Intls;
 
+#if NET461 || NETSTANDARD2_0 || NETSTANDARD2_1
+using FolkerKinzel.Strings.Polyfills;
+#endif
+
 namespace FolkerKinzel.CsvTools;
 
 /// <summary>
@@ -180,19 +184,21 @@ public class CsvAnalyzer
 
             using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.IsSet(CsvOptions.ThrowOnEmptyLines));
 
-            foreach (IEnumerable<string?>? row in csvStringReader)
+            IList<ReadOnlyMemory<char>>? row;
+            while((row = csvStringReader.Read()) is not null)
             {
                 if (firstLine)
                 {
                     firstLine = false;
 
-                    var firstLineFields = new List<string>();
+                    //var firstLineFields = new List<string>();
 
                     bool hasHeader = true;
                     bool hasMaybeNoHeader = false;
 
-                    foreach (string? s in row)
+                    for (int i = 0; i < row.Count; i++)
                     {
+                        ReadOnlyMemory<char> mem = row[i];
                         firstLineCount++;
 
                         if (hasHeader)
@@ -207,51 +213,52 @@ public class CsvAnalyzer
                                 this.Options = this.Options.Unset(CsvOptions.TrimColumns);
                             }
 
-                            if (s is null)
+                            if (mem.IsEmpty)
                             {
                                 hasMaybeNoHeader = true;
                                 continue;
                             }
 
-                            string trimmed = s.Trim();
+                            ReadOnlyMemory<char> trimmed = mem.Trim();
 
-                            firstLineFields.Add(trimmed);
+                            row[i] = trimmed;
 
-                            if (trimmed.Length != s.Length)
+                            if (trimmed.Length != mem.Length)
                             {
-                                this.Options = this.Options.Set(CsvOptions.TrimColumns);
+                                Options = Options.Set(CsvOptions.TrimColumns);
                             }
                         }
                     }//foreach
 
                     if (hasHeader)
                     {
-                        this.ColumnNames = new ReadOnlyCollection<string>(firstLineFields);
-                    }
+                        ColumnNames = new ReadOnlyCollection<string>(row.Select(x => x.ToString()).ToArray());
 
-                    // Prüfe, ob sich zwei Spaltennamen nur durch Groß- und Kleinschreibung unterscheiden:
-                    if (hasHeader)
-                    {
-                        // estimatedLength unterscheidet sich von firstLineCount, wenn nach dem letzten Feld
-                        // ein FieldSeparatorChar stand (s.o.)
-                        int estimatedLength = hasMaybeNoHeader ? firstLineCount - 1 : firstLineCount;
-
-                        if (estimatedLength != firstLineFields.Distinct(StringComparer.OrdinalIgnoreCase).Count())
+                        if(ColumnNames.Count == ColumnNames.Distinct(StringComparer.Ordinal).Count())
                         {
-                            this.Options = this.Options.Set(CsvOptions.CaseSensitiveKeys);
+                            if (ColumnNames.Count != ColumnNames.Distinct(StringComparer.OrdinalIgnoreCase).Count())
+                            {
+                                this.Options = this.Options.Set(CsvOptions.CaseSensitiveKeys);
+                            }
+                        }
+                        else
+                        {
+                            hasHeader = false;
+                            ColumnNames = null;
+                            Options = Options.Unset(CsvOptions.TrimColumns);
                         }
                     }
                 }
                 else
                 {
                     int currentLineCount = 0;
-                    string? firstString = null;
+                    ReadOnlyMemory<char> firstString = default;
 
-                    foreach (string? s in row)
+                    foreach (ReadOnlyMemory<char> mem in row)
                     {
                         if (currentLineCount == 0)
                         {
-                            firstString = s;
+                            firstString = mem;
                         }
 
                         currentLineCount++;
@@ -260,7 +267,7 @@ public class CsvAnalyzer
                     if (currentLineCount != firstLineCount)
                     {
                         this.Options = currentLineCount < firstLineCount
-                            ? currentLineCount == 1 && firstString is null ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines) : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
+                            ? currentLineCount == 1 && firstString.IsEmpty ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines) : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
                             : this.Options.Unset(CsvOptions.ThrowOnTooMuchFields);
                     }
                 }

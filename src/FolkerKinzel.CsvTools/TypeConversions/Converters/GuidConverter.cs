@@ -21,8 +21,12 @@ public sealed class GuidConverter : CsvTypeConverter<Guid>
     protected override string? DoConvertToString(Guid value) => value.ToString(_format, CultureInfo.InvariantCulture);
 
 
-    public override bool TryParseValue(string value, [NotNullWhen(true)] out Guid result)
+    public override bool TryParseValue(ReadOnlySpan<char> value, out Guid result)
+#if NET461 || NETSTANDARD2_0
+        => Guid.TryParse(value.ToString(), out result);
+#else
         => Guid.TryParse(value, out result);
+#endif
 
 
     private void ExamineFormat(string parameterName)

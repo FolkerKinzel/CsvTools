@@ -28,5 +28,10 @@ public sealed class ByteConverter : CsvTypeConverter<byte>
     protected override string? DoConvertToString(byte value) => value.ToString(_format, _formatProvider);
 
 
-    public override bool TryParseValue(string value, out byte result) => byte.TryParse(value, _styles, _formatProvider, out result);
+    public override bool TryParseValue(ReadOnlySpan<char> value, out byte result)
+#if NET461 || NETSTANDARD2_0
+        => byte.TryParse(value.ToString(), _styles, _formatProvider, out result);
+#else
+        => byte.TryParse(value, _styles, _formatProvider, out result);
+#endif
 }

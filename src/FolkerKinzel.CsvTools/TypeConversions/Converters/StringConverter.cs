@@ -9,11 +9,11 @@ public sealed class StringConverter : CsvTypeConverter<string?>
 
     protected override string? DoConvertToString(string? value) => value;
 
-    protected override bool CsvHasValue([NotNullWhen(true)] string? csvInput) => csvInput is not null;
+    protected override bool CsvHasValue(ReadOnlySpan<char> csvInput) => !csvInput.IsEmpty;
 
-    public override bool TryParseValue(string value, out string? result)
+    public override bool TryParseValue(ReadOnlySpan<char> value, out string? result)
     {
-        result = value;
+        result = value.ToString();
         return true;
     }
 }
