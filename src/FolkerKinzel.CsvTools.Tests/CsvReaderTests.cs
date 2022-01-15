@@ -7,6 +7,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections;
 
+using FolkerKinzel.Strings;
+
+#if !NETCOREAPP3_1
+using FolkerKinzel.Strings.Polyfills;
+#endif
+
 namespace FolkerKinzel.CsvTools.Tests
 {
     //public class CsvToolsTests<T>
@@ -45,7 +51,7 @@ namespace FolkerKinzel.CsvTools.Tests
             using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);
 
             int counter = 0;
-            foreach (CsvRecord record in csvReader.Read())
+            foreach (CsvRecord record in csvReader)
             {
                 counter++;
             }
@@ -63,13 +69,13 @@ namespace FolkerKinzel.CsvTools.Tests
             string file = TestFiles.GoogleCsv;
             using var Reader = new CsvReader(file, options: CsvOptions.None);
 
-            foreach (CsvRecord record in Reader.Read())
+            foreach (CsvRecord record in Reader)
             {
                 var sb = new StringBuilder();
 
-                foreach (KeyValuePair<string, string?> item in record)
+                foreach (KeyValuePair<string, ReadOnlyMemory<char>> item in record)
                 {
-                    _ = sb.Append(item.Key.PadRight(20)).Append(": ").AppendLine(item.Value);
+                    _ = sb.Append(item.Key.PadRight(20)).Append(": ").Append(item.Value.Span).AppendLine();
                 }
 
                 File.WriteAllText(Path.Combine(outDir, Path.GetFileName(file) + ".txt"), sb.ToString());
@@ -92,7 +98,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
             stringReader.Dispose();
 
-            foreach (CsvRecord _ in csvReader.Read())
+            foreach (CsvRecord _ in csvReader)
             {
 
             }
@@ -110,8 +116,8 @@ namespace FolkerKinzel.CsvTools.Tests
             using var stringReader = new StringReader(testCsv);
             using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);
 
-            _ = csvReader.Read();
-            _ = csvReader.Read();
+            _ = csvReader.GetEnumerator();
+            _ = csvReader.GetEnumerator();
         }
 
 
@@ -125,7 +131,7 @@ namespace FolkerKinzel.CsvTools.Tests
             using var stringReader = new StringReader(testCsv);
             using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);
 
-            IEnumerable numerable = csvReader.Read();
+            IEnumerable numerable = csvReader;
 
             int counter = 0;
             foreach (object? record in numerable)

@@ -28,7 +28,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
 
             const string test = "Test";
 
-            Assert.AreEqual(test, conv.Parse(test));
+            Assert.AreEqual(test, conv.Parse(test.AsSpan()));
 
         }
 

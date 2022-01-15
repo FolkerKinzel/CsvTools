@@ -51,7 +51,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp);
 
-            var now2 = (TimeSpan?)conv.Parse(tmp);
+            var now2 = (TimeSpan?)conv.Parse(tmp.AsSpan());
 
             Assert.AreEqual(now, now2);
         }
@@ -67,7 +67,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp);
 
-            var now2 = (TimeSpan?)conv.Parse(tmp);
+            var now2 = (TimeSpan?)conv.Parse(tmp.AsSpan());
 
             Assert.AreEqual(now, now2);
         }

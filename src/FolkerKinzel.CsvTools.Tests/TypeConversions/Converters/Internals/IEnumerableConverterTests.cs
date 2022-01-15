@@ -29,7 +29,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             string? s = conv.ConvertToString(list);
 
-            var result = (IEnumerable<int?>?)conv.Parse(s);
+            var result = (IEnumerable<int?>?)conv.Parse(s.AsSpan());
             Assert.IsNotNull(result);
             CollectionAssert.AreEqual(list, result!.ToList());
         }

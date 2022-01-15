@@ -452,7 +452,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [TestMethod()]
         public void GetEnumeratorTest1()
         {
-            var rec = new CsvRecord(3, false, true);
+            var rec = new CsvRecord(3);
 
             var wrapper = new CsvRecordWrapper
             {
@@ -679,9 +679,9 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [TestMethod()]
         public void IndexerTest()
         {
-            var record = new CsvRecord(2, false, true);
-            record[0] = "42";
-            record[1] = "43";
+            var record = new CsvRecord(2);
+            record[0] = "42".AsMemory();
+            record[1] = "43".AsMemory();
 
             var wrapper = new CsvRecordWrapper();
 
@@ -717,7 +717,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
         [TestMethod()]
         public void ToStringTest()
         {
-            var rec = new CsvRecord(3, false, true);
+            var rec = new CsvRecord(3);
 
             var wrapper = new CsvRecordWrapper();
 
@@ -765,7 +765,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             Assert.IsNotNull(s);
             Assert.AreNotEqual(0, s.Length);
 
-            rec[0] = "bla";
+            rec[0] = "bla".AsMemory();
 
             s = wrapper.ToString();
             Assert.IsNotNull(s);

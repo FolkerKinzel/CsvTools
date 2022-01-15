@@ -28,7 +28,7 @@ namespace Examples
             {
 
                 foreach (CsvRecord record in
-                    csvReader.Read().Where(x => x["City"] == "New York").ToArray())
+                    csvReader.Where(x => x["City"].Span == "New York").ToArray())
                 {
                     Console.Write(record["Name"]);
                     Console.Write(' ');
@@ -44,7 +44,7 @@ namespace Examples
             {
                 // NOTICE: Removing ".ToArray()" would cause the correct results:
                 foreach (CsvRecord record in
-                    csvReader.Read().Where(x => x["City"] == "New York").ToArray())
+                    csvReader.Where(x => x["City"].Span == "New York").ToArray())
                 {
                     Console.Write(record["Name"]);
                     Console.Write(' ');

@@ -182,9 +182,7 @@ public sealed class CsvWriter : IDisposable
         this._isHeaderRowWritten = true;
         this._fieldSeparator = fieldSeparator;
         this._trimColumns = options.HasFlag(CsvOptions.TrimColumns);
-        this.Record = new CsvRecord(
-            columnsCount,
-            options.HasFlag(CsvOptions.CaseSensitiveKeys));
+        this.Record = new CsvRecord(columnsCount);
     }
 
 

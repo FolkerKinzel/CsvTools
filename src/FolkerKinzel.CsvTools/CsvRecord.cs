@@ -52,14 +52,9 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// CSV-Dateien ohne Kopfzeile.)
     /// </summary>
     /// <param name="columnsCount">Anzahl der Spalten.</param>
-    /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv behandelt.</param>
-    /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
-    /// für weitere <see cref="CsvRecord"/>-Objekte. (Wird von <see cref="CsvReader"/> verwendet.)</param>
-    internal CsvRecord(int columnsCount, bool caseSensitive) //, bool initArr)
+    internal CsvRecord(int columnsCount)
     {
-        IEqualityComparer<string> comparer =
-            caseSensitive ?
-            StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
+        IEqualityComparer<string> comparer = StringComparer.OrdinalIgnoreCase;
 
         this._lookupDictionary = new Dictionary<string, int>(columnsCount, comparer);
         Identifier = _lookupDictionary.GetHashCode();
@@ -74,11 +69,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
 
         ColumnNames = new ReadOnlyCollection<string>(columnNames);
-
-        //if (initArr)
-        //{
-            _values = new ReadOnlyMemory<char>[columnsCount];
-        //}
+        _values = new ReadOnlyMemory<char>[columnsCount];
     }
 
 
@@ -250,7 +241,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 
         return dic;
 #else
-            return new Dictionary<string, ReadOnlyMemory<char>>(this, this._lookupDictionary.Comparer);
+        return new Dictionary<string, ReadOnlyMemory<char>>(this, this._lookupDictionary.Comparer);
 #endif
     }
 
@@ -330,16 +321,26 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     }
 
 
+    public void Fill(IEnumerable<string?> data)
+    {
+        if (data is null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
+        Fill(data.Select(x => x.AsMemory()));
+    }
+
 
     /// <summary>
-    /// Füllt <see cref="CsvRecord"/> mit den Inhalten einer <see cref="string"/>-Collection.
+    /// Füllt <see cref="CsvRecord"/> mit den Inhalten einer <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see>-Collection.
     /// </summary>
-    /// <param name="data">Eine <see cref="string"/>-Collection.</param>
+    /// <param name="data">Eine <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see>-Collection.</param>
     /// <exception cref="ArgumentNullException"><paramref name="data"/> ist <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="data"/> enthält mehr Einträge
     /// als <see cref="CsvRecord.Count"/>.</exception>
     /// <remarks>Wenn <paramref name="data"/> weniger Einträge als <see cref="CsvRecord.Count"/> hat,
-    /// werden die restlichen Felder von <see cref="CsvRecord"/> mit <c>null</c>-Werten gefüllt.</remarks>
+    /// werden die restlichen Felder von <see cref="CsvRecord"/> mit <see cref="ReadOnlyMemory{T}.Empty"/>-Werten gefüllt.</remarks>
     public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
     {
         if (data is null)

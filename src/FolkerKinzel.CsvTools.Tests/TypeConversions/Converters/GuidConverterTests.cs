@@ -47,7 +47,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp);
 
-            var now2 = (Guid?)conv.Parse(tmp);
+            var now2 = (Guid?)conv.Parse(tmp.AsSpan());
 
             Assert.AreEqual(guid, now2);
         }
@@ -63,7 +63,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp);
 
-            var now2 = (Guid?)conv.Parse(tmp);
+            var now2 = (Guid?)conv.Parse(tmp.AsSpan());
 
             Assert.AreEqual(guid, now2);
         }

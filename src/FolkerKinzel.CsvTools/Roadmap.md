@@ -20,9 +20,9 @@ column name aliases). This is for CSV files without header row.
 - [x] Replace `CsvConverterFactory` by a fluent API.
 - [ ] Don't allow `CsvWriter` to terminate the last row in a CSV file.
 - [x] Let `CsvReader` implement `IEnumerable<CsvRecord>`.
-- [ ] Let `CsvReader.Read()` return the next `CsvRecord` or `null` if EOF is reached.
+- [x] Let `CsvReader.Read()` return the next `CsvRecord` or `null` if EOF is reached.
 - [x] Make `DateTimeConverster.AsDateConverter()` a static method `DateTimeConverster.CreateDateConverter()`
-- [ ] Let `CsvRecord` return `ReadOnlyMemory<Char>` instead of `String`.
+- [x] Let `CsvRecord` return `ReadOnlyMemory<Char>` instead of `String`.
 - [ ] Add a DateOnlyConverter.
 - [ ] Add a TimeOnlyConverter.
 

@@ -62,7 +62,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp);
 
-            var now2 = (DateTime?)conv.Parse(tmp);
+            var now2 = (DateTime?)conv.Parse(tmp.AsSpan());
 
 
             Assert.AreEqual(now, now2);
@@ -82,7 +82,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp);
 
-            var now2 = (DateTime?)conv.Parse(tmp);
+            var now2 = (DateTime?)conv.Parse(tmp.AsSpan());
 
             Assert.AreEqual(now, now2);
         }
@@ -95,7 +95,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
         {
             ICsvTypeConverter conv = new DateTimeConverter();
 
-            var dt = conv.Parse(s);
+            var dt = conv.Parse(s.AsSpan());
 
             Assert.AreEqual(new DateTime(1974, 02, 16), dt);
         }

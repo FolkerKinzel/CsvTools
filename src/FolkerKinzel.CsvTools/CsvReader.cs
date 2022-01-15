@@ -181,7 +181,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
             }
             else
             {
-                _record = new CsvRecord(row.Count, caseSensitiveColumns);
+                _record = new CsvRecord(row.Count);
                 Fill(row, _reader);
                 return _record;
             }

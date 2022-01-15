@@ -21,7 +21,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             string? outp = (string?)conv.ConvertToString(null);
             Assert.IsNotNull(outp);
 
-            DayOfWeek res = conv.Parse(outp);
+            DayOfWeek res = conv.Parse(outp.AsSpan());
 
             Assert.AreEqual(default, res);
         }

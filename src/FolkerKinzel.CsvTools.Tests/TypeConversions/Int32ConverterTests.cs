@@ -22,7 +22,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(s);
 
-            int res = conv.Parse(s);
+            int res = conv.Parse(s.AsSpan());
 
             Assert.AreEqual(val, res);
         }
@@ -38,7 +38,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(s);
 
-            int res = conv.Parse(s);
+            int res = conv.Parse(s.AsSpan());
 
             Assert.AreEqual(val, res);
         }

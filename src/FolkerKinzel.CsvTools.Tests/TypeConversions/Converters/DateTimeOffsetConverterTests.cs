@@ -20,7 +20,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(s);
 
-            var dto = (DateTimeOffset)conv.Parse(s)!;
+            var dto = (DateTimeOffset)conv.Parse(s.AsSpan())!;
 
             Assert.AreEqual(dt, dto.DateTime);
         }
@@ -65,7 +65,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp);
 
-            var now2 = (DateTimeOffset?)conv.Parse(tmp);
+            var now2 = (DateTimeOffset?)conv.Parse(tmp.AsSpan());
 
 
             Assert.AreEqual(now, now2);
@@ -85,7 +85,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
 
             Assert.IsNotNull(tmp1);
 
-            var now2 = (DateTimeOffset?)conv.Parse(tmp1);
+            var now2 = (DateTimeOffset?)conv.Parse(tmp1.AsSpan());
 
             Assert.AreEqual(now, now2);
         }

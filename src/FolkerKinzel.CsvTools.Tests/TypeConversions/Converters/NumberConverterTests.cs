@@ -22,7 +22,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             string? s = conv.ConvertToString(d);
             Assert.IsNotNull(s);
 
-            double? d2 = (double?)conv.Parse(s);
+            double? d2 = (double?)conv.Parse(s.AsSpan());
             Assert.AreEqual(d, d2);
         }
 

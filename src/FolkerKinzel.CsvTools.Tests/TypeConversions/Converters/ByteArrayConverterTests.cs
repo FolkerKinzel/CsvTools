@@ -32,8 +32,8 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             ICsvTypeConverter conv = new ByteArrayConverter();
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
-            Assert.IsNull(conv.Parse(null));
-            _ = conv.Parse("blabla");
+            Assert.IsNull(conv.Parse(default));
+            _ = conv.Parse("blabla".AsSpan());
         }
 
 
@@ -43,8 +43,8 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             ICsvTypeConverter conv = new ByteArrayConverter(false);
             Assert.IsInstanceOfType(conv, typeof(ByteArrayConverter));
 
-            Assert.IsNull(conv.Parse(null));
-            Assert.IsNull(conv.Parse("blabla"));
+            Assert.IsNull(conv.Parse(default));
+            Assert.IsNull(conv.Parse("blabla".AsSpan()));
         }
         
 
@@ -60,7 +60,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             string? s = conv.ConvertToString(bytes);
             Assert.IsNotNull(s);
 
-            var bytes2 = (byte[]?)conv.Parse(s);
+            var bytes2 = (byte[]?)conv.Parse(s.AsSpan());
 
             CollectionAssert.AreEqual(bytes, bytes2);
         }

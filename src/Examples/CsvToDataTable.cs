@@ -55,7 +55,7 @@ namespace Examples
             // Refill the DataTable from the CSV-file:
             using (var reader = new CsvReader(FILE_NAME))
             {
-                foreach (CsvRecord record in reader.Read())
+                foreach (CsvRecord record in reader)
                 {
                     wrapper.Record = record;
                     DataRow dataRow = dataTable.NewRow();
