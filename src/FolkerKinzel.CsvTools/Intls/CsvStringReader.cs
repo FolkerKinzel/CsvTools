@@ -52,9 +52,10 @@ internal sealed class CsvStringReader : IDisposable
     {
         while ((_currentLine = _reader.ReadLine()) != null)
         {
+            LineNumber++;
+
             if (_currentLine.Length == 0 && _skipEmptyLines)
             {
-                LineNumber++;
                 continue;
             }
 
@@ -66,16 +67,14 @@ internal sealed class CsvStringReader : IDisposable
 
 
     /// <summary>
-    /// Liest die nächste Datenzeile als <see cref="IEnumerable{T}">IEnumerable&lt;string?&gt;</see> und ermöglicht es damit,
-    /// über die Felder der Datenzeile zu iterieren.
+    /// Liest die nächste Datenzeile als <see cref="List{T}">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.
     /// </summary>
-    /// <returns>Die nächste Datenzeile als <see cref="IEnumerable{T}">IEnumerable&lt;string?&gt;</see>.</returns>
+    /// <returns>Die nächste Datenzeile als <see cref="List{T}">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.</returns>
     /// <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind und wirft keine <see cref="Exception"/>,
     /// wenn es in einer Zeile zu viele oder zu wenige sind.</remarks>
     private List<ReadOnlyMemory<char>> GetNextRecord()
     {
         _row.Clear();
-        LineNumber++;
         LineIndex = 0;
 
         do
@@ -157,7 +156,7 @@ internal sealed class CsvStringReader : IDisposable
                     else
                     {
                         // wenn die Datenzeile mit einem leeren Feld endet,
-                        // wird dieses nicht gelesen, aber von GetNextRecord() als null-Wert ergänzt
+                        // wird dieses nicht gelesen, aber von GetNextRecord() als default(ReadOnlyMemory<char>) ergänzt
                         if (c != _fieldSeparator)
                         {
                             _ = _sb.Append(c);
