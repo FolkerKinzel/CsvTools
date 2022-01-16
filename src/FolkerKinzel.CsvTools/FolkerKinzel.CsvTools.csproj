@@ -9,7 +9,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>1.5.0</Version>
-    <FileVersion>1.5.0.64</FileVersion>
+    <FileVersion>1.5.0.66</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>
 			Adds a .NET 5.0 dll to the package.
@@ -49,15 +49,15 @@
     <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
     <PackageIconUrl />
   </PropertyGroup>
-	<PropertyGroup>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	</PropertyGroup>
+  <PropertyGroup>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
   <ItemGroup>
     <Using Remove="System.Net.Http" />
-	  <Using Include="System.Runtime.CompilerServices" />
-	  <Using Include="System.Diagnostics.CodeAnalysis" />
-	  <Using Include="System.Diagnostics" />
+    <Using Include="System.Runtime.CompilerServices" />
+    <Using Include="System.Diagnostics.CodeAnalysis" />
+    <Using Include="System.Diagnostics" />
   </ItemGroup>
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework 4.0 -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'net40' Or '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net461'">

@@ -114,18 +114,19 @@ internal sealed class CsvStringReader : IDisposable
 
         int startIndex = LineIndex;
 
-        for (int count = LineIndex; count < _currentLine.Length; count++)
+        for (int endIndex = startIndex; endIndex < _currentLine.Length; endIndex++)
         {
-            char c = _currentLine[count];
+            char c = _currentLine[endIndex];
 
             if (c == _fieldSeparator)
             {
-                LineIndex = count + 1;
-                return _currentLine.AsMemory(startIndex, count);
+                LineIndex = endIndex + 1;
+                return _currentLine.AsMemory(startIndex, endIndex - startIndex);
             }
 
             if (c == '\"')
             {
+                LineIndex = startIndex;
                 return GetAllocatedField();
             }
         }
@@ -137,6 +138,8 @@ internal sealed class CsvStringReader : IDisposable
 
     private ReadOnlyMemory<char> GetAllocatedField()
     {
+        Debug.Assert(_currentLine != null);
+        Debug.Assert(_currentLine.Length > 0);
         int startIndex = LineIndex;
         bool isQuoted = false;
         bool isMaskedDoubleQuote = false;
@@ -228,6 +231,10 @@ internal sealed class CsvStringReader : IDisposable
                                 isMaskedDoubleQuote = true;
                                 mustAllocate = true;
                             }
+                            else
+                            {
+                                isQuoted = false;
+                            }
                         }
                     }
                     else
@@ -237,9 +244,19 @@ internal sealed class CsvStringReader : IDisposable
                 }
                 else
                 {
-                    if (LineIndex == startIndex && c == '\"')
+                    if (c == '\"')
                     {
-                        isQuoted = true;
+                        char next = _currentLine[LineIndex + 1];
+
+                        if (next == '\"')
+                        {
+                            isMaskedDoubleQuote = true;
+                            mustAllocate = true;
+                        }
+                        else
+                        {
+                            isQuoted = true;
+                        }
                     }
                     else if (c == _fieldSeparator)
                     {
@@ -257,11 +274,13 @@ internal sealed class CsvStringReader : IDisposable
 
         }// while
 
+        ReadOnlyMemory<char> AllocateField()
+        {
+            Debug.Assert(_sb is not null);
+            return mustAllocate ? _sb.ToString().AsMemory() 
+                                : _currentLine.AsMemory(startIndex + 1, _sb.Length);
+        }
     }
 
-    private ReadOnlyMemory<char> AllocateField()
-    {
-        Debug.Assert(_sb is not null);
-        return _sb.ToString().AsMemory();
-    }
+    
 }

@@ -113,7 +113,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
             using var reader = new CsvReader(FILENAME_STANDARD);
 
-            Assert.AreEqual(VALUE1, reader.First()[Key1]);
+            Assert.AreEqual(VALUE1, reader.First()[Key1].ToString());
         }
 
 
