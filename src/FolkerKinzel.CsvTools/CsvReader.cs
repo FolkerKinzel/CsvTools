@@ -82,7 +82,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
     {
         StreamReader streamReader = InitializeStreamReader(fileName, textEncoding);
 
-        this._reader = new CsvStringReader(streamReader, fieldSeparator, (_options & CsvOptions.ThrowOnEmptyLines) != CsvOptions.ThrowOnEmptyLines);
+        this._reader = new CsvStringReader(streamReader, fieldSeparator, !_options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         this._options = options;
         this._hasHeaderRow = hasHeaderRow;
     }
@@ -107,7 +107,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
             throw new ArgumentNullException(nameof(reader));
         }
 
-        this._reader = new CsvStringReader(reader, fieldSeparator, (_options & CsvOptions.ThrowOnEmptyLines) != CsvOptions.ThrowOnEmptyLines);
+        this._reader = new CsvStringReader(reader, fieldSeparator, !_options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         this._options = options;
         this._hasHeaderRow = hasHeaderRow;
     }

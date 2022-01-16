@@ -42,7 +42,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
             Assert.IsTrue(analyzer.HasHeaderRow);
             Assert.AreEqual(';', analyzer.FieldSeparator);
-            CollectionAssert.AreEqual(analyzer.ColumnNames, new string[] { "Eins", "eins", "zwei", "drei", "" });
+            CollectionAssert.AreEqual(analyzer.ColumnNames, new string[] { "Eins", "eins", "zwei", "drei"});
 
             Assert.IsTrue(analyzer.Options.IsSet(CsvOptions.CaseSensitiveKeys));
             Assert.IsTrue(analyzer.Options.IsSet(CsvOptions.TrimColumns));

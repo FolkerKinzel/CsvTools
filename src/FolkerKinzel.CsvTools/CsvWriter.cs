@@ -34,6 +34,7 @@ public sealed class CsvWriter : IDisposable
     public const string NewLine = "\r\n";
 
     private bool _isHeaderRowWritten;
+    private bool _isDataWritten;
 
     private readonly char _fieldSeparator;
     private readonly bool _trimColumns;
@@ -198,7 +199,7 @@ public sealed class CsvWriter : IDisposable
 
 
     /// <summary>
-    /// Schreibt den Inhalt von <see cref="Record"/> in die CSV-Datei und setzt anschließend alle Spalten von <see cref="Record"/> auf <c>null</c>. 
+    /// Schreibt den Inhalt von <see cref="Record"/> in die CSV-Datei und setzt anschließend alle Spalten von <see cref="Record"/> auf <see cref="ReadOnlySpan{T}.Empty"/>. 
     /// (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.)
     /// </summary>
     /// <exception cref="IOException">E/A-Fehler</exception>
@@ -218,10 +219,15 @@ public sealed class CsvWriter : IDisposable
             }
 
             WriteField(columns[recordLength - 1].AsSpan());
-            _writer.WriteLine();
-
-            _isHeaderRowWritten = true;
+            _isHeaderRowWritten = _isDataWritten = true;
         }
+
+        if (_isDataWritten)
+        {
+            _writer.WriteLine();
+        }
+
+        _isDataWritten = true;
 
         for (int j = 0; j < recordLength - 1; j++)
         {
@@ -230,7 +236,7 @@ public sealed class CsvWriter : IDisposable
             {
                 WriteField(mem.Span);
 
-                Record[j] = null;
+                Record[j] = default;
             }
 
             _writer.Write(_fieldSeparator);
@@ -241,9 +247,8 @@ public sealed class CsvWriter : IDisposable
         {
             WriteField(lastString.Span);
 
-            Record[recordLength - 1] = null;
+            Record[recordLength - 1] = default;
         }
-        _writer.WriteLine();
 
         /////////////////////////////////////////////
 

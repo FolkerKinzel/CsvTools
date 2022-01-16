@@ -182,7 +182,7 @@ public class CsvAnalyzer
 
             int firstLineCount = 0;
 
-            using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.IsSet(CsvOptions.ThrowOnEmptyLines));
+            using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
 
             IList<ReadOnlyMemory<char>>? row;
             while((row = csvStringReader.Read()) is not null)
@@ -195,11 +195,11 @@ public class CsvAnalyzer
 
                     bool hasHeader = true;
                     bool hasMaybeNoHeader = false;
+                    firstLineCount = row.Count;
 
                     for (int i = 0; i < row.Count; i++)
                     {
                         ReadOnlyMemory<char> mem = row[i];
-                        firstLineCount++;
 
                         if (hasHeader)
                         {
@@ -228,11 +228,11 @@ public class CsvAnalyzer
                                 Options = Options.Set(CsvOptions.TrimColumns);
                             }
                         }
-                    }//foreach
+                    }//for
 
                     if (hasHeader)
                     {
-                        ColumnNames = new ReadOnlyCollection<string>(row.Select(x => x.ToString()).ToArray());
+                        ColumnNames = new ReadOnlyCollection<string>(row.Where(x => !x.IsEmpty).Select(x => x.ToString()).ToArray());
 
                         if(ColumnNames.Count == ColumnNames.Distinct(StringComparer.Ordinal).Count())
                         {
