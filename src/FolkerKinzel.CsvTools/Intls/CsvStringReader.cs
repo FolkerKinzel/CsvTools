@@ -47,6 +47,11 @@ internal sealed class CsvStringReader : IDisposable
         this._fieldSeparator = fieldSeparator;
     }
 
+    /// <summary>
+    /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
+    /// </summary>
+    public void Dispose() => _reader.Dispose();
+
 
     internal IList<ReadOnlyMemory<char>>? Read()
     {
@@ -79,7 +84,7 @@ internal sealed class CsvStringReader : IDisposable
 
         do
         {
-            _row.Add(GetAllocatedField());
+            _row.Add(GetField());
         }
         while (LineIndex < _currentLine?.Length);
 
@@ -98,138 +103,159 @@ internal sealed class CsvStringReader : IDisposable
         }
 
         return _row;
+    }
 
-        //////////////////////////////////////////////////
 
-        ReadOnlyMemory<char> GetAllocatedField()
+    private ReadOnlyMemory<char> GetField()
+    {
+        Debug.Assert(_currentLine != null);
+
+        int startIndex = LineIndex;
+
+        for (int count = LineIndex; count < _currentLine.Length; count++)
         {
-            int startIndex = LineIndex;
-            bool isQuoted = false;
-            bool isMaskedDoubleQuote = false;
+            char c = _currentLine[count];
 
-            _ = _sb.Clear();
-
-            while (true)
+            if (c == _fieldSeparator)
             {
-                if (_currentLine is null) // Dateiende
+                LineIndex = count + 1;
+                return _currentLine.AsMemory(startIndex, count);
+            }
+
+            if (c == '\"')
+            {
+                return GetAllocatedField();
+            }
+        }
+
+        LineIndex = _currentLine.Length;
+        return _currentLine.AsMemory(startIndex);
+    }
+
+
+    private ReadOnlyMemory<char> GetAllocatedField()
+    {
+        int startIndex = LineIndex;
+        bool isQuoted = false;
+        bool isMaskedDoubleQuote = false;
+
+        _ = _sb.Clear();
+
+        while (true)
+        {
+            if (_currentLine is null) // Dateiende
+            {
+                LineIndex = 0;
+                return InitField();
+            }
+
+            if (isQuoted && _currentLine.Length == 0) // Leerzeile
+            {
+                _ = _sb.AppendLine();
+                _currentLine = _reader.ReadLine();
+                LineNumber++;
+                LineIndex = 0;
+                continue;
+            }
+
+            if (LineIndex >= _currentLine.Length)
+            {
+                LineIndex = _currentLine.Length;
+
+                return InitField();
+            }
+
+            char c = _currentLine[LineIndex];
+
+            if (LineIndex == _currentLine.Length - 1)
+            {
+                if (c == '\"') // Feld beginnt mit Leerzeile oder maskiertes Feld endet
                 {
-                    LineIndex = 0;
-                    return InitField();
+                    isQuoted = !isQuoted;
                 }
 
-                if (isQuoted && _currentLine.Length == 0) // Leerzeile
+                if (isQuoted)
                 {
-                    _ = _sb.AppendLine();
+                    if (c != '\"')
+                    {
+                        _ = _sb.Append(c).AppendLine();
+                    }
                     _currentLine = _reader.ReadLine();
-                    LineNumber++;
                     LineIndex = 0;
+                    LineNumber++;
                     continue;
                 }
-
-                if (LineIndex >= _currentLine.Length)
+                else
                 {
-                    LineIndex = _currentLine.Length;
-
-                    return InitField();
-                }
-
-                char c = _currentLine[LineIndex];
-
-                if (LineIndex == _currentLine.Length - 1)
-                {
-                    if (c == '\"') // Feld beginnt mit Leerzeile oder maskiertes Feld endet
+                    // wenn die Datenzeile mit einem leeren Feld endet,
+                    // wird dieses nicht gelesen, aber von GetNextRecord() als default(ReadOnlyMemory<char>) ergänzt
+                    if (c != _fieldSeparator)
                     {
-                        isQuoted = !isQuoted;
+                        _ = _sb.Append(c);
                     }
 
-                    if (isQuoted)
+
+                    LineIndex = _currentLine.Length;
+                    return InitField();
+                }
+            }
+            else
+            {
+                if (isQuoted)
+                {
+                    if (c == '\"')
                     {
-                        if (c != '\"')
+                        if (isMaskedDoubleQuote)
                         {
-                            _ = _sb.Append(c).AppendLine();
+                            isMaskedDoubleQuote = false;
+                            _ = _sb.Append(c);
                         }
-                        _currentLine = _reader.ReadLine();
-                        LineIndex = 0;
-                        LineNumber++;
-                        continue;
+                        else
+                        {
+                            char next = _currentLine[LineIndex + 1];
+
+                            if (next == _fieldSeparator) // Feldende
+                            {
+                                LineIndex += 2;
+                                return InitField();
+                            }
+                            else if (next == '\"')
+                            {
+                                isMaskedDoubleQuote = true;
+                            }
+                        }
                     }
                     else
                     {
-                        // wenn die Datenzeile mit einem leeren Feld endet,
-                        // wird dieses nicht gelesen, aber von GetNextRecord() als default(ReadOnlyMemory<char>) ergänzt
-                        if (c != _fieldSeparator)
-                        {
-                            _ = _sb.Append(c);
-                        }
-
-
-                        LineIndex = _currentLine.Length;
-                        return InitField();
+                        _ = _sb.Append(c);
                     }
                 }
                 else
                 {
-                    if (isQuoted)
+                    if (LineIndex == startIndex && c == '\"')
                     {
-                        if (c == '\"')
-                        {
-                            if (isMaskedDoubleQuote)
-                            {
-                                isMaskedDoubleQuote = false;
-                                _ = _sb.Append(c);
-                            }
-                            else
-                            {
-                                char next = _currentLine[LineIndex + 1];
-
-                                if (next == _fieldSeparator) // Feldende
-                                {
-                                    LineIndex += 2;
-                                    return InitField();
-                                }
-                                else if (next == '\"')
-                                {
-                                    isMaskedDoubleQuote = true;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            _ = _sb.Append(c);
-                        }
+                        isQuoted = true;
+                    }
+                    else if (c == _fieldSeparator)
+                    {
+                        LineIndex++;
+                        return InitField();
                     }
                     else
                     {
-                        if (LineIndex == startIndex && c == '\"')
-                        {
-                            isQuoted = true;
-                        }
-                        else if (c == _fieldSeparator)
-                        {
-                            LineIndex++;
-                            return InitField();
-                        }
-                        else
-                        {
-                            _ = _sb.Append(c);
-                        }
+                        _ = _sb.Append(c);
                     }
-
-                    LineIndex++;
                 }
 
+                LineIndex++;
+            }
 
-            }// while
+        }// while
 
-            //////////////////////////////////////////
-            
-            ReadOnlyMemory<char> InitField() => _sb.ToString().AsMemory();
-        }
     }
 
+    private ReadOnlyMemory<char> InitField() => _sb.ToString().AsMemory();
 
-    /// <summary>
-    /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
-    /// </summary>
-    public void Dispose() => _reader.Dispose();
+
+    
 }

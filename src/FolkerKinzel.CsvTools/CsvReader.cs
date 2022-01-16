@@ -148,7 +148,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
     public void Dispose() => _reader.Dispose();
 
 
-    public CsvRecord? ReadRecord()
+    public CsvRecord? Read()
     {
         if (Eof)
         {
@@ -177,7 +177,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
                     trimColumns,
                     initArr: false,
                     throwException: false);
-                return ReadRecord();
+                return Read();
             }
             else
             {
@@ -274,7 +274,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
         _firstRun = false;
 
         CsvRecord? record;
-        while ((record = ReadRecord()) != null)
+        while ((record = Read()) != null)
         {
             yield return record;
         }
