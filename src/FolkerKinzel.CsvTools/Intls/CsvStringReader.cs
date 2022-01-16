@@ -79,7 +79,7 @@ internal sealed class CsvStringReader : IDisposable
 
         do
         {
-            _row.Add(GetField());
+            _row.Add(GetAllocatedField());
         }
         while (LineIndex < _currentLine?.Length);
 
@@ -101,7 +101,7 @@ internal sealed class CsvStringReader : IDisposable
 
         //////////////////////////////////////////////////
 
-        ReadOnlyMemory<char> GetField()
+        ReadOnlyMemory<char> GetAllocatedField()
         {
             int startIndex = LineIndex;
             bool isQuoted = false;
