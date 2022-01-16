@@ -17,7 +17,7 @@ namespace FolkerKinzel.CsvTools.Intls
     {
         private readonly TextReader _reader;
         private readonly char _fieldSeparator;
-       
+
         private readonly StringBuilder _sb = new();
         private readonly bool _skipEmptyLines;
 
@@ -51,7 +51,7 @@ namespace FolkerKinzel.CsvTools.Intls
         {
             while ((_currentLine = _reader.ReadLine()) != null)
             {
-                if(_currentLine.Length == 0 && _skipEmptyLines)
+                if (_currentLine.Length == 0 && _skipEmptyLines)
                 {
                     continue;
                 }
@@ -75,7 +75,7 @@ namespace FolkerKinzel.CsvTools.Intls
         {
             LineNumber++;
             LineIndex = 0;
-            
+
             do
             {
                 yield return GetField();
@@ -141,10 +141,8 @@ namespace FolkerKinzel.CsvTools.Intls
 
                         if (isQuoted)
                         {
-                            if (c != '\"')
-                            {
-                                _ = _sb.Append(c).AppendLine();
-                            }
+                            _ = c == '\"' ? _sb.AppendLine() : _sb.Append(c).AppendLine();
+
                             _currentLine = _reader.ReadLine();
                             LineIndex = 0;
                             LineNumber++;
@@ -152,14 +150,14 @@ namespace FolkerKinzel.CsvTools.Intls
                         }
                         else
                         {
-                            // wenn die Datenzeile mit einem leeren Feld endet,
+                            // Wenn die Datenzeile mit einem leeren Feld endet,
                             // wird dieses nicht gelesen, aber von GetNextRecord() als null-Wert ergänzt
-                            if (c != _fieldSeparator)
+                            if (c != _fieldSeparator && c != '\"')
                             {
                                 _ = _sb.Append(c);
                             }
 
-                            
+
                             LineIndex = _currentLine.Length;
                             return InitField();
                         }
