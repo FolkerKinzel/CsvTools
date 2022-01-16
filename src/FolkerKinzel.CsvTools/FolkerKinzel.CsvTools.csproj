@@ -49,6 +49,10 @@
     <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
     <PackageIconUrl />
   </PropertyGroup>
+	<PropertyGroup>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
   <ItemGroup>
     <Using Remove="System.Net.Http" />
 	  <Using Include="System.Runtime.CompilerServices" />
