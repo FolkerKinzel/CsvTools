@@ -15,7 +15,8 @@ internal sealed class CsvStringReader : IDisposable
     private const int INITIAL_COLUMNS_COUNT = 32;
     private readonly List<ReadOnlyMemory<char>> _row = new(INITIAL_COLUMNS_COUNT);
 
-    private readonly StringBuilder _sb = new();
+    private const int INITIAL_STRINGBUILDER_CAPACITY = 64;
+    private StringBuilder? _sb;
     private readonly bool _skipEmptyLines;
 
     private string? _currentLine;
@@ -139,6 +140,7 @@ internal sealed class CsvStringReader : IDisposable
         bool isQuoted = false;
         bool isMaskedDoubleQuote = false;
 
+        _sb ??= new StringBuilder(INITIAL_STRINGBUILDER_CAPACITY);
         _ = _sb.Clear();
 
         while (true)
@@ -254,8 +256,9 @@ internal sealed class CsvStringReader : IDisposable
 
     }
 
-    private ReadOnlyMemory<char> InitField() => _sb.ToString().AsMemory();
-
-
-    
+    private ReadOnlyMemory<char> InitField()
+    {
+        Debug.Assert(_sb is not null);
+        return _sb.ToString().AsMemory();
+    }
 }
