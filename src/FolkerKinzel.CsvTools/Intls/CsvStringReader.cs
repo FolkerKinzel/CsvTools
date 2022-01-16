@@ -9,13 +9,14 @@ namespace FolkerKinzel.CsvTools.Intls;
 /// </summary>
 internal sealed class CsvStringReader : IDisposable
 {
+    private const int INITIAL_COLUMNS_COUNT = 32;
+    private const int INITIAL_STRINGBUILDER_CAPACITY = 64;
+
     private readonly TextReader _reader;
     private readonly char _fieldSeparator;
 
-    private const int INITIAL_COLUMNS_COUNT = 32;
     private readonly List<ReadOnlyMemory<char>> _row = new(INITIAL_COLUMNS_COUNT);
 
-    private const int INITIAL_STRINGBUILDER_CAPACITY = 64;
     private StringBuilder? _sb;
     private readonly bool _skipEmptyLines;
 
@@ -139,6 +140,7 @@ internal sealed class CsvStringReader : IDisposable
         int startIndex = LineIndex;
         bool isQuoted = false;
         bool isMaskedDoubleQuote = false;
+        bool mustAllocate = false; // if masked Double Quotes or new lines this must be true
 
         _sb ??= new StringBuilder(INITIAL_STRINGBUILDER_CAPACITY);
         _ = _sb.Clear();
@@ -148,11 +150,12 @@ internal sealed class CsvStringReader : IDisposable
             if (_currentLine is null) // Dateiende
             {
                 LineIndex = 0;
-                return InitField();
+                return AllocateField();
             }
 
             if (isQuoted && _currentLine.Length == 0) // Leerzeile
             {
+                mustAllocate = true;
                 _ = _sb.AppendLine();
                 _currentLine = _reader.ReadLine();
                 LineNumber++;
@@ -163,8 +166,7 @@ internal sealed class CsvStringReader : IDisposable
             if (LineIndex >= _currentLine.Length)
             {
                 LineIndex = _currentLine.Length;
-
-                return InitField();
+                return AllocateField();
             }
 
             char c = _currentLine[LineIndex];
@@ -178,10 +180,10 @@ internal sealed class CsvStringReader : IDisposable
 
                 if (isQuoted)
                 {
-                    if (c != '\"')
-                    {
-                        _ = _sb.Append(c).AppendLine();
-                    }
+                    mustAllocate = true; // Leerzeile
+
+                    _ = c == '\"' ? _sb.AppendLine() : _sb.Append(c).AppendLine();
+
                     _currentLine = _reader.ReadLine();
                     LineIndex = 0;
                     LineNumber++;
@@ -191,14 +193,14 @@ internal sealed class CsvStringReader : IDisposable
                 {
                     // wenn die Datenzeile mit einem leeren Feld endet,
                     // wird dieses nicht gelesen, aber von GetNextRecord() als default(ReadOnlyMemory<char>) ergänzt
-                    if (c != _fieldSeparator)
+                    if (c != _fieldSeparator && c != '\"')
                     {
                         _ = _sb.Append(c);
                     }
 
 
                     LineIndex = _currentLine.Length;
-                    return InitField();
+                    return AllocateField();
                 }
             }
             else
@@ -219,11 +221,12 @@ internal sealed class CsvStringReader : IDisposable
                             if (next == _fieldSeparator) // Feldende
                             {
                                 LineIndex += 2;
-                                return InitField();
+                                return AllocateField();
                             }
                             else if (next == '\"')
                             {
                                 isMaskedDoubleQuote = true;
+                                mustAllocate = true;
                             }
                         }
                     }
@@ -241,7 +244,7 @@ internal sealed class CsvStringReader : IDisposable
                     else if (c == _fieldSeparator)
                     {
                         LineIndex++;
-                        return InitField();
+                        return AllocateField();
                     }
                     else
                     {
@@ -256,7 +259,7 @@ internal sealed class CsvStringReader : IDisposable
 
     }
 
-    private ReadOnlyMemory<char> InitField()
+    private ReadOnlyMemory<char> AllocateField()
     {
         Debug.Assert(_sb is not null);
         return _sb.ToString().AsMemory();

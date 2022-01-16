@@ -18,6 +18,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Using Remove="System.Net.Http" />
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
 	</ItemGroup>
 	
 
