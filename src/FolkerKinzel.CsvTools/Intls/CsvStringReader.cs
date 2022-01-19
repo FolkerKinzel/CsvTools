@@ -244,20 +244,11 @@ internal sealed class CsvStringReader : IDisposable
                 }
                 else
                 {
-                    if (c == '\"')
+                    if (LineIndex == startIndex && c == '\"')
                     {
-                        char next = _currentLine[LineIndex + 1];
-
-                        if (next == '\"')
-                        {
-                            isMaskedDoubleQuote = true;
-                            mustAllocate = true;
-                        }
-                        else
-                        {
-                            isQuoted = true;
-                        }
+                        isQuoted = true;
                     }
+                    // The remaining cases can only happen on invalid CSV:
                     else if (c == _fieldSeparator)
                     {
                         LineIndex++;
@@ -277,10 +268,10 @@ internal sealed class CsvStringReader : IDisposable
         ReadOnlyMemory<char> AllocateField()
         {
             Debug.Assert(_sb is not null);
-            return mustAllocate ? _sb.ToString().AsMemory() 
+            return mustAllocate ? _sb.ToString().AsMemory()
                                 : _currentLine.AsMemory(startIndex + 1, _sb.Length);
         }
     }
 
-    
+
 }
