@@ -143,20 +143,20 @@ internal sealed class CsvStringReader : IDisposable
         int startIndex = LineIndex;
         bool isQuoted = false;
         bool isMaskedDoubleQuote = false;
-        bool mustAllocate = false; // if masked Double Quotes or new lines this must be true
+        bool mustAllocate = false; // if masked Double Quotes or new lines are inside of a field this must be true
 
         _sb ??= new StringBuilder(INITIAL_STRINGBUILDER_CAPACITY);
         _ = _sb.Clear();
 
         while (true)
         {
-            if (_currentLine is null) // Dateiende
+            if (_currentLine is null) // EOF
             {
                 LineIndex = 0;
                 return AllocateField();
             }
 
-            if (isQuoted && _currentLine.Length == 0) // Leerzeile
+            if (isQuoted && _currentLine.Length == 0) // empty line
             {
                 mustAllocate = true;
                 _ = _sb.AppendLine();
@@ -176,14 +176,14 @@ internal sealed class CsvStringReader : IDisposable
 
             if (LineIndex == _currentLine.Length - 1)
             {
-                if (c == '\"') // Feld beginnt mit Leerzeile oder maskiertes Feld endet
+                if (c == '\"') // a field starts with an empty line or a masked field ends
                 {
                     isQuoted = !isQuoted;
                 }
 
                 if (isQuoted)
                 {
-                    mustAllocate = true; // Leerzeile
+                    mustAllocate = true; // empty line inside of a field
 
                     _ = c == '\"' ? _sb.AppendLine() : _sb.Append(c).AppendLine();
 
@@ -194,8 +194,8 @@ internal sealed class CsvStringReader : IDisposable
                 }
                 else
                 {
-                    // wenn die Datenzeile mit einem leeren Feld endet,
-                    // wird dieses nicht gelesen, aber von GetNextRecord() als default(ReadOnlyMemory<char>) ergänzt
+                    // If the line ends with an empty field this one is ignored here
+                    // but supplemented by GetNextRecord() as default(ReadOnlyMemory<char>).
                     if (c != _fieldSeparator && c != '\"')
                     {
                         _ = _sb.Append(c);
