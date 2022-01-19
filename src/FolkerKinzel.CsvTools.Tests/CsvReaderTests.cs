@@ -107,7 +107,7 @@ public class CsvReaderTests
     {
         const string testCsv =
             "Spalte \"1\",," + "\r\n" +
-            ",Spalte \"2\",";
+            ",Spalte \"2\"," + "\r\n";
 
         using var stringReader = new StringReader(testCsv);
         using var csvReader = new CsvReader(stringReader, hasHeaderRow: false);

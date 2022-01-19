@@ -19,7 +19,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Tests
             var conv = new EnumConverter<DayOfWeek>();
 
             string? outp = (string?)conv.ConvertToString(null);
-            Assert.IsNotNull(outp);
+            Assert.IsNull(outp);
 
             DayOfWeek res = conv.Parse(outp.AsSpan());
 

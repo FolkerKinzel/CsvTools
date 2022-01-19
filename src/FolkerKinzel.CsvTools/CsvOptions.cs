@@ -44,7 +44,7 @@ public enum CsvOptions
     /// Wenn gesetzt, wirft <see cref="CsvReader"/> eine <see cref="InvalidCsvException"/>, wenn in einer Datenzeile weniger
     /// Felder enthalten sind, als in der ersten Datenzeile.
     /// <note>
-    /// Andere Sotware könnte darauf verzichten, leere Felder am Zeilenende durch Feldtrennzeichen zu markieren. Das Fehlen
+    /// Andere Software könnte darauf verzichten, leere Felder am Zeilenende durch Feldtrennzeichen zu markieren. Das Fehlen
     /// von Feldern am Zeilenende kann aber auch ein Indiz für einen Lesefehler sein.
     /// </note>
     /// </summary>

@@ -33,7 +33,6 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
             return null;
         }
 
-
         if (value is T t)
         {
             return DoConvertToString(t);

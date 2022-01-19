@@ -142,6 +142,7 @@ internal sealed class CsvStringReader : IDisposable
         Debug.Assert(_currentLine.Length > 0);
         int startIndex = LineIndex;
         bool isQuoted = false;
+        bool hadBeenQuoted = false;
         bool isMaskedDoubleQuote = false;
         bool mustAllocate = false; // if masked Double Quotes or new lines are inside of a field this must be true
 
@@ -247,6 +248,7 @@ internal sealed class CsvStringReader : IDisposable
                     if (LineIndex == startIndex && c == '\"')
                     {
                         isQuoted = true;
+                        hadBeenQuoted = true;
                     }
                     // The remaining cases can only happen in invalid CSV:
                     else if (c == _fieldSeparator)
@@ -269,7 +271,7 @@ internal sealed class CsvStringReader : IDisposable
         {
             Debug.Assert(_sb is not null);
             return mustAllocate ? _sb.ToString().AsMemory()
-                                : _currentLine.AsMemory(startIndex + 1, _sb.Length);
+                                : _currentLine.AsMemory(hadBeenQuoted ? startIndex + 1 : startIndex, _sb.Length);
         }
     }
 

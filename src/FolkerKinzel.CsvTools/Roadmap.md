@@ -25,6 +25,7 @@ column name aliases). This is for CSV files without header row.
 - [x] Let `CsvRecord` return `ReadOnlyMemory<Char>` instead of `String`.
 - [ ] Add a DateOnlyConverter.
 - [ ] Add a TimeOnlyConverter.
+- [ ] Add a protected `AcceptsNull` property to CsvTypeConverter.
 
 ### 2.1.0
 - [ ] Add a BigIntegerConverter.

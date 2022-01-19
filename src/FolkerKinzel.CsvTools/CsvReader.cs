@@ -82,8 +82,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
     {
         StreamReader streamReader = InitializeStreamReader(fileName, textEncoding);
 
-        this._reader = new CsvStringReader(streamReader, fieldSeparator, !_options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         this._options = options;
+        this._reader = new CsvStringReader(streamReader, fieldSeparator, !options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         this._hasHeaderRow = hasHeaderRow;
     }
 
@@ -107,8 +107,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
             throw new ArgumentNullException(nameof(reader));
         }
 
-        this._reader = new CsvStringReader(reader, fieldSeparator, !_options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         this._options = options;
+        this._reader = new CsvStringReader(reader, fieldSeparator, !options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         this._hasHeaderRow = hasHeaderRow;
     }
 
@@ -212,7 +212,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
             {
                 if (i >= _record.Count)
                 {
-                    if ((_options & CsvOptions.ThrowOnTooMuchFields) == CsvOptions.ThrowOnTooMuchFields)
+                    if (_options.HasFlag(CsvOptions.ThrowOnTooMuchFields))
                     {
                         throw new InvalidCsvException("Too much fields in a record.", reader.LineNumber, reader.LineIndex);
                     }
@@ -224,32 +224,25 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>
 
                 ReadOnlyMemory<char> item = data[i];
 
-                if (item.Length != 0 && (_options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns)
-                {
-                    ReadOnlyMemory<char> trimmed = item.Trim();
-
-                    _record[i] = trimmed;
-                }
-                else
-                {
-                    _record[i] = item;
-                }
+                _record[i] = item.Length != 0 && _options.HasFlag(CsvOptions.TrimColumns)
+                             ? item.Trim()
+                             : item;
             }
 
 
             if (i < _record.Count)
             {
-                if (i == 0 && (_options & CsvOptions.ThrowOnEmptyLines) == CsvOptions.ThrowOnEmptyLines)
+                if (i == 1 && _options.HasFlag(CsvOptions.ThrowOnEmptyLines) && data[0].IsEmpty)
                 {
                     throw new InvalidCsvException("Unmasked empty line.", reader.LineNumber, 0);
                 }
 
-                if ((_options & CsvOptions.ThrowOnTooFewFields) == CsvOptions.ThrowOnTooFewFields)
+                if (_options.HasFlag(CsvOptions.ThrowOnTooFewFields))
                 {
                     throw new InvalidCsvException("Too few fields in a record.", reader.LineNumber, reader.LineIndex);
                 }
 
-                if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
+                if (_options.HasFlag(CsvOptions.DisableCaching))
                 {
                     for (int j = i; j < _record.Count; j++)
                     {
