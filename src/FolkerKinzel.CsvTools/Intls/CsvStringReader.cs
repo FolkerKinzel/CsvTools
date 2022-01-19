@@ -248,7 +248,7 @@ internal sealed class CsvStringReader : IDisposable
                     {
                         isQuoted = true;
                     }
-                    // The remaining cases can only happen on invalid CSV:
+                    // The remaining cases can only happen in invalid CSV:
                     else if (c == _fieldSeparator)
                     {
                         LineIndex++;
