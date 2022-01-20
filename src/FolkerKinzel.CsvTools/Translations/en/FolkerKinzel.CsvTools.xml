@@ -1,0 +1,1297 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FolkerKinzel.CsvTools</name>
+    </assembly>
+    <members>
+        <member name="T:FolkerKinzel.CsvTools.CsvAnalyzer">
+            <summary>
+            <see cref="T:FolkerKinzel.CsvTools.CsvAnalyzer"/> kann eine statistische Analyse auf einer CSV-Datei ausführen und
+            die Ergebnisse als Objekteigenschaften zur Verfügung stellen.
+            </summary>
+            <example>
+            <note type="note">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+            <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
+            <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
+            </example>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvAnalyzer.AnalyzedLinesMinCount">
+            <summary>
+            Mindestanzahl der zu untersuchenden Zeilen der CSV-Datei.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvAnalyzer.#ctor">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvAnalyzer"/>-Objekt.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvAnalyzer.Analyze(System.String,System.Int32,System.Text.Encoding)">
+            <summary>
+            Analysiert die CSV-Datei, auf die <paramref name="fileName"/> verweist, und füllt die Eigenschaften des <see cref="T:FolkerKinzel.CsvTools.CsvAnalyzer"/>-Objekts mit den
+            Ergebnissen der Analyse.
+            </summary>
+            <param name="fileName">Dateipfad der CSV-Datei.</param>
+            <param name="analyzedLinesCount">Höchstanzahl der in der CSV-Datei zu analysierenden Zeilen. Der Mindestwert
+            ist <see cref="F:FolkerKinzel.CsvTools.CsvAnalyzer.AnalyzedLinesMinCount"/>. Wenn die Datei weniger Zeilen hat als <paramref name="analyzedLinesCount"/>
+            wird sie komplett analysiert. (Sie können <see cref="F:System.Int32.MaxValue">Int32.MaxValue</see> angeben, um in jedem Fall die gesamte Datei zu
+            analysieren.)</param>
+            <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textkodierung oder <c>null</c> für <see cref="P:System.Text.Encoding.UTF8"/>.</param>
+            
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
+            <exception cref="T:System.IO.IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
+            <remarks><para><see cref="T:FolkerKinzel.CsvTools.CsvAnalyzer"/> führt auf der CSV-Datei eine statistische Analyse durch, um die geeigneten
+            Parameter für das Lesen der Datei zu finden. Das Ergebnis der Analyse ist also immer nur eine Schätzung, deren
+            Treffsicherheit mit der Zahl der analysierten Zeilen steigt.</para>
+            <para>Die Analyse ist zeitaufwändig, da auf die CSV-Datei lesend zugegriffen werden muss.</para></remarks>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvAnalyzer.FieldSeparator">
+            <summary>
+            Das Feldtrennzeichen der CSV-Datei.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvAnalyzer.Options">
+            <summary>
+            Optionen für das Lesen der CSV-Datei.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvAnalyzer.HasHeaderRow">
+            <summary>
+            <c>true</c>, wenn die CSV-Datei eine Kopfzeile hat.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvAnalyzer.ColumnNames">
+            <summary>
+            Spaltennamen der CSV-Datei.
+            </summary>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.CsvOptions">
+            <summary>
+            Benannte Konstanten, um Optionen für das Lesen und Schreiben von CSV-Dateien anzugeben. Die Flags
+            können kombiniert werden.
+            </summary>
+            <remarks>
+            <note type="tip">
+            Verwenden Sie zum sicheren und bequemen Arbeiten mit der <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Enum  die Erweiterungsmethoden der 
+            Klasse <see cref="T:FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension"/> (s.Beispiel)!
+            </note>
+            </remarks>
+            <example>
+            <para>Beispiel, das demonstriert, dass das Setzen des Flags <see cref="F:FolkerKinzel.CsvTools.CsvOptions.DisableCaching"/> zu unerwarteten Ergebnissen führen kann, wenn versucht wird,
+            die Ergebnismenge zu cachen.</para>
+            <note type="note">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+            <code language="cs" source="..\Examples\DisableCachingAndLinq.cs" />
+            </example>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.None">
+            <summary>
+            Kein Flag ist gesetzt. Das erzeugt einen sehr nachsichtigen Parser, der kaum Ausnahmen wirft.
+            </summary>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.ThrowOnTooMuchFields">
+            <summary>
+            Wenn gesetzt, wirft <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> eine <see cref="T:FolkerKinzel.CsvTools.InvalidCsvException"/>, wenn in einer Datenzeile mehr
+            Felder enthalten sind, als in der ersten Datenzeile.
+            <note>
+            Wenn in einer Datenzeile mehr
+            Felder enthalten sind, als in der ersten Datenzeile, ist das ein starkes Indiz für einen Lesefehler. Das Flag sollte
+            deshalb i.d.R. gesetzt sein.
+            </note>
+            </summary>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.ThrowOnTooFewFields">
+            <summary>
+            Wenn gesetzt, wirft <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> eine <see cref="T:FolkerKinzel.CsvTools.InvalidCsvException"/>, wenn in einer Datenzeile weniger
+            Felder enthalten sind, als in der ersten Datenzeile.
+            <note>
+            Andere Sotware könnte darauf verzichten, leere Felder am Zeilenende durch Feldtrennzeichen zu markieren. Das Fehlen
+            von Feldern am Zeilenende kann aber auch ein Indiz für einen Lesefehler sein.
+            </note>
+            </summary>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.ThrowOnEmptyLines">
+            <summary>
+            Wenn gesetzt, wirft <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> eine <see cref="T:FolkerKinzel.CsvTools.InvalidCsvException"/>, wenn in der CSV-Datei Leerzeilen
+            vorkommen, die nicht Teil eines mit Gänsefüßchen maskierten Datenfeldes sind.
+            <note>
+            Leerzeilen, die nicht Teil eines maskierten Feldes sind, können in keinem Fall als Teil der zu lesenden Daten interpretiert
+            werden. Sie können aber durch Entfernen des Flags erreichen, dass <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> solche Leerzeilen ignoriert.
+            </note>
+            </summary>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.CaseSensitiveKeys">
+            <summary>
+            Wenn das Flag nicht gesetzt ist, werden von der Klasse <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> die Spaltennamen der CSV-Datei, die zum Zugriff
+            auf die Daten dienen, nicht case-sensitiv interpretiert. Das ist dasselbe Verhalten, das <see cref="T:System.Data.DataColumnCollection"/>
+            zeigt.
+            </summary>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.TrimColumns">
+            <summary>
+            Wenn das Flag gesetzt ist, werden von <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> und <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/> sämtliche Daten-Tokens und auch die 
+            Spaltennamen mit der Methode <see cref="M:System.String.Trim"/> behandelt. Das bedeutet einen starken Performanceverlust und verändert
+            auch Daten, bei denen der vor- und nachgestellte Leerraum eine Bedeutung hat. Setzen Sie das Flag nur, um nicht standardkonforme
+            CSV-Dateien zu lesen, die zusätzliches Padding einführen.
+            </summary>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.Default">
+            <summary>
+            Standardeinstellung. Dies ist ein kombinierter Wert, der <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> zum Werfen einer <see cref="T:FolkerKinzel.CsvTools.InvalidCsvException"/> zwingt,
+            wenn die zu lesende Datei nicht dem Standard RFC 4180 entspricht. (Abweichende Spaltentrennzeichen und Zeilenwechselzeichen werden immer toleriert.)
+            </summary>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvOptions.DisableCaching">
+            <summary>
+            Wenn das Flag gesetzt wird, wird beim Lesen der CSV-Datei für jede Datenzeile dasselbe <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt verwendet (gefüllt mit neuen Daten).
+            Das bringt bei sehr großen
+            CSV-Dateien leichte Performancevorteile, kann aber zu unerwarteten Ergebnissen führen, wenn bei der Weiterverarbeitung versucht wird, die Ergbnismenge zu 
+            speichern. (s. Beispiel)
+            </summary>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.CsvReader">
+            <summary>
+            Bietet schreibgeschützten Vorwärtszugriff auf die Datensätze einer CSV-Datei. (Das bedeutet, dass der <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> die Datei nur einmal vorwärts
+            lesen kann.)
+            </summary>
+            <remarks>
+            <para>
+            Die Methode <see cref="M:FolkerKinzel.CsvTools.CsvReader.Read"/> gibt einen <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator&lt;CsvRecord&gt;</see> zurück, mit dem Sie über die Datensätze der CSV-Datei iterieren
+            können, die in Form von <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekten zurückgegeben werden.
+            </para>
+            <para>Die Klasse <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> bietet die
+            Möglichkeit, die Reihenfolge der Datenspalten der <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekte zur Laufzeit auf die Spaltenreihenfolge einer <see cref="T:System.Data.DataTable"/>
+            zu mappen und Typkonvertierungen durchzuführen.
+            </para>
+            <para>Beim Lesen einer unbekannten CSV-Datei können die geeigneten Parameter für den Konstruktor von <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> mit Hilfe der Klasse
+            <see cref="T:FolkerKinzel.CsvTools.CsvAnalyzer"/> ermittelt werden.</para>
+            </remarks>
+            <example>
+            <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+            <para>Linq-Abfrage auf einer CSV-Datei:</para>
+            <code language="cs" source="..\Examples\LinqOnCsvFile.cs"/>
+            <para>Speichern des Inhalts einer <see cref="T:System.Data.DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
+            eine <see cref="T:System.Data.DataTable"/>:</para>
+            <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
+            <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
+            <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
+            </example>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvReader.#ctor(System.String,System.Boolean,FolkerKinzel.CsvTools.CsvOptions,System.Char,System.Text.Encoding)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvReader"/>-Objekt.
+            </summary>
+            <param name="fileName">Dateipfad der CSV-Datei.</param>
+            <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
+            <param name="options">Optionen für das Lesen der CSV-Datei.</param>
+            <param name="fieldSeparator">Das Feldtrennzeichen, das in der CSV-Datei Verwendung findet.</param>
+            <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="P:System.Text.Encoding.UTF8"/>.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
+            <exception cref="T:System.IO.IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvReader.#ctor(System.IO.TextReader,System.Boolean,FolkerKinzel.CsvTools.CsvOptions,System.Char)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvReader"/>-Objekt.
+            </summary>
+            <param name="reader">Der <see cref="T:System.IO.TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
+            <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
+            <param name="options">Optionen für das Lesen der CSV-Datei.</param>
+            <param name="fieldSeparator">Das Feldtrennzeichen.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="reader"/> ist <c>null</c>.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvReader.Dispose">
+            <summary>
+            Gibt die Resourcen frei. (Schließt den <see cref="T:System.IO.TextReader"/>.)
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvReader.InitializeStreamReader(System.String,System.Text.Encoding)">
+            <summary>
+            Initialisiert einen <see cref="T:System.IO.StreamReader"/>.
+            </summary>
+            <param name="fileName">Dateipfad.</param>
+            <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="P:System.Text.Encoding.UTF8"/>.</param>
+            <returns>Ein <see cref="T:System.IO.StreamReader"/>.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
+            <exception cref="T:System.IO.IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.CsvRecord">
+            <summary>
+            Repräsentiert einen Datensatz der CSV-Datei (Zeile). Die Spaltenreihenfolge entspricht der der CSV-Datei und alle Spalten sind vom Datentyp
+            <see cref="T:System.String"/>. Auf den Inhalt der Spalten kann per nullbasiertem Spaltenindex oder über die Spaltennamen zugegriffen werden.
+            </summary>
+            <remarks>
+            Mit der Klasse <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> kann die Reihenfolge der Datenspalten zur Laufzeit auf die evtl. andere Spaltenreihenfolge 
+            einer <see cref="T:System.Data.DataTable"/> gemappt werden und es können damit auch Typkonvertierungen durchgeführt werden.
+            </remarks>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.#ctor(FolkerKinzel.CsvTools.CsvRecord)">
+            <summary>
+            Initialisiert aus <paramref name="source"/>, das als Vorlage dient, ein neues <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt,
+            das die unveränderlichen Teile der Vorlage referenziert bzw. kopiert. (Ctor der von <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> verwendet wird.)
+            </summary>
+            <param name="source"><see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt, das als Vorlage dient.</param>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.#ctor(System.Int32)">
+            <summary>
+            Initialisiert ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt mit Standardnamen für die Spalten ("Column1", "Column2" etc). (Geeignet für
+            CSV-Dateien ohne Kopfzeile.)
+            </summary>
+            <param name="columnsCount">Anzahl der Spalten.</param>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.#ctor(System.String[],System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt mit Spaltennamen. (Geeignet für
+            CSV-Dateien mit Kopfzeile.)
+            </summary>
+            <param name="keys">Spaltennamen. Die Auflistung kann <c>null</c>-Werte enthalten: Diese werden dann durch 
+            Standardnamen ersetzt.</param>
+            <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv behandelt.</param>
+            <param name="trimColumns">Wenn <c>true</c>, werden alle Spaltennamen mit der Methode <see cref="M:System.String.Trim"/> behandelt.</param>
+            <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert. Das Objekt taugt dann nur als Kopierschablone
+            für weitere <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekte. (Wird von <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> verwendet.</param>
+            <param name="throwException">Wenn <c>true</c>, wird eine <see cref="T:System.ArgumentException"/> geworfen,
+            wenn <paramref name="keys"/> 2 identische Spaltennamen enthält. Beim Lesen einer Datei sollte der 
+            Parameter auf <c>false</c> gesetzt werden, um die Spaltennamen automatisch so abzuwandeln, dass sie eindeutig sind.</param>
+            <exception cref="T:System.ArgumentException">Ein Spaltenname war bereits im Dictionary enthalten. Die Exception wird nur dann
+            geworfen, wenn <paramref name="throwException"/> <c>true</c> ist.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.Item(System.Int32)">
+            <summary>
+            Ruft den Wert der Spalte der CSV-Datei, die sich am angegebenen Index befindet, ab oder legt diesen fest.
+            </summary>
+            <param name="index">Der nullbasierte Index der Spalte der CSV-Datei, deren Wert abgerufen oder festgelegt wird.</param>
+            <returns>Das Element am angegebenen Index.</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="P:FolkerKinzel.CsvTools.CsvRecord.Count"/>.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.Item(System.String)">
+            <summary>
+            Ruft den Wert ab, der dem angegebenen Spaltennamen der CSV-Datei zugeordnet ist, oder legt diesen fest.
+            </summary>
+            <param name="columnName">Der Spaltenname der CSV-Datei.</param>
+            <returns>Der dem angegebenen Schlüssel zugeordnete Wert.</returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">Der mit <paramref name="columnName"/> angegebene Spaltenname existiert nicht.</exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.Count">
+            <summary>
+            Gibt die Anzahl der Spalten in <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> zurück.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.IsEmpty">
+            <summary>
+            Gibt <c>true</c> zurück, wenn <see cref="P:FolkerKinzel.CsvTools.CsvRecord.Count"/> 0 ist oder wenn alle
+            Felder den Wert <c>null</c> haben.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.ColumnNames">
+            <summary>
+            Gibt die in <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> gespeicherten Spaltennamen zurück.
+            </summary>
+            <remarks>Wenn die CSV-Datei keine Kopfzeile hatte, werden automatisch Spaltennamen der Art "Column1", "Column2" etc. vergeben.</remarks>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.Values">
+            <summary>
+            Gibt die <see cref="T:System.ReadOnlyMemory`1">ReadOnlyMemory&lt;Char&gt;</see>-Collection der in <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> gespeicherten Daten zurück. Die 
+            Werte können verändert werden.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.ToDictionary">
+            <summary>
+            Gibt eine Kopie der in <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> gespeicherten Daten als <see cref="T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string?&gt;</see> zurück, das
+            für den Schlüsselvergleich denselben <see cref="T:System.StringComparer"/> verwendet, mit dem <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> erstellt wurde.
+            </summary>
+            <returns>Eine Kopie der in <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> gespeicherten Daten als <see cref="T:System.Collections.Generic.Dictionary`2">Dictionary&lt;string, string?&gt;</see>.</returns>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.Identifier">
+            <summary>
+            Ein Hashcode, der für alle <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekte, die zum selben Lese- oder Schreibvorgang
+            gehören, identisch ist. (Wird von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> verwendet, um festzustellen,
+            ob der Zugriffsindex aktuell ist.)
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvRecord.Comparer">
+            <summary>
+            Der zur Auswahl der Schlüssel verwendete Comparer.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.Clear">
+            <summary>
+            Setzt alle Datenfelder von <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> auf <c>null</c>.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.TryGetValue(System.String,System.ReadOnlyMemory{System.Char}@)">
+            <summary>
+            Ruft den Wert ab, der dem angegebenen Spaltennamen der CSV-Datei zugeordnet ist.
+            </summary>
+            <param name="columnName">Der Name der Spalte der CSV-Datei, deren Wert abgerufen wird.</param>
+            <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem mit  <paramref name="columnName"/> angegebenen Spaltennamen
+            zugeordnet ist, wenn der Schlüssel gefunden wurde, oder andernfalls <c>null</c>. Dieser Parameter wird nicht
+            initialisiert übergeben.</param>
+            <returns><c>true</c>, wenn ein Spaltenname mit dem Wert von <paramref name="columnName"/> enthalten ist.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.TryGetValue(System.Int32,System.ReadOnlyMemory{System.Char}@)">
+            <summary>
+            Ruft den Wert ab, der dem angegebenen Spaltenindex der CSV-Datei zugeordnet ist.
+            </summary>
+            <param name="columnIndex">Nullbasierter Index der Datenspalte der CSV-Datei.</param>
+            <param name="value">Enthält nach dem Beenden dieser Methode den Wert, der dem mit  <paramref name="columnIndex"/> 
+            angegebenen Spaltenindex
+            zugeordnet ist, wenn der Spaltenindex existiert, oder andernfalls <c>null</c>. Dieser Parameter wird nicht
+            initialisiert übergeben.</param>
+            <returns><c>true</c>, wenn ein Spaltenindex mit dem Wert von <paramref name="columnIndex"/> in der CSV-Datei existiert.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.Fill(System.Collections.Generic.IEnumerable{System.ReadOnlyMemory{System.Char}})">
+            <summary>
+            Füllt <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> mit den Inhalten einer <see cref="T:System.ReadOnlyMemory`1">ReadOnlyMemory&lt;Char&gt;</see>-Collection.
+            </summary>
+            <param name="data">Eine <see cref="T:System.ReadOnlyMemory`1">ReadOnlyMemory&lt;Char&gt;</see>-Collection.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="data"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="data"/> enthält mehr Einträge
+            als <see cref="P:FolkerKinzel.CsvTools.CsvRecord.Count"/>.</exception>
+            <remarks>Wenn <paramref name="data"/> weniger Einträge als <see cref="P:FolkerKinzel.CsvTools.CsvRecord.Count"/> hat,
+            werden die restlichen Felder von <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> mit <see cref="P:System.ReadOnlyMemory`1.Empty"/>-Werten gefüllt.</remarks>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.ContainsColumn(System.String)">
+            <summary>
+            Bestimmt, ob das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt eine Spalte mit dem angegebenen Spaltennamen enthält.
+            </summary>
+            <param name="columnName">Der Spaltenname der zu suchenden Spalte der CSV-Datei.</param>
+            <returns><c>true</c>, wenn <paramref name="columnName"/> zu den Spaltennamen des <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekts gehört.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="columnName"/> ist <c>null</c>.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.IndexOfColumn(System.String)">
+            <summary>
+            Gibt den nullbasierten Index der Spalte der CSV-Datei zurück, die den angegebenen Spaltennamen hat,
+            oder -1, wenn <paramref name="columnName"/> nicht zu den Spaltennamen der CSV-Datei gehört.
+            </summary>
+            <param name="columnName">Der Spaltenname, für den überprüft werden soll, auf welchen Index von <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> er verweist.</param>
+            <returns>Der nullbasierte Index der Spalte der CSV-Datei mit dem Spaltennamen <paramref name="columnName"/>
+            oder -1, wenn <paramref name="columnName"/> nicht zu den Spaltennamen der CSV-Datei gehört.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc />
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.GetEnumerator">
+            <summary>
+            Gibt einen <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see> zurück, mit dem das 
+            <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekts durchlaufen wird. Das <see cref="T:System.Collections.Generic.KeyValuePair`2">KeyValuePair&lt;string, string?&gt;</see> enthält dabei
+            den Spaltennamen als <see cref="P:System.Collections.Generic.KeyValuePair`2.Key"/> und den Inhalt der Spalte als <see cref="P:System.Collections.Generic.KeyValuePair`2.Value"/>.
+            </summary>
+            <returns>Ein <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator&lt;KeyValuePair&lt;string, string?&gt;&gt;</see>.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvRecord.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.CsvWriter">
+            <summary>
+            Die Klasse ermöglicht es, Daten in eine CSV-Datei zu schreiben.
+            </summary>
+            <remarks><see cref="T:FolkerKinzel.CsvTools.CsvWriter"/> stellt in der Eigenschaft <see cref="P:FolkerKinzel.CsvTools.CsvWriter.Record"/> ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zur Verfügung, das einen
+            Puffer für einen Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt mit <see cref="T:System.String"/>-Daten und schreiben
+            Sie es anschließend mit der Methode <see cref="M:FolkerKinzel.CsvTools.CsvWriter.WriteRecord"/> in die Datei. Der Aufruf von <see cref="M:FolkerKinzel.CsvTools.CsvWriter.WriteRecord"/> setzt alle Felder von
+            <see cref="P:FolkerKinzel.CsvTools.CsvWriter.Record"/> wieder auf <c>null</c>-Werte, so dass das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt erneut befüllt werden kann. Wenn andere Datentypen als <see cref="T:System.String"/>
+            geschrieben werden sollen, bietet sich die Verwendung der Klasse <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> an, die einen komfortablen Adapter zwischen den
+            Daten der Anwendung und der CSV-Datei darstellt.</remarks>
+            <example>
+            <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+            <para>Speichern des Inhalts einer <see cref="T:System.Data.DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
+            eine <see cref="T:System.Data.DataTable"/>:</para>
+            <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
+            </example>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.CsvWriter.NewLine">
+            <summary>
+            Das beim Schreiben von CSV-Dateien zu verwendende Newline-Zeichen ("\r\n").
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.#ctor(System.String,System.String[],FolkerKinzel.CsvTools.CsvOptions,System.Text.Encoding,System.Char)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/>-Objekt mit den Spaltennamen für die zu schreibende Kopfzeile.
+            </summary>
+            <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
+            <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
+            enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
+            beachten, dass der Vergleich der Spaltennamen nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
+            gewählt wurde.</param>
+            <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+            <param name="textEncoding">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM. (<see cref="P:System.Text.Encoding.UTF8"/>)</param>
+            <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
+            
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">
+            <para><paramref name="fileName"/> ist kein gültiger Dateipfad</para>
+            <para>- oder -</para>
+            <para>ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
+            gewählt werden, ob der Vergleich der Spaltennamen case-sensitiv erfolgt.</para></exception>
+            <exception cref="T:System.IO.IOException">E/A-Fehler.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.#ctor(System.String,System.Int32,FolkerKinzel.CsvTools.CsvOptions,System.Text.Encoding,System.Char)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
+            </summary>
+            <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
+            <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
+            <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+            <param name="textEncoding">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
+            <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
+            
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
+            <exception cref="T:System.IO.IOException">E/A-Fehler.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.#ctor(System.IO.TextWriter,System.String[],FolkerKinzel.CsvTools.CsvOptions,System.Char)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/>-Objekt, mit den Spaltennamen für die zu schreibende Kopfzeile.
+            </summary>
+            <param name="writer">Der <see cref="T:System.IO.TextWriter"/>, mit dem geschrieben wird.</param>
+            <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
+            enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
+            beachten, dass der Vergleich der Spaltennamen nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
+            gewählt wurde.</param>
+            <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+            <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="writer"/> oder <paramref name="columnNames"/> ist <c>null.</c></exception>
+            <exception cref="T:System.ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
+            gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.#ctor(System.IO.TextWriter,System.Int32,FolkerKinzel.CsvTools.CsvOptions,System.Char)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
+            </summary>
+            <param name="writer">Der <see cref="T:System.IO.TextWriter"/>, mit dem geschrieben wird.</param>
+            <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
+            <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+            <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="writer"/> ist <c>null.</c></exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.#ctor(System.String[],System.Char,FolkerKinzel.CsvTools.CsvOptions)">
+            <summary>
+            Privater Konstruktor, der von den öffentlichen Konstruktoren aufgerufen wird, die ein <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/>-Objekt mit Spaltennamen 
+            für die zu schreibende Kopfzeile initialisieren. (Diese Konstruktoren initialisieren auch <see cref="F:FolkerKinzel.CsvTools.CsvWriter._writer"/>.)
+            </summary>
+            <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
+            enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
+            beachten, dass der Vergleich nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
+            gewählt wurde.</param>
+            <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
+            <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+            <exception cref="T:System.ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
+            gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.#ctor(System.Int32,System.Char,FolkerKinzel.CsvTools.CsvOptions)">
+            <summary>
+            Privater Konstruktor, der von den öffentlichen Konstruktoren aufgerufen wird, die ein <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/>-Objekt initialisieren, mit dem
+            eine CSV-Datei ohne Kopfzeile schreiben. (Diese Konstruktoren initialisieren auch <see cref="F:FolkerKinzel.CsvTools.CsvWriter._writer"/>.)
+            </summary>
+            <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
+            <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
+            <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.CsvWriter.Record">
+            <summary>
+            Der in die Datei zu schreibende Datensatz. Füllen Sie das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt mit Daten und rufen Sie
+            anschließend <see cref="M:FolkerKinzel.CsvTools.CsvWriter.WriteRecord"/> auf, um diese Daten in die Datei zu schreiben. <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/> leert
+            <see cref="P:FolkerKinzel.CsvTools.CsvWriter.Record"/> nach jedem Schreibvorgang.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.WriteRecord">
+            <summary>
+            Schreibt den Inhalt von <see cref="P:FolkerKinzel.CsvTools.CsvWriter.Record"/> in die CSV-Datei und setzt anschließend alle Spalten von <see cref="P:FolkerKinzel.CsvTools.CsvWriter.Record"/> auf <c>null</c>. 
+            (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.)
+            </summary>
+            <exception cref="T:System.IO.IOException">E/A-Fehler</exception>
+            <exception cref="T:System.ObjectDisposedException">Die Resourcen waren bereits freigegeben.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.Dispose">
+            <summary>
+            Gibt die Ressourcen frei. (Schließt den <see cref="T:System.IO.TextWriter"/>.)
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.CsvWriter.InitStreamWriter(System.String,System.Text.Encoding)">
+            <summary>
+            Initialisiert einen <see cref="T:System.IO.StreamWriter"/> mit der angegebenen Textkodierung mit
+            dem Namen der zu schreibenden Datei.
+            </summary>
+            <param name="fileName">Dateipfad.</param>
+            <param name="textEncoding">Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
+            <returns><see cref="T:System.IO.StreamWriter"/></returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
+            <exception cref="T:System.IO.IOException">E/A-Fehler.</exception>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension">
+            <summary>
+            Erweiterungsmethoden, die die Arbeit mit der <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Enum erleichtern.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension.Set(FolkerKinzel.CsvTools.CsvOptions,FolkerKinzel.CsvTools.CsvOptions)">
+            <summary>
+            Setzt sämtliche in <paramref name="flags"/> gesetzten Flags in <paramref name="value"/>.
+            </summary>
+            <param name="value">Der <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>?-Wert, auf dem die in <paramref name="flags"/> gesetzten Flags gesetzt werden.</param>
+            <param name="flags">Ein einzelner <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Wert oder eine Kombination aus mehreren 
+            <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Werten.</param>
+            <returns>Ein <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Wert, auf dem sämtliche in <paramref name="value"/> und <paramref name="flags"/>
+            gesetzten Flags gesetzt sind.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension.IsSet(FolkerKinzel.CsvTools.CsvOptions,FolkerKinzel.CsvTools.CsvOptions)">
+            <summary>
+            Untersucht, ob sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
+            gesetzt sind.
+            </summary>
+            <param name="value">Der <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>?-Wert, der daraufhin überprüft wird, ob sämtliche in <paramref name="flags"/> gesetzten 
+            Flags auf ihm gesetzt sind.</param>
+            <param name="flags">Ein einzelner <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Wert oder eine Kombination aus mehreren 
+            <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Werten.</param>
+            <returns><c>true</c>, wenn sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
+            gesetzt sind. (Wenn <paramref name="flags"/>&#160;<see cref="F:FolkerKinzel.CsvTools.CsvOptions.None"/> ist, wird nur dann <c>true</c> zurückgegeben,
+            wenn auch <paramref name="value"/>&#160;<see cref="F:FolkerKinzel.CsvTools.CsvOptions.None"/> ist.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.Extensions.CsvOptionsExtension.Unset(FolkerKinzel.CsvTools.CsvOptions,FolkerKinzel.CsvTools.CsvOptions)">
+            <summary>
+            Entfernt sämtliche in <paramref name="flags"/> gesetzten Flags aus <paramref name="value"/>.
+            </summary>
+            <param name="value">Der <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>?-Wert, aus dem die in <paramref name="flags"/> gesetzten Flags entfernt werden.</param>
+            <param name="flags">Ein einzelner <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Wert oder eine Kombination aus mehreren 
+            <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Werten.</param>
+            <returns>Ein <see cref="T:FolkerKinzel.CsvTools.CsvOptions"/>-Wert, auf dem sämtliche in <paramref name="flags"/>
+            gesetzten Flags entfernt sind.</returns>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.Intls.CsvStringReader">
+            <summary>
+            Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>" zurück.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.Intls.CsvStringReader.#ctor(System.IO.TextReader,System.Char,System.Boolean)">
+            <summary>
+            ctor
+            </summary>
+            <param name="reader">Der <see cref="T:System.IO.TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
+            <param name="fieldSeparator">Das Feldtrennzeichen.</param>
+            <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen in der CSV-Datei übersprungen.</param>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.Intls.CsvStringReader.Dispose">
+            <summary>
+            Gibt die Resourcen frei. (Schließt den <see cref="T:System.IO.TextReader"/>.)
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.Intls.CsvStringReader.GetNextRecord">
+            <summary>
+            Liest die nächste Datenzeile als <see cref="T:System.Collections.Generic.List`1">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.
+            </summary>
+            <returns>Die nächste Datenzeile als <see cref="T:System.Collections.Generic.List`1">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.</returns>
+            <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind und wirft keine <see cref="T:System.Exception"/>,
+            wenn es in einer Zeile zu viele oder zu wenige sind.</remarks>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.Resources.Res">
+            <summary>
+              Eine stark typisierte Ressourcenklasse zum Suchen von lokalisierten Zeichenfolgen usw.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.ResourceManager">
+            <summary>
+              Gibt die zwischengespeicherte ResourceManager-Instanz zurück, die von dieser Klasse verwendet wird.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.Culture">
+            <summary>
+              Überschreibt die CurrentUICulture-Eigenschaft des aktuellen Threads für alle
+              Ressourcenzuordnungen, die diese stark typisierte Ressourcenklasse verwenden.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.BadIdentifier">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The identifier is not well-formed. ähnelt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.CsvRecordIsNull">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die {0} is null. ähnelt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.DataTypeNotSupported">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die The converters data type is not supported. ähnelt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.InvalidCastNullToValueType">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die Unable to cast null to value type. ähnelt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.NotTwice">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die You must not run this method twice. ähnelt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.Resources.Res.PropertyNotFound">
+            <summary>
+              Sucht eine lokalisierte Zeichenfolge, die No property named &quot;{0}&quot; was found. ähnelt.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.Converters.DateTimeConverter.#ctor(System.String,System.Boolean,System.IFormatProvider,System.Boolean)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.TypeConversions.Converters.DateTimeConverter"/>-Objekt.
+            </summary>
+            <param name="format">Eine Formatzeichenfolge, die für die <see cref="T:System.String"/>-Ausgabe von <see cref="T:System.DateTime"/>-Werten verwendet 
+            wird.
+            Wenn die Option <paramref name="parseExact"/> gewählt ist, wird diese Formatzeichenfolge auch für das Parsen verwendet.</param>
+            <param name="throwing">Wenn <c>true</c>, wirft die Methode <see cref="!:Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+            anderenfalls gibt sie in diesem Fall <see cref="!:FallbackValue"/> zurück.</param>
+            <param name="formatProvider">Ein <see cref="T:System.IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+            bereitstellt oder <c>null</c> für <see cref="P:System.Globalization.CultureInfo.InvariantCulture"/>.</param>
+            <param name="parseExact">Wenn <c>true</c> als Argument übergeben wird, muss der Text in der CSV-Datei exakt mit der mit 
+            <paramref name="format"/> angegebenen
+            Formatzeichenfolge übereinstimmen.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="format"/> ist <c>null</c> und <paramref name="parseExact"/> ist <c>true</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="format"/> ist keine gültige Formatzeichenfolge.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.Converters.DateTimeOffsetConverter.#ctor(System.String,System.Boolean,System.IFormatProvider,System.Boolean)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.TypeConversions.Converters.DateTimeOffsetConverter"/>-Objekt.
+            </summary>
+            <param name="format">Eine Formatzeichenfolge, die für die <see cref="T:System.String"/>-Ausgabe von <see cref="T:System.DateTimeOffset"/>-Werten verwendet 
+            wird.
+            Wenn die Option <paramref name="parseExact"/> gewählt ist, wird diese Formatzeichenfolge auch für das Parsen verwendet.</param>
+            <param name="throwing">Wenn <c>true</c>, wirft die Methode <see cref="!:Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+            anderenfalls gibt sie in diesem Fall <see cref="!:FallbackValue"/> zurück.</param>
+            <param name="formatProvider">Ein <see cref="T:System.IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+            bereitstellt oder <c>null</c> für <see cref="P:System.Globalization.CultureInfo.InvariantCulture"/>.</param>
+            <param name="parseExact">Wenn <c>true</c> als Argument übergeben wird, muss der Text in der CSV-Datei exakt mit der mit 
+            <paramref name="format"/> angegebenen
+            Formatzeichenfolge übereinstimmen.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="format"/> ist <c>null</c> und <paramref name="parseExact"/> ist <c>true</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="format"/> ist keine gültige Formatzeichenfolge.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.Converters.TimeSpanConverter.#ctor(System.String,System.Boolean,System.IFormatProvider,System.Boolean,System.Globalization.TimeSpanStyles)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.TypeConversions.Converters.TimeSpanConverter"/>-Objekt.
+            </summary>
+            <param name="format">Eine Formatzeichenfolge, die für die <see cref="T:System.String"/>-Ausgabe von <see cref="T:System.TimeSpan"/>-Werten verwendet 
+            wird.
+            Wenn die Option <paramref name="parseExact"/> gewählt ist, wird diese Formatzeichenfolge auch für das Parsen verwendet.</param>
+            <param name="throwing">Wenn <c>true</c>, wirft die Methode <see cref="!:Parse"/> eine Ausnahme, wenn das Parsen misslingt,
+            anderenfalls gibt sie in diesem Fall <see cref="!:FallbackValue"/> zurück.</param>
+            <param name="formatProvider">Ein <see cref="T:System.IFormatProvider"/>-Objekt, das kulturspezifische Formatierungsinformationen
+            bereitstellt oder <c>null</c> für <see cref="P:System.Globalization.CultureInfo.InvariantCulture"/>.</param>
+            <param name="parseExact">Wenn <c>true</c> als Argument übergeben wird, muss der Text in der CSV-Datei exakt mit der mit 
+            <paramref name="format"/> angegebenen
+            Formatzeichenfolge übereinstimmen.</param>
+            <param name="styles">Ein Wert der <see cref="T:System.Globalization.TimeSpanStyles"/>-Enumeration, der zusätzliche Informationen für das Parsen bereitstellt. Wird
+            nur ausgewertet, wenn <paramref name="parseExact"/>&#160;<c>true</c> ist.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="format"/> ist <c>null</c> und <paramref name="parseExact"/> ist <c>true</c>.</exception>
+            <exception cref="T:System.ArgumentException"><paramref name="format"/> ist keine gültige Formatzeichenfolge.</exception>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty">
+            <summary>
+            Repräsentiert eine Eigenschaft, die von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> dynamisch zur Laufzeit implementiert wird ("späte Bindung").
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty"/> kapselt Informationen über Zugriff und die Typkonvertierung, die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> benötigt,
+            um auf die Daten des ihm zugrundeliegenden <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekts über den nullbasierten Spaltenindex zuzugreifen.
+            </summary>
+            <threadsafety static="true" instance="false"/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty.#ctor(System.String,System.Int32,FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty"/>-Objekt.
+            </summary>
+            <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
+            entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
+            <param name="desiredCsvColumnIndex">Nullbasierter Index der Spalte der CSV-Datei in die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty"/> schreiben soll bzw.
+            aus der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty"/> lesen soll. Wenn es den Index in der CSV-Datei nicht
+            gibt, wird die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty"/> beim Schreiben ignoriert. Beim Lesen wird in diesem Fall
+            <see cref="P:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter.FallbackValue"/> zurückgegeben.</param>
+            <param name="converter">Der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
+            
+            <exception cref="T:System.ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
+            ASCII-Zeichen).</exception>
+            
+            <exception cref="T:System.ArgumentNullException"><paramref name="propertyName"/> oder 
+            <paramref name="converter"/> ist <c>null</c>.</exception>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="desiredCsvColumnIndex"/> ist kleiner als 0.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty.DesiredCsvColumnIndex">
+            <summary>
+            Der Index der Spalte der CSV-Datei, auf die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty"/> zugreifen soll.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvColumnIndexProperty.UpdateReferredCsvColumnIndex">
+            <inheritdoc/>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty">
+            <summary>
+            Repräsentiert eine Eigenschaft, die von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> dynamisch zur Laufzeit implementiert wird ("späte Bindung").
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> kapselt Informationen über Zugriff und die Typkonvertierung, die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> benötigt,
+            um auf die Daten des ihm zugrundeliegenden <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekts über den Spaltennamen zuzugreifen.
+            </summary>
+            <threadsafety static="true" instance="false"/>
+        </member>
+        <member name="F:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty.MaxWildcardTimeout">
+            <summary>
+            Maximale Zeit (in Millisekunden) die für das Auflösen eines Spaltennamen-Aliases aufgewendet werden kann.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty.#ctor(System.String,System.Collections.Generic.IEnumerable{System.String},FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter,System.Int32)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt.
+            </summary>
+            <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
+            entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
+            <param name="columnNameAliases">Spaltennamen der CSV-Datei, auf die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> zugreifen kann. Für den
+            Zugriff wird der erste Alias verwendet, der eine Übereinstimmung 
+            mit einem Spaltennamen der CSV-Datei hat. Die Alias-Strings dürfen die Wildcard-Zeichen * und ? enthalten. Wenn ein 
+            Wildcard-Alias mit mehreren Spalten der CSV-Datei eine Übereinstimmung hat, wird die Spalte mit dem niedrigsten Index referenziert.</param>
+            <param name="converter">Der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
+            <param name="wildcardTimeout">Timeout-Wert in Millisekunden oder 0, für <see cref="F:System.Text.RegularExpressions.Regex.InfiniteMatchTimeout"/>. 
+            Ist der Wert größer als <see cref="F:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty.MaxWildcardTimeout"/>, wird er auf diesen Wert normalisiert.
+            Wenn ein Alias in <paramref name="columnNameAliases"/> ein
+            Wildcard-Zeichen enthält, wird innerhalb
+            dieses Timeouts versucht, den Alias aufzulösen. Gelingt dies nicht, reagiert <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> so, als hätte sie
+            kein Ziel in den Spalten der CSV-Datei. (In .Net-Framework 4.0 wird kein Timeout angewendet.)</param>
+            
+            <exception cref="T:System.ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="columnNameAliases"/> oder 
+            <paramref name="converter"/> ist <c>null</c>.</exception>
+            
+            <exception cref="T:System.ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
+            ASCII-Zeichen).</exception>
+            
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="wildcardTimeout"/> ist kleiner als 0.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty.ColumnNameAliases">
+            <summary>
+            Sammlung von alternativen Spaltennamen der CSV-Datei, die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> für den Zugriff auf
+            auf eine Spalte von <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> verwendet.
+            </summary>
+            <remarks>
+            <para>
+            Um mit verschiedenen CSV-Dateien kompatibel zu sein, können z.B. unterschiedliche Schreibweisen desselben Spaltennamens
+            oder Übersetzungen des Spaltennamens in andere Sprachen angegeben werden. Ein Alias kann auch die Wildcard-Zeichen * und ?
+            verwenden.
+            </para>
+            <para>
+            Da beim Setzen des Wertes von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> alle Aliase berücksichtigt werden, empfiehlt es sich nicht, mehreren
+            <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekten denselben Alias zuzuweisen.</para>
+            </remarks>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty.CsvRecordIdentifier">
+            <summary>
+            Ein Hashcode, der für alle <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekte, die zum selben Lese- oder Schreibvorgang
+            gehören, identisch ist. (Wird von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> verwendet, um festzustellen,
+            ob der Zugriffsindex aktuell ist.)
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty.UpdateReferredCsvColumnIndex">
+            <inheritdoc/>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnProperty">
+            <summary>
+            Abstrakte Basisklasse für Klassen, die eine Eigenschaft von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> repräsentieren, die dynamisch zur Laufzeit
+            implementiert wird, und deren Daten aus verschiedenen Spalten der CSV-Datei stammen.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnProperty.#ctor(System.String,FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter)" -->
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnProperty.Converter">
+            <summary>
+            Ein von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter"/> abgeleitetes Objekt, das die Typkonvertierung durchführt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnProperty.Record">
+            <summary>
+            Das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt, über das der Zugriff auf die CSV-Datei erfolgt.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnProperty.GetValue">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnProperty.SetValue(System.Object)">
+            <inheritdoc/>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter" -->
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter.Create">
+            <summary>
+            Liest die Daten aus <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter.Wrapper"/> und versucht, daraus eine Instanz des gewünschten Typs zu erzeugen.
+            </summary>
+            <returns>Eine Instanz des gewünschten Typs oder ein beliebiges FallbackValue (z.B. <c>null</c> oder <see cref="F:System.DBNull.Value"/>).</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter.ToCsv(System.Object)">
+            <summary>
+            Schreibt <paramref name="value"/> mit Hilfe von <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter.Wrapper"/> in die CSV-Datei.
+            </summary>
+            <param name="value">Das in die CSV-Datei zu schreibende Objekt.</param>
+            <exception cref="T:System.InvalidCastException"><paramref name="value"/> hat einen unerwarteten Datentyp.</exception>
+            <remarks>
+            <note type="inherit">
+            Die Methode sollte eine 
+            <see cref="T:System.InvalidCastException"/> werfen, wenn <paramref name="value"/> nicht <typeparamref name="T"/> oder einem
+            anderen erwarteten Datentyp (z.B. <see cref="F:System.DBNull.Value"/>) entspricht.
+            </note>
+            </remarks>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase">
+            <summary>
+            Abstrakte Basisklasse für Klassen, die eine Eigenschaft von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> repräsentieren, die dynamisch zur Laufzeit
+            implementiert wird.
+            </summary>
+            <remarks>
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase"/> kapselt Informationen, die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> benötigt,
+            um auf die Daten des ihm zugrundeliegenden <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekts zuzugreifen.
+            </remarks>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase.#ctor(System.String)" -->
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase.PropertyName">
+            <summary>
+            Bezeichner der Eigenschaft
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase.Record">
+            <summary>
+            Das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt, über das der Zugriff auf die CSV-Datei erfolgt.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase.GetValue">
+            <summary>
+            Extrahiert Daten eines bestimmten Typs aus <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>.
+            </summary>
+            <param name="record">Das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt, aus dem gelesen wird.</param>
+            <returns>Die extrahierten Daten.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase.SetValue(System.Object)">
+            <summary>
+            Speichert Daten eines bestimmten Typs in der CSV-Datei./>.
+            </summary>
+            <param name="record">Das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt, in das die Daten hineingeschrieben werden.</param>
+            <param name="value">Das zu speichernde Objekt.</param>
+            <exception cref="T:System.InvalidCastException"><paramref name="value"/> entspricht nicht dem erwarteten Datentyp.</exception>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper">
+            <summary>
+            Die Klasse bildet einen Wrapper um Objekte der Klasse <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>, der es ermöglicht, die Daten des <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekts
+            in einer selbst gewählten Reihenfolge zu indexieren, auf die Daten mit dynamisch zur Laufzeit implementierten Eigenschaften zuzugreifen sowie
+            Typkonvertierungen durchzuführen. Um die dynamisch implementierten Eigenschaften der Klasse <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> ("späte Bindung") direkt nutzen zu können 
+            und um die Rückgabewerte der Indexer ohne Cast zuzuweisen, muss die Instanz einer Variablen zugewiesen sein, die mit dem Schlüsselwort <c>dynamic</c>
+            deklariert ist.
+            </summary>
+            <remarks>
+            <para>Nachdem ein <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekt initialisiert wurde, müssen bei ihm mit der Methode 
+            <see cref="!:AddProperty(CsvColumnNameProperty)"/>&#160;<see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte registriert werden, die dynamische Eigenschaften
+            des <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekts darstellen und Typkonvertierungen für die im zugrundeliegenden <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt
+            gespeicherten <see cref="T:System.String"/>s übernehmen. Die Reihenfolge, in der die Eigenschaften registriert sind, bestimmt die
+            Reihenfolge, in der die Rückgabewerte dieser Eigenschaften zurückgegeben werden, wenn das <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekt
+            mit einer <c>foreach</c>-Schleife durchlaufen wird oder wenn mit dem Indexer <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Item(System.Int32)"/> darauf zugegriffen wird. Da
+            die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte über den CSV-Spaltenname auf das zugundeliegende <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugreifen,
+            müssen Anzahl und Reihenfolge der im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekt registrierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte nicht
+            mit den Spalten des zugrundeliegenden <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekts übereinstimmen.
+            </para>
+            <para>Mit den folgenden Methoden kann jederzeit auf die Reihenfolge der registrierten Eigenschaften Einfluss genommen werden:</para>
+            <list type="bullet">
+            <item><see cref="!:InsertProperty(int, CsvColumnNameProperty)"/></item>
+            <item><see cref="!:ReplaceProperty(string, CsvColumnNameProperty)"/></item>
+            <item><see cref="!:ReplacePropertyAt(int, CsvColumnNameProperty)"/></item>
+            <item><see cref="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.RemoveProperty(System.String)"/></item>
+            <item><see cref="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.RemovePropertyAt(System.Int32)"/></item>
+            </list>
+            <para>Mit <see cref="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Contains(System.String)"/> können Sie überprüfen, ob ein <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt mit dem angegebenen Namen
+            bereits registriert ist.</para>
+            <para>
+            Auf die Indexer <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Item(System.Int32)"/> und <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Item(System.String)"/> kann zwar auch zugegriffen werden, wenn die 
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Instanz einer normalen Variable zugewiesen ist, jedoch müssen die Rückgabewerte der Indexer dann
+            möglicherweise mit dem Cast-Operator in den eigentlichen Datentyp gecastet werden, da sie vom Typ <see cref="T:System.Object"/> sind.
+            </para>
+            <para>Wenn die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Instanz einer Variablen zugewiesen ist, die mit dem Schlüsselwort <c>dynamic</c>
+            deklariert wurde, übernimmt die Runtime die notwendigen Casts. Überdies ist es dann möglich, die registrierten 
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte wie normale Eigenschaften über ihren Namen anzusprechen (<see cref="!:CsvColumnNameProperty.PropertyName"/>).
+            Der Nachteil ist, dass Visual Studio auf dynamischen Variablen keinerlei "IntelliSense" bieten kann.
+            </para>
+            <para>Wenn eine CSV-Datei mit <see cref="T:FolkerKinzel.CsvTools.CsvWriter"/> geschrieben wird, genügt es, <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt,
+            das es mit Daten zu füllen gilt, nur einmal zuzuweisen, da beim Schreiben immer dasselbe
+            <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt verwendet wird.
+            </para>
+            <para>
+            Beim Lesen einer CSV-Datei mit <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> verhält es sich anders: Dem
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekt muss bei jeder Iteration des Readers zuerst das aktuelle <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen
+            werden, bevor auf die Eigenschaften des <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekts zugegriffen wird, denn <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> gibt
+            bei jeder Iteration ein neues <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zurück. (Das gilt nicht, wenn der <see cref="T:FolkerKinzel.CsvTools.CsvReader"/> mit <see cref="F:FolkerKinzel.CsvTools.CsvOptions.DisableCaching"/>
+            initialisiert wurde.)
+            </para>
+            <para>
+            Wenn <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnProperty"/>-Objekte in <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> eingefügt werden, erhalten die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekte
+            ihrer <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvMultiColumnTypeConverter"/> das aktuelle <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt automatisch über den Mutter-Wrapper, in den sie eingefügt sind.
+            </para>
+            </remarks>
+            <example>
+            <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+            <para>Speichern des Inhalts einer <see cref="T:System.Data.DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
+            eine <see cref="T:System.Data.DataTable"/>:</para>
+            <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
+            <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
+            <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
+            </example>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.#ctor">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekt. 
+            </summary>
+            <remarks>Vor dem Zugriff auf die Eigenschaften muss <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Record"/>
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen werden.</remarks>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Record">
+            <summary>
+            Das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt, 
+            auf dessen Daten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zugreift.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Count">
+            <summary>
+            Gibt die Anzahl der im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registrierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte
+            zurück.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.PropertyNames">
+            <summary>
+            Gibt eine Kopie der in <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registrierten Eigenschaftsnamen zurück.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Values">
+            <summary>
+            Gibt eine Kopie der in <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/> gespeicherten Daten zurück.
+            </summary>
+            <exception cref="T:System.InvalidCastException">Der Rückgabewert einer indexierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+            der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/> dieser <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
+            Ausnahme wirft.</exception>
+            <exception cref="T:System.InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen war.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Item(System.Int32)">
+            <summary>
+            Ermöglicht den Zugriff auf die im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registrierten Eigenschaften
+            über einen nullbasierten Index. Der Index entspricht der Reihenfolge, in der die
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registriert sind.
+            </summary>
+            <param name="index">Nullbasierter Index der registrierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte.</param>
+            <returns>Rückgabewert der bei <paramref name="index"/> registrierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>.</returns>
+            <exception cref = "T:System.InvalidOperationException" > Der Indexer wurde aufgerufen, bevor dem <see cref= "T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper" />
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen wurde.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+            <para></para>
+            <paramref name="index"/> ist kleiner als 0 oder größer oder gleich <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Count"/>.</exception>
+            <exception cref="T:System.InvalidCastException">
+            <para>
+            Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
+            diesem Index registrierten Property entspricht
+            </para>
+            <para>- oder -</para>
+            <para>
+            der Rückgabewert der indexierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+            der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/> dieser <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
+            Ausnahme wirft.
+            </para></exception>
+            <exception cref="T:System.InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen war.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Item(System.String)">
+            <summary>
+            Ermöglicht den Zugriff auf die im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registrierten Eigenschaften
+            über den Wert der Eigenschaft <see cref="!:CsvColumnNameProperty.PropertyName"/>.
+            </summary>
+            <param name="propertyName">Name der registrierten Eigenschaft. (Entspricht <see cref="!:CsvColumnNameProperty.PropertyName"/>.) Der
+            Vergleich erfolgt case-sensitiv.</param>
+            <returns>Rückgabewert der registrierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>, deren Eigenschaft <see cref="!:CsvColumnNameProperty.PropertyName"/>&#160;<paramref name="propertyName"/>
+            entspricht. Der Vergleich ist case-sensitiv.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="propertyName"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">Es wurde unter den bei <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registrierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Eigenschaften kein
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt gefunden, dessen Eigenschaft <see cref="!:CsvColumnNameProperty.PropertyName"/>&#160;<paramref name="propertyName"/> entspricht.</exception>
+            <exception cref="T:System.InvalidCastException">
+            <para>
+            Einem Index wurde ein Objekt zugewiesen, dessen Datentyp nicht dem Datentyp der an
+            diesem Index registrierten Property entspricht
+            </para>
+            <para>- oder -</para>
+            <para>
+            der Rückgabewert der indexierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+            der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/> dieser <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
+            Ausnahme wirft.
+            </para></exception>
+            <exception cref="T:System.InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen war.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.AddProperty(FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase)">
+            <summary>
+            Registriert eine <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> am Ende der Auflistung der registrierten Eigenschaften.
+            </summary>
+            <param name="property">Die anzufügende <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="property"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">Es ist bereits eine <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> mit demselben
+            <see cref="!:CsvColumnNameProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Contains(System.String)"/>!</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.RemoveProperty(System.String)">
+            <summary>
+            Entfernt die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> mit dem angegebenen <see cref="!:CsvColumnNameProperty.PropertyName"/>
+            aus der Auflistung der registrierten Eigenschaften.
+            </summary>
+            <param name="propertyName">Der <see cref="!:CsvColumnNameProperty.PropertyName"/> der zu entfernenden
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>.</param>
+            <returns><c>true</c>, wenn die gesuchte <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> in der Auflistung enthalten war
+            und entfernt werden konnte.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.RemovePropertyAt(System.Int32)">
+            <summary>
+            Entfernt die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> am angegebenen <paramref name="index"/> aus der
+            Auflistung der registrierten Eigenschaften.
+            </summary>
+            <param name="index">Der nullbasierte Index, an dem die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> entfernt werden soll.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
+            größer oder gleich <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Count"/>.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.InsertProperty(System.Int32,FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase)">
+            <summary>
+            Fügt <paramref name="property"/> am <paramref name="index"/> der registrierten Eigenschaften ein.
+            </summary>
+            <param name="index">Der nullbasierte Index, an dem <paramref name="property"/> eingefügt werden soll.</param>
+            <param name="property">Die einzufügende <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="property"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
+            größer als <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Count"/>.</exception>
+            <exception cref="T:System.ArgumentException">Es ist bereits eine <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> mit demselben
+            <see cref="!:CsvColumnNameProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Contains(System.String)"/>!</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.ReplacePropertyAt(System.Int32,FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase)">
+            <summary>
+            Ersetzt die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> am angegebenen Index der Auflistung der registrierten Eigenschaften
+            durch <paramref name="property"/>.
+            </summary>
+            <param name="index">Der nullbasierte Index, an dem das in der Auflistung vorhandene
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt durch <paramref name="property"/> ersetzt wird.</param>
+            <param name="property">Ein <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="property"/> ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> ist kleiner als 0 oder 
+            größer oder gleich <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Count"/>.</exception>
+            <exception cref="T:System.ArgumentException">Es ist bereits eine <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> mit demselben
+            <see cref="!:CsvColumnNameProperty.PropertyName"/> enthalten. Prüfen Sie das vorher mit <see cref="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Contains(System.String)"/>!</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.ReplaceProperty(System.String,FolkerKinzel.CsvTools.TypeConversions.CsvPropertyBase)">
+            <summary>
+            Ersetzt die registrierte Eigenschaft, deren <see cref="!:CsvColumnNameProperty.PropertyName"/> gleich <paramref name="propertyName"/>
+            ist durch <paramref name="property"/>.
+            </summary>
+            <param name="property"><see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt, mit dem ersetzt werden soll.</param>
+            <exception cref="T:System.ArgumentNullException"><paramref name="propertyName"/> oder <paramref name="property"/>
+            ist <c>null</c>.</exception>
+            <exception cref="T:System.ArgumentException">Es ist keine Eigenschaft unter der Bezeichnung <paramref name="propertyName"/>
+            registriert - oder - in der Auflistung der registrierten Eigenschaften befindet sich bereits ein 
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt dessen <see cref="!:CsvColumnNameProperty.PropertyName"/>-Eigenschaft identisch
+            mit der von <paramref name="property"/> ist. Prüfen Sie das vorher mit <see cref="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Contains(System.String)"/>!</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.Contains(System.String)">
+            <summary>
+            Untersucht, ob ein <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> unter dem mit
+            <paramref name="propertyName"/> angegebenen Namen registriert ist.
+            </summary>
+            <param name="propertyName">Der <see cref="!:CsvColumnNameProperty.PropertyName"/> der zu suchenden
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>.</param>
+            <returns><c>true</c>, wenn ein <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekt unter dem mit <paramref name="propertyName"/>
+            angegebenen Namen registriert ist.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.IndexOf(System.String)">
+            <summary>
+            Gibt den Index der Eigenschaft zurück, die den Eigenschaftsnamen (<see cref="!:CsvColumnNameProperty.PropertyName"/>) der 
+            <paramref name="propertyName"/> entspricht oder -1, wenn eine solche Eigenschaft nicht in <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registriert ist.
+            </summary>
+            <param name="propertyName">Der Eigenschaftsname der zu suchenden <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>.</param>
+            <returns>Der Index der Eigenschaft, die <paramref name="propertyName"/> als Eigenschaftsnamen (<see cref="!:CsvColumnNameProperty.PropertyName"/>) hat
+            oder -1, wenn eine solche Eigenschaft nicht in <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registriert ist.</returns>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+            <summary>
+            Wird automatisch aufgerufen, wenn einer dynamisch implementierten Eigenschaft ein Wert
+            zugewiesen wird. (Nicht zur direkten Verwendung in eigenem Code bestimmt.)
+            </summary>
+            <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
+            <param name="value">Das Objekt, das der dynamisch implementierten Eigenschaft zugewiesen wird.</param>
+            <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>
+            im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
+            wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
+            <exception cref="T:System.InvalidCastException"><paramref name="value"/> ist nicht vom Datentyp der registrierten
+            Property.</exception>
+            <exception cref="T:System.Exception">Es wurde versucht, auf eine nicht registrierte Property zuzugreifen.</exception>
+             <exception cref="T:System.InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen war.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+            <summary>
+            Wird automatisch aufgerufen, wenn der Wert einer dynamisch implementierten Eigenschaft
+            einer Variablen zugewiesen wird. (Nicht zur direkten Verwendung in eigenem Code bestimmt.)
+            </summary>
+            <param name="binder">Informationen über die aufrufende dynamische Eigenschaft.</param>
+            <param name="result">Das Objekt, das den Rückgabewert der dynamisch implementierten Eigenschaft darstellt.</param>
+            <returns><c>true</c>, wenn auf eine Eigenschaft zugegriffen wurde, die zuvor als <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>
+            im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/>-Objekt registriert wurde.</returns>
+            <exception cref="T:System.ArgumentNullException"><paramref name="binder"/> ist <c>null</c>. (Das kann nur passieren,
+            wenn die Methode direkt aus eigenem Code aufgerufen wird.)</exception>
+            <exception cref="T:System.Exception">Der Rückgabewert der indexierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+            der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/> dieser <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
+            Ausnahme wirft.</exception>
+            <exception cref="T:System.InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen war.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.GetDynamicMemberNames">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.GetMetaObject(System.Linq.Expressions.Expression)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryBinaryOperation(System.Dynamic.BinaryOperationBinder,System.Object,System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryConvert(System.Dynamic.ConvertBinder,System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryCreateInstance(System.Dynamic.CreateInstanceBinder,System.Object[],System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryDeleteIndex(System.Dynamic.DeleteIndexBinder,System.Object[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryDeleteMember(System.Dynamic.DeleteMemberBinder)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryGetIndex(System.Dynamic.GetIndexBinder,System.Object[],System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryInvoke(System.Dynamic.InvokeBinder,System.Object[],System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryInvokeMember(System.Dynamic.InvokeMemberBinder,System.Object[],System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TrySetIndex(System.Dynamic.SetIndexBinder,System.Object[],System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.TryUnaryOperation(System.Dynamic.UnaryOperationBinder,System.Object@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.GetEnumerator">
+            <summary>
+            Gibt einen <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator&lt;KeyValuePair&lt;string, object?&gt;&gt;</see> zurück, mit dem die Rückgabewerte der 
+            dynamisch implementierten Eigenschaften durchlaufen werden. Die Reihenfolge
+            entspricht der Reihenfolge, in der die
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registriert sind.
+            </summary>
+            <returns>Ein <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator&lt;KeyValuePair&lt;string, object?&gt;&gt;</see>.</returns>
+            <exception cref="T:System.InvalidCastException">Der Rückgabewert einer indexierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+            der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/> dieser <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
+            Ausnahme wirft.</exception>
+            <exception cref="T:System.InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen war.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gibt einen <see cref="T:System.Collections.IEnumerator"/> zurück, mit dem die Rückgabewerte der 
+            dynamisch implementierten Eigenschaften durchlaufen werden können. Die Reihenfolge
+            entspricht der Reihenfolge, in der die
+            <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/>-Objekte im <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> registriert sind.
+            </summary>
+            <returns>Ein <see cref="T:System.Collections.IEnumerator"/>.</returns>
+            <exception cref="T:System.InvalidCastException">Der Rückgabewert einer indexierten <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> konnte nicht erfolgreich geparst werden und 
+            der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/> dieser <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> war so konfiguriert, dass er in diesem Fall eine
+            Ausnahme wirft.</exception>
+            <exception cref="T:System.InvalidOperationException">Es wurde versucht, auf die Daten von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> zuzugreifen, ohne dass diesem
+            ein <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt zugewiesen war.</exception>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper.PropertyCollection">
+            ////////////////////////////////////////////////////////////////////////
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty">
+            <summary>
+            Abstrakte Basisklasse für Klassen, die eine Eigenschaft von <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvRecordWrapper"/> repräsentieren, die dynamisch zur Laufzeit
+            implementiert wird, und die ihre Daten aus einer einzelnen Spalte der CSV-Datei bezieht.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.#ctor(System.String,FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter)">
+            <summary>
+            Initialisiert ein neues <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty"/>-Objekt.
+            </summary>
+            <param name="propertyName">Der Bezeichner unter dem die Eigenschaft angesprochen wird. Er muss den Regeln für C#-Bezeichner
+            entsprechen. Es werden nur ASCII-Zeichen akzeptiert.</param>
+            <param name="converter">Der <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/>, der die Typkonvertierung übernimmt.</param>
+            
+            <exception cref="T:System.ArgumentException"><paramref name="propertyName"/> entspricht nicht den Regeln für C#-Bezeichner (nur
+            ASCII-Zeichen).</exception>
+            
+            <exception cref="T:System.ArgumentNullException"><paramref name="propertyName"/> oder 
+            <paramref name="converter"/> ist <c>null</c>.</exception>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.Converter">
+            <summary>
+            Ein <see cref="T:FolkerKinzel.CsvTools.TypeConversions.ICsvTypeConverter"/>-Objekt, das die Typkonvertierung durchführt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.Record">
+            <summary>
+            Das <see cref="T:FolkerKinzel.CsvTools.CsvRecord"/>-Objekt, über das der Zugriff auf die CSV-Datei erfolgt.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.ReferredCsvColumnIndex">
+            <summary>
+            Der Index der Spalte der CSV-Datei, auf die <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> zugreift oder <c>null</c>,
+            wenn <see cref="T:FolkerKinzel.CsvTools.TypeConversions.CsvColumnNameProperty"/> kein Ziel in der CSV-Datei findet. Die Eigenschaft wird beim
+            ersten Lese- oder Schreibzugriff aktualisiert.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.UpdateReferredCsvColumnIndex">
+            <summary>
+            Wird bei jedem Schreib- oder Lesevorgang aufgerufen, um zu überprüfen, ob <see cref="P:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.ReferredCsvColumnIndex"/> noch aktuell ist.
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.GetValue">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.TypeConversions.CsvSingleColumnProperty.SetValue(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="T:FolkerKinzel.CsvTools.InvalidCsvException">
+            <summary>
+            Ausnahmen, die beim Lesen von CSV-Dokumenten durch ungültige CSV-Dokumente
+            ausgelöst werden.
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.InvalidCsvException.CsvLineNumber">
+            <summary>
+            Zeilennummer der CSV-Datei beim Auftreten des Fehlers (1-basierter Index).
+            </summary>
+        </member>
+        <member name="P:FolkerKinzel.CsvTools.InvalidCsvException.CsvCharIndex">
+            <summary>
+            Zeichen in der Zeile der CSV-Datei, bei dem der Fehler auftrat (0-basierter Index).
+            </summary>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.InvalidCsvException.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.InvalidCsvException.#ctor(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.InvalidCsvException.#ctor(System.String,System.Int32,System.Int32)">
+            <inheritdoc cref="M:FolkerKinzel.CsvTools.InvalidCsvException.#ctor(System.String)" />
+            <param name="csvLineNumber">Zeilennummer der CSV-Datei beim Auftreten des Fehlers (1-basierter Index).</param>
+            <param name="csvCharIndex">Zeichen in der Zeile der CSV-Datei, bei dem der Fehler auftrat (0-basierter Index).</param>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.InvalidCsvException.#ctor(System.String,System.Exception)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.InvalidCsvException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.InvalidCsvException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <inheritdoc/>
+        </member>
+        <member name="M:FolkerKinzel.CsvTools.InvalidCsvException.ToString">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

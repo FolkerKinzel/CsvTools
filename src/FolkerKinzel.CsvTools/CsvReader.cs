@@ -67,8 +67,8 @@ namespace FolkerKinzel.CsvTools
         {
             StreamReader streamReader = InitializeStreamReader(fileName, textEncoding);
 
-            this._reader = new CsvStringReader(streamReader, fieldSeparator, (_options & CsvOptions.ThrowOnEmptyLines) != CsvOptions.ThrowOnEmptyLines);
             this._options = options;
+            this._reader = new CsvStringReader(streamReader, fieldSeparator, options.HasFlag(CsvOptions.ThrowOnEmptyLines));
             this._hasHeaderRow = hasHeaderRow;
         }
 
@@ -92,8 +92,8 @@ namespace FolkerKinzel.CsvTools
                 throw new ArgumentNullException(nameof(reader));
             }
 
-            this._reader = new CsvStringReader(reader, fieldSeparator, (_options & CsvOptions.ThrowOnEmptyLines) != CsvOptions.ThrowOnEmptyLines);
             this._options = options;
+            this._reader = new CsvStringReader(reader, fieldSeparator, options.HasFlag(CsvOptions.ThrowOnEmptyLines));
             this._hasHeaderRow = hasHeaderRow;
         }
 
@@ -229,7 +229,7 @@ namespace FolkerKinzel.CsvTools
 
                 if (dataIndex < clone.Count)
                 {
-                    if (dataIndex == 0 && (_options & CsvOptions.ThrowOnEmptyLines) == CsvOptions.ThrowOnEmptyLines)
+                    if (dataIndex == 0 && _options.HasFlag(CsvOptions.ThrowOnEmptyLines))
                     {
                         throw new InvalidCsvException("Unmasked empty line.", reader.LineNumber, 0);
                     }
