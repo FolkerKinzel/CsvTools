@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Tsltn Version="1.0" SourceFile="..\bin\Release\net6.0\de\FolkerKinzel.CsvTools.xml" SourceLanguage="de" TargetLanguage="en">
+<Tsltn Version="1.0" SourceFile="de\FolkerKinzel.CsvTools.xml" SourceLanguage="de" TargetLanguage="en">
   <T ID="DBC1FBE0460C8E94">Named constants to specify options for reading and writing CSV files. The flags can be combined.</T>
   <T ID="9F247E3BD9FEE2F2">Provides read-only forward access to the records of a CSV file. (This means, that the &lt;see cref="T:FolkerKinzel.CsvTools.CsvReader" /&gt; can only read the file forward once.)</T>
   <T ID="8A33921DD001915A">Represents a record of the CSV file (row). The column order corresponds to that of the CSV file and all columns are of the data type &lt;see cref="T:System.String" /&gt;. The content of the columns can be accessed using a zero-based column index or the column name.</T>
