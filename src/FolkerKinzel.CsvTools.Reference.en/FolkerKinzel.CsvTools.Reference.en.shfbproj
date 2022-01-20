@@ -28,6 +28,7 @@
     </TransformComponentArguments>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
+      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\Translations\en\FolkerKinzel.CsvTools.xml" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
@@ -47,13 +48,14 @@
     <SdkLinkTarget>Blank</SdkLinkTarget>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
-<NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Classes to read and write CSV files.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Extension methods to make working with CSV files more comfortable.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Classes, which make it easier to access data stored in CSV files.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Classes that support type conversions.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers (Group)" isGroup="True" isDocumented="True">Classes, which make it easier to access data stored in CSV files.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters (Group)" isGroup="True" isDocumented="True">Classes that support type conversions.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters.Specialized" isDocumented="True">Some specialized implementations of the interface ICsvTypeConverter. For ordinary tasks you should use CsvConverterFactory to initialize ICsvTypeConverter instances.</NamespaceSummaryItem></NamespaceSummaries>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools" isDocumented="True">Classes to read and write CSV files.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Extensions" isDocumented="True">Extension methods to make working with CSV files more comfortable.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers" isDocumented="True">Classes, which make it easier to access data stored in CSV files.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters" isDocumented="True">Classes that support type conversions.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers (Group)" isGroup="True" isDocumented="True">Classes, which make it easier to access data stored in CSV files.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters (Group)" isGroup="True" isDocumented="True">Classes that support type conversions.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="FolkerKinzel.CsvTools.Helpers.Converters.Specialized" isDocumented="True">Some specialized implementations of the interface ICsvTypeConverter. For ordinary tasks you should use CsvConverterFactory to initialize ICsvTypeConverter instances.</NamespaceSummaryItem>
+    </NamespaceSummaries>
     <NamingMethod>Guid</NamingMethod>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CopyrightText>Copyright &amp;#169%3b 2020 Folker Kinzel</CopyrightText>
