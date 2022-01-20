@@ -28,7 +28,7 @@
     </TransformComponentArguments>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\bin\Release\net40\FolkerKinzel.CsvTools.dll" />
-      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\bin\Release\net5.0\de\FolkerKinzel.CsvTools.xml" />
+      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\Translations\de\FolkerKinzel.CsvTools.xml" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
