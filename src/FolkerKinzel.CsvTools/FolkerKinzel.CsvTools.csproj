@@ -10,10 +10,10 @@
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <Version>1.6.3</Version>
-    <FileVersion>1.6.3.5</FileVersion>
+    <Version>1.6.4</Version>
+    <FileVersion>1.6.4.2</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/blob/master/docs/PackageReleaseNotes/1.6.3/ReleaseNotes.md</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/blob/master/docs/PackageReleaseNotes/1.6.4/ReleaseNotes.md</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
     <Description>.NET library to read and write CSV files.</Description>
     <Authors>Folker Kinzel</Authors>
@@ -74,7 +74,7 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461'">
     <PackageReference Include="FolkerKinzel.Strings">
-      <Version>4.3.0</Version>
+      <Version>4.4.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
