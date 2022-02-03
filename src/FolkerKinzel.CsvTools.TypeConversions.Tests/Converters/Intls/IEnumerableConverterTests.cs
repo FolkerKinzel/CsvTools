@@ -66,16 +66,16 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Tests
             CollectionAssert.AreEqual(arr1.ToArray(), arr2.ToArray());
         }
 
-        [TestMethod()]
-        public void ParseTest()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod()]
+        //public void ParseTest()
+        //{
+        //    Assert.Fail();
+        //}
 
-        [TestMethod()]
-        public void ConvertToStringTest()
-        {
-            Assert.Fail();
-        }
+        //[TestMethod()]
+        //public void ConvertToStringTest()
+        //{
+        //    Assert.Fail();
+        //}
     }
 }

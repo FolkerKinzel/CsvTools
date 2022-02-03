@@ -36,18 +36,10 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             Assert.IsInstanceOfType(conv, typeof(EnumConverter<TypeCode>));
         }
 
+
         [TestMethod()]
-        public void EnumConverterTest5()
-        {
-            var conv = new EnumConverter<DayOfWeek>();
-
-            string? outp = (string?)conv.ConvertToString(null);
-            Assert.IsNull(outp);
-
-            DayOfWeek res = conv.Parse(outp.AsSpan());
-
-            Assert.AreEqual(default, res);
-        }
+        [ExpectedException(typeof(InvalidCastException))]
+        public void EnumConverterTest5() => _ = new EnumConverter<DayOfWeek>().ConvertToString(null);
 
 
         [TestMethod]

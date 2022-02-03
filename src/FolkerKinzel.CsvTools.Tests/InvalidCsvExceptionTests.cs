@@ -9,11 +9,9 @@ namespace FolkerKinzel.CsvTools.Tests
     [TestClass()]
     public class InvalidCsvExceptionTests
     {
-//#pragma warning disable CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
-        
         [NotNull]
         public TestContext? TestContext { get; set; }
-//#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+
 
         [TestMethod()]
         public void InvalidCsvExceptionTest1()

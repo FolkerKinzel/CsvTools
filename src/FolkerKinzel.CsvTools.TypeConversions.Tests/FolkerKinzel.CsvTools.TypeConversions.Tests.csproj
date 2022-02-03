@@ -39,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FolkerKinzel.CsvTools.TypeConversions\FolkerKinzel.CsvTools.TypeConversions.csproj" />
+    <ProjectReference Include="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
   </ItemGroup>
 
   <ItemGroup>
