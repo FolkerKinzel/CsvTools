@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
-namespace FolkerKinzel.CsvTools.Extensions.Tests
+namespace FolkerKinzel.CsvTools.TypeConversions.Intls.Extensions.Tests
 {
 #if !NET45
     internal class TestCollection : KeyedCollection<string, CsvPropertyBase>

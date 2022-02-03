@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
-namespace FolkerKinzel.CsvTools.Extensions;
+namespace FolkerKinzel.CsvTools.TypeConversions.Intls.Extensions;
 
 #if NETSTANDARD2_0 || NET461
 internal static class PropertyCollectionExtension

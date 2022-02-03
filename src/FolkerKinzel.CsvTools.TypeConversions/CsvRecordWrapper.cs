@@ -8,7 +8,8 @@ using System.Globalization;
 using System.Linq.Expressions;
 using System.Text;
 using FolkerKinzel.CsvTools.Extensions;
-using FolkerKinzel.CsvTools.Resources;
+using FolkerKinzel.CsvTools.TypeConversions.Intls.Extensions;
+using FolkerKinzel.CsvTools.TypeConversions.Resources;
 
 namespace FolkerKinzel.CsvTools.TypeConversions;
 
@@ -214,19 +215,13 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     {
         get
         {
-            if (Record is null)
-            {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)));
-            }
-
-            if (propertyName is null)
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
-
-            return this._dynProps.TryGetValue(propertyName, out CsvPropertyBase? prop)
-                ? prop.GetValue()
-                : throw new ArgumentException(string.Format(Res.PropertyNotFound, nameof(propertyName)), nameof(propertyName));
+            return Record is null
+                ? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Res.CsvRecordIsNull, nameof(Record)))
+                : propertyName is null
+                    ? throw new ArgumentNullException(nameof(propertyName))
+                    : this._dynProps.TryGetValue(propertyName, out CsvPropertyBase? prop)
+                        ? prop.GetValue()
+                        : throw new ArgumentException(string.Format(Res.PropertyNotFound, nameof(propertyName)), nameof(propertyName));
         }
 
         set
@@ -535,6 +530,7 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override bool TryUnaryOperation(UnaryOperationBinder binder, out object? result) => base.TryUnaryOperation(binder, out result);
 
+
     ///// <summary>
     ///// Setzt den Wert sämtlicher Spalten des zugrundeliegenden <see cref="CsvRecord"/>-Objekts auf <c>null</c>.
     ///// </summary>
@@ -596,7 +592,6 @@ public sealed class CsvRecordWrapper : DynamicObject, IEnumerable<KeyValuePair<s
 
 
     /// <inheritdoc/>
-    [SuppressMessage("Design", "CA1031:Keine allgemeinen Ausnahmetypen abfangen", Justification = "<Ausstehend>")]
     public override string ToString()
     {
         if (Record is null || Count == 0)

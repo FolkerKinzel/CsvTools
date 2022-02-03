@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
@@ -252,13 +251,13 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// gehören, identisch ist. (Wird von <see cref="CsvColumnNameProperty"/> verwendet, um festzustellen,
     /// ob der Zugriffsindex aktuell ist.)
     /// </summary>
-    internal int Identifier { get; }
+    public int Identifier { get; }
 
 
     /// <summary>
     /// Der zur Auswahl der Schlüssel verwendete Comparer.
     /// </summary>
-    internal IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
+    public IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
     #endregion
 

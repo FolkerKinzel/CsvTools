@@ -175,7 +175,7 @@ public sealed class CsvColumnNameProperty : CsvSingleColumnProperty
             {
                 char c = alias[j];
 
-                if (c == '*' || c == '?')
+                if (c is '*' or '?')
                 {
                     return true;
                 }

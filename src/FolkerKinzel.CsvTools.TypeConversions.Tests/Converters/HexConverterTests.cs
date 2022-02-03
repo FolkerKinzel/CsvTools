@@ -28,7 +28,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             string? s = conv.ConvertToString(i);
             Assert.IsNotNull(s);
 
-            var i2 = (int?)conv.Parse(s.AsSpan());
+            int? i2 = (int?)conv.Parse(s.AsSpan());
 
             Assert.AreEqual(i, i2);
 
@@ -45,7 +45,7 @@ namespace FolkerKinzel.CsvTools.TypeConversions.Converters.Intls.Tests
             string? s = conv.ConvertToString(i)?.ToLowerInvariant();
             Assert.IsNotNull(s);
 
-            var i2 = (int?)conv.Parse(s.AsSpan());
+            int? i2 = (int?)conv.Parse(s.AsSpan());
 
             Assert.AreEqual(i, i2);
 

@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
-using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
 using System.Collections;

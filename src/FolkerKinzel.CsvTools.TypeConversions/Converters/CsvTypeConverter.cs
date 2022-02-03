@@ -28,6 +28,7 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
 
     protected abstract string? DoConvertToString(T value);
 
+    [SuppressMessage("Style", "IDE0046:In bedingten Ausdruck konvertieren", Justification = "<Ausstehend>")]
     public string? ConvertToString(object? value)
     {
         if (value is T t)
@@ -50,6 +51,8 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
 
     protected virtual bool CsvHasValue(ReadOnlySpan<char> csvInput) => !csvInput.IsWhiteSpace();
 
+
+    [SuppressMessage("Style", "IDE0046:In bedingten Ausdruck konvertieren", Justification = "<Ausstehend>")]
     public T? Parse(ReadOnlySpan<char> value)
     {
         if (!CsvHasValue(value))

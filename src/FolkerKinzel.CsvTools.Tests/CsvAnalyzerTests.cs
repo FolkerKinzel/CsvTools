@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using FolkerKinzel.CsvTools.Extensions;
-using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

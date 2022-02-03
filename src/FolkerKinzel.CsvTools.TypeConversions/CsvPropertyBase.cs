@@ -1,4 +1,4 @@
-﻿using FolkerKinzel.CsvTools.Resources;
+﻿using FolkerKinzel.CsvTools.TypeConversions.Resources;
 using System.Text.RegularExpressions;
 
 # if NETSTANDARD2_0 || NET461
