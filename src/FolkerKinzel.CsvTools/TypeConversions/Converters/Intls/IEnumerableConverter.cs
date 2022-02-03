@@ -7,6 +7,7 @@ internal sealed class IEnumerableConverter<TItem> : CsvTypeConverter<IEnumerable
     private readonly char _separatorChar;
     private readonly CsvTypeConverter<TItem?> _itemsConverter;
 
+    public override bool AcceptsNull => true;
 
     internal IEnumerableConverter(CsvTypeConverter<TItem?> itemsConverter, bool nullable, char fieldSeparator)
         : base(false, nullable ? null : Array.Empty<TItem>())

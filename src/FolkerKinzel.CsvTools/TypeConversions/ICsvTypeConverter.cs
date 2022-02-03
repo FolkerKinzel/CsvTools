@@ -9,4 +9,6 @@ public interface ICsvTypeConverter
     bool Throwing { get; }
 
     object? FallbackValue { get; }
+
+    bool AcceptsNull { get; }
 }

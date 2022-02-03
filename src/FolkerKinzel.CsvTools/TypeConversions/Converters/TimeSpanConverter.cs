@@ -47,6 +47,8 @@ public sealed class TimeSpanConverter : CsvTypeConverter<TimeSpan>
         ExamineFormat();
     }
 
+    public override bool AcceptsNull => false;
+
 
     protected override string? DoConvertToString(TimeSpan value) => value.ToString(_format, _formatProvider);
 

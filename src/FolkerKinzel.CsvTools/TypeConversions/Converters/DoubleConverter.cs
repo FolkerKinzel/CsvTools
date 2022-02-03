@@ -13,6 +13,8 @@ public sealed class DoubleConverter : CsvTypeConverter<double>
     public DoubleConverter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
+    public override bool AcceptsNull => false;
+
 
     protected override string? DoConvertToString(double value) => value.ToString(FORMAT, _formatProvider);
 

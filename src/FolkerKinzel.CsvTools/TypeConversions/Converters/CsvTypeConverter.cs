@@ -24,18 +24,19 @@ public abstract class CsvTypeConverter<T> : ICsvTypeConverter
 
     public abstract bool TryParseValue(ReadOnlySpan<char> value, out T result);
 
+    public abstract bool AcceptsNull { get; }
+
     protected abstract string? DoConvertToString(T value);
 
     public string? ConvertToString(object? value)
     {
-        if (value is null)
-        {
-            return null;
-        }
-
         if (value is T t)
         {
             return DoConvertToString(t);
+        }
+        else if (value is null)
+        {
+            return AcceptsNull ? null : throw new InvalidCastException(string.Format("Cannot cast null to {0}.", typeof(T)));
         }
         else
         {

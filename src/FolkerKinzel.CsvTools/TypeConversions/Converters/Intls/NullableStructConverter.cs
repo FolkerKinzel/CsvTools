@@ -7,6 +7,8 @@ internal sealed class NullableStructConverter<T> : CsvTypeConverter<Nullable<T>>
 {
     private readonly CsvTypeConverter<T> _typeConverter;
 
+    public override bool AcceptsNull => true;
+
     internal NullableStructConverter(CsvTypeConverter<T> converter)
         : base((converter ?? throw new ArgumentNullException(nameof(converter))).Throwing) => _typeConverter = converter;
 

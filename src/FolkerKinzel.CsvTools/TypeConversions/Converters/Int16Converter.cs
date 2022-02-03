@@ -16,7 +16,10 @@ public sealed class Int16Converter : CsvTypeConverter<int>
 
     public Int16Converter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-    
+
+
+    public override bool AcceptsNull => false;
+
 
     public Int16Converter AsHexConverter()
     {

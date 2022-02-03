@@ -18,6 +18,8 @@ public sealed class UInt16Converter : CsvTypeConverter<ushort>
     public UInt16Converter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
+    public override bool AcceptsNull => false;
+
 
     public UInt16Converter AsHexConverter()
     {

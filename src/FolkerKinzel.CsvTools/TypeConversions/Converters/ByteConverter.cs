@@ -24,6 +24,8 @@ public sealed class ByteConverter : CsvTypeConverter<byte>
         return this;
     }
 
+    public override bool AcceptsNull => false;
+
 
     protected override string? DoConvertToString(byte value) => value.ToString(_format, _formatProvider);
 

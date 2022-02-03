@@ -52,6 +52,9 @@ public sealed class DateTimeConverter : CsvTypeConverter<DateTime>
         => new(DATE_FORMAT, throwing, formatProvider, parseExact);
 
 
+    public override bool AcceptsNull => false;
+
+
     protected override string? DoConvertToString(DateTime value) => value.ToString(_format, _formatProvider);
 
 

@@ -12,7 +12,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>1.5.0</Version>
-    <FileVersion>1.5.0.68</FileVersion>
+    <FileVersion>1.5.0.70</FileVersion>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <PackageReleaseNotes>

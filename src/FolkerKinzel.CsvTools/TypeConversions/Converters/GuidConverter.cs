@@ -17,6 +17,8 @@ public sealed class GuidConverter : CsvTypeConverter<Guid>
         ExamineFormat(nameof(format));
     }
 
+    public override bool AcceptsNull => false;
+
 
     protected override string? DoConvertToString(Guid value) => value.ToString(_format, CultureInfo.InvariantCulture);
 

@@ -8,6 +8,8 @@ public sealed class CharConverter : CsvTypeConverter<char>
 
     protected override string? DoConvertToString(char value) => value.ToString();
 
+    public override bool AcceptsNull => false;
+
 
     public override bool TryParseValue(ReadOnlySpan<char> value, out char result)
     {

@@ -45,6 +45,8 @@ public sealed class DateTimeOffsetConverter : CsvTypeConverter<DateTimeOffset>
         ExamineFormat(nameof(format));
     }
 
+    public override bool AcceptsNull => false;
+
 
     protected override string? DoConvertToString(DateTimeOffset value) => value.ToString(_format, _formatProvider);
 

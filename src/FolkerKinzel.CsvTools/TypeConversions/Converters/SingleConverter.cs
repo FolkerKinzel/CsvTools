@@ -13,6 +13,8 @@ public sealed class SingleConverter : CsvTypeConverter<float>
     public SingleConverter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
+    public override bool AcceptsNull => false;
+
 
     protected override string? DoConvertToString(float value) => value.ToString(FORMAT, _formatProvider);
 

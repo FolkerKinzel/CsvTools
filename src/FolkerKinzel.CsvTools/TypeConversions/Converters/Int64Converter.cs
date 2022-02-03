@@ -16,7 +16,10 @@ public sealed class Int64Converter : CsvTypeConverter<long>
 
     public Int64Converter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-    
+
+
+    public override bool AcceptsNull => false;
+
 
     public Int64Converter AsHexConverter()
     {

@@ -18,7 +18,9 @@ public sealed class SByteConverter : CsvTypeConverter<sbyte>
 
     public SByteConverter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
-    
+
+    public override bool AcceptsNull => false;
+
 
     public SByteConverter AsHexConverter()
     {

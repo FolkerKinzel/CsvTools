@@ -13,6 +13,8 @@ public sealed class DecimalConverter : CsvTypeConverter<decimal>
     public DecimalConverter(bool throwing = true, IFormatProvider? formatProvider = null)
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
+    public override bool AcceptsNull => false;
+
 
     protected override string? DoConvertToString(decimal value) => value.ToString(FORMAT, _formatProvider);
 

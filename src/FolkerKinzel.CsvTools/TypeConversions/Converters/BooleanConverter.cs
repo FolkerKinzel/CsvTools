@@ -2,6 +2,8 @@
 
 public sealed class BooleanConverter : CsvTypeConverter<bool>
 {
+    public override bool AcceptsNull => false;
+
     public BooleanConverter(bool throwing = true, bool fallbackValue = default)
         : base(throwing, fallbackValue) { }
     

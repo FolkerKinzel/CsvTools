@@ -19,6 +19,9 @@ public sealed class UInt32Converter : CsvTypeConverter<uint>
         : base(throwing) => _formatProvider = formatProvider ?? CultureInfo.InvariantCulture;
 
 
+    public override bool AcceptsNull => false;
+
+
     public UInt32Converter AsHexConverter()
     {
         _styles = HEX_STYLE;

@@ -48,6 +48,9 @@ public sealed class EnumConverter<TEnum> : CsvTypeConverter<TEnum> where TEnum :
     public bool IgnoreCase { get; }
     public string? Format { get; } = DEFAULT_FORMAT;
 
+    public override bool AcceptsNull => false;
+
+
     protected override string? DoConvertToString(TEnum value) => value.ToString(Format);
 
     public override bool TryParseValue(ReadOnlySpan<char> value, out TEnum result)

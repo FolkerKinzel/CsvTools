@@ -6,6 +6,8 @@ public sealed class StringConverter : CsvTypeConverter<string?>
 {
     public StringConverter(bool nullable = true) : base(false, nullable ? null : string.Empty) { }
 
+    public override bool AcceptsNull => true;
+
 
     protected override string? DoConvertToString(string? value) => value;
 
