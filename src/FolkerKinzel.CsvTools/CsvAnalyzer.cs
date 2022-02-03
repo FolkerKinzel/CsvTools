@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
-using FolkerKinzel.CsvTools.Extensions;
 using FolkerKinzel.CsvTools.Intls;
 
 #if NET461 || NETSTANDARD2_0 || NETSTANDARD2_1

@@ -1,5 +1,4 @@
-﻿using FolkerKinzel.CsvTools.Extensions;
-using System.Data;
+﻿using System.Data;
 
 namespace FolkerKinzel.CsvTools;
 

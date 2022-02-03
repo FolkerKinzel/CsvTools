@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FolkerKinzel.CsvTools.Extensions.Tests
+namespace FolkerKinzel.CsvTools.Tests
 {
     [TestClass()]
     public class CsvOptionsExtensionsTests

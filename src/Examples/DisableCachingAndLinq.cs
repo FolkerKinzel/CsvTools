@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using FolkerKinzel.CsvTools;
-using FolkerKinzel.CsvTools.Extensions;
 
 namespace Examples
 {
