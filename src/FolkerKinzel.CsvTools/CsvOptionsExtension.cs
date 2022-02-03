@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace FolkerKinzel.CsvTools.Extensions;
+namespace FolkerKinzel.CsvTools;
 
 /// <summary>
 /// Erweiterungsmethoden, die die Arbeit mit der <see cref="CsvOptions"/>-Enum erleichtern.

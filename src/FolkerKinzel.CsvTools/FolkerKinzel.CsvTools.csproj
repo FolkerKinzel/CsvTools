@@ -62,12 +62,12 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
     <Compile Remove="old\**" />
+    <EmbeddedResource Remove="Extensions\**" />
     <EmbeddedResource Remove="old\**" />
+    <None Remove="Extensions\**" />
     <None Remove="old\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Extensions\PropertyCollectionExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Translations\FolkerKinzel.CsvTools.en.tsltn" />
