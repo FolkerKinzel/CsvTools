@@ -10,7 +10,7 @@ namespace Benchmarks
         private static void Main()
         {
             //Summary summary = BenchmarkRunner.Run<DBNullBenchmarks>();
-            Summary summary = BenchmarkRunner.Run<AccessBenchmark>();
+            //Summary summary = BenchmarkRunner.Run<AccessBenchmark>();
 
         }
     }
