@@ -25,10 +25,6 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Refer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{90C696E7-B5B0-408B-A391-B7FA0DEAC255}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolkerKinzel.CsvTools.TypeConversions", "FolkerKinzel.CsvTools.TypeConversions\FolkerKinzel.CsvTools.TypeConversions.csproj", "{B34816DB-47B6-4431-8F59-EA33F2BCE6F8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolkerKinzel.CsvTools.TypeConversions.Tests", "FolkerKinzel.CsvTools.TypeConversions.Tests\FolkerKinzel.CsvTools.TypeConversions.Tests.csproj", "{2315F2A6-CAD5-4F79-B700-7F9650BE3F81}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,14 +51,6 @@ Global
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B34816DB-47B6-4431-8F59-EA33F2BCE6F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B34816DB-47B6-4431-8F59-EA33F2BCE6F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B34816DB-47B6-4431-8F59-EA33F2BCE6F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B34816DB-47B6-4431-8F59-EA33F2BCE6F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2315F2A6-CAD5-4F79-B700-7F9650BE3F81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2315F2A6-CAD5-4F79-B700-7F9650BE3F81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2315F2A6-CAD5-4F79-B700-7F9650BE3F81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2315F2A6-CAD5-4F79-B700-7F9650BE3F81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
