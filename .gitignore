@@ -341,3 +341,4 @@ healthchecksdb
 
 # Reports directory
 reports/
+reports/html/
