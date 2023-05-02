@@ -168,6 +168,8 @@ namespace FolkerKinzel.CsvTools.Intls
                         {
                             if (c == '\"')
                             {
+                                isQuoted = !isQuoted;
+
                                 if (isMaskedDoubleQuote)
                                 {
                                     isMaskedDoubleQuote = false;
