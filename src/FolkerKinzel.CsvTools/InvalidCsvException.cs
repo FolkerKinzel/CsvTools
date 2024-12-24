@@ -52,23 +52,24 @@ public class InvalidCsvException : Exception, ISerializable
 
 
 
-    /// <inheritdoc/>
-    protected InvalidCsvException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-        this.CsvLineNumber = info.GetInt32(nameof(CsvLineNumber));
-        this.CsvCharIndex = info.GetInt32(nameof(CsvCharIndex));
-    }
+    ///// <inheritdoc/>
+    //protected InvalidCsvException(SerializationInfo info, StreamingContext context) : base(info, context)
+    //{
+    //    this.CsvLineNumber = info.GetInt32(nameof(CsvLineNumber));
+    //    this.CsvCharIndex = info.GetInt32(nameof(CsvCharIndex));
+    //}
 
 
 
-    /// <inheritdoc/>
-    public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        base.GetObjectData(info, context);
+    ///// <inheritdoc/>
+    //[Obsolete("This ctor is deprecated. Use the ctor that has the parameters message, csvLineNumber and csvCharIndex instead.")]
+    //public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    //{
+    //    base.GetObjectData(info, context);
 
-        info.AddValue(nameof(CsvLineNumber), CsvLineNumber);
-        info.AddValue(nameof(CsvCharIndex), CsvCharIndex);
-    }
+    //    info.AddValue(nameof(CsvLineNumber), CsvLineNumber);
+    //    info.AddValue(nameof(CsvCharIndex), CsvCharIndex);
+    //}
 
 
 

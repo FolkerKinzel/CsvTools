@@ -65,29 +65,31 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.AreEqual(charIndex, e.CsvCharIndex);
         }
 
-        [TestMethod()]
-        public void GetObjectDataTest()
-        {
-            string message = "Message";
+//        [TestMethod()]
+//        public void GetObjectDataTest()
+//        {
+//            string message = "Message";
 
-            int lineNumber = 4711;
-            int charIndex = 42;
+//            int lineNumber = 4711;
+//            int charIndex = 42;
 
-            var e = new InvalidCsvException(message, lineNumber, charIndex);
+//            var e = new InvalidCsvException(message, lineNumber, charIndex);
 
 
-            using var memStream = new MemoryStream();
-            var bf = new BinaryFormatter();
-            bf.Serialize(memStream, e);
+//            using var memStream = new MemoryStream();
+//#pragma warning disable SYSLIB0011 // Type or member is obsolete
+//            var bf = new BinaryFormatter();
+//#pragma warning restore SYSLIB0011 // Type or member is obsolete
+//            bf.Serialize(memStream, e);
 
-            memStream.Position = 0;
+//            memStream.Position = 0;
 
-            var e2 = (InvalidCsvException)bf.Deserialize(memStream);
+//            var e2 = (InvalidCsvException)bf.Deserialize(memStream);
 
-            Assert.AreEqual(e.Message, e2.Message);
-            Assert.AreEqual(e.CsvLineNumber, e2.CsvLineNumber);
-            Assert.AreEqual(e.CsvCharIndex, e2.CsvCharIndex);
-        }
+//            Assert.AreEqual(e.Message, e2.Message);
+//            Assert.AreEqual(e.CsvLineNumber, e2.CsvLineNumber);
+//            Assert.AreEqual(e.CsvCharIndex, e2.CsvCharIndex);
+//        }
 
 
         [TestMethod()]

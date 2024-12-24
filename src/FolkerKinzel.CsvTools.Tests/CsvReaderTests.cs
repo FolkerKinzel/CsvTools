@@ -9,10 +9,6 @@ using System.Collections;
 
 using FolkerKinzel.Strings;
 
-#if !NETCOREAPP3_1
-using FolkerKinzel.Strings.Polyfills;
-#endif
-
 namespace FolkerKinzel.CsvTools.Tests;
 
 [TestClass]
@@ -44,7 +40,7 @@ public class CsvReaderTests
     [TestMethod()]
     public void ReadTest2()
     {
-        string outDir = Path.Combine(TestContext.TestRunResultsDirectory, "CsvFilesAnalyzed");
+        string outDir = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvFilesAnalyzed");
         _ = Directory.CreateDirectory(outDir);
 
         string file = TestFiles.GoogleCsv;

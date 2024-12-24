@@ -12,7 +12,7 @@ namespace FolkerKinzel.CsvTools.Tests
         public void CsvAnalyzerTest()
         {
             var analyzer = new CsvAnalyzer();
-            Assert.IsInstanceOfType(analyzer, typeof(CsvAnalyzer));
+            Assert.IsNotNull(analyzer);
         }
 
         [TestMethod()]

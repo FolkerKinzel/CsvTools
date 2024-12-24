@@ -4,8 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
-#if NETSTANDARD2_1 || NETSTANDARD2_0 || NET461
-using FolkerKinzel.Strings.Polyfills;
+#if NETSTANDARD2_1 || NETSTANDARD2_0 || NET462
+using FolkerKinzel.Strings;
 #endif
 
 namespace FolkerKinzel.CsvTools;

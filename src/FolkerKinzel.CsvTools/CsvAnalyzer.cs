@@ -2,8 +2,8 @@
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
-#if NET461 || NETSTANDARD2_0 || NETSTANDARD2_1
-using FolkerKinzel.Strings.Polyfills;
+#if NET462 || NETSTANDARD2_0 || NETSTANDARD2_1
+using FolkerKinzel.Strings;
 #endif
 
 namespace FolkerKinzel.CsvTools;
@@ -28,7 +28,6 @@ public class CsvAnalyzer
     /// Initialisiert ein neues <see cref="CsvAnalyzer"/>-Objekt.
     /// </summary>
     public CsvAnalyzer() { }
-
 
     /// <summary>
     /// Analysiert die CSV-Datei, auf die <paramref name="fileName"/> verweist, und füllt die Eigenschaften des <see cref="CsvAnalyzer"/>-Objekts mit den

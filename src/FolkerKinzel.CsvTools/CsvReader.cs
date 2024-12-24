@@ -7,8 +7,8 @@ using FolkerKinzel.CsvTools.Resources;
 using System.Collections;
 using System.Numerics;
 
-#if NET461 || NETSTANDARD2_0 || NETSTANDARD2_1
-using FolkerKinzel.Strings.Polyfills;
+#if NET462 || NETSTANDARD2_0 || NETSTANDARD2_1
+using FolkerKinzel.Strings;
 #endif
 
 namespace FolkerKinzel.CsvTools;

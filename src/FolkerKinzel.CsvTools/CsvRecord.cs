@@ -230,7 +230,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <returns>Eine Kopie der in <see cref="CsvRecord"/> gespeicherten Daten als <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, string?&gt;</see>.</returns>
     public Dictionary<string, ReadOnlyMemory<char>> ToDictionary()
     {
-#if NETSTANDARD2_0 || NET461
+#if NETSTANDARD2_0 || NET462
         var dic = new Dictionary<string, ReadOnlyMemory<char>>(this.Count, this._lookupDictionary.Comparer);
 
         foreach (KeyValuePair<string, ReadOnlyMemory<char>> kvp in this)

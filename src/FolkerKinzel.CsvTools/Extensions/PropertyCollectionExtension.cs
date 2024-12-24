@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace FolkerKinzel.CsvTools.Extensions;
 
-#if NETSTANDARD2_0 || NET461
+#if NETSTANDARD2_0 || NET462
 internal static class PropertyCollectionExtension
 {
     internal static bool TryGetValue(

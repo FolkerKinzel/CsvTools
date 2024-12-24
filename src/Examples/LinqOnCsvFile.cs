@@ -6,7 +6,7 @@ using FolkerKinzel.CsvTools;
 
 namespace Examples
 {
-    public static class LinqOnCsvFile
+    internal static class LinqOnCsvFile
     {
         public static void TestLinqOnCsvFile()
         {

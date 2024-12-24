@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.github\ISSUE_TEMPLATE\bug_report.md = ..\.github\ISSUE_TEMPLATE\bug_report.md
 		..\.github\ISSUE_TEMPLATE\feature_request.md = ..\.github\ISSUE_TEMPLATE\feature_request.md
 		..\README.md = ..\README.md
-		Reference.md = Reference.md
-		..\docs\PackageReleaseNotes\2.0.0\ReleaseNotes.md = ..\docs\PackageReleaseNotes\2.0.0\ReleaseNotes.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools.Tests", "FolkerKinzel.CsvTools.Tests\FolkerKinzel.CsvTools.Tests.csproj", "{A688E97D-48BD-41FF-A3CB-40F316EE7C82}"

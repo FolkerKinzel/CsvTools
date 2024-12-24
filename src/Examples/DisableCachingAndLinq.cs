@@ -6,7 +6,7 @@ using FolkerKinzel.CsvTools;
 
 namespace Examples
 {
-    public static class DisableCachingAndLinq
+    internal static class DisableCachingAndLinq
     {
         public static void TestDisableCachingAndLinq()
         {
