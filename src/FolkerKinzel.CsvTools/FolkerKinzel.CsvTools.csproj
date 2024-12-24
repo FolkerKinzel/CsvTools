@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  
   <PropertyGroup>
     <TargetFrameworks>net8.0;netstandard2.1;netstandard2.0;net462</TargetFrameworks>
     <LangVersion>13.0</LangVersion>
@@ -10,7 +9,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>2.0.0-alpha.1</Version>
-    <FileVersion>2.0.0.0</FileVersion>
+    <FileVersion>2.0.0.1</FileVersion>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0-alpha.1</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
@@ -32,7 +31,6 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  
   <PropertyGroup>
     <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -100,7 +98,6 @@
       <Version>9.2.1</Version>
     </PackageReference>
   </ItemGroup>
-  
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net8.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />
   </Target>
