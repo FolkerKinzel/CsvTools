@@ -6,7 +6,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections;
-
 using FolkerKinzel.Strings;
 
 namespace FolkerKinzel.CsvTools.Tests;
@@ -143,5 +142,52 @@ public class CsvReaderTests
         using var _ = new CsvReader((StreamReader?)null!);
     }
 
+
+    [TestMethod]
+    public void CsvReaderTest6()
+    {
+        const string csv = """
+                Name,City
+                Ingrid,Berlin
+                Joyce,New York
+                Horst,Hamburg
+                John,New York
+                """;
+
+        using var csvReader = new CsvReader(new StringReader(csv));
+
+        int cnt = 0;
+
+        foreach (CsvRecord record in csvReader)
+        {
+            cnt++;
+        }
+
+        Assert.AreEqual(4, cnt);
+
+        foreach (CsvRecord record in csvReader)
+        {
+            Assert.Fail();
+        }
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ObjectDisposedException))]
+    public void CsvReaderTest7()
+    {
+        const string csv = """
+                Name,City
+                Ingrid,Berlin
+                Joyce,New York
+                Horst,Hamburg
+                John,New York
+                """;
+
+        using var csvReader = new CsvReader(new StringReader(csv));
+
+        Assert.AreEqual(4, csvReader.Count());
+
+        _ = csvReader.Count();
+    }
 
 }

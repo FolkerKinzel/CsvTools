@@ -1,42 +1,38 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>
-/// Ausnahmen, die beim Lesen von CSV-Dokumenten durch ungültige CSV-Dokumente
-/// ausgelöst werden.
-/// </summary>
+    /// <summary>Exception, thrown parsing invalid CSV documents.</summary>
 [Serializable]
 public class InvalidCsvException : Exception, ISerializable
 {
-    /// <summary>
-    /// Zeilennummer der CSV-Datei beim Auftreten des Fehlers (1-basierter Index).
-    /// </summary>
+    /// <summary>Line number of the CSV file where the error occurred (1-based index).</summary>
     public int CsvLineNumber { get; } = 1;
 
-    /// <summary>
-    /// Zeichen in der Zeile der CSV-Datei, bei dem der Fehler auftrat (0-basierter Index).
-    /// </summary>
+    /// <summary>Index of the character in the line of the CSV file where the error
+    /// occurred (0-based index).</summary>
     public int CsvCharIndex { get; }
 
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public InvalidCsvException()
     {
     }
 
 
 
-    ///<inheritdoc/>
+    /// <inheritdoc />
     public InvalidCsvException(string message) : base(message)
     {
     }
 
 
     /// <inheritdoc cref="InvalidCsvException(string)" />
-    /// <param name="csvLineNumber">Zeilennummer der CSV-Datei beim Auftreten des Fehlers (1-basierter Index).</param>
-    /// <param name="csvCharIndex">Zeichen in der Zeile der CSV-Datei, bei dem der Fehler auftrat (0-basierter Index).</param>
+    /// <param name="csvLineNumber">Line number of the CSV file where the error occurred
+    /// (1-based index).</param>
+    /// <param name="csvCharIndex">Index of the character in the line of the CSV file
+    /// where the error occurred (0-based index).</param>
 #pragma warning disable CS1573 // Parameter besitzt kein übereinstimmendes param-Tag im XML-Kommentar (andere Parameter jedoch schon)
     public InvalidCsvException(string message, int csvLineNumber, int csvCharIndex) : base(message)
 #pragma warning restore CS1573 // Parameter besitzt kein übereinstimmendes param-Tag im XML-Kommentar (andere Parameter jedoch schon)
@@ -47,12 +43,12 @@ public class InvalidCsvException : Exception, ISerializable
 
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public InvalidCsvException(string message, Exception innerException) : base(message, innerException) { }
 
 
 
-    ///// <inheritdoc/>
+    /// <inheritdoc />
     //protected InvalidCsvException(SerializationInfo info, StreamingContext context) : base(info, context)
     //{
     //    this.CsvLineNumber = info.GetInt32(nameof(CsvLineNumber));
@@ -61,7 +57,7 @@ public class InvalidCsvException : Exception, ISerializable
 
 
 
-    ///// <inheritdoc/>
+    /// <inheritdoc />
     //[Obsolete("This ctor is deprecated. Use the ctor that has the parameters message, csvLineNumber and csvCharIndex instead.")]
     //public override void GetObjectData(SerializationInfo info, StreamingContext context)
     //{
@@ -73,7 +69,7 @@ public class InvalidCsvException : Exception, ISerializable
 
 
 
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public override string ToString() =>
         base.ToString() + $" ({nameof(CsvLineNumber)}: {CsvLineNumber}, {nameof(CsvCharIndex)}: {CsvCharIndex})";
 

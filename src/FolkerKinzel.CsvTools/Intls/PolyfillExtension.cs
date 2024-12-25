@@ -1,4 +1,4 @@
-﻿namespace FolkerKinzel.CsvTools.Intls;
+namespace FolkerKinzel.CsvTools.Intls;
 
 internal static class PolyfillExtension
 {

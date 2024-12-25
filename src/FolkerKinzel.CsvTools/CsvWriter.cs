@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -10,26 +10,32 @@ using FolkerKinzel.Strings;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>
-/// Die Klasse ermöglicht es, Daten in eine CSV-Datei zu schreiben.
-/// </summary>
-/// <remarks><see cref="CsvWriter"/> stellt in der Eigenschaft <see cref="Record"/> ein <see cref="CsvRecord"/>-Objekt zur Verfügung, das einen
-/// Puffer für einen Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"/>-Objekt mit <see cref="string"/>-Daten und schreiben
-/// Sie es anschließend mit der Methode <see cref="WriteRecord"/> in die Datei. Der Aufruf von <see cref="WriteRecord"/> setzt alle Felder von
-/// <see cref="Record"/> wieder auf <c>null</c>-Werte, so dass das <see cref="CsvRecord"/>-Objekt erneut befüllt werden kann. Wenn andere Datentypen als <see cref="string"/>
-/// geschrieben werden sollen, bietet sich die Verwendung der Klasse <see cref="CsvRecordWrapper"/> an, die einen komfortablen Adapter zwischen den
-/// Daten der Anwendung und der CSV-Datei darstellt.</remarks>
-/// <example>
-/// <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
-/// <para>Speichern des Inhalts einer <see cref="DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
-/// eine <see cref="DataTable"/>:</para>
-/// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
-/// </example>
+    /// <summary>Writes data to a CSV file.</summary>
+    /// <remarks> <see cref="CsvWriter" /> stellt in der Eigenschaft <see cref="Record"
+    /// /> ein <see cref="CsvRecord" />-Objekt zur Verfügung, das einen Puffer für einen
+    /// Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"
+    /// />-Objekt mit <see cref="string" />-Daten und schreiben Sie es anschließend
+    /// mit der Methode <see cref="WriteRecord" /> in die Datei. Der Aufruf von <see
+    /// cref="WriteRecord" /> setzt alle Felder von <see cref="Record" /> wieder auf
+    /// <c>null</c>-Werte, so dass das <see cref="CsvRecord" />-Objekt erneut befüllt
+    /// werden kann. Wenn andere Datentypen als <see cref="string" /> geschrieben werden
+    /// sollen, bietet sich die Verwendung der Klasse <see cref="CsvRecordWrapper" />
+    /// an, die einen komfortablen Adapter zwischen den Daten der Anwendung und der
+    /// CSV-Datei darstellt.</remarks>
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// <para>
+    /// Saving the contents of a <see cref="DataTable" /> as a CSV file and importing
+    /// data from a CSV file into a <see cref="DataTable" />:
+    /// </para>
+    /// <code language="cs" source="..\Examples\CsvToDataTable.cs" />
+    /// </example>
 public sealed class CsvWriter : IDisposable
 {
-    /// <summary>
-    /// Das beim Schreiben von CSV-Dateien zu verwendende Newline-Zeichen ("\r\n").
-    /// </summary>
+    /// <summary>The newline character to use, when writing CSV files ("\r\n").</summary>
     public const string NewLine = "\r\n";
 
     private bool _isHeaderRowWritten;
@@ -38,94 +44,91 @@ public sealed class CsvWriter : IDisposable
     private readonly char _fieldSeparator;
     private readonly bool _trimColumns;
 
-    //[NotNull]
     private readonly TextWriter _writer;
 
-
-    #region ctors
-
-
-    /// <summary>
-    /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt mit den Spaltennamen für die zu schreibende Kopfzeile.
-    /// </summary>
-    /// <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
-    /// <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
-    /// enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
-    /// beachten, dass der Vergleich der Spaltennamen nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
-    /// gewählt wurde.</param>
-    /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-    /// <param name="textEncoding">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM. (<see cref="Encoding.UTF8"/>)</param>
-    /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
-    /// 
-    /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
+    /// for the header row to be written.</summary>
+    /// <param name="fileName">The file path of the CSV file to be written. If the file
+    /// exists, it will be overwritten.</param>
+    /// <param name="columnNames">An array of column names for the header to be written.
+    /// If the array contains <c>null</c> values, these are replaced by automatically
+    /// generated column names. Column names cannot appear twice. It is to note that
+    /// the comparison is not case-sensitive - unless this option is explicitely chosen
+    /// in <paramref name="options" />.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
+    /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
-    /// <para><paramref name="fileName"/> ist kein gültiger Dateipfad</para>
-    /// <para>- oder -</para>
-    /// <para>ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
-    /// gewählt werden, ob der Vergleich der Spaltennamen case-sensitiv erfolgt.</para></exception>
-    /// <exception cref="IOException">E/A-Fehler.</exception>
+    /// <para>
+    /// <paramref name="fileName" /> is not a valid file path
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// a column name in <paramref name="columnNames" /> occurs twice. In <paramref
+    /// name="options" /> you can choose, whether the comparison of column names is
+    /// case-sensitive.
+    /// </para>
+    /// </exception>
+    /// <exception cref="IOException">I/O-Error</exception>
     public CsvWriter(
         string fileName, string?[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
          : this(columnNames, fieldSeparator, options) => _writer = InitStreamWriter(fileName, textEncoding);
 
-
-    /// <summary>
-    /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
-    /// </summary>
-    /// <param name="fileName">Der Dateipfad der zu schreibenden CSV-Datei. Wenn die Datei existiert, wird sie überschrieben.</param>
-    /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
-    /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-    /// <param name="textEncoding">Die zu verwendende Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
-    /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
-    /// 
-    /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
-    /// <exception cref="IOException">E/A-Fehler.</exception>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
+    /// without a header row.</summary>
+    /// <param name="fileName">The file path of the CSV file to be written. If the file
+    /// exists, it will be overwritten.</param>
+    /// <param name="columnsCount">Number of columns in the CSV file.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
+    /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
+    /// file path.</exception>
+    /// <exception cref="IOException">I/O-Error</exception>
     public CsvWriter(
         string fileName, int columnsCount, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
          : this(columnsCount, fieldSeparator, options) => _writer = InitStreamWriter(fileName, textEncoding);
 
-
-    /// <summary>
-    /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit den Spaltennamen für die zu schreibende Kopfzeile.
-    /// </summary>
-    /// <param name="writer">Der <see cref="TextWriter"/>, mit dem geschrieben wird.</param>
-    /// <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
-    /// enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
-    /// beachten, dass der Vergleich der Spaltennamen nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
-    /// gewählt wurde.</param>
-    /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-    /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="writer"/> oder <paramref name="columnNames"/> ist <c>null.</c></exception>
-    /// <exception cref="ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
-    /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
+    /// for the header row to be written.</summary>
+    /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
+    /// <param name="columnNames">A colletion of column names for the header to be written.
+    /// The collection will be copied. If the collection contains <c>null</c> values, these 
+    /// are replaced with automatically
+    /// generated column names. Column names cannot appear twice. It is to note that
+    /// the comparison is not case-sensitive - unless this option is explicitely chosen
+    /// in <paramref name="options" />.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
+    /// name="columnNames" /> is <c>null.</c></exception>
+    /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
+    /// /> occurs twice. In <paramref name="options" /> can be chosen, whether the comparison
+    /// is case-sensitive.</exception>
     public CsvWriter(
-        TextWriter writer, string?[] columnNames, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
+        TextWriter writer, IEnumerable<string?> columnNames, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
         : this(columnNames, fieldSeparator, options)
     {
-        if (writer is null)
-        {
-            throw new ArgumentNullException(nameof(writer));
-        }
-
-        if (columnNames is null)
-        {
-            throw new ArgumentNullException(nameof(columnNames));
-        }
+        _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
+        _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
 
         this._writer = writer;
         writer.NewLine = NewLine;
     }
 
-
-    /// <summary>
-    /// Initialisiert ein neues <see cref="CsvWriter"/>-Objekt, mit dem eine CSV-Datei ohne Kopfzeile geschrieben wird.
-    /// </summary>
-    /// <param name="writer">Der <see cref="TextWriter"/>, mit dem geschrieben wird.</param>
-    /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
-    /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-    /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="writer"/> ist <c>null.</c></exception>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
+    /// without a header row.</summary>
+    /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
+    /// <param name="columnsCount">Number of columns in the CSV file.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
     public CsvWriter(
         TextWriter writer, int columnsCount, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
         : this(columnsCount, fieldSeparator, options)
@@ -139,42 +142,43 @@ public sealed class CsvWriter : IDisposable
         writer.NewLine = NewLine;
     }
 
-
-    /// <summary>
-    /// Privater Konstruktor, der von den öffentlichen Konstruktoren aufgerufen wird, die ein <see cref="CsvWriter"/>-Objekt mit Spaltennamen 
-    /// für die zu schreibende Kopfzeile initialisieren. (Diese Konstruktoren initialisieren auch <see cref="_writer"/>.)
-    /// </summary>
-    /// <param name="columnNames">Ein Array von Spaltennamen für die zu schreibende Kopfzeile. Wenn das Array <c>null</c>-Werte
-    /// enthält, werden diese durch automatisch erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen. Dabei ist zu
-    /// beachten, dass der Vergleich nicht case-sensitiv erfolgt - es sei denn, dass diese Option in <paramref name="options"/> ausdrücklich
-    /// gewählt wurde.</param>
-    /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
-    /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
-    /// <exception cref="ArgumentException">Ein Spaltenname in <paramref name="columnNames"/> kommt doppelt vor. In <paramref name="options"/> kann
-    /// gewählt werden, ob der Vergleich case-sensitiv erfolgt.</exception>
+    /// <summary> Privater Konstruktor, der von den öffentlichen Konstruktoren aufgerufen
+    /// wird, die ein <see cref="CsvWriter" />-Objekt mit Spaltennamen für die zu schreibende
+    /// Kopfzeile initialisieren. (Diese Konstruktoren initialisieren auch <see cref="_writer"
+    /// />.) </summary>
+    /// <param name="columnNames">Eine Sammlung von Spaltennamen für die zu schreibende
+    /// Kopfzeile. Die Sammlung wird kopiert. Wenn die Sammlung <c>null</c>-Werte enthält, werden diese durch automatisch
+    /// erzeugte Spaltennamen ersetzt. Spaltennamen dürfen nicht doppelt vorkommen.
+    /// Dabei ist zu beachten, dass der Vergleich nicht case-sensitiv erfolgt - es sei
+    /// denn, dass diese Option in <paramref name="options" /> ausdrücklich gewählt
+    /// wurde.</param>
+    /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
+    /// /> occurs twice. In <paramref name="options" /> can be chosen, whether the comparison
+    /// is case-sensitive.</exception>
 #pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
-    private CsvWriter(string?[] columnNames, char fieldSeparator, CsvOptions options)
+    private CsvWriter(IEnumerable<string?> columnNames, char fieldSeparator, CsvOptions options)
 #pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
     {
         this._fieldSeparator = fieldSeparator;
         this._trimColumns = options.HasFlag(CsvOptions.TrimColumns);
 
         this.Record = new CsvRecord(
-            columnNames,
+            columnNames.ToArray(),
             options.HasFlag(CsvOptions.CaseSensitiveKeys),
             _trimColumns,
             initArr: true,
             throwException: true);
     }
 
-
-    /// <summary>
-    /// Privater Konstruktor, der von den öffentlichen Konstruktoren aufgerufen wird, die ein <see cref="CsvWriter"/>-Objekt initialisieren, mit dem
-    /// eine CSV-Datei ohne Kopfzeile schreiben. (Diese Konstruktoren initialisieren auch <see cref="_writer"/>.)
-    /// </summary>
-    /// <param name="columnsCount">Anzahl der Spalten in der CSV-Datei.</param>
-    /// <param name="fieldSeparator">Das in der CSV-Datei zu verwendende Feldtrennzeichen.</param>
-    /// <param name="options">Optionen für die zu schreibende CSV-Datei.</param>
+    /// <summary> Privater Konstruktor, der von den öffentlichen Konstruktoren aufgerufen
+    /// wird, die ein <see cref="CsvWriter" />-Objekt initialisieren, mit dem eine CSV-Datei
+    /// ohne Kopfzeile schreiben. (Diese Konstruktoren initialisieren auch <see cref="_writer"
+    /// />.) </summary>
+    /// <param name="columnsCount">Number of columns in the CSV file.</param>
+    /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
 #pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
     private CsvWriter(int columnsCount, char fieldSeparator, CsvOptions options)
 #pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
@@ -185,24 +189,17 @@ public sealed class CsvWriter : IDisposable
         this.Record = new CsvRecord(columnsCount);
     }
 
-
-    #endregion
-
-
-    /// <summary>
-    /// Der in die Datei zu schreibende Datensatz. Füllen Sie das <see cref="CsvRecord"/>-Objekt mit Daten und rufen Sie
-    /// anschließend <see cref="WriteRecord"/> auf, um diese Daten in die Datei zu schreiben. <see cref="CsvWriter"/> leert
-    /// <see cref="Record"/> nach jedem Schreibvorgang.
-    /// </summary>
+    /// <summary>The record to be written to the file. Fill the <see cref="CsvRecord"
+    /// /> object with data and call then <see cref="WriteRecord" /> to write this data
+    /// to the file. <see cref="CsvWriter" /> clears the contents of <see cref="Record"
+    /// /> after each call of the <see cref="WriteRecord" /> method.</summary>
     public CsvRecord Record { get; }
 
-
-    /// <summary>
-    /// Schreibt den Inhalt von <see cref="Record"/> in die CSV-Datei und setzt anschließend alle Spalten von <see cref="Record"/> auf <see cref="ReadOnlySpan{T}.Empty"/>. 
-    /// (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.)
-    /// </summary>
-    /// <exception cref="IOException">E/A-Fehler</exception>
-    /// <exception cref="ObjectDisposedException">Die Resourcen waren bereits freigegeben.</exception>
+    /// <summary> Schreibt den Inhalt von <see cref="Record" /> in die CSV-Datei und
+    /// setzt anschließend alle Spalten von <see cref="Record" /> auf <see cref="ReadOnlySpan{T}.Empty"
+    /// />. (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.) </summary>
+    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="ObjectDisposedException">The resources were already released.</exception>
     public void WriteRecord()
     {
         int recordLength = Record.Count;
@@ -298,25 +295,20 @@ public sealed class CsvWriter : IDisposable
                                                   s.Contains(Environment.NewLine, StringComparison.Ordinal);
     }
 
-
-    /// <summary>
-    /// Gibt die Ressourcen frei. (Schließt den <see cref="TextWriter"/>.)
-    /// </summary>
+    /// <summary>Releases the resources. (Closes the <see cref="TextWriter" />.)</summary>
     public void Dispose() => _writer.Dispose();
-
 
     #region private
 
-    /// <summary>
-    /// Initialisiert einen <see cref="StreamWriter"/> mit der angegebenen Textkodierung mit
-    /// dem Namen der zu schreibenden Datei.
-    /// </summary>
+    /// <summary> Initialisiert einen <see cref="StreamWriter" /> mit der angegebenen
+    /// Textkodierung mit dem Namen der zu schreibenden Datei. </summary>
     /// <param name="fileName">Dateipfad.</param>
     /// <param name="textEncoding">Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
-    /// <returns><see cref="StreamWriter"/></returns>
-    /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
-    /// <exception cref="IOException">E/A-Fehler.</exception>
+    /// <returns> <see cref="StreamWriter" /> </returns>
+    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
+    /// file path.</exception>
+    /// <exception cref="IOException">I/O-Error</exception>
     [ExcludeFromCodeCoverage]
     private static StreamWriter InitStreamWriter(string fileName, Encoding? textEncoding)
     {

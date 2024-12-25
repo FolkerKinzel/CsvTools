@@ -12,18 +12,18 @@ namespace Examples
         {
             const string csvFileName = "LinqTest.csv";
 
-            File.WriteAllText(csvFileName, new StringBuilder()
-                .AppendLine("Name,City")
-                .AppendLine("Ingrid,Berlin")
-                .AppendLine("Joyce,New York")
-                .AppendLine("Horst,Hamburg")
-                .AppendLine("John,New York")
-                .ToString());
+            File.WriteAllText(csvFileName, """
+                Name,City
+                Ingrid,Berlin
+                Joyce,New York
+                Horst,Hamburg
+                John,New York
+                """);
 
             using var csvReader = new CsvReader(csvFileName);
             Console.Write("How many people live in New York?: ");
             Console.WriteLine(
-                csvReader.Where(x => x["City"].Span == "New York").Count());
+                csvReader.Where(x => x["City"].Span.Equals("New York", StringComparison.Ordinal)).Count());
 
             // Console Output: How many people live in New York?: 2
         }

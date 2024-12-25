@@ -1,91 +1,85 @@
-﻿using System.Data;
+using System.Data;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>
-/// Benannte Konstanten, um Optionen für das Lesen und Schreiben von CSV-Dateien anzugeben. Die Flags
-/// können kombiniert werden.
-/// </summary>
+/// <summary>Named constants to specify options for reading and writing CSV files.
+/// The flags can be combined.</summary>
 /// <remarks>
 /// <note type="tip">
-/// Verwenden Sie zum sicheren und bequemen Arbeiten mit der <see cref="CsvOptions"/>-Enum  die Erweiterungsmethoden der 
-/// Klasse <see cref="CsvOptionsExtension"/> (s.Beispiel)!
+/// To work safely and conveniently with the <see cref="CsvOptions"/> enum, use the 
+/// extension methods of the <see cref="CsvOptionsExtension" /> class (see example).
 /// </note>
 /// </remarks>
 /// <example>
-/// <para>Beispiel, das demonstriert, dass das Setzen des Flags <see cref="DisableCaching"/> zu unerwarteten Ergebnissen führen kann, wenn versucht wird,
-/// die Ergebnismenge zu cachen.</para>
-/// <note type="note">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
+/// <para>
+/// Example, which demonstrates that setting the flag <see cref="DisableCaching"
+/// /> can lead to unexpected results when an attempt is made to cache the result
+/// set.
+/// </para>
+/// <note type="note">
+/// In the following code example - for easier readability - exception handling
+/// has been omitted.
+/// </note>
 /// <code language="cs" source="..\Examples\DisableCachingAndLinq.cs" />
 /// </example>
-
 [Flags]
 public enum CsvOptions
 {
-    /// <summary>
-    /// Kein Flag ist gesetzt. Das erzeugt einen sehr nachsichtigen Parser, der kaum Ausnahmen wirft.
-    /// </summary>
+    /// <summary>No flag is set. This creates a very lenient parser that rarely throws
+    /// exceptions.</summary>
     None = 0,
 
-    /// <summary>
-    /// Wenn gesetzt, wirft <see cref="CsvReader"/> eine <see cref="InvalidCsvException"/>, wenn in einer Datenzeile mehr
-    /// Felder enthalten sind, als in der ersten Datenzeile.
+    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="InvalidCsvException"
+    /// /> if a data row contains more fields than the first data row.
     /// <note>
-    /// Wenn in einer Datenzeile mehr
-    /// Felder enthalten sind, als in der ersten Datenzeile, ist das ein starkes Indiz für einen Lesefehler. Das Flag sollte
-    /// deshalb i.d.R. gesetzt sein.
+    /// If a data row has more Fields than the first data row, this is a strong indication
+    /// of a read error. The flag should therefore usually be set.
     /// </note>
     /// </summary>
     ThrowOnTooMuchFields = 1,
 
-
-    /// <summary>
-    /// Wenn gesetzt, wirft <see cref="CsvReader"/> eine <see cref="InvalidCsvException"/>, wenn in einer Datenzeile weniger
-    /// Felder enthalten sind, als in der ersten Datenzeile.
+    /// <summary> If set, <see cref="CsvReader" /> throws a <see cref="InvalidCsvException" /> 
+    /// if a data row contains fewer fields than the first data row.
     /// <note>
-    /// Andere Software könnte darauf verzichten, leere Felder am Zeilenende durch Feldtrennzeichen zu markieren. Das Fehlen
-    /// von Feldern am Zeilenende kann aber auch ein Indiz für einen Lesefehler sein.
+    /// Other software may not mark empty fields at the end of the line with field separators. 
+    /// However, the absence of fields at the end of the line can also be an indication of a data
+    /// error.
     /// </note>
     /// </summary>
     ThrowOnTooFewFields = 1 << 1,
 
-    /// <summary>
-    /// Wenn gesetzt, wirft <see cref="CsvReader"/> eine <see cref="InvalidCsvException"/>, wenn in der CSV-Datei Leerzeilen
-    /// vorkommen, die nicht Teil eines mit Gänsefüßchen maskierten Datenfeldes sind.
+    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="InvalidCsvException"
+    /// /> if there are blank lines in the CSV file that are not part of a data field
+    /// masked with quotes.
     /// <note>
-    /// Leerzeilen, die nicht Teil eines maskierten Feldes sind, können in keinem Fall als Teil der zu lesenden Daten interpretiert
-    /// werden. Sie können aber durch Entfernen des Flags erreichen, dass <see cref="CsvReader"/> solche Leerzeilen ignoriert.
+    /// Blank lines that are not part of a masked field can in no case be interpreted
+    /// as part of the data to be read. However, by removing the flag, <see cref="CsvReader"
+    /// /> ignores such blank lines.
     /// </note>
     /// </summary>
     ThrowOnEmptyLines = 1 << 2,
 
-    /// <summary>
-    /// Wenn das Flag nicht gesetzt ist, werden von der Klasse <see cref="CsvRecord"/> die Spaltennamen der CSV-Datei, die zum Zugriff
-    /// auf die Daten dienen, nicht case-sensitiv interpretiert. Das ist dasselbe Verhalten, das <see cref="DataColumnCollection"/>
-    /// zeigt.
-    /// </summary>
+    /// <summary>If the flag is not set, the class <see cref="CsvRecord" /> interpretes
+    /// the column names of the CSV file in a case-insensitive manner. This is the same
+    /// behavior that <see cref="DataColumnCollection" /> shows.</summary>
     CaseSensitiveKeys = 1 << 3,
 
-    /// <summary>
-    /// Wenn das Flag gesetzt ist, werden von <see cref="CsvReader"/> und <see cref="CsvWriter"/> sämtliche Daten-Tokens und auch die 
-    /// Spaltennamen mit der Methode <see cref="string.Trim()"/> behandelt. Das bedeutet einen starken Performanceverlust und verändert
-    /// auch Daten, bei denen der vor- und nachgestellte Leerraum eine Bedeutung hat. Setzen Sie das Flag nur, um nicht standardkonforme
-    /// CSV-Dateien zu lesen, die zusätzliches Padding einführen.
-    /// </summary>
+    /// <summary>If the flag is set, <see cref="CsvReader" /> and <see cref="CsvWriter"
+    /// /> will handle all data tokens and the column names with the <see cref="string.Trim()"
+    /// /> method. That can damage data
+    /// where the leading and trailing white space has a meaning. Only set the flag
+    /// for reading non-standard CSV files, that introduce additional padding.</summary>
     TrimColumns = 1 << 4,
 
-    /// <summary>
-    /// Standardeinstellung. Dies ist ein kombinierter Wert, der <see cref="CsvReader"/> zum Werfen einer <see cref="InvalidCsvException"/> zwingt,
-    /// wenn die zu lesende Datei nicht dem Standard RFC 4180 entspricht. (Abweichende Spaltentrennzeichen und Zeilenwechselzeichen werden immer toleriert.)
-    /// </summary>
+    /// <summary>Default setting. This is a combined value, that forces <see cref="CsvReader"
+    /// /> to throw an <see cref="InvalidCsvException" />, if the file to be read does
+    /// not comply with the RFC 4180 standard. (Alternative column separators and newline
+    /// characters are always tolerated.)</summary>
     Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines,
 
-
-    /// <summary>
-    /// Wenn das Flag gesetzt wird, wird beim Lesen der CSV-Datei für jede Datenzeile dasselbe <see cref="CsvRecord"/>-Objekt verwendet (gefüllt mit neuen Daten).
-    /// Das bringt bei sehr großen
-    /// CSV-Dateien leichte Performancevorteile, kann aber zu unerwarteten Ergebnissen führen, wenn bei der Weiterverarbeitung versucht wird, die Ergbnismenge zu 
-    /// speichern. (s. Beispiel)
-    /// </summary>
+    /// <summary>If the flag is set, the same <see cref="CsvRecord" /> object is used
+    /// for each data row when reading the CSV file (filled with new data). That brings
+    /// slight performance advantages when parsing very large CSV files, but can lead
+    /// to unexpected results if an attempt is made to cache the results. (see example)</summary>
     DisableCaching = 1 << 5
 }

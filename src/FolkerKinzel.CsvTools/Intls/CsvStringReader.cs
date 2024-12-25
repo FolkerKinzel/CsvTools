@@ -1,12 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics;
 using System.Text;
 
 namespace FolkerKinzel.CsvTools.Intls;
 
-/// <summary>
-/// Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>" zurück.
-/// </summary>
+    /// <summary> Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>"
+    /// zurück. </summary>
 internal sealed class CsvStringReader : IDisposable
 {
     private const int INITIAL_COLUMNS_COUNT = 32;
@@ -14,26 +13,21 @@ internal sealed class CsvStringReader : IDisposable
 
     private readonly TextReader _reader;
     private readonly char _fieldSeparator;
-
     private readonly List<ReadOnlyMemory<char>> _row = new(INITIAL_COLUMNS_COUNT);
-
     private StringBuilder? _sb;
     private readonly bool _skipEmptyLines;
-
     private string? _currentLine;
 
     internal int LineNumber { get; private set; }
 
     internal int LineIndex { get; private set; }
 
-
-
-    /// <summary>
-    /// ctor
-    /// </summary>
-    /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
-    /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
-    /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen in der CSV-Datei übersprungen.</param>
+    /// <summary> ctor </summary>
+    /// <param name="reader">The <see cref="TextReader" /> with which the CSV file is
+    /// read.</param>
+    /// <param name="fieldSeparator">The field separator char used in the CSV file.</param>
+    /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen
+    /// in der CSV-Datei übersprungen.</param>
 #if NET462 || NETSTANDARD2_0
 #pragma warning disable CS8618 // Ein Non-Nullable-Feld muss beim Beenden des Konstruktors einen Wert ungleich NULL enthalten. Erwägen Sie die Deklaration als Nullable.
 #endif
@@ -49,11 +43,8 @@ internal sealed class CsvStringReader : IDisposable
         this._fieldSeparator = fieldSeparator;
     }
 
-    /// <summary>
-    /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
-    /// </summary>
+    /// <summary>Releases the resources. (Closes the <see cref="TextReader" />.)</summary>
     public void Dispose() => _reader.Dispose();
-
 
     internal IList<ReadOnlyMemory<char>>? Read()
     {
@@ -72,13 +63,12 @@ internal sealed class CsvStringReader : IDisposable
         return null;
     }
 
-
-    /// <summary>
-    /// Liest die nächste Datenzeile als <see cref="List{T}">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.
+    /// <summary> Liest die nächste Datenzeile als <see cref="List{T}">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.
     /// </summary>
     /// <returns>Die nächste Datenzeile als <see cref="List{T}">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.</returns>
-    /// <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind und wirft keine <see cref="Exception"/>,
-    /// wenn es in einer Zeile zu viele oder zu wenige sind.</remarks>
+    /// <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind
+    /// und wirft keine <see cref="Exception" />, wenn es in einer Zeile zu viele oder
+    /// zu wenige sind.</remarks>
     private List<ReadOnlyMemory<char>> GetNextRecord()
     {
         _row.Clear();
@@ -89,7 +79,6 @@ internal sealed class CsvStringReader : IDisposable
             _row.Add(GetField());
         }
         while (LineIndex < _currentLine?.Length);
-
 
         if (_currentLine != null)
         {
@@ -106,7 +95,6 @@ internal sealed class CsvStringReader : IDisposable
 
         return _row;
     }
-
 
     private ReadOnlyMemory<char> GetField()
     {
@@ -134,7 +122,6 @@ internal sealed class CsvStringReader : IDisposable
         LineIndex = _currentLine.Length;
         return _currentLine.AsMemory(startIndex);
     }
-
 
     private ReadOnlyMemory<char> GetAllocatedField()
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -8,45 +8,50 @@ using FolkerKinzel.Strings;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>
-/// <see cref="CsvAnalyzer"/> kann eine statistische Analyse auf einer CSV-Datei ausführen und
-/// die Ergebnisse als Objekteigenschaften zur Verfügung stellen.
-/// </summary>
+/// <summary> <see cref="CsvAnalyzer" /> can perform a statistical analysis on a 
+/// CSV file and provide the results as its properties.</summary>
 /// <example>
-/// <note type="note">Im folgenden Code-Beispiel wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
-/// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
-/// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
+/// <note type="note">
+/// In the following code example - for easier readability - exception handling
+/// has been omitted.
+/// </note>
+/// <para>
+/// Deserialization of any objects from CSV files:
+/// </para>
+/// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs" />
 /// </example>
 public class CsvAnalyzer
 {
-    /// <summary>
-    /// Mindestanzahl der zu untersuchenden Zeilen der CSV-Datei.
-    /// </summary>
+    /// <summary>Minimum number of lines in the CSV file to be analyzed.</summary>
     public const int AnalyzedLinesMinCount = 5;
 
-    /// <summary>
-    /// Initialisiert ein neues <see cref="CsvAnalyzer"/>-Objekt.
-    /// </summary>
+    /// <summary> Initializes a new <see cref="CsvAnalyzer" /> instance. </summary>
     public CsvAnalyzer() { }
 
-    /// <summary>
-    /// Analysiert die CSV-Datei, auf die <paramref name="fileName"/> verweist, und füllt die Eigenschaften des <see cref="CsvAnalyzer"/>-Objekts mit den
-    /// Ergebnissen der Analyse.
+    /// <summary> Parses the CSV file referenced by <paramref name="fileName" /> and populates 
+    /// the properties of the <see cref="CsvAnalyzer" /> object with the results of the analysis.
     /// </summary>
-    /// <param name="fileName">Dateipfad der CSV-Datei.</param>
-    /// <param name="analyzedLinesCount">Höchstanzahl der in der CSV-Datei zu analysierenden Zeilen. Der Mindestwert
-    /// ist <see cref="AnalyzedLinesMinCount"/>. Wenn die Datei weniger Zeilen hat als <paramref name="analyzedLinesCount"/>
-    /// wird sie komplett analysiert. (Sie können <see cref="int.MaxValue">Int32.MaxValue</see> angeben, um in jedem Fall die gesamte Datei zu
-    /// analysieren.)</param>
-    /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
-    /// 
-    /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
-    /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
-    /// <remarks><para><see cref="CsvAnalyzer"/> führt auf der CSV-Datei eine statistische Analyse durch, um die geeigneten
-    /// Parameter für das Lesen der Datei zu finden. Das Ergebnis der Analyse ist also immer nur eine Schätzung, deren
-    /// Treffsicherheit mit der Zahl der analysierten Zeilen steigt.</para>
-    /// <para>Die Analyse ist zeitaufwändig, da auf die CSV-Datei lesend zugegriffen werden muss.</para></remarks>
+    /// <param name="fileName">File path of the CSV file.</param>
+    /// <param name="analyzedLinesCount">Maximum number of lines to analyze in the CSV file. The minimum 
+    /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
+    /// <paramref name="analyzedLinesCount" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
+    /// <param name="textEncoding">The text encoding to be used to read the CSV file
+    /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
+    /// file path.</exception>
+    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <remarks>
+    /// <para>
+    /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the CSV file to find the appropriate 
+    /// parameters for reading the file. The result of the analysis is therefore always only an estimate, 
+    /// the accuracy of which increases with the number of lines analyzed.
+    /// </para>
+    /// <para>
+    /// The analysis is time-consuming because the CSV file has to be accessed for reading.
+    /// </para>
+    /// </remarks>
     public void Analyze(string fileName, int analyzedLinesCount = AnalyzedLinesMinCount, Encoding? textEncoding = null)
     {
         if (analyzedLinesCount < AnalyzedLinesMinCount)
@@ -55,7 +60,16 @@ public class CsvAnalyzer
         }
 
         // Suche Feldtrennzeichen:
+
+/* Unmerged change from project 'FolkerKinzel.CsvTools (netstandard2.1)'
+Before:
         using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
+        {
+After:
+        using (StreamReader? reader = CsvTools.StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
+        {
+*/
+        using (StreamReader? reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
         {
             const int COMMA_INDEX = 0;
             const int SEMICOLON_INDEX = 1;
@@ -122,8 +136,6 @@ public class CsvAnalyzer
                     continue;
                 }
 
-
-
                 // Vergleich für Datenzeile:
                 for (int charIndex = 0; charIndex < line.Length; charIndex++)
                 {
@@ -174,7 +186,16 @@ public class CsvAnalyzer
 
         }//using
 
+
+/* Unmerged change from project 'FolkerKinzel.CsvTools (netstandard2.1)'
+Before:
         using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
+        {
+After:
+        using (StreamReader? reader = CsvTools.StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
+        {
+*/
+        using (StreamReader? reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
         {
             bool firstLine = true;
 
@@ -273,24 +294,15 @@ public class CsvAnalyzer
         }//using
     }
 
-
-    /// <summary>
-    /// Das Feldtrennzeichen der CSV-Datei.
-    /// </summary>
+    /// <summary>The field separator char used in the CSV file.</summary>
     public char FieldSeparator { get; private set; } = ',';
 
-    /// <summary>
-    /// Optionen für das Lesen der CSV-Datei.
-    /// </summary>
+    /// <summary>Options for reading the CSV file.</summary>
     public CsvOptions Options { get; private set; } = CsvOptions.Default;
 
-    /// <summary>
-    /// <c>true</c>, wenn die CSV-Datei eine Kopfzeile hat.
-    /// </summary>
+    /// <summary> <c>true</c>, if the CSV file has a header with column names.</summary>
     public bool HasHeaderRow => ColumnNames != null;
 
-    /// <summary>
-    /// Spaltennamen der CSV-Datei.
-    /// </summary>
+    /// <summary>The column names of the CSV file.</summary>
     public ReadOnlyCollection<string>? ColumnNames { get; private set; }
 }//class

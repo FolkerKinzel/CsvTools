@@ -1,48 +1,44 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>
-/// Erweiterungsmethoden, die die Arbeit mit der <see cref="CsvOptions"/>-Enum erleichtern.
-/// </summary>
+/// <summary>Extension methods that make working with the <see cref="CsvOptions" /> enum 
+/// easier.</summary>
 public static class CsvOptionsExtension
 {
-    /// <summary>
-    /// Setzt sämtliche in <paramref name="flags"/> gesetzten Flags in <paramref name="value"/>.
-    /// </summary>
-    /// <param name="value">Der <see cref="CsvOptions"/>?-Wert, auf dem die in <paramref name="flags"/> gesetzten Flags gesetzt werden.</param>
-    /// <param name="flags">Ein einzelner <see cref="CsvOptions"/>-Wert oder eine Kombination aus mehreren 
-    /// <see cref="CsvOptions"/>-Werten.</param>
-    /// <returns>Ein <see cref="CsvOptions"/>-Wert, auf dem sämtliche in <paramref name="value"/> und <paramref name="flags"/>
-    /// gesetzten Flags gesetzt sind.</returns>
+    /// <summary>Sets all flags set in <paramref name="flags" /> in <paramref name="value"
+    /// />.</summary>
+    /// <param name="value">The <see cref="CsvOptions" /> Value to which the flags
+    /// set in <paramref name="flags" /> are set.</param>
+    /// <param name="flags">A single <see cref="CsvOptions" /> value or a combination
+    /// of several <see cref="CsvOptions" /> values.</param>
+    /// <returns>A <see cref="CsvOptions" /> value on which all in <paramref name="value"
+    /// /> and <paramref name="flags" /> set flags are set.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvOptions Set(this CsvOptions value, CsvOptions flags) => value | flags;
 
-
-    /// <summary>
-    /// Untersucht, ob sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
-    /// gesetzt sind.
-    /// </summary>
-    /// <param name="value">Der <see cref="CsvOptions"/>?-Wert, der daraufhin überprüft wird, ob sämtliche in <paramref name="flags"/> gesetzten 
-    /// Flags auf ihm gesetzt sind.</param>
-    /// <param name="flags">Ein einzelner <see cref="CsvOptions"/>-Wert oder eine Kombination aus mehreren 
-    /// <see cref="CsvOptions"/>-Werten.</param>
-    /// <returns><c>true</c>, wenn sämtliche in <paramref name="flags"/> gesetzten Flags auch in <paramref name="value"/>
-    /// gesetzt sind. (Wenn <paramref name="flags"/>&#160;<see cref="CsvOptions.None"/> ist, wird nur dann <c>true</c> zurückgegeben,
-    /// wenn auch <paramref name="value"/>&#160;<see cref="CsvOptions.None"/> ist.</returns>
+    /// <summary>Examines whether all flags set in <paramref name="flags" /> also in
+    /// <paramref name="value" /> are set.</summary>
+    /// <param name="value">The <see cref="CsvOptions" /> value, which is checked to
+    /// see whether all flags set in <paramref name="flags" /> are set on it.</param>
+    /// <param name="flags">A single <see cref="CsvOptions" /> value or a combination
+    /// of several <see cref="CsvOptions" /> values.</param>
+    /// <returns> <c>true</c> if all flags set in <paramref name="flags" /> also in
+    /// <paramref name="value" /> are set. (If <paramref name="flags" /> is <see cref="CsvOptions.None"
+    /// />, <c>true</c> is only returned if <paramref name="value" /> is also <see
+    /// cref="CsvOptions.None" />.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool IsSet(this CsvOptions value, CsvOptions flags)
         => flags == CsvOptions.None ? value == flags : (value & flags) == flags;
 
-
-    /// <summary>
-    /// Entfernt sämtliche in <paramref name="flags"/> gesetzten Flags aus <paramref name="value"/>.
-    /// </summary>
-    /// <param name="value">Der <see cref="CsvOptions"/>?-Wert, aus dem die in <paramref name="flags"/> gesetzten Flags entfernt werden.</param>
-    /// <param name="flags">Ein einzelner <see cref="CsvOptions"/>-Wert oder eine Kombination aus mehreren 
-    /// <see cref="CsvOptions"/>-Werten.</param>
-    /// <returns>Ein <see cref="CsvOptions"/>-Wert, auf dem sämtliche in <paramref name="flags"/>
-    /// gesetzten Flags entfernt sind.</returns>
+    /// <summary>Removes all flags set in <paramref name="flags" /> from <paramref name="value"
+    /// />.</summary>
+    /// <param name="value">The <see cref="CsvOptions" /> value from which the flags
+    /// set in <paramref name="flags" /> are removed.</param>
+    /// <param name="flags">A single <see cref="CsvOptions" /> value or a combination
+    /// of several <see cref="CsvOptions" /> values.</param>
+    /// <returns>A <see cref="CsvOptions" /> value on which everyone in <paramref name="flags"
+    /// /> set flags are removed.</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvOptions Unset(this CsvOptions value, CsvOptions flags) => value & ~flags;
 }
