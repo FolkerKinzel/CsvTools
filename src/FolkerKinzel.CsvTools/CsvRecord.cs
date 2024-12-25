@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -219,25 +220,27 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 
     /// <summary> A hash code that is identical for all <see cref="CsvRecord" /> objects belonging to 
     /// the same read or write operation. </summary>
-    /// <remarks>Used by the package FolkerKinzel.CsvTools.TypeConverters.</remarks>
-    /// [EditorBrowsable(EditorBrowsableState.Never)]
+    /// <remarks>Used by the package FolkerKinzel.CsvTools.TypeConversions.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public int Identifier { get; }
 
     /// <summary> Gets the comparer used to select the keys.</summary>
+    /// <remarks>Used by the package FolkerKinzel.CsvTools.TypeConversions.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
     /// <summary>Sets all data fields of <see cref="CsvRecord" /> to <c>null</c>.</summary>
     public void Clear() => Array.Clear(_values, 0, _values.Length);
 
-    /// <summary>Gets the value associated with the specified column name in the CSV
+    /// <summary>Tries to get the value associated with the specified column name in the CSV
     /// file.</summary>
-    /// <param name="columnName">The column name in the CSV file, whose value is being
+    /// <param name="columnName">The column name in the CSV file whose value is being
     /// obtained.</param>
     /// <param name="value">After the method has finished, the argument contains the
     /// value associated with the column name specified with <paramref name="columnName"
     /// /> if the key was found, or <c>null</c> otherwise. The parameter is passed uninitialized.</param>
     /// <returns> <c>true</c> if it contains a column name with the value of <paramref
-    /// name="columnName" />.</returns>
+    /// name="columnName" />, otherwise <c>false</c>.</returns>
     /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.</exception>
     public bool TryGetValue(string columnName, out ReadOnlyMemory<char> value)
     {
@@ -258,15 +261,15 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
-    /// <summary>Gets the value associated with the specified column index of the CSV
+    /// <summary>Tries to get the value associated with the specified column index of the CSV
     /// file.</summary>
     /// <param name="columnIndex">Zero-based index of the data column of the CSV file.</param>
     /// <param name="value">When this method returns, the parameter contains the value
     /// assigned to the column index specified with <paramref name="columnIndex" />
     /// if the column index exists, or <c>null</c> otherwise. This parameter is passed
     /// uninitialized.</param>
-    /// <returns> <c>true</c>, if a column index with the value of <paramref name="columnIndex"
-    /// /> exists in the CSV file.</returns>
+    /// <returns> <c>true</c> if a column index with the value of <paramref name="columnIndex"
+    /// /> exists in the CSV file, otherwise <c>false</c>.</returns>
     public bool TryGetValue(int columnIndex, out ReadOnlyMemory<char> value)
     {
         if (columnIndex >= 0 && columnIndex < Count)
@@ -281,33 +284,39 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
+    /// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
+    /// <see cref="string"/> collection. The collection may contain <c>null</c> values.
+    /// </summary>
+    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
+    /// more entries than <see cref="CsvRecord.Count" />.</exception>
+    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
+    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
+    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
     public void Fill(IEnumerable<string?> data)
     {
-        if (data is null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
         Fill(data.Select(x => x.AsMemory()));
     }
 
-    /// <summary> Füllt <see cref="CsvRecord" /> mit den Inhalten einer <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see>-Collection.
+    /// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
+    /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> collection.
     /// </summary>
-    /// <param name="data">Eine <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see>-Collection.</param>
+    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
     /// more entries than <see cref="CsvRecord.Count" />.</exception>
-    /// <remarks>Wenn <paramref name="data" /> weniger Einträge als <see cref="CsvRecord.Count"
-    /// /> hat, werden die restlichen Felder von <see cref="CsvRecord" /> mit <see cref="ReadOnlyMemory{T}.Empty"
-    /// />-Werten gefüllt.</remarks>
+    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
+    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
+    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
     public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
     {
-        if (data is null)
-        {
-            throw new ArgumentNullException(nameof(data));
-        }
-
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+        
         int i = 0;
+
         foreach (ReadOnlyMemory<char> item in data)
         {
             if (i >= _values.Length)
