@@ -18,6 +18,19 @@ public partial class CsvAnalyzer
     /// <summary> Initializes a new <see cref="CsvAnalyzer" /> instance. </summary>
     public CsvAnalyzer() { }
 
+    /// <summary>The field separator char used in the CSV file.</summary>
+    public char FieldSeparator { get; private set; } = ',';
+
+    /// <summary>Options for reading the CSV file.</summary>
+    public CsvOptions Options { get; private set; } = CsvOptions.Default;
+
+    /// <summary> <c>true</c>, if the CSV file has a header with column names.</summary>
+    public bool HasHeaderRow => ColumnNames != null;
+
+    /// <summary>The column names of the CSV file.</summary>
+    public IReadOnlyList<string>? ColumnNames { get; private set; }
+
+
     /// <summary> Parses the CSV file referenced by <paramref name="fileName" /> and populates 
     /// the properties of the <see cref="CsvAnalyzer" /> object with the results of the analysis.
     /// </summary>
@@ -49,22 +62,28 @@ public partial class CsvAnalyzer
             analyzedLinesCount = AnalyzedLinesMinCount;
         }
 
-        new FieldSeparatorAnalyzer(this).InitFieldSeparator(fileName);
-        //InitFieldSeparator(fileName, analyzedLinesCount, textEncoding);
+        FieldSeparator = new FieldSeparatorAnalyzer().InitFieldSeparator(fileName);
         InitProperties(fileName, textEncoding, analyzedLinesCount);
     }
 
-    private void InitProperties(string fileName, Encoding? textEncoding, int maxCount)
+    private void InitProperties(string fileName, Encoding? textEncoding, int maxLines)
     {
         int analyzedLinesCount = 0;
         int firstLineCount = 0;
         List<ReadOnlyMemory<char>>? row;
 
         using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
-        using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+        using var csvStringReader = new CsvStringReader(reader, FieldSeparator, false);
 
-        while ((row = csvStringReader.Read()) is not null && analyzedLinesCount < maxCount)
+        while ((row = csvStringReader.Read()) is not null && analyzedLinesCount < maxLines)
         {
+            if(row.Count == 1 && row[0].IsEmpty)
+            {
+                // Empty lines are not part of the data and should not be counted.
+                Options = Options.Unset(CsvOptions.ThrowOnEmptyLines);
+                continue;
+            }
+
             analyzedLinesCount++;
 
             if (analyzedLinesCount == 1)
@@ -139,40 +158,13 @@ public partial class CsvAnalyzer
         return firstLineCount;
     }
 
-    private void SetOptions(int firstLineCount, IList<ReadOnlyMemory<char>> row)
+    private void SetOptions(int firstLineCount, List<ReadOnlyMemory<char>> row)
     {
-        int currentLineCount = 0;
-        ReadOnlyMemory<char> firstString = default;
-
-        foreach (ReadOnlyMemory<char> mem in row)
+        if (row.Count != firstLineCount)
         {
-            if (currentLineCount == 0)
-            {
-                firstString = mem;
-            }
-
-            currentLineCount++;
-        }
-
-        if (currentLineCount != firstLineCount)
-        {
-            this.Options = currentLineCount < firstLineCount
-                ? currentLineCount == 1 && firstString.IsEmpty
-                    ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines)
-                    : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
+            this.Options = row.Count < firstLineCount
+                ? this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
                 : this.Options.Unset(CsvOptions.ThrowOnTooMuchFields);
         }
     }
-
-    /// <summary>The field separator char used in the CSV file.</summary>
-    public char FieldSeparator { get; private set; } = ',';
-
-    /// <summary>Options for reading the CSV file.</summary>
-    public CsvOptions Options { get; private set; } = CsvOptions.Default;
-
-    /// <summary> <c>true</c>, if the CSV file has a header with column names.</summary>
-    public bool HasHeaderRow => ColumnNames != null;
-
-    /// <summary>The column names of the CSV file.</summary>
-    public IReadOnlyList<string>? ColumnNames { get; private set; }
-}//class
+}
