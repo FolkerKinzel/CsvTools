@@ -16,15 +16,9 @@ namespace FolkerKinzel.CsvTools;
 /// <summary>Provides read-only forward access to the records of a CSV file. (This
 /// means that the <see cref="CsvReader" /> can only read the file forward once.)</summary>
 /// <remarks>
-/// <para>
 /// The class implements <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>. A 
 /// <see cref="CsvReader"/> instance can be iterated with <c>foreach</c> or queried using 
 /// Linq methods.
-/// </para>
-/// <para>
-/// When reading an unknown CSV file, the appropriate constructor parameters can be determined 
-/// using the <see cref="CsvAnalyzer" /> class .
-/// </para>
 /// </remarks>
 /// <example>
 /// <note type="note">

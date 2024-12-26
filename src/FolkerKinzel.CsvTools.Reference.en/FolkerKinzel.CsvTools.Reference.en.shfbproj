@@ -13,7 +13,7 @@
     <RootNamespace>FolkerKinzel.Csv.Doku</RootNamespace>
     <Name>FolkerKinzel.CsvTools.Doku.de</Name>
     <!-- SHFB properties -->
-    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
+    <FrameworkVersion>.NET Core/.NET Standard/.NET 5.0+</FrameworkVersion>
     <OutputPath>.\Help\</OutputPath>
     <HtmlHelpName>FolkerKinzel.CsvTools.en</HtmlHelpName>
     <Language>en-US</Language>
@@ -27,7 +27,7 @@
       <Argument Key="maxVersionParts" Value="" xmlns="" />
     </TransformComponentArguments>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\bin\Release\net40\FolkerKinzel.CsvTools.dll" />
+      <DocumentationSource sourceFile="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
     </DocumentationSources>
     <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <SyntaxFilters>Standard</SyntaxFilters>
