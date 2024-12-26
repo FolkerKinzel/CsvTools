@@ -16,13 +16,13 @@ namespace FolkerKinzel.CsvTools;
 /// Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"
 /// />-Objekt mit <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>-Daten 
 /// und schreiben Sie es anschließend
-/// mit der Methode <see cref="WriteRecord" /> in die Datei. Der Aufruf von <see
+/// mit der Methode <see cref="WriteRecord" /> in die Datei! Der Aufruf von <see
 /// cref="WriteRecord" /> setzt alle Felder von <see cref="Record" /> wieder auf
 /// <see cref="ReadOnlyMemory{T}.Empty"/>, so dass das <see cref="CsvRecord" />-Objekt 
 /// erneut befüllt werden kann.</remarks>
 public sealed class CsvWriter : IDisposable
 {
-    /// <summary>The newline character to use, when writing CSV files ("\r\n").</summary>
+    /// <summary>The newline characters to use when writing CSV files ("\r\n").</summary>
     public const string NewLine = "\r\n";
 
     private bool _isHeaderRowWritten;
