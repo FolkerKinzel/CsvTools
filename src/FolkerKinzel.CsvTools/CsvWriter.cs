@@ -10,7 +10,7 @@ using FolkerKinzel.Strings;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Writes data to a CSV file.</summary>
+/// <summary>Writes data as a CSV file.</summary>
 /// <remarks> <see cref="CsvWriter" /> stellt in der Eigenschaft <see cref="Record"
 /// /> ein <see cref="CsvRecord" />-Objekt zur Verfügung, das einen Puffer für einen
 /// Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"
@@ -18,8 +18,8 @@ namespace FolkerKinzel.CsvTools;
 /// und schreiben Sie es anschließend
 /// mit der Methode <see cref="WriteRecord" /> in die Datei. Der Aufruf von <see
 /// cref="WriteRecord" /> setzt alle Felder von <see cref="Record" /> wieder auf
-/// <c>null</c>-Werte, so dass das <see cref="CsvRecord" />-Objekt erneut befüllt
-/// werden kann.</remarks>
+/// <see cref="ReadOnlyMemory{T}.Empty"/>, so dass das <see cref="CsvRecord" />-Objekt 
+/// erneut befüllt werden kann.</remarks>
 public sealed class CsvWriter : IDisposable
 {
     /// <summary>The newline character to use, when writing CSV files ("\r\n").</summary>
@@ -96,7 +96,7 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
     /// name="columnNames" /> is <c>null.</c></exception>
     /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
-    /// /> occurs twice. In <paramref name="options" /> can be chosen, whether the comparison
+    /// /> occurs twice. In <paramref name="options" /> can be chosen whether the comparison
     /// is case-sensitive.</exception>
     public CsvWriter(
         TextWriter writer, IEnumerable<string?> columnNames, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
@@ -180,7 +180,7 @@ public sealed class CsvWriter : IDisposable
     public CsvRecord Record { get; }
 
     /// <summary> Schreibt den Inhalt von <see cref="Record" /> in die CSV-Datei und
-    /// setzt anschließend alle Spalten von <see cref="Record" /> auf <see cref="ReadOnlySpan{T}.Empty"
+    /// setzt anschließend alle Spalten von <see cref="Record" /> auf <see cref="ReadOnlyMemory{T}.Empty"
     /// />. (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.) </summary>
     /// <exception cref="IOException">I/O-Error</exception>
     /// <exception cref="ObjectDisposedException">The resources were already released.</exception>
@@ -212,10 +212,10 @@ public sealed class CsvWriter : IDisposable
         for (int j = 0; j < recordLength - 1; j++)
         {
             ReadOnlyMemory<char> mem = Record[j];
+
             if (!mem.IsEmpty)
             {
                 WriteField(mem.Span);
-
                 Record[j] = default;
             }
 
@@ -223,10 +223,10 @@ public sealed class CsvWriter : IDisposable
         }
 
         ReadOnlyMemory<char> lastString = Record[recordLength - 1];
-        if (!Record[recordLength - 1].IsEmpty)
+
+        if (!lastString.IsEmpty)
         {
             WriteField(lastString.Span);
-
             Record[recordLength - 1] = default;
         }
 
@@ -273,10 +273,10 @@ public sealed class CsvWriter : IDisposable
             }
         }
 
-
-        bool NeedsToBeQuoted(ReadOnlySpan<char> s) => s.Contains(_fieldSeparator) ||
-                                                  s.Contains('"') ||
-                                                  s.Contains(Environment.NewLine, StringComparison.Ordinal);
+        bool NeedsToBeQuoted(ReadOnlySpan<char> s)
+            => s.Contains(_fieldSeparator) ||
+               s.Contains('"') ||
+               s.Contains(Environment.NewLine, StringComparison.Ordinal);
     }
 
     /// <summary>Releases the resources. (Closes the <see cref="TextWriter" />.)</summary>
