@@ -180,7 +180,7 @@ public sealed class CsvWriter : IDisposable
     public CsvRecord Record { get; }
 
     /// <summary> Schreibt den Inhalt von <see cref="Record" /> in die CSV-Datei und
-    /// setzt anschließend alle Spalten von <see cref="Record" /> auf <see cref="ReadOnlyMemory{T}.Empty"
+    /// setzt anschließend alle Felder von <see cref="Record" /> auf <see cref="ReadOnlyMemory{T}.Empty"
     /// />. (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.) </summary>
     /// <exception cref="IOException">I/O-Error</exception>
     /// <exception cref="ObjectDisposedException">The resources were already released.</exception>
