@@ -16,9 +16,12 @@ namespace FolkerKinzel.CsvTools;
 /// <summary>Provides read-only forward access to the records of a CSV file. (This
 /// means that the <see cref="CsvReader" /> can only read the file forward once.)</summary>
 /// <remarks>
+/// <para>
 /// The class implements <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>. A 
 /// <see cref="CsvReader"/> instance can be iterated with <c>foreach</c> or queried using 
-/// Linq methods.
+/// Linq methods. Note that an instance can only be iterated once; if an attempt is made to
+/// iterate it twice, an <see cref="ObjectDisposedException"/> is thrown.
+/// </para>
 /// </remarks>
 /// <example>
 /// <note type="note">
@@ -47,6 +50,13 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <param name="fieldSeparator">The field separator char used in the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
+    /// 
+    /// <remarks>
+    /// <note type="tip">
+    /// The optimal constructor parameters can be determined automatically with <see cref="CsvAnalyzer"/>.
+    /// </note>
+    /// </remarks>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
     /// file path.</exception>
@@ -74,6 +84,13 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// names.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="fieldSeparator">The field separator char used in the CSV file.</param>
+    /// 
+    /// <remarks>
+    /// <note type="tip">
+    /// The optimal constructor parameters can be determined automatically with <see cref="CsvAnalyzer"/>.
+    /// </note>
+    /// </remarks>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public CsvReader(
