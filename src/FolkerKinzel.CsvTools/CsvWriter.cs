@@ -10,29 +10,16 @@ using FolkerKinzel.Strings;
 
 namespace FolkerKinzel.CsvTools;
 
-    /// <summary>Writes data to a CSV file.</summary>
-    /// <remarks> <see cref="CsvWriter" /> stellt in der Eigenschaft <see cref="Record"
-    /// /> ein <see cref="CsvRecord" />-Objekt zur Verfügung, das einen Puffer für einen
-    /// Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"
-    /// />-Objekt mit <see cref="string" />-Daten und schreiben Sie es anschließend
-    /// mit der Methode <see cref="WriteRecord" /> in die Datei. Der Aufruf von <see
-    /// cref="WriteRecord" /> setzt alle Felder von <see cref="Record" /> wieder auf
-    /// <c>null</c>-Werte, so dass das <see cref="CsvRecord" />-Objekt erneut befüllt
-    /// werden kann. Wenn andere Datentypen als <see cref="string" /> geschrieben werden
-    /// sollen, bietet sich die Verwendung der Klasse <see cref="CsvRecordWrapper" />
-    /// an, die einen komfortablen Adapter zwischen den Daten der Anwendung und der
-    /// CSV-Datei darstellt.</remarks>
-    /// <example>
-    /// <note type="note">
-    /// In the following code examples - for easier readability - exception handling
-    /// has been omitted.
-    /// </note>
-    /// <para>
-    /// Saving the contents of a <see cref="DataTable" /> as a CSV file and importing
-    /// data from a CSV file into a <see cref="DataTable" />:
-    /// </para>
-    /// <code language="cs" source="..\Examples\CsvToDataTable.cs" />
-    /// </example>
+/// <summary>Writes data to a CSV file.</summary>
+/// <remarks> <see cref="CsvWriter" /> stellt in der Eigenschaft <see cref="Record"
+/// /> ein <see cref="CsvRecord" />-Objekt zur Verfügung, das einen Puffer für einen
+/// Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"
+/// />-Objekt mit <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>-Daten 
+/// und schreiben Sie es anschließend
+/// mit der Methode <see cref="WriteRecord" /> in die Datei. Der Aufruf von <see
+/// cref="WriteRecord" /> setzt alle Felder von <see cref="Record" /> wieder auf
+/// <c>null</c>-Werte, so dass das <see cref="CsvRecord" />-Objekt erneut befüllt
+/// werden kann.</remarks>
 public sealed class CsvWriter : IDisposable
 {
     /// <summary>The newline character to use, when writing CSV files ("\r\n").</summary>
@@ -133,10 +120,7 @@ public sealed class CsvWriter : IDisposable
         TextWriter writer, int columnsCount, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
         : this(columnsCount, fieldSeparator, options)
     {
-        if (writer is null)
-        {
-            throw new ArgumentNullException(nameof(writer));
-        }
+        _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
 
         this._writer = writer;
         writer.NewLine = NewLine;
@@ -206,7 +190,7 @@ public sealed class CsvWriter : IDisposable
 
         if (!_isHeaderRowWritten)
         {
-            ReadOnlyCollection<string>? columns = Record.ColumnNames;
+            IReadOnlyList<string>? columns = Record.ColumnNames;
 
             for (int i = 0; i < recordLength - 1; i++)
             {
