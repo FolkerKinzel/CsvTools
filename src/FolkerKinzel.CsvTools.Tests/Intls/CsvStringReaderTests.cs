@@ -20,7 +20,7 @@ public class CsvStringReaderTests
         using var stringReader = new StringReader(csv);
         using var reader = new CsvStringReader(stringReader, ',', true);
 
-        IList<ReadOnlyMemory<char>>? list = reader.Read();
+        List<ReadOnlyMemory<char>>? list = reader.Read();
         Assert.IsNotNull(list);
         Assert.AreEqual(1, list!.Count);
         Assert.AreEqual(list![0].ToString(), input);

@@ -10,17 +10,7 @@ namespace FolkerKinzel.CsvTools;
 
 /// <summary> <see cref="CsvAnalyzer" /> can perform a statistical analysis on a 
 /// CSV file and provide the results as its properties.</summary>
-/// <example>
-/// <note type="note">
-/// In the following code example - for easier readability - exception handling
-/// has been omitted.
-/// </note>
-/// <para>
-/// Deserialization of any objects from CSV files:
-/// </para>
-/// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs" />
-/// </example>
-public class CsvAnalyzer
+public partial class CsvAnalyzer
 {
     /// <summary>Minimum number of lines in the CSV file to be analyzed.</summary>
     public const int AnalyzedLinesMinCount = 5;
@@ -59,239 +49,119 @@ public class CsvAnalyzer
             analyzedLinesCount = AnalyzedLinesMinCount;
         }
 
-        // Suche Feldtrennzeichen:
+        new FieldSeparatorAnalyzer(this).InitFieldSeparator(fileName);
+        //InitFieldSeparator(fileName, analyzedLinesCount, textEncoding);
+        InitProperties(fileName, textEncoding, analyzedLinesCount);
+    }
 
-/* Unmerged change from project 'FolkerKinzel.CsvTools (netstandard2.1)'
-Before:
-        using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
+    private void InitProperties(string fileName, Encoding? textEncoding, int maxCount)
+    {
+        int analyzedLinesCount = 0;
+        int firstLineCount = 0;
+        List<ReadOnlyMemory<char>>? row;
+
+        using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
+        using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+
+        while ((row = csvStringReader.Read()) is not null && analyzedLinesCount < maxCount)
         {
-After:
-        using (StreamReader? reader = CsvTools.StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
-        {
-*/
-        using (StreamReader? reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
-        {
-            const int COMMA_INDEX = 0;
-            const int SEMICOLON_INDEX = 1;
-            const int HASH_INDEX = 2;
+            analyzedLinesCount++;
 
-            bool firstLine = true;
-
-            const string sepChars = ",;#\t ";
-            int sepCharsLength = sepChars.Length;
-            Span<int> firstLineOccurrence = stackalloc int[sepCharsLength];
-            firstLineOccurrence.Clear();
-            Span<int> sameOccurrence = stackalloc int[sepCharsLength];
-            sameOccurrence.Clear();
-            Span<int> currentLineOccurrence = stackalloc int[sepCharsLength];
-            currentLineOccurrence.Clear();
-
-            for (int i = 0; i < analyzedLinesCount; i++)
+            if (analyzedLinesCount == 1)
             {
-                string? line = reader.ReadLine();
+                firstLineCount = ParseFirstLine(row);
+            }
+            else
+            {
+                SetOptions(firstLineCount, row);
+            }
+        }
+    }
 
-                if (line is null)
+    private int ParseFirstLine(List<ReadOnlyMemory<char>> row)
+    {
+        int firstLineCount;
+        bool hasHeader = true;
+        bool hasMaybeNoHeader = false;
+        firstLineCount = row.Count;
+
+        for (int i = 0; i < row.Count; i++)
+        {
+            ReadOnlyMemory<char> mem = row[i];
+
+            if (hasHeader)
+            {
+                // RFC 4180 says: "The last field in the
+                // record must not be followed by a comma."
+                // Bad implementations - like Thunderbird - do other.
+                if (hasMaybeNoHeader)
                 {
-                    break;
+                    hasHeader = false;
+                    this.Options = this.Options.Unset(CsvOptions.TrimColumns);
                 }
 
-                if (firstLine)
+                if (mem.IsEmpty)
                 {
-                    // Skip empty lines before the first line:
-                    if (line.Length == 0)
-                    {
-                        Options = Options.Unset(CsvOptions.ThrowOnEmptyLines);
-                        i--;
-                        continue;
-                    }
-
-                    firstLine = false;
-
-                    // Vergleich für Kopfzeile:
-                    for (int charIndex = 0; charIndex < line.Length; charIndex++)
-                    {
-                        char ch = line[charIndex];
-
-                        for (int sepCharIndex = 0; sepCharIndex < sepCharsLength; sepCharIndex++)
-                        {
-                            if (ch.Equals(sepChars[sepCharIndex]))
-                            {
-                                firstLineOccurrence[sepCharIndex]++;
-                            }
-                        }
-                    }
-
-                    // wenn in der Kopfzeile Komma, Semikolon oder Raute auftauchen, werden Tabulator und Leerzeichen nicht mehr ausgewertet
-                    if (firstLineOccurrence[COMMA_INDEX] != 0 || firstLineOccurrence[SEMICOLON_INDEX] != 0 || firstLineOccurrence[HASH_INDEX] != 0)
-                    {
-                        // lösche Whitespace-Werte
-                        for (int j = 3; j < sepCharsLength; j++)
-                        {
-                            firstLineOccurrence[j] = 0;
-                        }
-
-                        sepCharsLength = 3;
-                    }
-
+                    hasMaybeNoHeader = true;
                     continue;
                 }
 
-                // Vergleich für Datenzeile:
-                for (int charIndex = 0; charIndex < line.Length; charIndex++)
+                ReadOnlyMemory<char> trimmed = mem.Trim();
+
+                row[i] = trimmed;
+
+                if (trimmed.Length != mem.Length)
                 {
-                    char ch = line[charIndex];
-
-                    for (int sepCharIndex = 0; sepCharIndex < sepCharsLength; sepCharIndex++)
-                    {
-                        if (ch.Equals(sepChars[sepCharIndex]))
-                        {
-                            currentLineOccurrence[sepCharIndex]++;
-                        }
-                    }
-                }
-
-                for (int sepCharIndex = 0; sepCharIndex < sepCharsLength; sepCharIndex++)
-                {
-                    if (currentLineOccurrence[sepCharIndex] == firstLineOccurrence[sepCharIndex])
-                    {
-                        sameOccurrence[sepCharIndex]++;
-                    }
-                }
-
-                // Clear currentLineOccurrence
-                for (int sepCharIndex = 0; sepCharIndex < sepCharsLength; sepCharIndex++)
-                {
-                    currentLineOccurrence[sepCharIndex] = 0;
-                }
-            }//for
-
-            this.FieldSeparator = sepChars[0];
-
-            int sameOcc = sameOccurrence[0];
-            int probability = firstLineOccurrence[0] * (1 + sameOcc * sameOcc * sameOcc);
-
-            // Formel für statistische Wahrscheinlichkeit:
-            for (int sepCharIndex = 1; sepCharIndex < sepCharsLength; sepCharIndex++)
-            {
-                sameOcc = sameOccurrence[sepCharIndex];
-
-                int newProbability = firstLineOccurrence[sepCharIndex] * (1 + sameOcc * sameOcc * sameOcc);
-
-                if (newProbability > probability)
-                {
-                    this.FieldSeparator = sepChars[sepCharIndex];
-                    probability = newProbability;
+                    Options = Options.Set(CsvOptions.TrimColumns);
                 }
             }
+        }//for
 
-        }//using
-
-
-/* Unmerged change from project 'FolkerKinzel.CsvTools (netstandard2.1)'
-Before:
-        using (StreamReader? reader = CsvReader.InitializeStreamReader(fileName, textEncoding))
+        if (hasHeader)
         {
-After:
-        using (StreamReader? reader = CsvTools.StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
-        {
-*/
-        using (StreamReader? reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding))
-        {
-            bool firstLine = true;
+            ColumnNames = row.Where(x => !x.IsEmpty).Select(x => x.ToString()).ToArray();
 
-            int firstLineCount = 0;
-
-            using var csvStringReader = new CsvStringReader(reader, FieldSeparator, !Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
-
-            IList<ReadOnlyMemory<char>>? row;
-            while((row = csvStringReader.Read()) is not null)
+            if (ColumnNames.Count == ColumnNames.Distinct(StringComparer.Ordinal).Count())
             {
-                if (firstLine)
+                if (ColumnNames.Count != ColumnNames.Distinct(StringComparer.OrdinalIgnoreCase).Count())
                 {
-                    firstLine = false;
-
-                    //var firstLineFields = new List<string>();
-
-                    bool hasHeader = true;
-                    bool hasMaybeNoHeader = false;
-                    firstLineCount = row.Count;
-
-                    for (int i = 0; i < row.Count; i++)
-                    {
-                        ReadOnlyMemory<char> mem = row[i];
-
-                        if (hasHeader)
-                        {
-                            // Nach RFC 4180 darf das letzte Feld einer Datenzeile hinter sich kein
-                            // FieldSeparatorChar mehr haben: "The last field in the
-                            // record must not be followed by a comma."
-                            // Schlechte Implementierungen - wie Thunderbird - halten sich aber nicht daran.
-                            if (hasMaybeNoHeader)
-                            {
-                                hasHeader = false;
-                                this.Options = this.Options.Unset(CsvOptions.TrimColumns);
-                            }
-
-                            if (mem.IsEmpty)
-                            {
-                                hasMaybeNoHeader = true;
-                                continue;
-                            }
-
-                            ReadOnlyMemory<char> trimmed = mem.Trim();
-
-                            row[i] = trimmed;
-
-                            if (trimmed.Length != mem.Length)
-                            {
-                                Options = Options.Set(CsvOptions.TrimColumns);
-                            }
-                        }
-                    }//for
-
-                    if (hasHeader)
-                    {
-                        ColumnNames = new ReadOnlyCollection<string>(row.Where(x => !x.IsEmpty).Select(x => x.ToString()).ToArray());
-
-                        if(ColumnNames.Count == ColumnNames.Distinct(StringComparer.Ordinal).Count())
-                        {
-                            if (ColumnNames.Count != ColumnNames.Distinct(StringComparer.OrdinalIgnoreCase).Count())
-                            {
-                                this.Options = this.Options.Set(CsvOptions.CaseSensitiveKeys);
-                            }
-                        }
-                        else
-                        {
-                            hasHeader = false;
-                            ColumnNames = null;
-                            Options = Options.Unset(CsvOptions.TrimColumns);
-                        }
-                    }
-                }
-                else
-                {
-                    int currentLineCount = 0;
-                    ReadOnlyMemory<char> firstString = default;
-
-                    foreach (ReadOnlyMemory<char> mem in row)
-                    {
-                        if (currentLineCount == 0)
-                        {
-                            firstString = mem;
-                        }
-
-                        currentLineCount++;
-                    }
-
-                    if (currentLineCount != firstLineCount)
-                    {
-                        this.Options = currentLineCount < firstLineCount
-                            ? currentLineCount == 1 && firstString.IsEmpty ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines) : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
-                            : this.Options.Unset(CsvOptions.ThrowOnTooMuchFields);
-                    }
+                    this.Options = this.Options.Set(CsvOptions.CaseSensitiveKeys);
                 }
             }
-        }//using
+            else
+            {
+                hasHeader = false;
+                ColumnNames = null;
+                Options = Options.Unset(CsvOptions.TrimColumns);
+            }
+        }
+
+        return firstLineCount;
+    }
+
+    private void SetOptions(int firstLineCount, IList<ReadOnlyMemory<char>> row)
+    {
+        int currentLineCount = 0;
+        ReadOnlyMemory<char> firstString = default;
+
+        foreach (ReadOnlyMemory<char> mem in row)
+        {
+            if (currentLineCount == 0)
+            {
+                firstString = mem;
+            }
+
+            currentLineCount++;
+        }
+
+        if (currentLineCount != firstLineCount)
+        {
+            this.Options = currentLineCount < firstLineCount
+                ? currentLineCount == 1 && firstString.IsEmpty
+                    ? this.Options.Unset(CsvOptions.ThrowOnEmptyLines)
+                    : this.Options.Unset(CsvOptions.ThrowOnTooFewFields)
+                : this.Options.Unset(CsvOptions.ThrowOnTooMuchFields);
+        }
     }
 
     /// <summary>The field separator char used in the CSV file.</summary>
@@ -304,5 +174,5 @@ After:
     public bool HasHeaderRow => ColumnNames != null;
 
     /// <summary>The column names of the CSV file.</summary>
-    public ReadOnlyCollection<string>? ColumnNames { get; private set; }
+    public IReadOnlyList<string>? ColumnNames { get; private set; }
 }//class

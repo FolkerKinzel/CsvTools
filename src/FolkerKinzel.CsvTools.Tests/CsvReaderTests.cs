@@ -82,7 +82,7 @@ public class CsvReaderTests
 
 
     [TestMethod]
-    [ExpectedException(typeof(InvalidOperationException))]
+    [ExpectedException(typeof(ObjectDisposedException))]
     public void ReadTest4()
     {
         const string testCsv =
@@ -144,6 +144,7 @@ public class CsvReaderTests
 
 
     [TestMethod]
+    [ExpectedException(typeof(ObjectDisposedException))]
     public void CsvReaderTest6()
     {
         const string csv = """

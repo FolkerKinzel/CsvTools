@@ -46,7 +46,7 @@ internal sealed class CsvStringReader : IDisposable
     /// <summary>Releases the resources. (Closes the <see cref="TextReader" />.)</summary>
     public void Dispose() => _reader.Dispose();
 
-    internal IList<ReadOnlyMemory<char>>? Read()
+    internal List<ReadOnlyMemory<char>>? Read()
     {
         while ((_currentLine = _reader.ReadLine()) != null)
         {
@@ -57,19 +57,20 @@ internal sealed class CsvStringReader : IDisposable
                 continue;
             }
 
-            return GetNextRecord();
+            ReadNextRecord();
+            return _row;
         }
 
         return null;
     }
 
-    /// <summary> Liest die nächste Datenzeile als <see cref="List{T}">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.
+    /// <summary> Liest die nächste Datenzeile in <see cref="_row"/> ein.
     /// </summary>
-    /// <returns>Die nächste Datenzeile als <see cref="List{T}">List&lt;ReadOnlyMemory&lt;char&gt;&gt;</see>.</returns>
+    ///
     /// <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind
     /// und wirft keine <see cref="Exception" />, wenn es in einer Zeile zu viele oder
     /// zu wenige sind.</remarks>
-    private List<ReadOnlyMemory<char>> GetNextRecord()
+    private void ReadNextRecord()
     {
         _row.Clear();
         LineIndex = 0;
@@ -92,8 +93,6 @@ internal sealed class CsvStringReader : IDisposable
 
             _currentLine = null;
         }
-
-        return _row;
     }
 
     private ReadOnlyMemory<char> GetField()

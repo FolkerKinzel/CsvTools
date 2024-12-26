@@ -144,7 +144,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// on the <see cref="CsvOptions" /> value, specified in the constructor.</exception>
     private CsvRecord? Read()
     {
-        IList<ReadOnlyMemory<char>>? row = _reader.Read();
+        List<ReadOnlyMemory<char>>? row = _reader.Read();
 
         if (row is null)
         {
