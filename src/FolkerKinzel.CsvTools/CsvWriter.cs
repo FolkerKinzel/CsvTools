@@ -11,15 +11,12 @@ using FolkerKinzel.Strings;
 namespace FolkerKinzel.CsvTools;
 
 /// <summary>Writes data as a CSV file.</summary>
-/// <remarks> <see cref="CsvWriter" /> stellt in der Eigenschaft <see cref="Record"
-/// /> ein <see cref="CsvRecord" />-Objekt zur Verfügung, das einen Puffer für einen
-/// Datensatz (Zeile) der CSV-Datei repräsentiert. Füllen Sie das <see cref="CsvRecord"
-/// />-Objekt mit <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>-Daten 
-/// und schreiben Sie es anschließend
-/// mit der Methode <see cref="WriteRecord" /> in die Datei! Der Aufruf von <see
-/// cref="WriteRecord" /> setzt alle Felder von <see cref="Record" /> wieder auf
-/// <see cref="ReadOnlyMemory{T}.Empty"/>, so dass das <see cref="CsvRecord" />-Objekt 
-/// erneut befüllt werden kann.</remarks>
+/// <remarks> <see cref="CsvWriter" /> provides a <see cref="CsvRecord" /> object in its 
+/// <see cref="Record" /> property that represents a buffer for a data record (row) of the 
+/// CSV file. Fill the <see cref="CsvRecord" /> object with data and then write it to the 
+/// file using the <see cref="WriteRecord" /> method! After the <see cref="WriteRecord" /> 
+/// returns all fields of <see cref="Record" /> are reset to <see cref="ReadOnlyMemory{T}.Empty"/>
+/// so that the <see cref="CsvRecord" /> object can be filled again.</remarks>
 public sealed class CsvWriter : IDisposable
 {
     /// <summary>The newline characters to use when writing CSV files ("\r\n").</summary>
@@ -61,9 +58,13 @@ public sealed class CsvWriter : IDisposable
     /// </para>
     /// </exception>
     /// <exception cref="IOException">I/O-Error</exception>
-    public CsvWriter(
-        string fileName, string?[] columnNames, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
-         : this(columnNames, fieldSeparator, options) => _writer = InitStreamWriter(fileName, textEncoding);
+    public CsvWriter(string fileName,
+                     string?[] columnNames,
+                     CsvOptions options = CsvOptions.Default,
+                     Encoding? textEncoding = null,
+                     char fieldSeparator = ',')
+         : this(columnNames, fieldSeparator, options) 
+        => _writer = InitStreamWriter(fileName, textEncoding);
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
     /// without a header row.</summary>
@@ -78,9 +79,13 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">I/O-Error</exception>
-    public CsvWriter(
-        string fileName, int columnsCount, CsvOptions options = CsvOptions.Default, Encoding? textEncoding = null, char fieldSeparator = ',')
-         : this(columnsCount, fieldSeparator, options) => _writer = InitStreamWriter(fileName, textEncoding);
+    public CsvWriter(string fileName,
+                     int columnsCount,
+                     CsvOptions options = CsvOptions.Default,
+                     Encoding? textEncoding = null,
+                     char fieldSeparator = ',')
+         : this(columnsCount, fieldSeparator, options) 
+        => _writer = InitStreamWriter(fileName, textEncoding);
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
@@ -98,8 +103,10 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
     /// /> occurs twice. In <paramref name="options" /> can be chosen whether the comparison
     /// is case-sensitive.</exception>
-    public CsvWriter(
-        TextWriter writer, IEnumerable<string?> columnNames, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
+    public CsvWriter(TextWriter writer,
+                     IEnumerable<string?> columnNames,
+                     CsvOptions options = CsvOptions.Default,
+                     char fieldSeparator = ',')
         : this(columnNames, fieldSeparator, options)
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
@@ -116,8 +123,10 @@ public sealed class CsvWriter : IDisposable
     /// <param name="options">Options for the CSV file to be written.</param>
     /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
-    public CsvWriter(
-        TextWriter writer, int columnsCount, CsvOptions options = CsvOptions.Default, char fieldSeparator = ',')
+    public CsvWriter(TextWriter writer,
+                     int columnsCount,
+                     CsvOptions options = CsvOptions.Default,
+                     char fieldSeparator = ',')
         : this(columnsCount, fieldSeparator, options)
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
@@ -179,11 +188,11 @@ public sealed class CsvWriter : IDisposable
     /// /> after each call of the <see cref="WriteRecord" /> method.</summary>
     public CsvRecord Record { get; }
 
-    /// <summary> Schreibt den Inhalt von <see cref="Record" /> in die CSV-Datei und
-    /// setzt anschließend alle Felder von <see cref="Record" /> auf <see cref="ReadOnlyMemory{T}.Empty"
-    /// />. (Beim ersten Aufruf wird ggf. auch die Kopfzeile geschrieben.) </summary>
+    /// <summary> Writes the contents of <see cref="Record" /> to the CSV file and then sets all
+    /// fields of <see cref="Record" /> to <see cref="ReadOnlyMemory{T}.Empty" />. (The first 
+    /// time it is called, the header row may also be written.)</summary>
     /// <exception cref="IOException">I/O-Error</exception>
-    /// <exception cref="ObjectDisposedException">The resources were already released.</exception>
+    /// <exception cref="ObjectDisposedException">The file was already closed.</exception>
     public void WriteRecord()
     {
         int recordLength = Record.Count;
@@ -279,7 +288,7 @@ public sealed class CsvWriter : IDisposable
                s.Contains(Environment.NewLine, StringComparison.Ordinal);
     }
 
-    /// <summary>Releases the resources. (Closes the <see cref="TextWriter" />.)</summary>
+    /// <summary>Releases the resources. (Closes the CSV file.)</summary>
     public void Dispose() => _writer.Dispose();
 
     #region private

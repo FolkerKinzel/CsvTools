@@ -18,8 +18,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examples", "Examples\Examples.csproj", "{F850413D-BE94-47C3-92E6-50B03F76FE7D}"
 EndProject
-Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Doku.de", "FolkerKinzel.CsvTools.Doku.de\FolkerKinzel.CsvTools.Doku.de.shfbproj", "{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}"
-EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Reference.en", "FolkerKinzel.CsvTools.Reference.en\FolkerKinzel.CsvTools.Reference.en.shfbproj", "{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{90C696E7-B5B0-408B-A391-B7FA0DEAC255}"
@@ -42,8 +40,6 @@ Global
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

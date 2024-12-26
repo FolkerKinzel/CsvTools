@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 
 namespace FolkerKinzel.CsvTools;
 
-    /// <summary>Exception, thrown parsing invalid CSV documents.</summary>
+/// <summary>Exception, thrown parsing invalid CSV documents.</summary>
 [Serializable]
 public class InvalidCsvException : Exception, ISerializable
 {
@@ -10,23 +10,14 @@ public class InvalidCsvException : Exception, ISerializable
     public int CsvLineNumber { get; } = 1;
 
     /// <summary>Index of the character in the line of the CSV file where the error
-    /// occurred (0-based index).</summary>
+    /// occurred (Zero-based index).</summary>
     public int CsvCharIndex { get; }
 
-
+    /// <inheritdoc />
+    public InvalidCsvException() { }
 
     /// <inheritdoc />
-    public InvalidCsvException()
-    {
-    }
-
-
-
-    /// <inheritdoc />
-    public InvalidCsvException(string message) : base(message)
-    {
-    }
-
+    public InvalidCsvException(string message) : base(message) { }
 
     /// <inheritdoc cref="InvalidCsvException(string)" />
     /// <param name="csvLineNumber">Line number of the CSV file where the error occurred
@@ -41,36 +32,10 @@ public class InvalidCsvException : Exception, ISerializable
         this.CsvCharIndex = csvCharIndex;
     }
 
-
-
     /// <inheritdoc />
     public InvalidCsvException(string message, Exception innerException) : base(message, innerException) { }
-
-
-
-    /// <inheritdoc />
-    //protected InvalidCsvException(SerializationInfo info, StreamingContext context) : base(info, context)
-    //{
-    //    this.CsvLineNumber = info.GetInt32(nameof(CsvLineNumber));
-    //    this.CsvCharIndex = info.GetInt32(nameof(CsvCharIndex));
-    //}
-
-
-
-    /// <inheritdoc />
-    //[Obsolete("This ctor is deprecated. Use the ctor that has the parameters message, csvLineNumber and csvCharIndex instead.")]
-    //public override void GetObjectData(SerializationInfo info, StreamingContext context)
-    //{
-    //    base.GetObjectData(info, context);
-
-    //    info.AddValue(nameof(CsvLineNumber), CsvLineNumber);
-    //    info.AddValue(nameof(CsvCharIndex), CsvCharIndex);
-    //}
-
-
 
     /// <inheritdoc />
     public override string ToString() =>
         base.ToString() + $" ({nameof(CsvLineNumber)}: {CsvLineNumber}, {nameof(CsvCharIndex)}: {CsvCharIndex})";
-
 }
