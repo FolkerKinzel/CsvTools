@@ -166,7 +166,7 @@ public class CsvReaderTests
 
         Assert.AreEqual(4, cnt);
 
-        foreach (CsvRecord record in csvReader)
+        foreach (CsvRecord _ in csvReader)
         {
             Assert.Fail();
         }
@@ -191,4 +191,20 @@ public class CsvReaderTests
         _ = csvReader.Count();
     }
 
+
+    [TestMethod]
+    public void MyTestMethod()
+    {
+        const string csv = """
+                Name,City
+                Ingrid,Berlin
+                Joyce,New York
+                Horst,Hamburg
+                John,New York
+                """;
+
+        using var csvReader = new CsvReader(new StringReader(csv));
+
+        Assert.AreEqual(4, csvReader.Count());
+    }
 }

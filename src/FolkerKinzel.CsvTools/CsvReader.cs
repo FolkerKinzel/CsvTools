@@ -74,7 +74,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
         StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
 
         this._options = options;
-        this._reader = new CsvStringReader(streamReader, fieldSeparator, !options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+        this._reader = new CsvStringReader(streamReader, fieldSeparator, options);
         this._hasHeaderRow = hasHeaderRow;
     }
 

@@ -63,17 +63,24 @@ public partial class CsvAnalyzer
         }
 
         FieldSeparator = new FieldSeparatorAnalyzer().InitFieldSeparator(fileName);
-        InitProperties(fileName, textEncoding, analyzedLinesCount);
-    }
 
-    private void InitProperties(string fileName, Encoding? textEncoding, int maxLines)
+        try
+        {
+            InitProperties(fileName, textEncoding, analyzedLinesCount, CsvOptions.Default);
+        }
+        catch (InvalidCsvException e)
+        {
+             
+        }
+
+    private void InitProperties(string fileName, Encoding? textEncoding, int maxLines, CsvOptions options)
     {
         int analyzedLinesCount = 0;
         int firstLineCount = 0;
         CsvRow? row;
 
         using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
-        using var csvStringReader = new CsvStringReader(reader, FieldSeparator, false);
+        using var csvStringReader = new CsvStringReader(reader, FieldSeparator, options);
 
         while ((row = csvStringReader.Read()) is not null && analyzedLinesCount < maxLines)
         {

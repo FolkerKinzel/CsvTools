@@ -129,10 +129,16 @@
   <data name="InvalidCastNullToValueType" xml:space="preserve">
     <value>Unable to cast null to value type.</value>
   </data>
+  <data name="InvalidMasking" xml:space="preserve">
+    <value>Invalid usage of ".</value>
+  </data>
   <data name="NotTwice" xml:space="preserve">
     <value>You must not run this method twice.</value>
   </data>
   <data name="PropertyNotFound" xml:space="preserve">
     <value>No property named "{0}" was found.</value>
+  </data>
+  <data name="TruncatedFile" xml:space="preserve">
+    <value>Truncated CSV file.</value>
   </data>
 </root>

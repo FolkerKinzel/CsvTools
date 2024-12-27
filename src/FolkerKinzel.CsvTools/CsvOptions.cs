@@ -59,27 +59,36 @@ public enum CsvOptions
     /// </summary>
     ThrowOnEmptyLines = 1 << 2,
 
+    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="InvalidCsvException"
+    /// /> if a masked field at the end of the file is not properly closed.
+    /// <note>
+    /// An unclosed field at the end of a CSV file is a data error. However, by removing the flag, 
+    /// <see cref="CsvReader" /> will be able to parse the rest of the file.
+    /// </note>
+    /// </summary>
+    ThrowOnTruncatedFiles = 1 << 3,
+
     /// <summary>If the flag is not set, the class <see cref="CsvRecord" /> interpretes
     /// the column names of the CSV file in a case-insensitive manner. This is the same
     /// behavior that <see cref="DataColumnCollection" /> shows.</summary>
-    CaseSensitiveKeys = 1 << 3,
+    CaseSensitiveKeys = 1 << 4,
 
     /// <summary>If the flag is set, <see cref="CsvReader" /> and <see cref="CsvWriter"
     /// /> will handle all data tokens and the column names with the <see cref="string.Trim()"
     /// /> method. That can damage data
     /// where the leading and trailing white space has a meaning. Only set the flag
     /// for reading non-standard CSV files, that introduce additional padding.</summary>
-    TrimColumns = 1 << 4,
+    TrimColumns = 1 << 5,
 
     /// <summary>Default setting. This is a combined value, that forces <see cref="CsvReader"
     /// /> to throw an <see cref="InvalidCsvException" />, if the file to be read does
     /// not comply with the RFC 4180 standard. (Alternative column separators and newline
     /// characters are always tolerated.)</summary>
-    Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines,
+    Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles,
 
     /// <summary>If the flag is set, the same <see cref="CsvRecord" /> object is used
     /// for each data row when reading the CSV file (filled with new data). That brings
     /// slight performance advantages when parsing very large CSV files, but can lead
     /// to unexpected results if an attempt is made to cache the results. (see example)</summary>
-    DisableCaching = 1 << 5
+    DisableCaching = 1 << 6
 }

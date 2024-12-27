@@ -111,6 +111,8 @@ namespace FolkerKinzel.CsvTools.Tests
                 writer.WriteRecord();
             }
 
+            string csv = File.ReadAllText(FILENAME_STANDARD);
+
             using var reader = new CsvReader(FILENAME_STANDARD);
 
             Assert.AreEqual(VALUE1, reader.First()[Key1].ToString());
