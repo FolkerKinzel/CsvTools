@@ -4,8 +4,8 @@ using System.Text;
 
 namespace FolkerKinzel.CsvTools.Intls;
 
-    /// <summary> Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>"
-    /// zurück. </summary>
+/// <summary> Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>"
+/// zurück. </summary>
 internal sealed class CsvStringReader : IDisposable
 {
     private const int INITIAL_COLUMNS_COUNT = 32;
@@ -13,10 +13,11 @@ internal sealed class CsvStringReader : IDisposable
 
     private readonly TextReader _reader;
     private readonly char _fieldSeparator;
-    private readonly List<ReadOnlyMemory<char>> _row = new(INITIAL_COLUMNS_COUNT);
+    private readonly CsvRow _row = new(INITIAL_COLUMNS_COUNT);
     private StringBuilder? _sb;
     private readonly bool _skipEmptyLines;
     private string? _currentLine;
+    private bool _mustAllocate;
 
     internal int LineNumber { get; private set; }
 
@@ -46,7 +47,7 @@ internal sealed class CsvStringReader : IDisposable
     /// <summary>Releases the resources. (Closes the <see cref="TextReader" />.)</summary>
     public void Dispose() => _reader.Dispose();
 
-    internal List<ReadOnlyMemory<char>>? Read()
+    internal CsvRow? Read()
     {
         while ((_currentLine = _reader.ReadLine()) != null)
         {
@@ -64,12 +65,6 @@ internal sealed class CsvStringReader : IDisposable
         return null;
     }
 
-    /// <summary> Liest die nächste Datenzeile in <see cref="_row"/> ein.
-    /// </summary>
-    ///
-    /// <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind
-    /// und wirft keine <see cref="Exception" />, wenn es in einer Zeile zu viele oder
-    /// zu wenige sind.</remarks>
     private void ReadNextRecord()
     {
         _row.Clear();
@@ -77,17 +72,18 @@ internal sealed class CsvStringReader : IDisposable
 
         do
         {
-            _row.Add(GetField());
+            AddField();
         }
         while (LineIndex < _currentLine?.Length);
 
         if (_currentLine != null)
         {
             int length = _currentLine.Length;
+
             if (length != 0 && _currentLine[length - 1] == _fieldSeparator)
             {
-                // ergänzt das fehlende letzte Feld, wenn die Zeile mit dem
-                // Feldtrennzeichen endet:
+                // adds the missing last field if the line ends with the
+                // field separator:
                 _row.Add(default);
             }
 
@@ -95,42 +91,45 @@ internal sealed class CsvStringReader : IDisposable
         }
     }
 
-    private ReadOnlyMemory<char> GetField()
+    private void AddField()
     {
         Debug.Assert(_currentLine != null);
 
-        int startIndex = LineIndex;
+        ReadOnlySpan<char> span = _currentLine.AsSpan();
 
-        for (int endIndex = startIndex; endIndex < _currentLine.Length; endIndex++)
+        for (int endIndex = LineIndex; endIndex < span.Length; endIndex++)
         {
-            char c = _currentLine[endIndex];
+            char c = span[endIndex];
 
             if (c == _fieldSeparator)
             {
+                _row.Add(_currentLine.AsMemory(LineIndex, endIndex - LineIndex));
                 LineIndex = endIndex + 1;
-                return _currentLine.AsMemory(startIndex, endIndex - startIndex);
+                return;
             }
 
             if (c == '\"')
             {
-                LineIndex = startIndex;
-                return GetAllocatedField();
+                AddAllocatedField();
+                return;
             }
         }
 
+        // separator at the end of the line
+        _row.Add(_currentLine.AsMemory(LineIndex));
         LineIndex = _currentLine.Length;
-        return _currentLine.AsMemory(startIndex);
     }
 
-    private ReadOnlyMemory<char> GetAllocatedField()
+    private void AddAllocatedField()
     {
         Debug.Assert(_currentLine != null);
         Debug.Assert(_currentLine.Length > 0);
+
         int startIndex = LineIndex;
-        bool isQuoted = false;
-        bool hadBeenQuoted = false;
+        bool insideQuotes = false;
         bool isMaskedDoubleQuote = false;
-        bool mustAllocate = false; // if masked Double Quotes or new lines are inside of a field this must be true
+        ReadOnlySpan<char> span = _currentLine.AsSpan();
+        _mustAllocate = false; // if masked Double Quotes or new lines are inside of a field this must be true
 
         _sb ??= new StringBuilder(INITIAL_STRINGBUILDER_CAPACITY);
         _ = _sb.Clear();
@@ -140,14 +139,16 @@ internal sealed class CsvStringReader : IDisposable
             if (_currentLine is null) // EOF
             {
                 LineIndex = 0;
-                return AllocateField();
+                DoAddAllocatedField(startIndex);
+                return;
             }
 
-            if (isQuoted && _currentLine.Length == 0) // empty line
+            if (insideQuotes && span.Length == 0) // empty line
             {
-                mustAllocate = true;
+                _mustAllocate = true;
                 _ = _sb.AppendLine();
                 _currentLine = _reader.ReadLine();
+                span = _currentLine.AsSpan();
                 LineNumber++;
                 LineIndex = 0;
                 continue;
@@ -156,25 +157,27 @@ internal sealed class CsvStringReader : IDisposable
             if (LineIndex >= _currentLine.Length)
             {
                 LineIndex = _currentLine.Length;
-                return AllocateField();
+                DoAddAllocatedField(startIndex);
+                return;
             }
 
-            char c = _currentLine[LineIndex];
+            char c = span[LineIndex];
 
-            if (LineIndex == _currentLine.Length - 1)
+            if (LineIndex == span.Length - 1)
             {
                 if (c == '\"') // a field starts with an empty line or a masked field ends
                 {
-                    isQuoted = !isQuoted;
+                    insideQuotes = !insideQuotes;
                 }
 
-                if (isQuoted)
+                if (insideQuotes)
                 {
-                    mustAllocate = true; // empty line inside of a field
+                    _mustAllocate = true; // empty line inside of a field
 
                     _ = c == '\"' ? _sb.AppendLine() : _sb.Append(c).AppendLine();
 
                     _currentLine = _reader.ReadLine();
+                    span = _currentLine.AsSpan();
                     LineIndex = 0;
                     LineNumber++;
                     continue;
@@ -188,14 +191,14 @@ internal sealed class CsvStringReader : IDisposable
                         _ = _sb.Append(c);
                     }
 
-
-                    LineIndex = _currentLine.Length;
-                    return AllocateField();
+                    LineIndex = span.Length;
+                    DoAddAllocatedField(startIndex);
+                    return;
                 }
             }
-            else
+            else // LineIndex < span.Length - 1
             {
-                if (isQuoted)
+                if (insideQuotes)
                 {
                     if (c == '\"')
                     {
@@ -206,21 +209,22 @@ internal sealed class CsvStringReader : IDisposable
                         }
                         else
                         {
-                            char next = _currentLine[LineIndex + 1];
+                            char next = span[LineIndex + 1];
 
                             if (next == _fieldSeparator) // Feldende
                             {
                                 LineIndex += 2;
-                                return AllocateField();
+                                DoAddAllocatedField(startIndex);
+                                return;
                             }
                             else if (next == '\"')
                             {
                                 isMaskedDoubleQuote = true;
-                                mustAllocate = true;
+                                _mustAllocate = true;
                             }
                             else
                             {
-                                isQuoted = false;
+                                insideQuotes = false;
                             }
                         }
                     }
@@ -233,14 +237,14 @@ internal sealed class CsvStringReader : IDisposable
                 {
                     if (LineIndex == startIndex && c == '\"')
                     {
-                        isQuoted = true;
-                        hadBeenQuoted = true;
+                        insideQuotes = true;
                     }
                     // The remaining cases can only happen in invalid CSV:
                     else if (c == _fieldSeparator)
                     {
                         LineIndex++;
-                        return AllocateField();
+                        DoAddAllocatedField(startIndex);
+                        return;
                     }
                     else
                     {
@@ -252,14 +256,19 @@ internal sealed class CsvStringReader : IDisposable
             }
 
         }// while
-
-        ReadOnlyMemory<char> AllocateField()
-        {
-            Debug.Assert(_sb is not null);
-            return mustAllocate ? _sb.ToString().AsMemory()
-                                : _currentLine.AsMemory(hadBeenQuoted ? startIndex + 1 : startIndex, _sb.Length);
-        }
     }
 
+    private void DoAddAllocatedField(int startIndex)
+    {
+        Debug.Assert(_sb is not null);
 
+        if(_mustAllocate)
+        {
+            _row.Add(_sb.ToString().AsMemory());
+        }
+        else
+        {
+            _row.Add(_currentLine.AsMemory(startIndex + 1, _sb.Length));
+        }
+    }
 }

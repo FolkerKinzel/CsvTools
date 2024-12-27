@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -29,7 +30,6 @@ public partial class CsvAnalyzer
 
     /// <summary>The column names of the CSV file.</summary>
     public IReadOnlyList<string>? ColumnNames { get; private set; }
-
 
     /// <summary> Parses the CSV file referenced by <paramref name="fileName" /> and populates 
     /// the properties of the <see cref="CsvAnalyzer" /> object with the results of the analysis.
@@ -70,7 +70,7 @@ public partial class CsvAnalyzer
     {
         int analyzedLinesCount = 0;
         int firstLineCount = 0;
-        List<ReadOnlyMemory<char>>? row;
+        CsvRow? row;
 
         using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
         using var csvStringReader = new CsvStringReader(reader, FieldSeparator, false);
@@ -97,14 +97,19 @@ public partial class CsvAnalyzer
         }
     }
 
-    private int ParseFirstLine(List<ReadOnlyMemory<char>> row)
+    private int ParseFirstLine(CsvRow csvRow)
     {
-        int firstLineCount;
+        int firstLineCount = csvRow.Count;
         bool hasHeader = true;
         bool hasMaybeNoHeader = false;
-        firstLineCount = row.Count;
 
-        for (int i = 0; i < row.Count; i++)
+#if NET8_0_OR_GREATER
+        Span<ReadOnlyMemory<char>> row = CollectionsMarshal.AsSpan(csvRow);
+#else
+        CsvRow row = csvRow;
+#endif
+
+        for (int i = 0; i < csvRow.Count; i++)
         {
             ReadOnlyMemory<char> mem = row[i];
 
@@ -138,7 +143,7 @@ public partial class CsvAnalyzer
 
         if (hasHeader)
         {
-            ColumnNames = row.Where(x => !x.IsEmpty).Select(x => x.ToString()).ToArray();
+            ColumnNames = csvRow.Where(x => !x.IsEmpty).Select(x => x.ToString()).ToArray();
 
             if (ColumnNames.Count == ColumnNames.Distinct(StringComparer.Ordinal).Count())
             {
@@ -158,7 +163,7 @@ public partial class CsvAnalyzer
         return firstLineCount;
     }
 
-    private void SetOptions(int firstLineCount, List<ReadOnlyMemory<char>> row)
+    private void SetOptions(int firstLineCount, CsvRow row)
     {
         if (row.Count != firstLineCount)
         {

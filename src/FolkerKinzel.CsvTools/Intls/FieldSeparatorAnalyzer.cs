@@ -86,6 +86,7 @@ internal ref struct FieldSeparatorAnalyzer()
 
         if (_last != '\n')
         {
+            // Last line does not end with a new line
             HandleNewLine(findsList);
         }
 

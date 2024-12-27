@@ -6,6 +6,7 @@ using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
 using System.Collections;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
 #if NET462 || NETSTANDARD2_0 || NETSTANDARD2_1
 using FolkerKinzel.Strings;
@@ -161,7 +162,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// on the <see cref="CsvOptions" /> value, specified in the constructor.</exception>
     private CsvRecord? Read()
     {
-        List<ReadOnlyMemory<char>>? row = _reader.Read();
+        CsvRow? row = _reader.Read();
 
         if (row is null)
         {
@@ -208,34 +209,34 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
             return span.IsEmpty ? null : span.ToString();
         }
 
-        void Fill(IList<ReadOnlyMemory<char>> data, CsvStringReader reader)
+        void Fill(CsvRow data, CsvStringReader reader)
         {
+            if (data.Count > _record.Count && _options.HasFlag(CsvOptions.ThrowOnTooMuchFields))
+            {
+                throw new InvalidCsvException("Too much fields in a record.", reader.LineNumber, reader.LineIndex);
+            }
+
+            Span<ReadOnlyMemory<char>> recordSpan = _record.Span;
             int i;
+#if NET8_0_OR_GREATER
+            Span<ReadOnlyMemory<char>> dataSpan = CollectionsMarshal.AsSpan(data);
+
             for (i = 0; i < data.Count; i++)
             {
-                if (i >= _record.Count)
-                {
-                    if (_options.HasFlag(CsvOptions.ThrowOnTooMuchFields))
-                    {
-                        throw new InvalidCsvException("Too much fields in a record.", reader.LineNumber, reader.LineIndex);
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-
+                ReadOnlyMemory<char> item = dataSpan[i];
+#else
+            for (i = 0; i < data.Count; i++)
+            {
                 ReadOnlyMemory<char> item = data[i];
-
-                _record[i] = item.Length != 0 && _options.HasFlag(CsvOptions.TrimColumns)
+#endif
+                recordSpan[i] = item.Length != 0 && _options.HasFlag(CsvOptions.TrimColumns)
                              ? item.Trim()
                              : item;
             }
 
-
             if (i < _record.Count)
             {
-                if (i == 1 && _options.HasFlag(CsvOptions.ThrowOnEmptyLines) && data[0].IsEmpty)
+                if (row.IsEmpty && _options.HasFlag(CsvOptions.ThrowOnEmptyLines))
                 {
                     throw new InvalidCsvException("Unmasked empty line.", reader.LineNumber, 0);
                 }
@@ -249,7 +250,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
                 {
                     for (int j = i; j < _record.Count; j++)
                     {
-                        _record[j] = default;
+                        recordSpan[j] = default;
                     }
                 }
             }

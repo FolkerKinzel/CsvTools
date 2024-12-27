@@ -229,6 +229,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     [EditorBrowsable(EditorBrowsableState.Never)]
     public IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
+    internal Span<ReadOnlyMemory<char>> Span => _values;
+
     /// <summary>Sets all data fields of <see cref="CsvRecord" /> to <c>null</c>.</summary>
     public void Clear() => Array.Clear(_values, 0, _values.Length);
 
