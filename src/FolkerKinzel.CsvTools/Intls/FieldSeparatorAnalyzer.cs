@@ -11,12 +11,6 @@ internal ref struct FieldSeparatorAnalyzer()
     private const int EOF = -1;
     private const int MAX_LINES = 5;
 
-    private int _last = '\0';
-    private int _current;
-    private int _rowLength = 0;
-    private bool _inQuotes = false;
-    private RowSeparatorFinds _finds = new();
-
     private class RowSeparatorFinds
     {
         public int Comma { get; set; }
@@ -25,6 +19,12 @@ internal ref struct FieldSeparatorAnalyzer()
         public int Tab { get; set; }
         public int Space { get; set; }
     }
+    
+    private int _last = '\0';
+    private int _current;
+    private int _rowLength = 0;
+    private bool _inQuotes = false;
+    private RowSeparatorFinds _finds = new();
 
     public char InitFieldSeparator(string fileName)
     {
@@ -78,28 +78,7 @@ internal ref struct FieldSeparatorAnalyzer()
                     }
 
                     _last = _current;
-
-                    switch (_current)
-                    {
-                        case ',':
-
-                            _finds.Comma++;
-                            break;
-                        case ';':
-
-                            _finds.Semicolon++;
-                            break;
-                        case '#':
-
-                            _finds.Hash++;
-                            break;
-                        case '\t':
-                            _finds.Tab++;
-                            break;
-                        case ' ':
-                            _finds.Space++;
-                            break;
-                    }
+                    CountCurrent();
                 }
             }// while
         }
@@ -110,6 +89,51 @@ internal ref struct FieldSeparatorAnalyzer()
             HandleNewLine(findsList);
         }
 
+        return SelectSeparator(findsList);
+    }
+
+    private void HandleNewLine(List<RowSeparatorFinds> findsList)
+    {
+        _last = _current;
+
+        if (_rowLength == 1)
+        {
+            // Empty line
+            return;
+        }
+
+        _rowLength = 0;
+        findsList.Add(_finds);
+        _finds = new RowSeparatorFinds();
+    }
+
+    private readonly void CountCurrent()
+    {
+        switch (_current)
+        {
+            case ',':
+
+                _finds.Comma++;
+                break;
+            case ';':
+
+                _finds.Semicolon++;
+                break;
+            case '#':
+
+                _finds.Hash++;
+                break;
+            case '\t':
+                _finds.Tab++;
+                break;
+            case ' ':
+                _finds.Space++;
+                break;
+        }
+    }
+
+    private static char SelectSeparator(List<RowSeparatorFinds> findsList)
+    {
         if (findsList.Count == 0)
         {
             return ','; // default
@@ -179,20 +203,5 @@ internal ref struct FieldSeparatorAnalyzer()
         }
 
         return ',';
-    }
-
-    private void HandleNewLine(List<RowSeparatorFinds> findsList)
-    {
-        _last = _current;
-
-        if (_rowLength == 1)
-        {
-            // Empty line
-            return;
-        }
-
-        _rowLength = 0;
-        findsList.Add(_finds);
-        _finds = new RowSeparatorFinds();
     }
 }
