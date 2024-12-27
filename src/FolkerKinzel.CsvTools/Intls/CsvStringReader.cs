@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Diagnostics;
 using System.Text;
 using FolkerKinzel.CsvTools.Resources;
 
@@ -152,9 +150,9 @@ internal sealed class CsvStringReader : IDisposable
                 {
                     _mustAllocate = true; // empty line inside of a field
 
-                    _ = c == '\"' ? _sb.AppendLine() : _sb.Append(c).AppendLine();
+                    _ = _sb.Append(c).AppendLine();
 
-                    if(!LoadNextLine())
+                    if (!LoadNextLine())
                     {
                         return;
                     }
@@ -213,7 +211,7 @@ internal sealed class CsvStringReader : IDisposable
 
         if (_currentLine is null) // EOF
         {
-            if(_options.HasFlag(CsvOptions.ThrowOnTruncatedFiles))
+            if (_options.HasFlag(CsvOptions.ThrowOnTruncatedFiles))
             {
                 throw new CsvFormatException(Res.FileTruncated, CsvError.FileTruncated, LineNumber, LineIndex);
             }

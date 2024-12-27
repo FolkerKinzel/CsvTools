@@ -18,12 +18,13 @@ public class CsvStringReaderTests
         string csv = "\"" + input + "\"";
 
         using var stringReader = new StringReader(csv);
-        using var reader = new CsvStringReader(stringReader, ',', CsvOptions.None);
+        using var reader = new CsvStringReader(stringReader, ',', CsvOptions.Default);
 
         List<ReadOnlyMemory<char>>? list = reader.Read();
         Assert.IsNotNull(list);
         Assert.AreEqual(1, list!.Count);
-        Assert.AreEqual(list![0].ToString(), input);
+        string result = list[0].ToString();
+        Assert.AreEqual(result, input);
 
     }
 }

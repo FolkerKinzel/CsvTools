@@ -32,16 +32,43 @@ namespace FolkerKinzel.CsvTools.Tests
             analyzer.Analyze("  ");
         }
 
+        
+
         [TestMethod()]
         public void AnalyzeTest3()
         {
             var analyzer = new CsvAnalyzer();
             analyzer.Analyze(TestFiles.AnalyzerTestCsv);
 
+            AssertAnalyzerTestCsv(analyzer);
+
+            //Assert.IsTrue(analyzer.HasHeaderRow);
+            //Assert.AreEqual(';', analyzer.FieldSeparator);
+            //CollectionAssert.AreEqual(analyzer.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei"});
+
+            //Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.CaseSensitiveKeys));
+            //Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.TrimColumns));
+            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooFewFields));
+            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooMuchFields));
+            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.DisableCaching));
+            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+        }
+
+        [TestMethod]
+        public void AnalyzeTest4()
+        {
+            var analyzer = new CsvAnalyzer();
+            analyzer.Analyze(TestFiles.AnalyzerTestCsv, analyzedLinesCount: -42);
+
+            AssertAnalyzerTestCsv(analyzer);
+        }
+
+
+        private static void AssertAnalyzerTestCsv(CsvAnalyzer analyzer)
+        {
             Assert.IsTrue(analyzer.HasHeaderRow);
             Assert.AreEqual(';', analyzer.FieldSeparator);
-            CollectionAssert.AreEqual(analyzer.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei"});
-
+            CollectionAssert.AreEqual(analyzer.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei" });
             Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.CaseSensitiveKeys));
             Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.TrimColumns));
             Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooFewFields));
@@ -51,7 +78,7 @@ namespace FolkerKinzel.CsvTools.Tests
         }
 
         [TestMethod()]
-        public void AnalyzeTest4()
+        public void AnalyzeTest5()
         {
             var analyzer = new CsvAnalyzer();
             analyzer.Analyze(TestFiles.GoogleCsv);

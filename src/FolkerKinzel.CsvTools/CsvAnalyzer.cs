@@ -1,12 +1,6 @@
-using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
-
-#if NET462 || NETSTANDARD2_0 || NETSTANDARD2_1
-using FolkerKinzel.Strings;
-#endif
 
 namespace FolkerKinzel.CsvTools;
 
@@ -40,8 +34,16 @@ public partial class CsvAnalyzer
     /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLinesCount" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
-    /// <param name="textEncoding">The text encoding to be used to read the CSV file
-    /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
+    /// <param name="textEncoding">
+    /// <para>
+    /// The text encoding to be used to read the CSV file
+    /// or <c>null</c> for <see cref="Encoding.UTF8" />.
+    /// </para>
+    /// <note type="tip">
+    /// Use <see cref="FolkerKinzel.Strings.TextEncodingConverter.GetCodePage(ReadOnlySpan{byte}, out int)"/>
+    /// to determine the code page automatically from the byte order mark (BOM). (It comes with the dependencies.)
+    /// </note>
+    /// </param>
     /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
     /// file path.</exception>
@@ -77,7 +79,7 @@ repeat:
                 Options = Options.Unset(CsvOptions.ThrowOnTruncatedFiles);
                 goto repeat;
             }
-            
+
             return;
         }
     }
@@ -93,7 +95,7 @@ repeat:
 
         while ((row = csvStringReader.Read()) is not null && analyzedLinesCount < maxLines)
         {
-            if(row.Count == 1 && row[0].IsEmpty)
+            if (row.Count == 1 && row[0].IsEmpty)
             {
                 // Empty lines are not part of the data and should not be counted.
                 Options = Options.Unset(CsvOptions.ThrowOnEmptyLines);

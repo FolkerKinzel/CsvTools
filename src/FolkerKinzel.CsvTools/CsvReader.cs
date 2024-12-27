@@ -1,16 +1,9 @@
+using System.Collections;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
-using System.Collections;
-using System.Numerics;
-using System.Runtime.InteropServices;
-
-#if NET462 || NETSTANDARD2_0 || NETSTANDARD2_1
-using FolkerKinzel.Strings;
-#endif
 
 namespace FolkerKinzel.CsvTools;
 

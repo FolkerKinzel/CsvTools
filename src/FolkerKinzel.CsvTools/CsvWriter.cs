@@ -1,12 +1,5 @@
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
-
-#if NETSTANDARD2_1 || NETSTANDARD2_0 || NET462
-using FolkerKinzel.Strings;
-#endif
 
 namespace FolkerKinzel.CsvTools;
 
@@ -63,7 +56,7 @@ public sealed class CsvWriter : IDisposable
                      CsvOptions options = CsvOptions.Default,
                      Encoding? textEncoding = null,
                      char fieldSeparator = ',')
-         : this(columnNames, fieldSeparator, options) 
+         : this(columnNames, fieldSeparator, options)
         => _writer = InitStreamWriter(fileName, textEncoding);
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
@@ -84,7 +77,7 @@ public sealed class CsvWriter : IDisposable
                      CsvOptions options = CsvOptions.Default,
                      Encoding? textEncoding = null,
                      char fieldSeparator = ',')
-         : this(columnsCount, fieldSeparator, options) 
+         : this(columnsCount, fieldSeparator, options)
         => _writer = InitStreamWriter(fileName, textEncoding);
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names

@@ -47,6 +47,7 @@
     <Using Include="System.Runtime.CompilerServices" />
     <Using Include="System.Diagnostics.CodeAnalysis" />
     <Using Include="System.Diagnostics" />
+    <Using Include="FolkerKinzel.Strings" /> 
   </ItemGroup>
   <!-- 👇 disable the nullable warnings when compiling for .NET Framework -->
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'net462'">
@@ -71,6 +72,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="FolkerKinzel.Strings" Version="9.2.1"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Res.Designer.cs">
@@ -85,11 +87,7 @@
       <LastGenOutput>Res.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net462'">
-    <PackageReference Include="FolkerKinzel.Strings">
-      <Version>9.2.1</Version>
-    </PackageReference>
-  </ItemGroup>
+  
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Release if '$(TargetFramework)' == 'net8.0' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />
   </Target>

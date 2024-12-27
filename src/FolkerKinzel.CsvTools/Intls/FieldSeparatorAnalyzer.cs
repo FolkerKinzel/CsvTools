@@ -1,10 +1,4 @@
-﻿using System.Text;
-using FolkerKinzel.CsvTools;
-
-#if NET462 || NETSTANDARD2_0 || NETSTANDARD2_1
-#endif
-
-namespace FolkerKinzel.CsvTools.Intls;
+﻿namespace FolkerKinzel.CsvTools.Intls;
 
 internal ref struct FieldSeparatorAnalyzer()
 {
@@ -19,7 +13,7 @@ internal ref struct FieldSeparatorAnalyzer()
         public int Tab { get; set; }
         public int Space { get; set; }
     }
-    
+
     private int _last = '\0';
     private int _current;
     private int _rowLength = 0;

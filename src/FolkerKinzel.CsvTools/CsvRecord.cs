@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -312,7 +310,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
-        
+
         int i = 0;
 
         foreach (ReadOnlyMemory<char> item in data)

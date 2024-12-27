@@ -25,13 +25,7 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.IsTrue(options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         }
 
-        [TestMethod()]
-        public void IsSetTest2()
-        {
-            CsvOptions options = CsvOptions.ThrowOnEmptyLines | CsvOptions.TrimColumns;
-
-            Assert.IsFalse(options.HasFlag(CsvOptions.None));
-        }
+        
 
         [TestMethod()]
         public void UnsetTest()
