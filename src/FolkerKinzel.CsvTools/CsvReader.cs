@@ -41,7 +41,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     private readonly bool _hasHeaderRow;
 
     private CsvRecord? _record = null; // Schablone für weitere CsvRecord-Objekte
-    private CsvRecord _current;
+    private CsvRecord? _current;
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="fileName">File path of the CSV file to read.</param>
@@ -62,9 +62,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the disk.</exception>
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public CsvReader(
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         string fileName,
         bool hasHeaderRow = true,
         CsvOptions options = CsvOptions.Default,
@@ -93,9 +91,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public CsvReader(
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         TextReader reader,
         bool hasHeaderRow = true,
         CsvOptions options = CsvOptions.Default,
@@ -104,15 +100,15 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
         _ArgumentNullException.ThrowIfNull(reader, nameof(reader));
 
         this._options = options;
-        this._reader = new CsvStringReader(reader, fieldSeparator, !options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+        this._reader = new CsvStringReader(reader, fieldSeparator, options);
         this._hasHeaderRow = hasHeaderRow;
     }
 
     /// <inheritdoc/>
-    CsvRecord IEnumerator<CsvRecord>.Current => _current;
+    CsvRecord IEnumerator<CsvRecord>.Current => _current!;
 
     /// <inheritdoc/>
-    object? IEnumerator.Current => ((IEnumerator<CsvRecord>)this).Current;
+    object IEnumerator.Current => ((IEnumerator<CsvRecord>)this).Current;
 
     /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -124,7 +120,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="ObjectDisposedException">The CSV file was already
     /// closed.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
-    /// <exception cref="InvalidCsvException">Invalid CSV file. The interpretation depends
+    /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
     /// on the <see cref="CsvOptions" /> value, specified in the constructor.</exception>
     bool IEnumerator.MoveNext()
     {
@@ -158,7 +154,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="ObjectDisposedException">The CSV file was already
     /// closed.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
-    /// <exception cref="InvalidCsvException">Invalid CSV file. The interpretation depends
+    /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
     /// on the <see cref="CsvOptions" /> value, specified in the constructor.</exception>
     private CsvRecord? Read()
     {
@@ -180,7 +176,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
                 _record = new CsvRecord(columnNames,
                                         _options.HasFlag(CsvOptions.CaseSensitiveKeys),
                                         trimColumns,
-                                        initArr: false,
+                                        initArr: _options.HasFlag(CsvOptions.DisableCaching),
                                         throwException: false);
                 return Read();
             }
@@ -213,7 +209,10 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
         {
             if (data.Count > _record.Count && _options.HasFlag(CsvOptions.ThrowOnTooMuchFields))
             {
-                throw new InvalidCsvException("Too much fields in a record.", reader.LineNumber, reader.LineIndex);
+                throw new CsvFormatException(Res.TooMuchFields,
+                                             CsvError.TooMuchFields,
+                                             reader.LineNumber,
+                                             reader.LineIndex);
             }
 
             Span<ReadOnlyMemory<char>> recordSpan = _record.Span;
@@ -238,12 +237,12 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
             {
                 if (row.IsEmpty && _options.HasFlag(CsvOptions.ThrowOnEmptyLines))
                 {
-                    throw new InvalidCsvException("Unmasked empty line.", reader.LineNumber, 0);
+                    throw new CsvFormatException(Res.EmptyLine, CsvError.EmptyLine, reader.LineNumber, 0);
                 }
 
                 if (_options.HasFlag(CsvOptions.ThrowOnTooFewFields))
                 {
-                    throw new InvalidCsvException("Too few fields in a record.", reader.LineNumber, reader.LineIndex);
+                    throw new CsvFormatException(Res.TooFewFields, CsvError.TooFewFields, reader.LineNumber, reader.LineIndex);
                 }
 
                 if (_options.HasFlag(CsvOptions.DisableCaching))

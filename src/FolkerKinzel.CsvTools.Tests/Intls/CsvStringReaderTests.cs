@@ -18,7 +18,7 @@ public class CsvStringReaderTests
         string csv = "\"" + input + "\"";
 
         using var stringReader = new StringReader(csv);
-        using var reader = new CsvStringReader(stringReader, ',', true);
+        using var reader = new CsvStringReader(stringReader, ',', CsvOptions.None);
 
         List<ReadOnlyMemory<char>>? list = reader.Read();
         Assert.IsNotNull(list);

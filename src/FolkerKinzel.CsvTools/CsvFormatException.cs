@@ -1,10 +1,11 @@
 using System.Runtime.Serialization;
+using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
 /// <summary>Exception, thrown parsing invalid CSV documents.</summary>
 [Serializable]
-public class InvalidCsvException : Exception, ISerializable
+public sealed class CsvFormatException : Exception, ISerializable
 {
     /// <summary>Line number of the CSV file where the error occurred (1-based index).</summary>
     public int CsvLineNumber { get; } = 1;
@@ -13,27 +14,29 @@ public class InvalidCsvException : Exception, ISerializable
     /// occurred (Zero-based index).</summary>
     public int CsvCharIndex { get; }
 
-    /// <inheritdoc />
-    public InvalidCsvException() { }
+    internal CsvError Error { get; }
 
-    /// <inheritdoc />
-    public InvalidCsvException(string message) : base(message) { }
+    ///// <inheritdoc />
+    //internal CsvFormatException() { }
 
-    /// <inheritdoc cref="InvalidCsvException(string)" />
+    ///// <inheritdoc />
+    //internal CsvFormatException(string message) : base(message) { }
+
+    /// <summary>Initializes a new instance of the <see cref="CsvFormatException"/> class.</summary>
+    /// <param name="error">The error that occurred.</param>
     /// <param name="csvLineNumber">Line number of the CSV file where the error occurred
     /// (1-based index).</param>
     /// <param name="csvCharIndex">Index of the character in the line of the CSV file
     /// where the error occurred (0-based index).</param>
-#pragma warning disable CS1573 // Parameter besitzt kein übereinstimmendes param-Tag im XML-Kommentar (andere Parameter jedoch schon)
-    public InvalidCsvException(string message, int csvLineNumber, int csvCharIndex) : base(message)
-#pragma warning restore CS1573 // Parameter besitzt kein übereinstimmendes param-Tag im XML-Kommentar (andere Parameter jedoch schon)
+    internal CsvFormatException(string message, CsvError error, int csvLineNumber, int csvCharIndex) : base(message)
     {
-        this.CsvLineNumber = csvLineNumber;
-        this.CsvCharIndex = csvCharIndex;
+        Error = error;
+        CsvLineNumber = csvLineNumber;
+        CsvCharIndex = csvCharIndex;
     }
 
-    /// <inheritdoc />
-    public InvalidCsvException(string message, Exception innerException) : base(message, innerException) { }
+    ///// <inheritdoc />
+    //internal CsvFormatException(string message, Exception innerException) : base(message, innerException) { }
 
     /// <inheritdoc />
     public override string ToString() =>

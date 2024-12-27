@@ -12,22 +12,21 @@ namespace Examples
         {
             const string csvFileName = "LinqTest.csv";
 
-            File.WriteAllText(csvFileName, new StringBuilder()
-                .AppendLine("Name,City")
-                .AppendLine("Ingrid,Berlin")
-                .AppendLine("Joyce,New York")
-                .AppendLine("Horst,Hamburg")
-                .AppendLine("John,New York")
-                .ToString());
+            File.WriteAllText(csvFileName, """
+                Name,City
+                Ingrid,Berlin
+                Joyce,New York
+                Horst,Hamburg
+                John,New York
+                """);
 
             Console.WriteLine("Which people live in New York?: ");
 
             Console.Write("  Determine with cache enabled:  ");
             using (var csvReader = new CsvReader(csvFileName))
             {
-
                 foreach (CsvRecord record in
-                    csvReader.Where(x => x["City"].Span == "New York").ToArray())
+                    csvReader.Where(x => x["City"].Span.Equals("New York", StringComparison.Ordinal)).ToArray())
                 {
                     Console.Write(record["Name"]);
                     Console.Write(' ');
@@ -43,7 +42,7 @@ namespace Examples
             {
                 // NOTICE: Removing ".ToArray()" would cause the correct results:
                 foreach (CsvRecord record in
-                    csvReader.Where(x => x["City"].Span == "New York").ToArray())
+                    csvReader.Where(x => x["City"].Span.Equals("New York", StringComparison.Ordinal)).ToArray())
                 {
                     Console.Write(record["Name"]);
                     Console.Write(' ');

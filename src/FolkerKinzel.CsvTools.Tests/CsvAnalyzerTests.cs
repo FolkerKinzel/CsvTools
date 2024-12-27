@@ -42,12 +42,12 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.AreEqual(';', analyzer.FieldSeparator);
             CollectionAssert.AreEqual(analyzer.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei"});
 
-            Assert.IsTrue(analyzer.Options.IsSet(CsvOptions.CaseSensitiveKeys));
-            Assert.IsTrue(analyzer.Options.IsSet(CsvOptions.TrimColumns));
-            Assert.IsFalse(analyzer.Options.IsSet(CsvOptions.ThrowOnTooFewFields));
-            Assert.IsFalse(analyzer.Options.IsSet(CsvOptions.ThrowOnTooMuchFields));
-            Assert.IsFalse(analyzer.Options.IsSet(CsvOptions.DisableCaching));
-            Assert.IsFalse(analyzer.Options.IsSet(CsvOptions.ThrowOnEmptyLines));
+            Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.CaseSensitiveKeys));
+            Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.TrimColumns));
+            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooFewFields));
+            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooMuchFields));
+            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.DisableCaching));
+            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         }
 
         [TestMethod()]

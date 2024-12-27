@@ -17,7 +17,7 @@ namespace FolkerKinzel.CsvTools;
 /// or the column name.</summary>
 public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<char>>>
 {
-    private readonly ReadOnlyMemory<char>[] _values = [];
+    private readonly ReadOnlyMemory<char>[] _values;
     private readonly Dictionary<string, int> _lookupDictionary;
 
     /// <summary> Initialisiert aus <paramref name="source" />, das als Vorlage dient,
@@ -115,11 +115,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }//for
 
         ColumnNames = keys!;
-
-        if (initArr)
-        {
-            _values = new ReadOnlyMemory<char>[Count];
-        }
+        _values = initArr ? new ReadOnlyMemory<char>[Count] : [];
 
         ///////////////////////////////////////////////////
 

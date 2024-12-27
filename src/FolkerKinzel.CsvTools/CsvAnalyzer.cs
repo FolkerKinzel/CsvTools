@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using System.Security.Permissions;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -64,14 +65,22 @@ public partial class CsvAnalyzer
 
         FieldSeparator = new FieldSeparatorAnalyzer().InitFieldSeparator(fileName);
 
+repeat:
         try
         {
-            InitProperties(fileName, textEncoding, analyzedLinesCount, CsvOptions.Default);
+            InitProperties(fileName, textEncoding, analyzedLinesCount, Options);
         }
-        catch (InvalidCsvException e)
+        catch (CsvFormatException e)
         {
-             
+            if (e.Error == CsvError.FileTruncated)
+            {
+                Options = Options.Unset(CsvOptions.ThrowOnTruncatedFiles);
+                goto repeat;
+            }
+            
+            return;
         }
+    }
 
     private void InitProperties(string fileName, Encoding? textEncoding, int maxLines, CsvOptions options)
     {

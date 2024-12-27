@@ -61,38 +61,20 @@ namespace FolkerKinzel.CsvTools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The identifier is not well-formed..
+        ///   Looks up a localized string similar to Unmasked empty line..
         /// </summary>
-        internal static string BadIdentifier {
+        internal static string EmptyLine {
             get {
-                return ResourceManager.GetString("BadIdentifier", resourceCulture);
+                return ResourceManager.GetString("EmptyLine", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} is null..
+        ///   Looks up a localized string similar to Truncated CSV file..
         /// </summary>
-        internal static string CsvRecordIsNull {
+        internal static string FileTruncated {
             get {
-                return ResourceManager.GetString("CsvRecordIsNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The converters data type is not supported..
-        /// </summary>
-        internal static string DataTypeNotSupported {
-            get {
-                return ResourceManager.GetString("DataTypeNotSupported", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unable to cast null to value type..
-        /// </summary>
-        internal static string InvalidCastNullToValueType {
-            get {
-                return ResourceManager.GetString("InvalidCastNullToValueType", resourceCulture);
+                return ResourceManager.GetString("FileTruncated", resourceCulture);
             }
         }
         
@@ -106,29 +88,20 @@ namespace FolkerKinzel.CsvTools.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must not run this method twice..
+        ///   Looks up a localized string similar to Too few fields in a record..
         /// </summary>
-        internal static string NotTwice {
+        internal static string TooFewFields {
             get {
-                return ResourceManager.GetString("NotTwice", resourceCulture);
+                return ResourceManager.GetString("TooFewFields", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No property named &quot;{0}&quot; was found..
+        ///   Looks up a localized string similar to Too much fields in a record..
         /// </summary>
-        internal static string PropertyNotFound {
+        internal static string TooMuchFields {
             get {
-                return ResourceManager.GetString("PropertyNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Truncated CSV file..
-        /// </summary>
-        internal static string TruncatedFile {
-            get {
-                return ResourceManager.GetString("TruncatedFile", resourceCulture);
+                return ResourceManager.GetString("TooMuchFields", resourceCulture);
             }
         }
     }

@@ -10,11 +10,11 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             CsvOptions options = CsvOptions.None;
 
-            Assert.IsFalse((options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching);
+            Assert.IsFalse(options.HasFlag(CsvOptions.DisableCaching));
 
             options = options.Set(CsvOptions.DisableCaching);
 
-            Assert.IsTrue((options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching);
+            Assert.IsTrue(options.HasFlag(CsvOptions.DisableCaching));
         }
 
         [TestMethod()]
@@ -22,7 +22,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             CsvOptions options = CsvOptions.ThrowOnEmptyLines | CsvOptions.TrimColumns;
 
-            Assert.IsTrue(options.IsSet(CsvOptions.ThrowOnEmptyLines));
+            Assert.IsTrue(options.HasFlag(CsvOptions.ThrowOnEmptyLines));
         }
 
         [TestMethod()]
@@ -30,7 +30,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             CsvOptions options = CsvOptions.ThrowOnEmptyLines | CsvOptions.TrimColumns;
 
-            Assert.IsFalse(options.IsSet(CsvOptions.None));
+            Assert.IsFalse(options.HasFlag(CsvOptions.None));
         }
 
         [TestMethod()]

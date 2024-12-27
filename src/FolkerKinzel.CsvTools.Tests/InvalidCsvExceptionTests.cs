@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using FolkerKinzel.CsvTools.Intls;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -13,39 +14,39 @@ namespace FolkerKinzel.CsvTools.Tests
         public TestContext? TestContext { get; set; }
 
 
-        [TestMethod()]
-        public void InvalidCsvExceptionTest1()
-        {
-            var e = new InvalidCsvException();
+        //[TestMethod()]
+        //public void InvalidCsvExceptionTest1()
+        //{
+        //    var e = new CsvFormatException();
 
-            Assert.IsNotNull(e);
-            Assert.IsNotNull(e.Message);
-        }
+        //    Assert.IsNotNull(e);
+        //    Assert.IsNotNull(e.Message);
+        //}
 
-        [TestMethod()]
-        public void InvalidCsvExceptionTest2()
-        {
-            string message = "Message";
+        //[TestMethod()]
+        //public void InvalidCsvExceptionTest2()
+        //{
+        //    string message = "Message";
 
-            var e = new InvalidCsvException(message);
+        //    var e = new CsvFormatException(message);
 
-            Assert.IsNotNull(e);
-            Assert.AreEqual(message, e.Message);
-        }
+        //    Assert.IsNotNull(e);
+        //    Assert.AreEqual(message, e.Message);
+        //}
 
-        [TestMethod()]
-        public void InvalidCsvExceptionTest3()
-        {
-            string message = "Message";
+        //[TestMethod()]
+        //public void InvalidCsvExceptionTest3()
+        //{
+        //    string message = "Message";
 
-            var inner = new Exception();
+        //    var inner = new Exception();
 
-            var e = new InvalidCsvException(message,  inner);
+        //    var e = new CsvFormatException(message,  inner);
 
-            Assert.IsNotNull(e);
-            Assert.AreSame(inner, e.InnerException);
-            Assert.AreEqual(message, e.Message);
-        }
+        //    Assert.IsNotNull(e);
+        //    Assert.AreSame(inner, e.InnerException);
+        //    Assert.AreEqual(message, e.Message);
+        //}
 
         [TestMethod()]
         public void InvalidCsvExceptionTest4()
@@ -56,11 +57,13 @@ namespace FolkerKinzel.CsvTools.Tests
             int charIndex = 42;
             
 
-            var e = new InvalidCsvException(message, lineNumber, charIndex);
+            var e = new CsvFormatException(message, CsvError.FileTruncated, lineNumber, charIndex);
 
             Assert.IsNotNull(e);
             
             Assert.AreEqual(message, e.Message);
+            Assert.AreEqual(CsvError.FileTruncated, e.Error);
+
             Assert.AreEqual(lineNumber, e.CsvLineNumber);
             Assert.AreEqual(charIndex, e.CsvCharIndex);
         }
@@ -100,7 +103,7 @@ namespace FolkerKinzel.CsvTools.Tests
             int lineNumber = 4711;
             int charIndex = 42;
 
-            var e = new InvalidCsvException(message, lineNumber, charIndex);
+            var e = new CsvFormatException(message, CsvError.InvalidMasking, lineNumber, charIndex);
 
             string s = e.ToString();
 
@@ -109,9 +112,5 @@ namespace FolkerKinzel.CsvTools.Tests
 
             TestContext.WriteLine(s);
         }
-
-
-
-
     }
 }

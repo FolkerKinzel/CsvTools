@@ -196,7 +196,7 @@ internal sealed class CsvStringReader : IDisposable
                     }
                     else
                     {
-                        throw new InvalidCsvException(Res.InvalidMasking, LineNumber, LineIndex);
+                        throw new CsvFormatException(Res.InvalidMasking, CsvError.InvalidMasking, LineNumber, LineIndex);
                     }
                 }
 
@@ -215,7 +215,7 @@ internal sealed class CsvStringReader : IDisposable
         {
             if(_options.HasFlag(CsvOptions.ThrowOnTruncatedFiles))
             {
-                throw new InvalidCsvException(Res.TruncatedFile, LineNumber, LineIndex);
+                throw new CsvFormatException(Res.FileTruncated, CsvError.FileTruncated, LineNumber, LineIndex);
             }
 
             return false;

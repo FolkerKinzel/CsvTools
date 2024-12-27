@@ -117,28 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BadIdentifier" xml:space="preserve">
-    <value>The identifier is not well-formed.</value>
-  </data>
-  <data name="CsvRecordIsNull" xml:space="preserve">
-    <value>{0} is null.</value>
-  </data>
-  <data name="DataTypeNotSupported" xml:space="preserve">
-    <value>The converters data type is not supported.</value>
-  </data>
-  <data name="InvalidCastNullToValueType" xml:space="preserve">
-    <value>Unable to cast null to value type.</value>
+  <data name="EmptyLine" xml:space="preserve">
+    <value>Unmasked empty line.</value>
   </data>
   <data name="InvalidMasking" xml:space="preserve">
     <value>Invalid usage of ".</value>
   </data>
-  <data name="NotTwice" xml:space="preserve">
-    <value>You must not run this method twice.</value>
+  <data name="TooFewFields" xml:space="preserve">
+    <value>Too few fields in a record.</value>
   </data>
-  <data name="PropertyNotFound" xml:space="preserve">
-    <value>No property named "{0}" was found.</value>
+  <data name="TooMuchFields" xml:space="preserve">
+    <value>Too much fields in a record.</value>
   </data>
-  <data name="TruncatedFile" xml:space="preserve">
+  <data name="FileTruncated" xml:space="preserve">
     <value>Truncated CSV file.</value>
   </data>
 </root>

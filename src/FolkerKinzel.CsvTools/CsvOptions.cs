@@ -29,7 +29,7 @@ public enum CsvOptions
     /// exceptions.</summary>
     None = 0,
 
-    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="InvalidCsvException"
+    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
     /// /> if a data row contains more fields than the first data row.
     /// <note>
     /// If a data row has more Fields than the first data row, this is a strong indication
@@ -38,7 +38,7 @@ public enum CsvOptions
     /// </summary>
     ThrowOnTooMuchFields = 1,
 
-    /// <summary> If set, <see cref="CsvReader" /> throws a <see cref="InvalidCsvException" /> 
+    /// <summary> If set, <see cref="CsvReader" /> throws a <see cref="CsvFormatException" /> 
     /// if a data row contains fewer fields than the first data row.
     /// <note>
     /// Other software may not mark empty fields at the end of the line with field separators. 
@@ -48,7 +48,7 @@ public enum CsvOptions
     /// </summary>
     ThrowOnTooFewFields = 1 << 1,
 
-    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="InvalidCsvException"
+    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
     /// /> if there are blank lines in the CSV file that are not part of a data field
     /// masked with quotes.
     /// <note>
@@ -59,10 +59,10 @@ public enum CsvOptions
     /// </summary>
     ThrowOnEmptyLines = 1 << 2,
 
-    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="InvalidCsvException"
+    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
     /// /> if a masked field at the end of the file is not properly closed.
     /// <note>
-    /// An unclosed field at the end of a CSV file is a data error. However, by removing the flag, 
+    /// An unclosed masked field at the end of a CSV file is a data error. However, by removing the flag, 
     /// <see cref="CsvReader" /> will be able to parse the rest of the file.
     /// </note>
     /// </summary>
@@ -81,7 +81,7 @@ public enum CsvOptions
     TrimColumns = 1 << 5,
 
     /// <summary>Default setting. This is a combined value, that forces <see cref="CsvReader"
-    /// /> to throw an <see cref="InvalidCsvException" />, if the file to be read does
+    /// /> to throw an <see cref="CsvFormatException" />, if the file to be read does
     /// not comply with the RFC 4180 standard. (Alternative column separators and newline
     /// characters are always tolerated.)</summary>
     Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles,
