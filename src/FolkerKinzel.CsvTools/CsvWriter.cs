@@ -143,9 +143,9 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
     /// /> occurs twice. In <paramref name="options" /> can be chosen, whether the comparison
     /// is case-sensitive.</exception>
-#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private CsvWriter(IEnumerable<string?> columnNames, char fieldSeparator, CsvOptions options)
-#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
         this._fieldSeparator = fieldSeparator;
         this._trimColumns = options.HasFlag(CsvOptions.TrimColumns);
@@ -165,9 +165,9 @@ public sealed class CsvWriter : IDisposable
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
     /// <param name="fieldSeparator">The field separator char to use in the CSV file.</param>
     /// <param name="options">Options for the CSV file to be written.</param>
-#pragma warning disable CS8618 // Das Non-Nullable-Feld _writer ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private CsvWriter(int columnsCount, char fieldSeparator, CsvOptions options)
-#pragma warning restore CS8618 // Das Non-Nullable-Feld ist nicht initialisiert. Deklarieren Sie das Feld ggf. als "Nullable".
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     {
         this._isHeaderRowWritten = true;
         this._fieldSeparator = fieldSeparator;
@@ -284,8 +284,6 @@ public sealed class CsvWriter : IDisposable
     /// <summary>Releases the resources. (Closes the CSV file.)</summary>
     public void Dispose() => _writer.Dispose();
 
-    #region private
-
     /// <summary> Initialisiert einen <see cref="StreamWriter" /> mit der angegebenen
     /// Textkodierung mit dem Namen der zu schreibenden Datei. </summary>
     /// <param name="fileName">Dateipfad.</param>
@@ -335,5 +333,4 @@ public sealed class CsvWriter : IDisposable
         }
     }
 
-    #endregion
 }

@@ -92,21 +92,29 @@ repeat:
 
         using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
         using var csvStringReader = new CsvStringReader(reader, FieldSeparator, options);
+        bool hasEmptyLine = false;
 
         while ((row = csvStringReader.Read()) is not null && analyzedLinesCount < maxLines)
         {
-            if (row.Count == 1 && row[0].IsEmpty)
+            if (row.IsEmpty)
             {
                 // Empty lines are not part of the data and should not be counted.
-                Options = Options.Unset(CsvOptions.ThrowOnEmptyLines);
+                // If all lines are empty, the file can be read with CsvOptions.Default.
+                hasEmptyLine = true;
                 continue;
+            }
+
+            if (hasEmptyLine)
+            {
+                Options = Options.Unset(CsvOptions.ThrowOnEmptyLines);
             }
 
             analyzedLinesCount++;
 
             if (analyzedLinesCount == 1)
             {
-                firstLineCount = ParseFirstLine(row);
+                firstLineCount = row.Count;
+                ParseFirstLine(row);
             }
             else
             {
@@ -115,70 +123,53 @@ repeat:
         }
     }
 
-    private int ParseFirstLine(CsvRow csvRow)
+    private void ParseFirstLine(CsvRow csvRow)
     {
-        int firstLineCount = csvRow.Count;
-        bool hasHeader = true;
-        bool hasMaybeNoHeader = false;
-
 #if NET8_0_OR_GREATER
         Span<ReadOnlyMemory<char>> row = CollectionsMarshal.AsSpan(csvRow);
 #else
         CsvRow row = csvRow;
 #endif
-
         for (int i = 0; i < csvRow.Count; i++)
         {
             ReadOnlyMemory<char> mem = row[i];
 
-            if (hasHeader)
+            if (mem.IsEmpty && i != csvRow.Count - 1)
             {
+                // Has no header if the empty field is not the
+                // last field in the record.
                 // RFC 4180 says: "The last field in the
                 // record must not be followed by a comma."
                 // Bad implementations - like Thunderbird - do other.
-                if (hasMaybeNoHeader)
-                {
-                    hasHeader = false;
-                    this.Options = this.Options.Unset(CsvOptions.TrimColumns);
-                }
+                ColumnNames = null;
+                Options = Options.Unset(CsvOptions.TrimColumns);
+                return;
+            }
 
-                if (mem.IsEmpty)
-                {
-                    hasMaybeNoHeader = true;
-                    continue;
-                }
+            ReadOnlyMemory<char> trimmed = mem.Trim();
 
-                ReadOnlyMemory<char> trimmed = mem.Trim();
+            row[i] = trimmed;
 
-                row[i] = trimmed;
-
-                if (trimmed.Length != mem.Length)
-                {
-                    Options = Options.Set(CsvOptions.TrimColumns);
-                }
+            if (trimmed.Length != mem.Length)
+            {
+                Options = Options.Set(CsvOptions.TrimColumns);
             }
         }//for
 
-        if (hasHeader)
-        {
-            ColumnNames = csvRow.Where(x => !x.IsEmpty).Select(x => x.ToString()).ToArray();
+        ColumnNames = csvRow.Where(x => !x.IsEmpty).Select(x => x.ToString()).ToArray();
 
-            if (ColumnNames.Count == ColumnNames.Distinct(StringComparer.Ordinal).Count())
+        if (ColumnNames.Count == ColumnNames.Distinct(StringComparer.Ordinal).Count())
+        {
+            if (ColumnNames.Count != ColumnNames.Distinct(StringComparer.OrdinalIgnoreCase).Count())
             {
-                if (ColumnNames.Count != ColumnNames.Distinct(StringComparer.OrdinalIgnoreCase).Count())
-                {
-                    this.Options = this.Options.Set(CsvOptions.CaseSensitiveKeys);
-                }
-            }
-            else
-            {
-                hasHeader = false;
-                ColumnNames = null;
-                Options = Options.Unset(CsvOptions.TrimColumns);
+                this.Options = this.Options.Set(CsvOptions.CaseSensitiveKeys);
             }
         }
-
-        return firstLineCount;
+        else // duplicate column names: no header
+        {
+            ColumnNames = null;
+            Options = Options.Unset(CsvOptions.TrimColumns);
+        }
     }
 
     private void SetOptions(int firstLineCount, CsvRow row)
