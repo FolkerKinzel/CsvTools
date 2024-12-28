@@ -9,9 +9,7 @@ internal sealed class CsvStringReader : IDisposable
 {
     private const int INITIAL_COLUMNS_COUNT = 32;
     private const int INITIAL_STRINGBUILDER_CAPACITY = 64;
-    private readonly CsvOptions _options;
     private readonly TextReader _reader;
-    private readonly char _fieldSeparator;
     private readonly CsvRow _row = new(INITIAL_COLUMNS_COUNT);
     private StringBuilder? _sb;
     private string? _currentLine;
@@ -27,14 +25,18 @@ internal sealed class CsvStringReader : IDisposable
     /// <param name="options">The parser options.</param>
     /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen
     /// in der CSV-Datei übersprungen.</param>
-    internal CsvStringReader(TextReader reader, char fieldSeparator, CsvOptions options)
+    internal CsvStringReader(TextReader reader, char delimiter, CsvOpts options)
     {
         Debug.Assert(reader != null);
 
-        this._options = options;
+        this.Options = options;
         this._reader = reader;
-        this._fieldSeparator = fieldSeparator;
+        this.Delimiter = delimiter;
     }
+
+    internal CsvOpts Options { get; }
+
+    internal char Delimiter { get; }
 
     /// <summary>Releases the resources. (Closes the <see cref="TextReader" />.)</summary>
     public void Dispose() => _reader.Dispose();
@@ -45,7 +47,7 @@ internal sealed class CsvStringReader : IDisposable
         {
             LineNumber++;
 
-            if (_currentLine.Length == 0 && !_options.HasFlag(CsvOptions.ThrowOnEmptyLines))
+            if (_currentLine.Length == 0 && !Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
             {
                 continue;
             }
@@ -72,7 +74,7 @@ internal sealed class CsvStringReader : IDisposable
         {
             int length = _currentLine.Length;
 
-            if (length != 0 && _currentLine[length - 1] == _fieldSeparator)
+            if (length != 0 && _currentLine[length - 1] == Delimiter)
             {
                 // adds the missing last field if the line ends with the
                 // field separator:
@@ -87,25 +89,59 @@ internal sealed class CsvStringReader : IDisposable
 
         ReadOnlySpan<char> span = _currentLine.AsSpan();
 
-        if (LineIndex < span.Length && span[LineIndex] == '\"')
+        if (IsMaskedField(span))
         {
             AddAllocatedField();
             return;
         }
 
+        ReadOnlyMemory<char> field;
+
         for (int idx = LineIndex; idx < span.Length; idx++)
         {
-            if (span[idx] == _fieldSeparator)
+            if (span[idx] == Delimiter)
             {
-                _row.Add(_currentLine.AsMemory(LineIndex, idx - LineIndex));
+                field = _currentLine.AsMemory(LineIndex, idx - LineIndex);
+                _row.Add(Options.HasFlag(CsvOpts.TrimColumns) ? field.Trim() : field);
                 LineIndex = idx + 1;
                 return;
             }
         }
 
         // field at the end of a line
-        _row.Add(_currentLine.AsMemory(LineIndex));
+        field = _currentLine.AsMemory(LineIndex);
+        _row.Add(Options.HasFlag(CsvOpts.TrimColumns) ? field.Trim() : field);
         LineIndex = _currentLine.Length;
+    }
+
+    private bool IsMaskedField(ReadOnlySpan<char> span)
+    {
+        if (LineIndex >= span.Length)
+        {
+            return false;
+        }
+
+        for (int i = LineIndex; i < span.Length; i++)
+        {
+            char c = span[i];
+
+            if (char.IsWhiteSpace(c))
+            {
+                continue;
+            }
+
+            if (c == '\"')
+            {
+                LineIndex = i;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private void AddAllocatedField()
@@ -181,7 +217,7 @@ internal sealed class CsvStringReader : IDisposable
 
                     char next = span[LineIndex + 1];
 
-                    if (next == _fieldSeparator)
+                    if (next == Delimiter)
                     {
                         LineIndex += 2;
                         DoAddAllocatedField(startIndex);
@@ -191,6 +227,11 @@ internal sealed class CsvStringReader : IDisposable
                     {
                         // masked double quote
                         _mustAllocate = true;
+                    }
+                    else if (next == ' ' && this.Delimiter != ' ')
+                    {
+                        // tolerate spaces after the closing quote if the
+                        // field separator is not a space
                     }
                     else
                     {
@@ -211,7 +252,7 @@ internal sealed class CsvStringReader : IDisposable
 
         if (_currentLine is null) // EOF
         {
-            if (_options.HasFlag(CsvOptions.ThrowOnTruncatedFiles))
+            if (Options.HasFlag(CsvOpts.ThrowOnTruncatedFiles))
             {
                 throw new CsvFormatException(Res.FileTruncated, CsvError.FileTruncated, LineNumber, LineIndex);
             }
@@ -225,6 +266,7 @@ internal sealed class CsvStringReader : IDisposable
     private void DoAddAllocatedField(int startIndex)
     {
         Debug.Assert(_sb is not null);
+        Debug.Assert(_sb.Length >= 1);
 
         if (_mustAllocate)
         {
@@ -232,7 +274,7 @@ internal sealed class CsvStringReader : IDisposable
         }
         else
         {
-            _row.Add(_currentLine.AsMemory(startIndex + 1, _sb.Length));
+            _row.Add(_currentLine.AsMemory(startIndex + 1, _sb.Length - 1));
         }
     }
 }

@@ -62,8 +62,6 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// Diese werden dann durch Standardnamen ersetzt.</param>
     /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv
     /// behandelt.</param>
-    /// <param name="trimColumns">Wenn <c>true</c>, werden alle Spaltennamen mit der
-    /// Methode <see cref="string.Trim()" /> behandelt.</param>
     /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert.
     /// Das Objekt taugt dann nur als Kopierschablone für weitere <see cref="CsvRecord"
     /// />-Objekte. (Wird von <see cref="CsvEnumerator" /> verwendet.</param>
@@ -71,10 +69,11 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// /> geworfen, wenn <paramref name="keys" /> 2 identische Spaltennamen enthält.
     /// Beim Lesen einer Datei sollte der Parameter auf <c>false</c> gesetzt werden,
     /// um die Spaltennamen automatisch so abzuwandeln, dass sie eindeutig sind.</param>
+    /// 
     /// <exception cref="ArgumentException">Ein Spaltenname war bereits im Dictionary
     /// enthalten. Die Exception wird nur dann geworfen, wenn <paramref name="throwException"
     /// /><c>true</c> ist.</exception>
-    internal CsvRecord(string?[] keys, bool caseSensitive, bool trimColumns, bool initArr, bool throwException)
+    internal CsvRecord(string?[] keys, bool caseSensitive, bool initArr, bool throwException)
     {
         Debug.Assert(keys != null);
 
@@ -97,11 +96,6 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
             }
             else
             {
-                if (trimColumns)
-                {
-                    key = key.Trim();
-                }
-
                 if (!throwException && _lookupDictionary.ContainsKey(key))
                 {
                     key = MakeUnique(key);
@@ -293,8 +287,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     public void Fill(IEnumerable<string?> data)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
-
-        Fill(data.Select(x => x.AsMemory()));
+        DoFill(data.Select(x => x.AsMemory()));
     }
 
     /// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
@@ -310,7 +303,11 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
+        DoFill(data);
+    }
 
+    internal void DoFill(IEnumerable<ReadOnlyMemory<char>> data)
+    {
         int i = 0;
 
         foreach (ReadOnlyMemory<char> item in data)

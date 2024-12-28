@@ -30,10 +30,9 @@ namespace FolkerKinzel.CsvTools;
 public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
 {
     private readonly CsvStringReader _reader;
-    private readonly CsvOptions _options;
     private readonly bool _hasHeaderRow;
 
-    private CsvRecord? _record = null; // Schablone für weitere CsvRecord-Objekte
+    private CsvRecord? _record = null; // Template for additional CsvRecord objects
     private CsvRecord? _current;
 
     /// <summary>Initializes a new <see cref="CsvEnumerator" /> instance.</summary>
@@ -41,7 +40,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
     /// names.</param>
     /// <param name="options">Options for reading the CSV file.</param>
-    /// <param name="fieldSeparator">The field separator char used in the CSV file.</param>
+    /// <param name="delimiter">The field separator char used in the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
     /// 
@@ -58,14 +57,13 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     public CsvEnumerator(
         string fileName,
         bool hasHeaderRow = true,
-        CsvOptions options = CsvOptions.Default,
-        char fieldSeparator = ',',
+        CsvOpts options = CsvOpts.Default,
+        char delimiter = ',',
         Encoding? textEncoding = null)
     {
         StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
 
-        this._options = options;
-        this._reader = new CsvStringReader(streamReader, fieldSeparator, options);
+        this._reader = new CsvStringReader(streamReader, delimiter, options);
         this._hasHeaderRow = hasHeaderRow;
     }
 
@@ -75,7 +73,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
     /// names.</param>
     /// <param name="options">Options for reading the CSV file.</param>
-    /// <param name="fieldSeparator">The field separator char used in the CSV file.</param>
+    /// <param name="delimiter">The field separator char used in the CSV file.</param>
     /// 
     /// <remarks>
     /// <note type="tip">
@@ -87,15 +85,18 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     public CsvEnumerator(
         TextReader reader,
         bool hasHeaderRow = true,
-        CsvOptions options = CsvOptions.Default,
-        char fieldSeparator = ',')
+        CsvOpts options = CsvOpts.Default,
+        char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(reader, nameof(reader));
 
-        this._options = options;
-        this._reader = new CsvStringReader(reader, fieldSeparator, options);
+        this._reader = new CsvStringReader(reader, delimiter, options);
         this._hasHeaderRow = hasHeaderRow;
     }
+
+    public CsvOpts Options => _reader.Options;
+
+    public char Delimiter => _reader.Delimiter;
 
     /// <inheritdoc/>
     CsvRecord IEnumerator<CsvRecord>.Current => _current!;
@@ -114,7 +115,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     /// closed.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
-    /// on the <see cref="CsvOptions" /> value, specified in the constructor.</exception>
+    /// on the <see cref="CsvOpts" /> value, specified in the constructor.</exception>
     bool IEnumerator.MoveNext()
     {
         CsvRecord? record = Read();
@@ -148,7 +149,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     /// closed.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
-    /// on the <see cref="CsvOptions" /> value, specified in the constructor.</exception>
+    /// on the <see cref="CsvOpts" /> value, specified in the constructor.</exception>
     private CsvRecord? Read()
     {
         CsvRow? row = _reader.Read();
@@ -163,13 +164,12 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
         {
             if (_hasHeaderRow)
             {
-                bool trimColumns = _options.HasFlag(CsvOptions.TrimColumns);
-                string?[] columnNames = trimColumns ? row.Select(TrimConvert).ToArray() : row.Select(x => x.IsEmpty ? null : x.ToString()).ToArray();
+                bool trimColumns = Options.HasFlag(CsvOpts.TrimColumns);
+                string?[] columnNames = row.Select(x => x.IsEmpty ? null : x.ToString()).ToArray();
 
                 _record = new CsvRecord(columnNames,
-                                        _options.HasFlag(CsvOptions.CaseSensitiveKeys),
-                                        trimColumns,
-                                        initArr: _options.HasFlag(CsvOptions.DisableCaching),
+                                        Options.HasFlag(CsvOpts.CaseSensitiveKeys),
+                                        initArr: Options.HasFlag(CsvOpts.DisableCaching),
                                         throwException: false);
                 return Read();
             }
@@ -181,7 +181,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
             }
         }
 
-        if (!_options.HasFlag(CsvOptions.DisableCaching))
+        if (!Options.HasFlag(CsvOpts.DisableCaching))
         {
             _record = new CsvRecord(_record);
         }
@@ -192,15 +192,9 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
 
         /////////////////////////////////////////////////////////////////////
 
-        static string? TrimConvert(ReadOnlyMemory<char> value)
-        {
-            ReadOnlySpan<char> span = value.Span.Trim();
-            return span.IsEmpty ? null : span.ToString();
-        }
-
         void Fill(CsvRow data, CsvStringReader reader)
         {
-            if (data.Count > _record.Count && _options.HasFlag(CsvOptions.ThrowOnTooMuchFields))
+            if (data.Count > _record.Count && Options.HasFlag(CsvOpts.ThrowOnTooMuchFields))
             {
                 throw new CsvFormatException(Res.TooMuchFields,
                                              CsvError.TooMuchFields,
@@ -210,10 +204,11 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
 
             Span<ReadOnlyMemory<char>> recordSpan = _record.Span;
             int i;
+            int count = Math.Min(data.Count, _record.Count);
 #if NET8_0_OR_GREATER
             Span<ReadOnlyMemory<char>> dataSpan = CollectionsMarshal.AsSpan(data);
 
-            for (i = 0; i < data.Count; i++)
+            for (i = 0; i < count; i++)
             {
                 ReadOnlyMemory<char> item = dataSpan[i];
 #else
@@ -221,24 +216,22 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
             {
                 ReadOnlyMemory<char> item = data[i];
 #endif
-                recordSpan[i] = item.Length != 0 && _options.HasFlag(CsvOptions.TrimColumns)
-                             ? item.Trim()
-                             : item;
+                recordSpan[i] = item;
             }
 
             if (i < _record.Count)
             {
-                if (row.IsEmpty && _options.HasFlag(CsvOptions.ThrowOnEmptyLines))
+                if (row.IsEmpty && Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
                 {
                     throw new CsvFormatException(Res.EmptyLine, CsvError.EmptyLine, reader.LineNumber, 0);
                 }
 
-                if (_options.HasFlag(CsvOptions.ThrowOnTooFewFields))
+                if (Options.HasFlag(CsvOpts.ThrowOnTooFewFields))
                 {
                     throw new CsvFormatException(Res.TooFewFields, CsvError.TooFewFields, reader.LineNumber, reader.LineIndex);
                 }
 
-                if (_options.HasFlag(CsvOptions.DisableCaching))
+                if (Options.HasFlag(CsvOpts.DisableCaching))
                 {
                     for (int j = i; j < _record.Count; j++)
                     {

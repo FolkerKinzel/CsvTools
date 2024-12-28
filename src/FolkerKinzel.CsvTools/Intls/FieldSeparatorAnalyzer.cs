@@ -9,11 +9,13 @@ internal ref struct FieldSeparatorAnalyzer()
 
     private class RowSeparatorFinds
     {
-        public int Comma { get; set; }
-        public int Semicolon { get; set; }
-        public int Hash { get; set; }
-        public int Tab { get; set; }
-        public int Space { get; set; }
+        internal int Comma { get; set; }
+        internal int Semicolon { get; set; }
+        internal int Hash { get; set; }
+        internal int Tab { get; set; }
+        internal int Space { get; set; }
+
+        internal bool IsEmpty => Comma == 0 && Semicolon == 0 && Hash == 0 && Tab == 0 && Space == 0;
     }
 
     private int _last = '\0';
@@ -23,55 +25,51 @@ internal ref struct FieldSeparatorAnalyzer()
     private RowSeparatorFinds _finds = new();
     private readonly List<RowSeparatorFinds> _findsList = [];
 
-    public char InitFieldSeparator(string fileName, Encoding? encoding)
+    public char GetFieldSeparator(string fileName, Encoding? encoding)
     {
-        try
+        using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, encoding);
+
+        while ((_current = reader.Read()) != EOF && _findsList.Count < MAX_LINES) // Skips BOM
         {
-            using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, encoding);
+            _rowLength++;
 
-            while ((_current = reader.Read()) != EOF && _findsList.Count < MAX_LINES) // Skips BOM
+            if (_current == '"')
             {
-                _rowLength++;
+                _inQuotes = !_inQuotes;
+                _last = _current;
+                continue;
+            }
 
-                if (_current == '"')
+            if (!_inQuotes)
+            {
+                if (_last == '\r')
                 {
-                    _inQuotes = !_inQuotes;
-                    _last = _current;
+                    _rowLength--; // current is \n or the first character of the next line
+                    HandleNewLine();
+
+                    if (_current is '\n' or '\r')
+                    {
+                        // line ending is \r\n,
+                        // or line ending is \r and two empty lines follow each other
+                        continue;
+                    }
+                    else
+                    {
+                        // line ending is \r
+                        _rowLength = 1;
+                    }
+                }
+                else if (_current == '\n')
+                {
+                    // line ending is \n
+                    HandleNewLine();
                     continue;
                 }
 
-                if (!_inQuotes)
-                {
-                    if (_last == '\r')
-                    {
-                        _rowLength--; // current is \n or the first character of the next line
-                        HandleNewLine();
-
-                        if (_current is '\n' or '\r')
-                        {
-                            // line ending is \r\n,
-                            // or line ending is \r and two empty lines follow each other
-                            continue;
-                        }
-                        else
-                        {
-                            // line ending is \r
-                            _rowLength = 1;
-                        }
-                    }
-                    else if (_current == '\n')
-                    {
-                        // line ending is \n
-                        HandleNewLine();
-                        continue;
-                    }
-
-                    _last = _current;
-                    CountCurrent();
-                }
-            }// while
-        }
-        catch { }
+                _last = _current;
+                CountCurrent();
+            }
+        }// while
 
         if (_last != '\n')
         {
@@ -93,8 +91,12 @@ internal ref struct FieldSeparatorAnalyzer()
         }
 
         _rowLength = 0;
-        _findsList.Add(_finds);
-        _finds = new RowSeparatorFinds();
+
+        if(!_finds.IsEmpty)
+        {
+            _findsList.Add(_finds);
+            _finds = new RowSeparatorFinds();
+        }
     }
 
     private readonly void CountCurrent()

@@ -9,84 +9,51 @@ namespace FolkerKinzel.CsvTools.Tests
     public class CsvAnalyzerTests
     {
         [TestMethod()]
-        public void CsvAnalyzerTest()
-        {
-            var analyzer = new CsvAnalyzer();
-            Assert.IsNotNull(analyzer);
-        }
-
-        [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void AnalyzeTest1()
-        {
-            var analyzer = new CsvAnalyzer();
-            analyzer.Analyze(null!);
-        }
-
+        public void AnalyzeTest1() => CsvAnalyzer.Analyze(null!);
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void AnalyzeTest2()
-        {
-            var analyzer = new CsvAnalyzer();
-            analyzer.Analyze("  ");
-        }
-
-        
+        public void AnalyzeTest2() => CsvAnalyzer.Analyze("  ");
 
         [TestMethod()]
         public void AnalyzeTest3()
         {
-            var analyzer = new CsvAnalyzer();
-            analyzer.Analyze(TestFiles.AnalyzerTestCsv);
+            CsvAnalyzerResult results = CsvAnalyzer.Analyze(TestFiles.AnalyzerTestCsv);
 
-            AssertAnalyzerTestCsv(analyzer);
-
-            //Assert.IsTrue(analyzer.HasHeaderRow);
-            //Assert.AreEqual(';', analyzer.FieldSeparator);
-            //CollectionAssert.AreEqual(analyzer.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei"});
-
-            //Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.CaseSensitiveKeys));
-            //Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.TrimColumns));
-            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooFewFields));
-            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooMuchFields));
-            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.DisableCaching));
-            //Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+            AssertAnalyzerTestCsv(results);
         }
 
         [TestMethod]
         public void AnalyzeTest4()
         {
-            var analyzer = new CsvAnalyzer();
-            analyzer.Analyze(TestFiles.AnalyzerTestCsv, analyzedLinesCount: -42);
+            CsvAnalyzerResult result = CsvAnalyzer.Analyze(TestFiles.AnalyzerTestCsv, analyzedLines: -42);
 
-            AssertAnalyzerTestCsv(analyzer);
+            AssertAnalyzerTestCsv(result);
         }
 
-
-        private static void AssertAnalyzerTestCsv(CsvAnalyzer analyzer)
+        private static void AssertAnalyzerTestCsv(CsvAnalyzerResult result)
         {
-            Assert.IsTrue(analyzer.HasHeaderRow);
-            Assert.AreEqual(';', analyzer.FieldSeparator);
-            CollectionAssert.AreEqual(analyzer.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei" });
-            Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.CaseSensitiveKeys));
-            Assert.IsTrue(analyzer.Options.HasFlag(CsvOptions.TrimColumns));
-            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooFewFields));
-            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnTooMuchFields));
-            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.DisableCaching));
-            Assert.IsFalse(analyzer.Options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+            Assert.IsTrue(result.HasHeaderRow);
+            Assert.AreEqual(';', result.Delimiter);
+            CollectionAssert.AreEqual(result.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei" });
+            Assert.IsTrue(result.Options.HasFlag(CsvOpts.CaseSensitiveKeys));
+            Assert.IsTrue(result.Options.HasFlag(CsvOpts.TrimColumns));
+            Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnTooFewFields));
+            Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnTooMuchFields));
+            Assert.IsFalse(result.Options.HasFlag(CsvOpts.DisableCaching));
+            Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnEmptyLines));
         }
 
         [TestMethod()]
         public void AnalyzeTest5()
         {
-            var analyzer = new CsvAnalyzer();
-            analyzer.Analyze(TestFiles.GoogleCsv);
+            CsvAnalyzerResult result = CsvAnalyzer.Analyze(TestFiles.GoogleCsv);
 
-            Assert.IsTrue(analyzer.HasHeaderRow);
-            Assert.AreEqual(',', analyzer.FieldSeparator);
+            Assert.IsTrue(result.HasHeaderRow);
+            Assert.AreEqual(',', result.Delimiter);
 
-            Assert.AreEqual(analyzer.Options, CsvOptions.Default);
+            Assert.AreEqual(result.Options, CsvOpts.Default);
         }
     }
 }

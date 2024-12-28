@@ -8,21 +8,21 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod()]
         public void SetTest()
         {
-            CsvOptions options = CsvOptions.None;
+            CsvOpts options = CsvOpts.None;
 
-            Assert.IsFalse(options.HasFlag(CsvOptions.DisableCaching));
+            Assert.IsFalse(options.HasFlag(CsvOpts.DisableCaching));
 
-            options = options.Set(CsvOptions.DisableCaching);
+            options = options.Set(CsvOpts.DisableCaching);
 
-            Assert.IsTrue(options.HasFlag(CsvOptions.DisableCaching));
+            Assert.IsTrue(options.HasFlag(CsvOpts.DisableCaching));
         }
 
         [TestMethod()]
         public void IsSetTest1()
         {
-            CsvOptions options = CsvOptions.ThrowOnEmptyLines | CsvOptions.TrimColumns;
+            CsvOpts options = CsvOpts.ThrowOnEmptyLines | CsvOpts.TrimColumns;
 
-            Assert.IsTrue(options.HasFlag(CsvOptions.ThrowOnEmptyLines));
+            Assert.IsTrue(options.HasFlag(CsvOpts.ThrowOnEmptyLines));
         }
 
         
@@ -30,13 +30,13 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod()]
         public void UnsetTest()
         {
-            CsvOptions options = CsvOptions.DisableCaching | CsvOptions.ThrowOnEmptyLines;
+            CsvOpts options = CsvOpts.DisableCaching | CsvOpts.ThrowOnEmptyLines;
 
-            Assert.IsTrue((options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching);
+            Assert.IsTrue((options & CsvOpts.DisableCaching) == CsvOpts.DisableCaching);
 
-            options = options.Unset(CsvOptions.DisableCaching);
+            options = options.Unset(CsvOpts.DisableCaching);
 
-            Assert.IsFalse((options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching);
+            Assert.IsFalse((options & CsvOpts.DisableCaching) == CsvOpts.DisableCaching);
         }
     }
 }

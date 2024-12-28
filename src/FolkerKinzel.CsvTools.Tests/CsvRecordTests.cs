@@ -82,7 +82,7 @@ namespace FolkerKinzel.CsvTools.Tests
             const string col1 = "col1";
             const string col2 = "col2";
 
-            var rec = new CsvRecord([col1, col2], false, false, true, false);
+            var rec = new CsvRecord([col1, col2], false, true, false);
             rec[col1] = "1".AsMemory();
             rec[col2] = "2".AsMemory();
 
@@ -107,7 +107,7 @@ namespace FolkerKinzel.CsvTools.Tests
             const string col1 = "col1";
             const string col2 = "col2";
 
-            var rec = new CsvRecord([col1, col2], false, false, true, false);
+            var rec = new CsvRecord([col1, col2], false, true, false);
 
             _ = rec.TryGetValue(null!, out ReadOnlyMemory<char> _);
         }
@@ -167,7 +167,7 @@ namespace FolkerKinzel.CsvTools.Tests
             const string col1 = "col1";
             const string col2 = "col2";
 
-            var rec = new CsvRecord([col1, col2], false, false, true, false);
+            var rec = new CsvRecord([col1, col2], false, true, false);
             rec[col1] = "1".AsMemory();
             rec[col2] = "2".AsMemory();
 
@@ -188,7 +188,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             const string col1 = "col1";
 
-            var rec = new CsvRecord([col1], false, false, true, false);
+            var rec = new CsvRecord([col1], false, true, false);
 
             Assert.IsTrue(rec.ContainsColumn(col1));
             Assert.IsTrue(rec.ContainsColumn(col1.ToUpperInvariant()));
@@ -201,7 +201,7 @@ namespace FolkerKinzel.CsvTools.Tests
         [ExpectedException(typeof(ArgumentNullException))]
         public void ContainsColumnTest2()
         {
-            var rec = new CsvRecord([], false, false, true, false);
+            var rec = new CsvRecord([], false, true, false);
 
             _ = rec.ContainsColumn(null!);
         }
@@ -213,7 +213,7 @@ namespace FolkerKinzel.CsvTools.Tests
             const string col1 = "col1";
             const string col2 = "col2";
 
-            var rec = new CsvRecord([col1, col2], false, false, true, false);
+            var rec = new CsvRecord([col1, col2], false, true, false);
 
             Assert.AreEqual(0, rec.IndexOfColumn(col1));
             Assert.AreEqual(1, rec.IndexOfColumn(col2));

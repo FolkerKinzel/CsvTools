@@ -6,7 +6,7 @@ namespace FolkerKinzel.CsvTools;
 /// The flags can be combined.</summary>
 /// <remarks>
 /// <note type="tip">
-/// To work safely and conveniently with the <see cref="CsvOptions"/> enum, use the 
+/// To work safely and conveniently with the <see cref="CsvOpts"/> enum, use the 
 /// extension methods of the <see cref="CsvOptionsExtension" /> class (see example).
 /// </note>
 /// </remarks>
@@ -23,7 +23,7 @@ namespace FolkerKinzel.CsvTools;
 /// <code language="cs" source="..\Examples\DisableCachingAndLinq.cs" />
 /// </example>
 [Flags]
-public enum CsvOptions
+public enum CsvOpts
 {
     /// <summary>No flag is set. This creates a very lenient parser that rarely throws
     /// exceptions.</summary>
@@ -73,10 +73,9 @@ public enum CsvOptions
     /// behavior that <see cref="DataColumnCollection" /> shows.</summary>
     CaseSensitiveKeys = 1 << 4,
 
-    /// <summary>If the flag is set, <see cref="CsvEnumerator" /> and <see cref="CsvWriter"
-    /// /> will handle all data tokens and the column names with the <see cref="string.Trim()"
-    /// /> method. That can damage data
-    /// where the leading and trailing white space has a meaning. Only set the flag
+    /// <summary>If the flag is set, <see cref="CsvEnumerator" /> leading and trailing
+    /// white space will be removed from all data tokens and the column names. That can damage data
+    /// where the white space has a meaning. Only set the flag
     /// for reading non-standard CSV files, that introduce additional padding.</summary>
     TrimColumns = 1 << 5,
 

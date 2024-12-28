@@ -103,17 +103,16 @@ namespace FolkerKinzel.CsvTools.Tests
             {
                 writer.Record[Key1] = VALUE1.AsMemory();
 
-                writer.WriteRecord();
+                writer.Write();
 
                 writer.Record[Key1] = "Value1".AsMemory();
                 writer.Record[Key2] = "Value2".AsMemory();
 
-                writer.WriteRecord();
+                writer.Write();
             }
 
-            string csv = File.ReadAllText(FILENAME_STANDARD);
-
-            using var reader = new CsvReader(FILENAME_STANDARD);
+            //string csv = File.ReadAllText(FILENAME_STANDARD);
+            using var reader = new CsvEnumerator(FILENAME_STANDARD);
 
             Assert.AreEqual(VALUE1, reader.First()[Key1].ToString());
         }
@@ -132,15 +131,15 @@ namespace FolkerKinzel.CsvTools.Tests
             {
                 writer.Record[0] = VALUE1.AsMemory();
 
-                writer.WriteRecord();
+                writer.Write();
 
                 writer.Record[0] = "Value1".AsMemory();
                 writer.Record[1] = "Value2".AsMemory();
 
-                writer.WriteRecord();
+                writer.Write();
             }
 
-            using var reader = new CsvReader(FILENAME_STANDARD, hasHeaderRow: false);
+            using var reader = new CsvEnumerator(FILENAME_STANDARD, hasHeaderRow: false);
 
             Assert.AreEqual(VALUE1, reader.First()[0].ToString());
         }
@@ -153,7 +152,7 @@ namespace FolkerKinzel.CsvTools.Tests
             using var writer = new CsvWriter("File", 2);
 
             writer.Dispose();
-            writer.WriteRecord();
+            writer.Write();
         }
 
 
