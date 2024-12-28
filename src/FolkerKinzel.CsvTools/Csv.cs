@@ -7,7 +7,34 @@ public static class Csv
     /// <summary>The newline characters to use in CSV files ("\r\n").</summary>
     public const string NewLine = "\r\n";
 
-
+    /// <summary> Analyzes the CSV file referenced by <paramref name="fileName" />.
+    /// </summary>
+    /// <param name="fileName">File path of the CSV file.</param>
+    /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
+    /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
+    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
+    /// 
+    /// <returns>The results of the analysis.</returns>
+    /// 
+    /// <remarks>
+    /// <para>
+    /// The method performs a statistical analysis on the CSV file to find the appropriate 
+    /// parameters for reading the file. The result of the analysis is therefore always only an estimate, 
+    /// the accuracy of which increases with the number of lines analyzed.
+    /// </para>
+    /// <para>
+    /// The analysis is time-consuming because the CSV file has to be accessed for reading.
+    /// </para>
+    /// <para>
+    /// This method also automatically determines the <see cref="Encoding"/> of the CSV file.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
+    /// file path.</exception>
+    /// <exception cref="IOException">Error accessing the file.</exception>
     public static (Encoding, CsvAnalyzerResult) Analyze(string fileName, int analizedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         Encoding? encoding = TextEncodingConverter.TryGetEncoding(GetCodePage(fileName), out encoding)
@@ -19,6 +46,35 @@ public static class Csv
         return (encoding, results);
     }
 
+    /// <summary>This method analyzes the CSV file referenced by <paramref name="fileName" />
+    /// first and then opens a <see cref="CsvEnumerator"/> to read its content.
+    /// </summary>
+    /// <param name="fileName">File path of the CSV file.</param>
+    /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
+    /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
+    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
+    /// 
+    /// <returns>An <see cref="CsvEnumerator"/> that allows to iterate the data.</returns>
+    /// 
+    /// <remarks>
+    /// <para>
+    /// The method performs a statistical analysis on the CSV file to find the appropriate 
+    /// parameters for reading the file. The result of the analysis is therefore always only an estimate, 
+    /// the accuracy of which increases with the number of lines analyzed.
+    /// </para>
+    /// <para>
+    /// The analysis is time-consuming because the CSV file has to be accessed for reading.
+    /// </para>
+    /// <para>
+    /// This method also automatically determines the <see cref="Encoding"/> of the CSV file.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
+    /// file path.</exception>
+    /// <exception cref="IOException">Error accessing the file.</exception>
     public static CsvEnumerator OpenReadAnalyzed(string fileName,
                                                  int analizedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
