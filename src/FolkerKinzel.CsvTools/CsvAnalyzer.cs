@@ -11,9 +11,9 @@ public static class CsvAnalyzer
     /// <summary>Minimum number of lines in the CSV file to be analyzed.</summary>
     public const int AnalyzedLinesMinCount = 5;
 
-    /// <summary> Analyzes the CSV file referenced by <paramref name="fileName" />.
+    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
     /// </summary>
-    /// <param name="fileName">File path of the CSV file.</param>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
@@ -39,13 +39,13 @@ public static class CsvAnalyzer
     /// </para>
     /// </remarks>
     /// 
-    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
+    /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
-    public static CsvAnalyzerResult Analyze(string fileName,
-                                             int analyzedLines = AnalyzedLinesMinCount,
-                                             Encoding? textEncoding = null)
+    public static CsvAnalyzerResult Analyze(string filePath,
+                                            int analyzedLines = AnalyzedLinesMinCount,
+                                            Encoding? textEncoding = null)
     {
         CsvAnalyzerResult results = new();
 
@@ -54,12 +54,12 @@ public static class CsvAnalyzer
             analyzedLines = AnalyzedLinesMinCount;
         }
 
-        results.Delimiter = new FieldSeparatorAnalyzer().GetFieldSeparator(fileName, textEncoding);
+        results.Delimiter = new FieldSeparatorAnalyzer().GetFieldSeparator(filePath, textEncoding);
 
 repeat:
         try
         {
-            InitProperties(fileName,
+            InitProperties(filePath,
                            textEncoding,
                            analyzedLines,
                            results);

@@ -36,11 +36,11 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     private CsvRecord? _current;
 
     /// <summary>Initializes a new <see cref="CsvEnumerator" /> instance.</summary>
-    /// <param name="fileName">File path of the CSV file to read.</param>
+    /// <param name="filePath">File path of the CSV file to read.</param>
     /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
     /// names.</param>
     /// <param name="options">Options for reading the CSV file.</param>
-    /// <param name="delimiter">The field separator char used in the CSV file.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
     /// 
@@ -50,36 +50,30 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
     /// </note>
     /// </remarks>
     /// 
-    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
+    /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the disk.</exception>
     public CsvEnumerator(
-        string fileName,
+        string filePath,
         bool hasHeaderRow = true,
         CsvOpts options = CsvOpts.Default,
         char delimiter = ',',
         Encoding? textEncoding = null)
     {
-        StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(fileName, textEncoding);
+        StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
 
         this._reader = new CsvStringReader(streamReader, delimiter, options);
         this._hasHeaderRow = hasHeaderRow;
     }
 
-    /// <summary>Initializes a new <see cref="CsvEnumerator" /> object.</summary>
-    /// <param name="reader">The <see cref="TextReader" /> with which the CSV file is
+    /// <summary>Initializes a new <see cref="CsvEnumerator" /> instance.</summary>
+    /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
     /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
-    /// names.</param>
-    /// <param name="options">Options for reading the CSV file.</param>
-    /// <param name="delimiter">The field separator char used in the CSV file.</param>
-    /// 
-    /// <remarks>
-    /// <note type="tip">
-    /// The optimal constructor parameters can be determined automatically with <see cref="CsvAnalyzer"/>.
-    /// </note>
-    /// </remarks>
+    /// names, otherwise <c>false</c>.</param>
+    /// <param name="options">Options for reading CSV.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     public CsvEnumerator(

@@ -23,7 +23,7 @@ internal static class CsvExamples
         using CsvEnumerator csv = Csv.OpenReadAnalyzed(filePath);
         CsvRecord[] data = [.. csv];
 
-        Csv.Write(filePath, CsvData.Create(data.Select(x => x.Values)), data[0].ColumnNames);
+        Csv.Write(CsvData.Create(data.Select(x => x.Values)), filePath, data[0].ColumnNames);
 
         Console.WriteLine(File.ReadAllText(filePath));
     }
