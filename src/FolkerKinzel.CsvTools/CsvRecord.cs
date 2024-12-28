@@ -20,7 +20,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 
     /// <summary> Initialisiert aus <paramref name="source" />, das als Vorlage dient,
     /// ein neues <see cref="CsvRecord" />-Objekt, das die unveränderlichen Teile der
-    /// Vorlage referenziert bzw. kopiert. (Ctor, der von <see cref="CsvReader" /> verwendet
+    /// Vorlage referenziert bzw. kopiert. (Ctor, der von <see cref="CsvEnumerator" /> verwendet
     /// wird.) </summary>
     /// <param name="source"> <see cref="CsvRecord" />-Objekt, das als Vorlage dient.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,7 +66,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// Methode <see cref="string.Trim()" /> behandelt.</param>
     /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert.
     /// Das Objekt taugt dann nur als Kopierschablone für weitere <see cref="CsvRecord"
-    /// />-Objekte. (Wird von <see cref="CsvReader" /> verwendet.</param>
+    /// />-Objekte. (Wird von <see cref="CsvEnumerator" /> verwendet.</param>
     /// <param name="throwException">Wenn <c>true</c>, wird eine <see cref="ArgumentException"
     /// /> geworfen, wenn <paramref name="keys" /> 2 identische Spaltennamen enthält.
     /// Beim Lesen einer Datei sollte der Parameter auf <c>false</c> gesetzt werden,

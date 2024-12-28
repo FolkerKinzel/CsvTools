@@ -8,11 +8,11 @@ using FolkerKinzel.CsvTools.Resources;
 namespace FolkerKinzel.CsvTools;
 
 /// <summary>Provides read-only forward access to the records of a CSV file. (This
-/// means that the <see cref="CsvReader" /> can only read the file forward once.)</summary>
+/// means that the <see cref="CsvEnumerator" /> can only read the file forward once.)</summary>
 /// <remarks>
 /// <para>
 /// The class implements <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>. A 
-/// <see cref="CsvReader"/> instance can be iterated with <c>foreach</c> or queried using 
+/// <see cref="CsvEnumerator"/> instance can be iterated with <c>foreach</c> or queried using 
 /// Linq methods. Note that an instance can only be iterated once; if an attempt is made to
 /// iterate it twice, an <see cref="ObjectDisposedException"/> is thrown.
 /// </para>
@@ -27,7 +27,7 @@ namespace FolkerKinzel.CsvTools;
 /// </para>
 /// <code language="cs" source="..\Examples\LinqOnCsvFile.cs" />
 /// </example>
-public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
+public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
 {
     private readonly CsvStringReader _reader;
     private readonly CsvOptions _options;
@@ -36,7 +36,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     private CsvRecord? _record = null; // Schablone für weitere CsvRecord-Objekte
     private CsvRecord? _current;
 
-    /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
+    /// <summary>Initializes a new <see cref="CsvEnumerator" /> instance.</summary>
     /// <param name="fileName">File path of the CSV file to read.</param>
     /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
     /// names.</param>
@@ -55,7 +55,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the disk.</exception>
-    public CsvReader(
+    public CsvEnumerator(
         string fileName,
         bool hasHeaderRow = true,
         CsvOptions options = CsvOptions.Default,
@@ -69,7 +69,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
         this._hasHeaderRow = hasHeaderRow;
     }
 
-    /// <summary>Initializes a new <see cref="CsvReader" /> object.</summary>
+    /// <summary>Initializes a new <see cref="CsvEnumerator" /> object.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV file is
     /// read.</param>
     /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
@@ -84,7 +84,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
-    public CsvReader(
+    public CsvEnumerator(
         TextReader reader,
         bool hasHeaderRow = true,
         CsvOptions options = CsvOptions.Default,

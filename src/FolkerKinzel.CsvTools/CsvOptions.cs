@@ -29,7 +29,7 @@ public enum CsvOptions
     /// exceptions.</summary>
     None = 0,
 
-    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
+    /// <summary>If set, <see cref="CsvEnumerator" /> throws an <see cref="CsvFormatException"
     /// /> if a data row contains more fields than the first data row.
     /// <note>
     /// If a data row has more Fields than the first data row, this is a strong indication
@@ -38,7 +38,7 @@ public enum CsvOptions
     /// </summary>
     ThrowOnTooMuchFields = 1,
 
-    /// <summary> If set, <see cref="CsvReader" /> throws a <see cref="CsvFormatException" /> 
+    /// <summary> If set, <see cref="CsvEnumerator" /> throws a <see cref="CsvFormatException" /> 
     /// if a data row contains fewer fields than the first data row.
     /// <note>
     /// Other software may not mark empty fields at the end of the line with field separators. 
@@ -48,22 +48,22 @@ public enum CsvOptions
     /// </summary>
     ThrowOnTooFewFields = 1 << 1,
 
-    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
+    /// <summary>If set, <see cref="CsvEnumerator" /> throws an <see cref="CsvFormatException"
     /// /> if there are blank lines in the CSV file that are not part of a data field
     /// masked with quotes.
     /// <note>
     /// Blank lines that are not part of a masked field can in no case be interpreted
-    /// as part of the data to be read. However, by removing the flag, <see cref="CsvReader"
+    /// as part of the data to be read. However, by removing the flag, <see cref="CsvEnumerator"
     /// /> ignores such blank lines.
     /// </note>
     /// </summary>
     ThrowOnEmptyLines = 1 << 2,
 
-    /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
+    /// <summary>If set, <see cref="CsvEnumerator" /> throws an <see cref="CsvFormatException"
     /// /> if a masked field at the end of the file is not properly closed.
     /// <note>
     /// An unclosed masked field at the end of a CSV file is a data error. However, by removing the flag, 
-    /// <see cref="CsvReader" /> will be able to parse the rest of the file.
+    /// <see cref="CsvEnumerator" /> will be able to parse the rest of the file.
     /// </note>
     /// </summary>
     ThrowOnTruncatedFiles = 1 << 3,
@@ -73,14 +73,14 @@ public enum CsvOptions
     /// behavior that <see cref="DataColumnCollection" /> shows.</summary>
     CaseSensitiveKeys = 1 << 4,
 
-    /// <summary>If the flag is set, <see cref="CsvReader" /> and <see cref="CsvWriter"
+    /// <summary>If the flag is set, <see cref="CsvEnumerator" /> and <see cref="CsvWriter"
     /// /> will handle all data tokens and the column names with the <see cref="string.Trim()"
     /// /> method. That can damage data
     /// where the leading and trailing white space has a meaning. Only set the flag
     /// for reading non-standard CSV files, that introduce additional padding.</summary>
     TrimColumns = 1 << 5,
 
-    /// <summary>Default setting. This is a combined value, that forces <see cref="CsvReader"
+    /// <summary>Default setting. This is a combined value, that forces <see cref="CsvEnumerator"
     /// /> to throw an <see cref="CsvFormatException" />, if the file to be read does
     /// not comply with the RFC 4180 standard. (Alternative column separators and newline
     /// characters are always tolerated.)</summary>
