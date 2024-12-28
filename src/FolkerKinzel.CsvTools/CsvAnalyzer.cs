@@ -65,7 +65,7 @@ public partial class CsvAnalyzer
             analyzedLinesCount = AnalyzedLinesMinCount;
         }
 
-        FieldSeparator = new FieldSeparatorAnalyzer().InitFieldSeparator(fileName);
+        FieldSeparator = new FieldSeparatorAnalyzer().InitFieldSeparator(fileName, textEncoding);
 
 repeat:
         try

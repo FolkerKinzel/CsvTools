@@ -1,4 +1,6 @@
-﻿namespace FolkerKinzel.CsvTools.Intls;
+﻿using System.Text;
+
+namespace FolkerKinzel.CsvTools.Intls;
 
 internal ref struct FieldSeparatorAnalyzer()
 {
@@ -19,23 +21,16 @@ internal ref struct FieldSeparatorAnalyzer()
     private int _rowLength = 0;
     private bool _inQuotes = false;
     private RowSeparatorFinds _finds = new();
+    private readonly List<RowSeparatorFinds> _findsList = [];
 
-    public char InitFieldSeparator(string fileName)
+    public char InitFieldSeparator(string fileName, Encoding? encoding)
     {
-        List<RowSeparatorFinds> findsList = [];
-
         try
         {
-            using var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, encoding);
 
-            while ((_current = fileStream.ReadByte()) != EOF && findsList.Count < MAX_LINES)
+            while ((_current = reader.Read()) != EOF && _findsList.Count < MAX_LINES) // Skips BOM
             {
-                if (_current == 0)
-                {
-                    // ignore Unicode
-                    continue;
-                }
-
                 _rowLength++;
 
                 if (_current == '"')
@@ -50,7 +45,7 @@ internal ref struct FieldSeparatorAnalyzer()
                     if (_last == '\r')
                     {
                         _rowLength--; // current is \n or the first character of the next line
-                        HandleNewLine(findsList);
+                        HandleNewLine();
 
                         if (_current is '\n' or '\r')
                         {
@@ -67,7 +62,7 @@ internal ref struct FieldSeparatorAnalyzer()
                     else if (_current == '\n')
                     {
                         // line ending is \n
-                        HandleNewLine(findsList);
+                        HandleNewLine();
                         continue;
                     }
 
@@ -81,13 +76,13 @@ internal ref struct FieldSeparatorAnalyzer()
         if (_last != '\n')
         {
             // Last line does not end with a new line
-            HandleNewLine(findsList);
+            HandleNewLine();
         }
 
-        return SelectSeparator(findsList);
+        return SelectSeparator(_findsList);
     }
 
-    private void HandleNewLine(List<RowSeparatorFinds> findsList)
+    private void HandleNewLine()
     {
         _last = _current;
 
@@ -98,7 +93,7 @@ internal ref struct FieldSeparatorAnalyzer()
         }
 
         _rowLength = 0;
-        findsList.Add(_finds);
+        _findsList.Add(_finds);
         _finds = new RowSeparatorFinds();
     }
 
@@ -107,15 +102,12 @@ internal ref struct FieldSeparatorAnalyzer()
         switch (_current)
         {
             case ',':
-
                 _finds.Comma++;
                 break;
             case ';':
-
                 _finds.Semicolon++;
                 break;
             case '#':
-
                 _finds.Hash++;
                 break;
             case '\t':
