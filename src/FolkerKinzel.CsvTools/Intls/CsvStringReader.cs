@@ -22,9 +22,8 @@ internal sealed class CsvStringReader : IDisposable
     /// <summary> ctor </summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV file is
     /// read.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="options">The parser options.</param>
-    /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen
-    /// in der CSV-Datei übersprungen.</param>
     internal CsvStringReader(TextReader reader, char delimiter, CsvOpts options)
     {
         Debug.Assert(reader != null);
@@ -213,7 +212,7 @@ internal sealed class CsvStringReader : IDisposable
                 }
                 else
                 {
-                    Debug.Assert(c == '\"');
+                    Debug.Assert(c is '\"' or ' ');
 
                     char next = span[LineIndex + 1];
 

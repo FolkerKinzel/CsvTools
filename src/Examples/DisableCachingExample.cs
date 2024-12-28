@@ -2,7 +2,7 @@
 
 namespace Examples;
 
-internal static class DisableCachingExamples
+internal static class DisableCachingExample
 {
     public static void DisableCachingSideEffects()
     {

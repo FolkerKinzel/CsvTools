@@ -57,14 +57,14 @@ namespace FolkerKinzel.CsvTools.Tests
         }
 
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void FillTest4()
-        {
-            var rec = new CsvRecord(2);
+        //[TestMethod]
+        //[ExpectedException(typeof(ArgumentNullException))]
+        //public void FillTest4()
+        //{
+        //    var rec = new CsvRecord(2);
 
-            rec.Fill((IEnumerable<string?>?)null!);
-        }
+        //    rec.Fill((IEnumerable<string?>?)null!);
+        //}
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]

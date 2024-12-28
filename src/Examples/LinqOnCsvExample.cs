@@ -2,7 +2,7 @@
 
 namespace Examples;
 
-internal static class LinqOnCsvExamples
+internal static class LinqOnCsvExample
 {
     public static void LinqOnCsvFile()
     {

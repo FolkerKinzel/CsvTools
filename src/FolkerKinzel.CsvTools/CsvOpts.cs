@@ -7,7 +7,7 @@ namespace FolkerKinzel.CsvTools;
 /// <remarks>
 /// <note type="tip">
 /// To work safely and conveniently with the <see cref="CsvOpts"/> enum, use the 
-/// extension methods of the <see cref="CsvOptionsExtension" /> class (see example).
+/// extension methods of the <see cref="CsvOptsExtension" /> class (see example).
 /// </note>
 /// </remarks>
 /// <example>
@@ -20,7 +20,7 @@ namespace FolkerKinzel.CsvTools;
 /// In the following code example - for easier readability - exception handling
 /// has been omitted.
 /// </note>
-/// <code language="cs" source="..\Examples\DisableCachingAndLinq.cs" />
+/// <code language="cs" source="..\Examples\DisableCachingExample.cs" />
 /// </example>
 [Flags]
 public enum CsvOpts

@@ -23,6 +23,7 @@ public sealed class CsvFormatException : Exception, ISerializable
     //internal CsvFormatException(string message) : base(message) { }
 
     /// <summary>Initializes a new instance of the <see cref="CsvFormatException"/> class.</summary>
+    /// <param name="message">The error message.</param>
     /// <param name="error">The error that occurred.</param>
     /// <param name="csvLineNumber">Line number of the CSV file where the error occurred
     /// (1-based index).</param>

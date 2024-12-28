@@ -7,7 +7,7 @@
         {
              //LinqOnCsvExamples.LinqOnCsvFile();
              //DisableCachingExamples.DisableCachingSideEffects();
-            CsvExamples.HandleForeignCsvFile("foreign.csv");
+            CsvExample.HandleForeignCsvFile("foreign.csv");
         }
     }
 }

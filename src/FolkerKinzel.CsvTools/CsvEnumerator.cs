@@ -25,7 +25,7 @@ namespace FolkerKinzel.CsvTools;
 /// <para>
 /// Linq query on a CSV file:
 /// </para>
-/// <code language="cs" source="..\Examples\LinqOnCsvFile.cs" />
+/// <code language="cs" source="..\Examples\LinqOnCsvExample.cs" />
 /// </example>
 public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
 {
@@ -88,8 +88,14 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
         this._hasHeaderRow = hasHeaderRow;
     }
 
+    /// <summary>
+    /// Gets the options for reading the CSV file.
+    /// </summary>
     public CsvOpts Options => _reader.Options;
 
+    /// <summary>
+    /// Gets the field separator character.
+    /// </summary>
     public char Delimiter => _reader.Delimiter;
 
     /// <inheritdoc/>

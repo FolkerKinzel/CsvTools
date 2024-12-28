@@ -274,21 +274,21 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
-    /// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
-    /// <see cref="string"/> collection. The collection may contain <c>null</c> values.
-    /// </summary>
-    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
-    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more entries than <see cref="CsvRecord.Count" />.</exception>
-    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
-    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
-    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    public void Fill(IEnumerable<string?> data)
-    {
-        _ArgumentNullException.ThrowIfNull(data, nameof(data));
-        DoFill(data.Select(x => x.AsMemory()));
-    }
+    ///// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
+    ///// <see cref="string"/> collection. The collection may contain <c>null</c> values.
+    ///// </summary>
+    ///// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
+    ///// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    ///// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
+    ///// more entries than <see cref="CsvRecord.Count" />.</exception>
+    ///// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
+    ///// the remaining fields of <see cref="CsvRecord" /> are filled with 
+    ///// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
+    //public void Fill(IEnumerable<string?> data)
+    //{
+    //    _ArgumentNullException.ThrowIfNull(data, nameof(data));
+    //    DoFill(data.Select(x => x.AsMemory()));
+    //}
 
     /// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
     /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> collection.
@@ -303,11 +303,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
-        DoFill(data);
-    }
-
-    internal void DoFill(IEnumerable<ReadOnlyMemory<char>> data)
-    {
+     
         int i = 0;
 
         foreach (ReadOnlyMemory<char> item in data)

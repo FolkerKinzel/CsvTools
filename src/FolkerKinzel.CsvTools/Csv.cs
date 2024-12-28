@@ -1,7 +1,10 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
+/// <summary>Static class with methods for reading and writing CSV files.</summary>
 public static class Csv
 {
     /// <summary>The newline characters to use in CSV files ("\r\n").</summary>
@@ -11,7 +14,7 @@ public static class Csv
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
-    /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
+    /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
@@ -35,13 +38,14 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
-    public static (Encoding, CsvAnalyzerResult) Analyze(string filePath, int analizedLines = CsvAnalyzer.AnalyzedLinesMinCount)
+    public static (Encoding, CsvAnalyzerResult) Analyze(string filePath,
+                                                        int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         Encoding? encoding = TextEncodingConverter.TryGetEncoding(GetCodePage(filePath), out encoding)
                                   ? encoding
                                   : Encoding.UTF8;
 
-        CsvAnalyzerResult results = CsvAnalyzer.Analyze(filePath, analizedLines, encoding);
+        CsvAnalyzerResult results = CsvAnalyzer.Analyze(filePath, analyzedLines, encoding);
 
         return (encoding, results);
     }
@@ -51,7 +55,7 @@ public static class Csv
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
-    /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
+    /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
@@ -71,14 +75,23 @@ public static class Csv
     /// </para>
     /// </remarks>
     /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\Examples\CsvExample.cs" />
+    /// </example>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     public static CsvEnumerator OpenReadAnalyzed(string filePath,
-                                                 int analizedLines = CsvAnalyzer.AnalyzedLinesMinCount)
+                                                 int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
-        (Encoding encoding, CsvAnalyzerResult results) = Analyze(filePath, analizedLines);
+        (Encoding encoding, CsvAnalyzerResult results) = Analyze(filePath, analyzedLines);
         return new(filePath, results.HasHeaderRow, results.Options, results.Delimiter, encoding);
     }
 
@@ -171,18 +184,17 @@ public static class Csv
                                       char delimiter = ',')
         => new(filePath, columnNames, options, textEncoding, delimiter);
 
-
     /// <summary>
     /// Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
-    /// <param name="columnNames">A colletion of column names for the header to be written.
+    /// <param name="columnNames">A collection of column names for the header to be written.
     /// The collection will be copied. If the collection contains <c>null</c> values, these 
     /// are replaced with automatically
     /// generated column names. Column names cannot appear twice. It is to note that
     /// the comparison is not case-sensitive - unless this option is explicitely chosen
     /// in <paramref name="options" />.</param>
-    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="options">Options for the CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
@@ -223,12 +235,11 @@ public static class Csv
                                       char delimiter = ',')
         => new(filePath, columnsCount, options, textEncoding, delimiter);
 
-
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data
     /// without a header row.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
-    /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="columnsCount">Number of columns in the CSV.</param>
+    /// <param name="options">Options for the CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
@@ -242,17 +253,49 @@ public static class Csv
                                       char delimiter = ',')
         => new(writer, columnsCount, options, delimiter);
 
-    public static void Write(CsvData data,
-                             TextWriter writer,
-                             IEnumerable<string?> columnNames,
-                             CsvOpts options = CsvOpts.Default,
-                             char delimiter = ',')
-    {
-        using CsvWriter csvWriter = new(writer, columnNames, options, delimiter);
-        DoWrite(csvWriter, data);
-    }
-
-    public static void Write(CsvData data,
+    /// <summary>Writes <paramref name="data"/> to a new CSV file with a header row. If the 
+    /// target file already exists, it is truncated and overwritten.</summary>
+    /// <param name="data">The data to be written to the CSV file.</param>
+    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="columnNames">A collection of column names for the header to be written.
+    /// The collection will be copied. If the collection contains <c>null</c> values, these 
+    /// are replaced by automatically generated column names. Column names cannot appear twice. 
+    /// It is to note that the comparison is not case-sensitive - unless this option is explicitely
+    /// chosen in <paramref name="options" />.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\Examples\CsvExample.cs" />
+    /// </example>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="filePath" />, or <paramref name="data" />, 
+    /// or one of its items is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> An item of <paramref name="data" /> contains
+    /// more items than <paramref name="columnNames"/> />.</exception>
+    /// <exception cref="ArgumentException">
+    /// <para>
+    /// <paramref name="filePath" /> is not a valid file path
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// a column name in <paramref name="columnNames" /> occurs twice. In <paramref
+    /// name="options" /> you can choose, whether the comparison of column names is
+    /// case-sensitive.
+    /// </para>
+    /// </exception>
+    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="ObjectDisposedException">The file was already closed.</exception>
+    public static void Write(IEnumerable<IEnumerable<ReadOnlyMemory<char>>> data,
                              string filePath,
                              IEnumerable<string?> columnNames,
                              CsvOpts options = CsvOpts.Default,
@@ -263,7 +306,56 @@ public static class Csv
         DoWrite(writer, data);
     }
 
-    public static void Write(CsvData data,
+    /// <summary>Writes <paramref name="data"/> in CSV format with a header row.</summary>
+    /// <param name="data">The data to be written in CSV format.</param>
+    /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
+    /// <param name="columnNames">A collection of column names for the header to be written.
+    /// The collection will be copied. If the collection contains <c>null</c> values, these 
+    /// are replaced with automatically
+    /// generated column names. Column names cannot appear twice. It is to note that
+    /// the comparison is not case-sensitive - unless this option is explicitely chosen
+    /// in <paramref name="options" />.</param>
+    /// <param name="options">Options for the CSV.</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="writer" />, or <paramref name="columnNames"/>,
+    /// or <paramref name="data" />, or one of its items is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> An item of <paramref name="data" /> contains
+    /// more items than <paramref name="columnNames"/> />.</exception>
+    ///  <exception cref="ArgumentException">A column name in <paramref name="columnNames"
+    /// /> occurs twice. In <paramref name="options" /> can be chosen whether the comparison
+    /// is case-sensitive.</exception>
+    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="ObjectDisposedException"><paramref name="writer"/> was already closed.</exception>
+    public static void Write(IEnumerable<IEnumerable<ReadOnlyMemory<char>>> data,
+                             TextWriter writer,
+                             IEnumerable<string?> columnNames,
+                             CsvOpts options = CsvOpts.Default,
+                             char delimiter = ',')
+    {
+        using CsvWriter csvWriter = new(writer, columnNames, options, delimiter);
+        DoWrite(csvWriter, data);
+    }
+
+    /// <summary>Writes <paramref name="data"/> to a new CSV file without a header row. If the 
+    /// target file already exists, it is truncated and overwritten.</summary>
+    /// <param name="data">The data to be written to the CSV file.</param>
+    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="columnsCount">Number of columns in the CSV file.</param>
+    /// <param name="options">Options for the CSV file to be written.</param>
+    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="filePath" />, or <paramref name="data" />, 
+    /// or one of its items is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> An item of <paramref name="data" /> contains
+    /// more items than <paramref name="columnsCount"/> />.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
+    /// file path.</exception>
+    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="ObjectDisposedException">The file was already closed.</exception>
+    public static void Write(IEnumerable<IEnumerable<ReadOnlyMemory<char>>> data,
                              string filePath,
                              int columnsCount,
                              CsvOpts options = CsvOpts.Default,
@@ -274,7 +366,20 @@ public static class Csv
         DoWrite(writer, data);
     }
 
-    public static void Write(CsvData data,
+    /// <summary>Writes <paramref name="data"/> in CSV format without a header row.</summary>
+    /// <param name="data">The data to be written in CSV format.</param>
+    /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
+    /// <param name="columnsCount">Number of columns in the CSV.</param>
+    /// <param name="options">Options for the CSV.</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="writer" />, or <paramref name="data" />, or one of its items
+    /// is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> An item of <paramref name="data" /> contains
+    /// more items than <paramref name="columnsCount"/> />.</exception>
+    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="ObjectDisposedException"><paramref name="writer"/> was already closed.</exception>
+    public static void Write(IEnumerable<IEnumerable<ReadOnlyMemory<char>>> data,
                              TextWriter writer,
                              int columnsCount,
                              CsvOpts options = CsvOpts.Default,
@@ -307,11 +412,13 @@ public static class Csv
         }
     }
 
-    private static void DoWrite(CsvWriter writer, CsvData values)
+    private static void DoWrite(CsvWriter writer, IEnumerable<IEnumerable<ReadOnlyMemory<char>>> values)
     {
+        _ArgumentNullException.ThrowIfNull(values, nameof(values));
+
         foreach (IEnumerable<ReadOnlyMemory<char>> record in values)
         {
-            writer.Record.DoFill(record);
+            writer.Record.Fill(record);
             writer.Write();
         }
     }
