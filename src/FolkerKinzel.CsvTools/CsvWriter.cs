@@ -14,9 +14,9 @@ public sealed class CsvWriter : IDisposable
 {
     private bool _isHeaderRowWritten;
     private bool _isDataWritten;
+    private readonly SearchValuesPolyfill<char> _reservedChars;
 
     private readonly char _fieldSeparator;
-    private readonly bool _trimColumns;
 
     private readonly TextWriter _writer;
 
@@ -27,9 +27,10 @@ public sealed class CsvWriter : IDisposable
     /// <param name="columnNames">A collection of column names for the header to be written.
     /// The collection will be copied. If the collection contains <c>null</c> values, these 
     /// are replaced by automatically generated column names. Column names cannot appear twice. 
-    /// It is to note that the comparison is not case-sensitive - unless this option is explicitely
-    /// chosen in <paramref name="options" />.</param>
-    /// <param name="options">Options for the CSV file to be written.</param>
+    /// With <paramref name="caseSensitive"/>
+    /// can be chosen whether the comparison is case-sensitive or not.</param>
+    ///<param name="caseSensitive">If <c>true</c>, column names that differ only in 
+    /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character.</param>
@@ -42,38 +43,36 @@ public sealed class CsvWriter : IDisposable
     /// - or -
     /// </para>
     /// <para>
-    /// a column name in <paramref name="columnNames" /> occurs twice. In <paramref
-    /// name="options" /> you can choose, whether the comparison of column names is
-    /// case-sensitive.
+    /// a column name in <paramref name="columnNames" /> occurs twice. With <paramref name="caseSensitive"/> 
+    /// can be chosen whether the comparison is case-sensitive or not.
     /// </para>
     /// </exception>
     /// <exception cref="IOException">I/O-Error</exception>
     public CsvWriter(string filePath,
                      IEnumerable<string?> columnNames,
-                     CsvOpts options = CsvOpts.Default,
+                     bool caseSensitive = false,
                      Encoding? textEncoding = null,
                      char delimiter = ',')
-         : this(InitStreamWriter(filePath, textEncoding), columnNames, options, delimiter) { }
+         : this(InitStreamWriter(filePath, textEncoding), columnNames, caseSensitive, delimiter) { }
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
     /// without a header row.</summary>
     /// <param name="filePath">The file path of the CSV file to be written. If the file
     /// exists, it will be overwritten.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="options">Options for the CSV file to be written.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">I/O-Error</exception>
     public CsvWriter(string filePath,
                      int columnsCount,
-                     CsvOpts options = CsvOpts.Default,
                      Encoding? textEncoding = null,
                      char delimiter = ',')
-         : this(InitStreamWriter(filePath, textEncoding), columnsCount, options, delimiter) { }
+         : this(InitStreamWriter(filePath, textEncoding), columnsCount, delimiter) { }
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
@@ -81,59 +80,60 @@ public sealed class CsvWriter : IDisposable
     /// <param name="columnNames">A collection of column names for the header to be written.
     /// The collection will be copied. If the collection contains <c>null</c> values, these 
     /// are replaced with automatically
-    /// generated column names. Column names cannot appear twice. It is to note that
-    /// the comparison is not case-sensitive - unless this option is explicitely chosen
-    /// in <paramref name="options" />.</param>
-    /// <param name="options">Options for the CSV file to be written.</param>
+    /// generated column names. Column names cannot appear twice. With <paramref name="caseSensitive"/>
+    /// can be chosen whether the comparison is case-sensitive or not.</param>
+    /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
+    /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
     /// name="columnNames" /> is <c>null.</c></exception>
     /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
-    /// /> occurs twice. In <paramref name="options" /> can be chosen whether the comparison
-    /// is case-sensitive.</exception>
+    /// /> occurs twice. With <paramref name="caseSensitive"/> can be chosen whether 
+    /// the comparison is case-sensitive or not.</exception>
     public CsvWriter(TextWriter writer,
                      IEnumerable<string?> columnNames,
-                     CsvOpts options = CsvOpts.Default,
+                     bool caseSensitive = false,
                      char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
         _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
 
-        this._writer = writer;
-        writer.NewLine = Csv.NewLine;
+        _writer = writer;
+        _writer.NewLine = Csv.NewLine;
 
-        this._fieldSeparator = delimiter;
-        this._trimColumns = options.HasFlag(CsvOpts.TrimColumns);
+        _fieldSeparator = delimiter;
+        _reservedChars = CreateReservedChars(delimiter);
 
         this.Record = new CsvRecord(
             columnNames.ToArray(),
-            options.HasFlag(CsvOpts.CaseSensitiveKeys),
+            caseSensitive,
             initArr: true,
             throwException: true);
     }
+
+    private static SearchValuesPolyfill<char> CreateReservedChars(char delimiter) 
+        => SearchValuesPolyfill.Create([delimiter, '\"', '\r', 'n']);
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data
     /// without a header row.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="options">Options for the CSV file to be written.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
     public CsvWriter(TextWriter writer,
                      int columnsCount,
-                     CsvOpts options = CsvOpts.Default,
                      char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
-
         this._writer = writer;
         writer.NewLine = Csv.NewLine;
 
-        this._isHeaderRowWritten = true;
-        this._fieldSeparator = delimiter;
-        this._trimColumns = options.HasFlag(CsvOpts.TrimColumns);
-        this.Record = new CsvRecord(columnsCount);
+        _isHeaderRowWritten = true;
+        _fieldSeparator = delimiter;
+        _reservedChars = CreateReservedChars(delimiter);
+        Record = new CsvRecord(columnsCount);
     }
 
     /// <summary>The record to be written to the file. Fill the <see cref="CsvRecord"
@@ -153,7 +153,8 @@ public sealed class CsvWriter : IDisposable
 
         if (!_isHeaderRowWritten)
         {
-            IReadOnlyList<string>? columns = Record.ColumnNames;
+            Debug.Assert(Record.ColumnNames is string[]);
+            ReadOnlySpan<string> columns = (string[])Record.ColumnNames;
 
             for (int i = 0; i < recordLength - 1; i++)
             {
@@ -172,37 +173,34 @@ public sealed class CsvWriter : IDisposable
 
         _isDataWritten = true;
 
+        Span<ReadOnlyMemory<char>> values = Record.Values;
+
         for (int j = 0; j < recordLength - 1; j++)
         {
-            ReadOnlyMemory<char> mem = Record[j];
+            ReadOnlyMemory<char> mem = values[j];
 
             if (!mem.IsEmpty)
             {
                 WriteField(mem.Span);
-                Record[j] = default;
+                values[j] = default;
             }
 
             _writer.Write(_fieldSeparator);
         }
 
-        ReadOnlyMemory<char> lastString = Record[recordLength - 1];
+        ReadOnlyMemory<char> lastString = values[recordLength - 1];
 
         if (!lastString.IsEmpty)
         {
             WriteField(lastString.Span);
-            Record[recordLength - 1] = default;
+            values[recordLength - 1] = default;
         }
 
         /////////////////////////////////////////////
 
         void WriteField(ReadOnlySpan<char> field)
         {
-            if (_trimColumns)
-            {
-                field = field.Trim();
-            }
-
-            bool needsToBeQuoted = NeedsToBeQuoted(field);
+            bool needsToBeQuoted = field.ContainsAny(_reservedChars);
 
             if (needsToBeQuoted)
             {
@@ -235,11 +233,6 @@ public sealed class CsvWriter : IDisposable
                 _writer.Write(field);
             }
         }
-
-        bool NeedsToBeQuoted(ReadOnlySpan<char> s)
-            => s.Contains(_fieldSeparator) ||
-               s.Contains('"') ||
-               s.Contains(Environment.NewLine, StringComparison.Ordinal);
     }
 
     /// <summary>Releases the resources. (Closes the CSV file.)</summary>

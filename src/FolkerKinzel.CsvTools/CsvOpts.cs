@@ -2,7 +2,7 @@ using System.Data;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Named constants to specify options for reading and writing CSV files.
+/// <summary>Named constants to specify options for reading CSV files.
 /// The flags can be combined.</summary>
 /// <remarks>
 /// <note type="tip">
@@ -73,8 +73,8 @@ public enum CsvOpts
     /// behavior that <see cref="DataColumnCollection" /> shows.</summary>
     CaseSensitiveKeys = 1 << 4,
 
-    /// <summary>If the flag is set, <see cref="CsvEnumerator" /> leading and trailing
-    /// white space will be removed from all data tokens and the column names. That can damage data
+    /// <summary>If the flag is set, <see cref="CsvEnumerator" /> will remove leading and trailing
+    /// white space from all data tokens and the column names. That can damage data
     /// where the white space has a meaning. Only set the flag
     /// for reading non-standard CSV files, that introduce additional padding.</summary>
     TrimColumns = 1 << 5,

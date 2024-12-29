@@ -129,19 +129,19 @@ namespace FolkerKinzel.CsvTools.Tests
 
             using (var writer = new CsvWriter(FILENAME_STANDARD, 2))
             {
-                writer.Record[0] = VALUE1.AsMemory();
+                writer.Record.Values[0] = VALUE1.AsMemory();
 
                 writer.Write();
 
-                writer.Record[0] = "Value1".AsMemory();
-                writer.Record[1] = "Value2".AsMemory();
+                writer.Record.Values[0] = "Value1".AsMemory();
+                writer.Record.Values[1] = "Value2".AsMemory();
 
                 writer.Write();
             }
 
             using var reader = new CsvEnumerator(FILENAME_STANDARD, hasHeaderRow: false);
 
-            Assert.AreEqual(VALUE1, reader.First()[0].ToString());
+            Assert.AreEqual(VALUE1, reader.First().Values[0].ToString());
         }
 
 

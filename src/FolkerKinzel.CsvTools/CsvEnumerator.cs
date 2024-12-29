@@ -202,7 +202,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
                                              reader.LineIndex);
             }
 
-            Span<ReadOnlyMemory<char>> recordSpan = _record.Span;
+            Span<ReadOnlyMemory<char>> recordSpan = _record.Values;
             int i;
             int count = Math.Min(data.Count, _record.Count);
 #if NET8_0_OR_GREATER

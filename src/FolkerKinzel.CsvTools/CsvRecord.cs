@@ -11,11 +11,9 @@ namespace FolkerKinzel.CsvTools;
 /// <summary>Represents a record of the CSV file (row). The column order corresponds
 /// to that of the CSV file and all columns are of the <see cref="Type"/>&#160;
 /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>. The content of the
-/// columns can be accessed using a zero-based column index
-/// or the column name.</summary>
+/// columns can be accessed with the column name or directly as an array.</summary>
 public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<char>>>
 {
-    private readonly ReadOnlyMemory<char>[] _values;
     private readonly Dictionary<string, int> _lookupDictionary;
 
     /// <summary> Initialisiert aus <paramref name="source" />, das als Vorlage dient,
@@ -29,7 +27,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         _lookupDictionary = source._lookupDictionary;
         Identifier = source.Identifier;
         ColumnNames = source.ColumnNames;
-        _values = new ReadOnlyMemory<char>[Count];
+        Values = new ReadOnlyMemory<char>[Count];
     }
 
     /// <summary> Initialisiert ein <see cref="CsvRecord" />-Objekt mit Standardnamen
@@ -53,7 +51,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
 
         ColumnNames = new ReadOnlyCollection<string>(columnNames);
-        _values = new ReadOnlyMemory<char>[columnsCount];
+        Values = new ReadOnlyMemory<char>[columnsCount];
     }
 
     /// <summary> Initialisiert ein neues <see cref="CsvRecord" />-Objekt mit Spaltennamen.
@@ -107,7 +105,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }//for
 
         ColumnNames = keys!;
-        _values = initArr ? new ReadOnlyMemory<char>[Count] : [];
+        Values = initArr ? new ReadOnlyMemory<char>[Count] : [];
 
         ///////////////////////////////////////////////////
 
@@ -139,18 +137,18 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
-    /// <summary>Gets or sets the value of the column in the CSV file that is at the
-    /// specified index.</summary>
-    /// <param name="index">The zero-based index of the column in the CSV file whose
-    /// value is being obtained or set.</param>
-    /// <returns>The item at the specified index.</returns>
-    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="index" /> is
-    /// less than Zero or greater or equal than <see cref="Count" />.</exception>
-    public ReadOnlyMemory<char> this[int index]
-    {
-        get => _values[index];
-        set => _values[index] = value;
-    }
+    ///// <summary>Gets or sets the value of the column in the CSV file that is at the
+    ///// specified index.</summary>
+    ///// <param name="index">The zero-based index of the column in the CSV file whose
+    ///// value is being obtained or set.</param>
+    ///// <returns>The item at the specified index.</returns>
+    ///// <exception cref="ArgumentOutOfRangeException"> <paramref name="index" /> is
+    ///// less than Zero or greater or equal than <see cref="Count" />.</exception>
+    //public ReadOnlyMemory<char> this[int index]
+    //{
+    //    get => _values[index];
+    //    set => _values[index] = value;
+    //}
 
     /// <summary>Gets or sets the value associated with the specified column name in
     /// the CSV file.</summary>
@@ -161,8 +159,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.</exception>
     public ReadOnlyMemory<char> this[string columnName]
     {
-        get => _values[_lookupDictionary[columnName]];
-        set => _values[_lookupDictionary[columnName]] = value;
+        get => Values[_lookupDictionary[columnName]];
+        set => Values[_lookupDictionary[columnName]] = value;
     }
 
     /// <summary>Returns the number of columns in the <see cref="CsvRecord" /> instance.</summary>
@@ -173,16 +171,15 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <c>true</c> if <see cref="Count" /> is Zero or if all fields are
     /// <see cref="ReadOnlyMemory{T}.Empty"/>, otherwise <c>false</c>.
     /// </value>
-    public bool IsEmpty => Count == 0 || _values.All(x => x.IsEmpty);
+    public bool IsEmpty => Count == 0 || Values.All(x => x.IsEmpty);
 
     /// <summary>Gets the column names.</summary>
     /// <remarks>If the CSV file did not have a header, column names of the type "Column1",
     /// "Column2" etc. are automatically assigned.</remarks>
     public IReadOnlyList<string> ColumnNames { get; }
 
-    /// <summary> Gets the list of data stored in <see cref="CsvRecord" />. The values 
-    /// can be changed.</summary>
-    public IList<ReadOnlyMemory<char>> Values => _values;
+    /// <summary> Gets the array of data stored in <see cref="CsvRecord" />.</summary>
+    public ReadOnlyMemory<char>[] Values { get; }
 
     /// <summary> Returns a copy of the data stored in <see cref="CsvRecord" /> as <see cref="Dictionary{TKey,
     /// TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see>, 
@@ -217,10 +214,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     [EditorBrowsable(EditorBrowsableState.Never)]
     public IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
-    internal Span<ReadOnlyMemory<char>> Span => _values;
-
     /// <summary>Sets all data fields of <see cref="CsvRecord" /> to <c>null</c>.</summary>
-    public void Clear() => Array.Clear(_values, 0, _values.Length);
+    public void Clear() => Array.Clear(Values, 0, Values.Length);
 
     /// <summary>Tries to get the value associated with the specified column name in the CSV
     /// file.</summary>
@@ -241,7 +236,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 
         if (_lookupDictionary.TryGetValue(columnName, out int index))
         {
-            value = _values[index];
+            value = Values[index];
             return true;
         }
         else
@@ -264,7 +259,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     {
         if (columnIndex >= 0 && columnIndex < Count)
         {
-            value = _values[columnIndex];
+            value = Values[columnIndex];
             return true;
         }
         else
@@ -290,35 +285,68 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     //    DoFill(data.Select(x => x.AsMemory()));
     //}
 
-    /// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
-    /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> collection.
+    ///// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
+    ///// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> collection.
+    ///// </summary>
+    ///// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
+    ///// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    ///// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
+    ///// more entries than <see cref="CsvRecord.Count" />.</exception>
+    ///// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
+    ///// the remaining fields of <see cref="CsvRecord" /> are filled with 
+    ///// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
+    //public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
+    //{
+    //    _ArgumentNullException.ThrowIfNull(data, nameof(data));
+     
+    //    int i = 0;
+
+    //    Span<ReadOnlyMemory<char>> span = Values;
+
+    //    foreach (ReadOnlyMemory<char> item in data)
+    //    {
+    //        if (i >= span.Length)
+    //        {
+    //            throw new ArgumentOutOfRangeException(nameof(data));
+    //        }
+
+    //        span[i++] = item;
+    //    }
+
+    //    for (int j = i; j < span.Length; j++)
+    //    {
+    //        span[j] = default;
+    //    }
+    //}
+
+    /// <summary> Fills the <see cref="CsvRecord" /> instance with a read-only span of
+    /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> values.
     /// </summary>
     /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
-    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
     /// more entries than <see cref="CsvRecord.Count" />.</exception>
     /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
     /// the remaining fields of <see cref="CsvRecord" /> are filled with 
     /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
+    public void Fill(ReadOnlySpan<ReadOnlyMemory<char>> data)
     {
-        _ArgumentNullException.ThrowIfNull(data, nameof(data));
-     
         int i = 0;
+
+        Span<ReadOnlyMemory<char>> span = Values;
 
         foreach (ReadOnlyMemory<char> item in data)
         {
-            if (i >= _values.Length)
+            if (i >= span.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(data));
             }
 
-            _values[i++] = item;
+            span[i++] = item;
         }
 
-        for (int j = i; j < _values.Length; j++)
+        for (int j = i; j < span.Length; j++)
         {
-            _values[j] = default;
+            span[j] = default;
         }
     }
 
@@ -373,9 +401,13 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 
         var sb = new StringBuilder();
 
-        foreach (var key in ColumnNames)
+        Debug.Assert(ColumnNames is string[]);
+        ReadOnlySpan<string> columns = (string[])ColumnNames;
+        ReadOnlySpan<ReadOnlyMemory<char>> values = Values;
+
+        for (int i = 0; i < Count; i++)
         {
-            _ = sb.Append(key).Append(": ").Append(this[key]).Append(", ");
+            _ = sb.Append(columns[i]).Append(": ").Append(values[i].Span).Append(", ");
         }
 
         if (sb.Length >= 2)

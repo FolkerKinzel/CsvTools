@@ -66,14 +66,14 @@ namespace FolkerKinzel.CsvTools.Tests
         //    rec.Fill((IEnumerable<string?>?)null!);
         //}
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void FillTest5()
-        {
-            var rec = new CsvRecord(2);
+        //[TestMethod]
+        //[ExpectedException(typeof(ArgumentNullException))]
+        //public void FillTest5()
+        //{
+        //    var rec = new CsvRecord(2);
 
-            rec.Fill((IEnumerable<ReadOnlyMemory<char>>?)null!);
-        }
+        //    rec.Fill((IEnumerable<ReadOnlyMemory<char>>?)null!);
+        //}
 
 
         [TestMethod()]
@@ -117,8 +117,8 @@ namespace FolkerKinzel.CsvTools.Tests
         public void TryGetValueTest2()
         {
             var rec = new CsvRecord(2);
-            rec[0] = "1".AsMemory();
-            rec[1] = "2".AsMemory();
+            rec.Values[0] = "1".AsMemory();
+            rec.Values[1] = "2".AsMemory();
 
             Assert.IsTrue(rec.TryGetValue(0, out ReadOnlyMemory<char> val1));
             Assert.AreEqual("1", val1.ToString());
@@ -138,8 +138,8 @@ namespace FolkerKinzel.CsvTools.Tests
         public void GetEnumeratorTest1()
         {
             var rec = new CsvRecord(2);
-            rec[0] = "1".AsMemory();
-            rec[1] = "2".AsMemory();
+            rec.Values[0] = "1".AsMemory();
+            rec.Values[1] = "2".AsMemory();
 
             Assert.AreEqual(3, rec.Select(x => int.Parse(x.Value!.ToString(), CultureInfo.InvariantCulture)).Sum());
         }
@@ -151,8 +151,8 @@ namespace FolkerKinzel.CsvTools.Tests
         public void ToStringTest()
         {
             var rec = new CsvRecord(2);
-            rec[0] = "1".AsMemory();
-            rec[1] = "2".AsMemory();
+            rec.Values[0] = "1".AsMemory();
+            rec.Values[1] = "2".AsMemory();
 
             string s = rec.ToString();
 
