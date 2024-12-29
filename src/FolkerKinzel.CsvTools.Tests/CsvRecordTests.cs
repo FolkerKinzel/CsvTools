@@ -33,7 +33,7 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod()]
         public void FillTest2()
         {
-            var data = new ReadOnlyMemory<char>[] { "eins".AsMemory(), "zwei".AsMemory() };
+            ReadOnlyMemory<char>[] data = ["eins".AsMemory(), "zwei".AsMemory()];
             var rec = new CsvRecord(2);
 
             Assert.AreEqual(2, rec.Count);
@@ -54,6 +54,24 @@ namespace FolkerKinzel.CsvTools.Tests
             var rec = new CsvRecord(2);
 
             rec.Fill(["1".AsMemory(), "2".AsMemory(), "3".AsMemory()]);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void ItemTest1()
+        {
+            var rec = new CsvRecord(1);
+
+            _ = rec[1];
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IndexOutOfRangeException))]
+        public void ItemTest2()
+        {
+            var rec = new CsvRecord(1);
+
+            rec[-1] = default;
         }
 
 

@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -80,14 +80,14 @@ public enum CsvOpts
     TrimColumns = 1 << 5,
 
     /// <summary>Default setting. This is a combined value, that forces <see cref="CsvEnumerator"
-    /// /> to throw an <see cref="CsvFormatException" />, if the file to be read does
-    /// not comply with the RFC 4180 standard. (Alternative column separators and newline
-    /// characters are always tolerated.)</summary>
-    Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles,
+    /// /> to throw an <see cref="CsvFormatException" /> if the file to be read does
+    /// not comply with the RFC 4180 standard, and allows the results to be cached. (Alternative column 
+    /// separators and newline characters are always tolerated.)</summary>
+    Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles | EnableCaching,
 
-    /// <summary>If the flag is set, a new <see cref="CsvRecord" /> object is instantiated
-    /// for each iteration when reading the CSV file, otherwise the same <see cref="CsvRecord" /> instance
-    /// is filled with new data. Don't forget to set this flag if the 
-    /// <see cref="CsvRecord"/> instances have to be cached!</summary>
+    /// <summary>Disable this flag to gain performance benefits when parsing large files. Note that if this flag is 
+    /// not set, the results of the read operation cannot be cached: the <see cref="CsvRecord" /> instance 
+    /// provided by <see cref="CsvEnumerator"/> will then always be the same. Only the values ​​it contains will 
+    /// change with each iteration.</summary>
     EnableCaching = 1 << 6
 }

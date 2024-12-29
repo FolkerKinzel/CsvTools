@@ -11,7 +11,7 @@ namespace FolkerKinzel.CsvTools;
 /// <summary>Represents a record of the CSV file (row). The column order corresponds
 /// to that of the CSV file and all columns are of the <see cref="Type"/>&#160;
 /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>. The content of the
-/// columns can be accessed with the column name or directly as an array.</summary>
+/// columns can be accessed with the column name or with its zero-based column index.</summary>
 public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<char>>>
 {
     private readonly Dictionary<string, int> _lookupDictionary;
@@ -137,18 +137,18 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
-    ///// <summary>Gets or sets the value of the column in the CSV file that is at the
-    ///// specified index.</summary>
-    ///// <param name="index">The zero-based index of the column in the CSV file whose
-    ///// value is being obtained or set.</param>
-    ///// <returns>The item at the specified index.</returns>
-    ///// <exception cref="ArgumentOutOfRangeException"> <paramref name="index" /> is
-    ///// less than Zero or greater or equal than <see cref="Count" />.</exception>
-    //public ReadOnlyMemory<char> this[int index]
-    //{
-    //    get => _values[index];
-    //    set => _values[index] = value;
-    //}
+    /// <summary>Gets or sets the value of the column in the CSV file that is at the
+    /// specified index.</summary>
+    /// <param name="index">The zero-based index of the column in the CSV file whose
+    /// value is being obtained or set.</param>
+    /// <returns>The item at the specified index.</returns>
+    /// <exception cref="IndexOutOfRangeException"> <paramref name="index" /> is
+    /// less than Zero or greater or equal than <see cref="Count" />.</exception>
+    public ReadOnlyMemory<char> this[int index]
+    {
+        get => Values[index];
+        set => Values[index] = value;
+    }
 
     /// <summary>Gets or sets the value associated with the specified column name in
     /// the CSV file.</summary>
