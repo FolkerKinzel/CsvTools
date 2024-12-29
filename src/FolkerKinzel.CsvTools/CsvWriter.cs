@@ -7,7 +7,7 @@ namespace FolkerKinzel.CsvTools;
 /// <remarks> <see cref="CsvWriter" /> provides a <see cref="CsvRecord" /> object in its 
 /// <see cref="Record" /> property that represents a buffer for a data record (row) of the 
 /// CSV file. Fill the <see cref="CsvRecord" /> object with data and then write it to the 
-/// file using the <see cref="Write" /> method! After the <see cref="Write" /> 
+/// file using the <see cref="WriteRecord" /> method! After the <see cref="WriteRecord" /> 
 /// returns all fields of <see cref="Record" /> are reset to <see cref="ReadOnlyMemory{T}.Empty"/>
 /// so that the <see cref="CsvRecord" /> object can be filled again.</remarks>
 public sealed class CsvWriter : IDisposable
@@ -137,9 +137,9 @@ public sealed class CsvWriter : IDisposable
     }
 
     /// <summary>The record to be written to the file. Fill the <see cref="CsvRecord"
-    /// /> object with data and call then <see cref="Write" /> to write this data
+    /// /> object with data and call then <see cref="WriteRecord" /> to write this data
     /// to the file. <see cref="CsvWriter" /> clears the contents of <see cref="Record"
-    /// /> after each call of the <see cref="Write" /> method.</summary>
+    /// /> after each call of the <see cref="WriteRecord" /> method.</summary>
     public CsvRecord Record { get; }
 
     /// <summary> Writes the contents of <see cref="Record" /> to the CSV file and then sets all
@@ -147,7 +147,7 @@ public sealed class CsvWriter : IDisposable
     /// time it is called, the header row may also be written.)</summary>
     /// <exception cref="IOException">I/O-Error</exception>
     /// <exception cref="ObjectDisposedException">The file was already closed.</exception>
-    public void Write()
+    public void WriteRecord()
     {
         int recordLength = Record.Count;
 

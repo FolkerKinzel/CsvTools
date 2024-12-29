@@ -28,7 +28,7 @@ internal static class CsvExample
         foreach (CsvRecord record in data)
         {
             writer.Record.Fill(record.Values);
-            writer.Write();
+            writer.WriteRecord();
         }
 
         Console.WriteLine(File.ReadAllText(filePath));

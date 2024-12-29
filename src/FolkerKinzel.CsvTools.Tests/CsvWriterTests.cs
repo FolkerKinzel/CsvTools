@@ -12,7 +12,6 @@ namespace FolkerKinzel.CsvTools.Tests
         [NotNull]
         public TestContext? TestContext { get; set; }
 
-
         [TestMethod()]
         public void CsvWriterTest()
         {
@@ -40,7 +39,6 @@ namespace FolkerKinzel.CsvTools.Tests
             using var writer = new CsvWriter("Test", ["1", "2"]);
             Assert.IsNotNull(writer);
         }
-
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
@@ -89,7 +87,6 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.IsNotNull(writer);
         }
 
-
         [TestMethod()]
         public void WriteRecordTest1()
         {
@@ -103,12 +100,12 @@ namespace FolkerKinzel.CsvTools.Tests
             {
                 writer.Record[Key1] = VALUE1.AsMemory();
 
-                writer.Write();
+                writer.WriteRecord();
 
                 writer.Record[Key1] = "Value1".AsMemory();
                 writer.Record[Key2] = "Value2".AsMemory();
 
-                writer.Write();
+                writer.WriteRecord();
             }
 
             //string csv = File.ReadAllText(FILENAME_STANDARD);
@@ -116,7 +113,6 @@ namespace FolkerKinzel.CsvTools.Tests
 
             Assert.AreEqual(VALUE1, reader.First()[Key1].ToString());
         }
-
 
         /// <summary>
         /// Write CSV without Header.
@@ -131,19 +127,18 @@ namespace FolkerKinzel.CsvTools.Tests
             {
                 writer.Record.Values[0] = VALUE1.AsMemory();
 
-                writer.Write();
+                writer.WriteRecord();
 
                 writer.Record.Values[0] = "Value1".AsMemory();
                 writer.Record.Values[1] = "Value2".AsMemory();
 
-                writer.Write();
+                writer.WriteRecord();
             }
 
             using var reader = new CsvEnumerator(FILENAME_STANDARD, hasHeaderRow: false);
 
             Assert.AreEqual(VALUE1, reader.First().Values[0].ToString());
         }
-
 
         [TestMethod()]
         [ExpectedException(typeof(ObjectDisposedException))]
@@ -152,9 +147,8 @@ namespace FolkerKinzel.CsvTools.Tests
             using var writer = new CsvWriter("File", 2);
 
             writer.Dispose();
-            writer.Write();
+            writer.WriteRecord();
         }
-
 
         [TestMethod()]
         public void DisposeTest()
