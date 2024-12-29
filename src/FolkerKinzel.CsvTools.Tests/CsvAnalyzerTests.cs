@@ -41,7 +41,7 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.IsTrue(result.Options.HasFlag(CsvOpts.TrimColumns));
             Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnTooFewFields));
             Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnTooMuchFields));
-            Assert.IsFalse(result.Options.HasFlag(CsvOpts.DisableCaching));
+            Assert.IsFalse(result.Options.HasFlag(CsvOpts.EnableCaching));
             Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnEmptyLines));
         }
 

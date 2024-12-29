@@ -144,9 +144,6 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.AreEqual(3, rec.Select(x => int.Parse(x.Value!.ToString(), CultureInfo.InvariantCulture)).Sum());
         }
 
-        
-
-
         [TestMethod()]
         public void ToStringTest()
         {
@@ -159,7 +156,6 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.IsNotNull(s);
             Assert.AreNotEqual(0, s.Length);
         }
-
 
         [TestMethod()]
         public void ToDictionaryTest()

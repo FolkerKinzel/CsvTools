@@ -50,7 +50,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
             columnNames[i] = keyName;
         }
 
-        ColumnNames = new ReadOnlyCollection<string>(columnNames);
+        ColumnNames = columnNames;
         Values = new ReadOnlyMemory<char>[columnsCount];
     }
 

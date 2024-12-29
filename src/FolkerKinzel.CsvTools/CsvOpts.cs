@@ -12,8 +12,8 @@ namespace FolkerKinzel.CsvTools;
 /// </remarks>
 /// <example>
 /// <para>
-/// Example, which demonstrates that setting the flag <see cref="DisableCaching"
-/// /> can lead to unexpected results when an attempt is made to cache the result
+/// Example, which demonstrates that setting the flag <see cref="EnableCaching"
+/// /> is required when an attempt is made to cache the results.
 /// set.
 /// </para>
 /// <note type="note">
@@ -85,9 +85,9 @@ public enum CsvOpts
     /// characters are always tolerated.)</summary>
     Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles,
 
-    /// <summary>If the flag is set, the same <see cref="CsvRecord" /> object is used
-    /// for each data row when reading the CSV file (filled with new data). That brings
-    /// slight performance advantages when parsing very large CSV files, but can lead
-    /// to unexpected results if an attempt is made to cache the results. (see example)</summary>
-    DisableCaching = 1 << 6
+    /// <summary>If the flag is set, a new <see cref="CsvRecord" /> object is instantiated
+    /// for each iteration when reading the CSV file, otherwise the same <see cref="CsvRecord" /> instance
+    /// is filled with new data. Don't forget to set this flag if the 
+    /// <see cref="CsvRecord"/> instances have to be cached!</summary>
+    EnableCaching = 1 << 6
 }
