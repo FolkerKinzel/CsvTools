@@ -78,7 +78,7 @@ public sealed class CsvWriter : IDisposable
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
-    /// <param name="columnNames">A colletion of column names for the header to be written.
+    /// <param name="columnNames">A collection of column names for the header to be written.
     /// The collection will be copied. If the collection contains <c>null</c> values, these 
     /// are replaced with automatically
     /// generated column names. Column names cannot appear twice. It is to note that
