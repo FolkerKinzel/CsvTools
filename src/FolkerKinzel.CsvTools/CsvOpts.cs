@@ -26,7 +26,7 @@ namespace FolkerKinzel.CsvTools;
 public enum CsvOpts
 {
     /// <summary>No flag is set. This creates a very lenient parser that rarely throws
-    /// exceptions.</summary>
+    /// exceptions. Note that caching is not enabled.</summary>
     None = 0,
 
     /// <summary>If set, <see cref="CsvEnumerator" /> throws an <see cref="CsvFormatException"
