@@ -285,44 +285,91 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     //    DoFill(data.Select(x => x.AsMemory()));
     //}
 
-    ///// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
-    ///// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> collection.
-    ///// </summary>
-    ///// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
-    ///// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    ///// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    ///// more entries than <see cref="CsvRecord.Count" />.</exception>
-    ///// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
-    ///// the remaining fields of <see cref="CsvRecord" /> are filled with 
-    ///// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    //public void Fill(IEnumerable<ReadOnlyMemory<char>> data)
-    //{
-    //    _ArgumentNullException.ThrowIfNull(data, nameof(data));
-     
-    //    int i = 0;
+    /// <summary> Fills <see cref="Values"/> with the contents of a 
+    /// <see cref="string"/> collection.
+    /// </summary>
+    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.
+    /// The collection may contain <c>null</c> values.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
+    /// more items than <see cref="CsvRecord.Count" />.</exception>
+    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
+    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
+    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
+    public void Fill(IEnumerable<string?> data)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
-    //    Span<ReadOnlyMemory<char>> span = Values;
+        int i = 0;
 
-    //    foreach (ReadOnlyMemory<char> item in data)
-    //    {
-    //        if (i >= span.Length)
-    //        {
-    //            throw new ArgumentOutOfRangeException(nameof(data));
-    //        }
+        Span<ReadOnlyMemory<char>> span = Values;
 
-    //        span[i++] = item;
-    //    }
+        foreach (string? item in data)
+        {
+            if (i >= span.Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(data));
+            }
 
-    //    for (int j = i; j < span.Length; j++)
-    //    {
-    //        span[j] = default;
-    //    }
-    //}
+            span[i++] = item.AsMemory();
+        }
 
-    /// <summary> Fills the <see cref="CsvRecord" /> instance with a read-only span of
+        for (int j = i; j < span.Length; j++)
+        {
+            span[j] = default;
+        }
+    }
+
+    /// <summary> Fills <see cref="Values"/> with the contents of a 
+    /// <see cref="string"/> array.
+    /// </summary>
+    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.
+    /// The array may contain <c>null</c> values.</param>
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
+    /// more items than <see cref="CsvRecord.Count" />.</exception>
+    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
+    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
+    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
+    public void Fill(string?[] data) => Fill(data.AsSpan());
+
+    /// <summary> Fills <see cref="Values"/> with the contents 
+    /// of a read-only span of <see cref="string"/>s.
+    /// </summary>
+    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" />
+    /// instance. The span may contain <c>null</c> values.</param>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
+    /// more entries than <see cref="CsvRecord.Count" />.</exception>
+    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
+    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
+    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
+    public void Fill(ReadOnlySpan<string?> data)
+    {
+        if (data.Length > Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(data));
+        }
+
+        int i = 0;
+        Span<ReadOnlyMemory<char>> span = Values;
+
+        foreach (string? item in data)
+        {
+            span[i++] = item.AsMemory();
+        }
+
+        for (int j = i; j < span.Length; j++)
+        {
+            span[j] = default;
+        }
+    }
+
+    /// <summary> Fills <see cref="Values"/> with the contents 
+    /// of a read-only span of
     /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> values.
     /// </summary>
-    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
+    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" />
+    /// instance.</param>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
     /// more entries than <see cref="CsvRecord.Count" />.</exception>
     /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
@@ -330,17 +377,16 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
     public void Fill(ReadOnlySpan<ReadOnlyMemory<char>> data)
     {
-        int i = 0;
+        if (data.Length > Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(data));
+        }
 
+        int i = 0;
         Span<ReadOnlyMemory<char>> span = Values;
 
         foreach (ReadOnlyMemory<char> item in data)
         {
-            if (i >= span.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(data));
-            }
-
             span[i++] = item;
         }
 

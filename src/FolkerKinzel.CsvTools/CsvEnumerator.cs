@@ -169,7 +169,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
 
                 _record = new CsvRecord(columnNames,
                                         Options.HasFlag(CsvOpts.CaseSensitiveKeys),
-                                        initArr: !Options.HasFlag(CsvOpts.EnableCaching),
+                                        initArr: Options.HasFlag(CsvOpts.DisableCaching),
                                         throwException: false);
                 return Read();
             }
@@ -181,7 +181,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
             }
         }
 
-        if (Options.HasFlag(CsvOpts.EnableCaching))
+        if (!Options.HasFlag(CsvOpts.DisableCaching))
         {
             _record = new CsvRecord(_record);
         }
@@ -231,7 +231,7 @@ public sealed class CsvEnumerator : IDisposable, IEnumerable<CsvRecord>, IEnumer
                     throw new CsvFormatException(Res.TooFewFields, CsvError.TooFewFields, reader.LineNumber, reader.LineIndex);
                 }
 
-                if (!Options.HasFlag(CsvOpts.EnableCaching))
+                if (Options.HasFlag(CsvOpts.DisableCaching))
                 {
                     for (int j = i; j < _record.Count; j++)
                     {

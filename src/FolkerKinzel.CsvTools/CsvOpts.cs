@@ -12,8 +12,8 @@ namespace FolkerKinzel.CsvTools;
 /// </remarks>
 /// <example>
 /// <para>
-/// Example, which demonstrates that setting the flag <see cref="EnableCaching"
-/// /> is required when an attempt is made to cache the results.
+/// Example that demonstrates that setting the flag <see cref="DisableCaching"
+/// /> leads to errors when an attempt is made to cache the results.
 /// set.
 /// </para>
 /// <note type="note">
@@ -26,7 +26,7 @@ namespace FolkerKinzel.CsvTools;
 public enum CsvOpts
 {
     /// <summary>No flag is set. This creates a very lenient parser that rarely throws
-    /// exceptions. Note that caching is not enabled.</summary>
+    /// exceptions.</summary>
     None = 0,
 
     /// <summary>If set, <see cref="CsvEnumerator" /> throws an <see cref="CsvFormatException"
@@ -81,13 +81,13 @@ public enum CsvOpts
 
     /// <summary>Default setting. This is a combined value, that forces <see cref="CsvEnumerator"
     /// /> to throw an <see cref="CsvFormatException" /> if the file to be read does
-    /// not comply with the RFC 4180 standard, and allows the results to be cached. (Alternative column 
+    /// not comply with the RFC 4180 standard. (Alternative column 
     /// separators and newline characters are always tolerated.)</summary>
-    Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles | EnableCaching,
+    Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles,
 
-    /// <summary>Disable this flag to gain performance benefits when parsing large files. Note that if this flag is 
-    /// not set, the results of the read operation cannot be cached: the <see cref="CsvRecord" /> instance 
+    /// <summary>Set this flag to gain performance benefits when parsing large files. Note that if this flag is 
+    /// set, the results of the read operation cannot be cached: the <see cref="CsvRecord" /> instance 
     /// provided by <see cref="CsvEnumerator"/> will then always be the same. Only the values ​​it contains will 
-    /// change with each iteration.</summary>
-    EnableCaching = 1 << 6
+    /// update with each iteration.</summary>
+    DisableCaching = 1 << 6
 }
