@@ -1,5 +1,5 @@
-# FolkerKinzel.CsvTools
-.NET-library to read and write CSV files. 
+# FolkerKinzel.CsvTools.Mappings
+Mappings and type conversions for [FolkerKinzel.CsvTools](https://www.nuget.org/packages/FolkerKinzel.CsvTools)
 
 It is used as a dependency in [FolkerKinzel.Contacts.IO](https://www.nuget.org/packages/FolkerKinzel.Contacts.IO/) - an easy to use .NET-API to manage contact data of organizations and natural persons, including a data model and classes to persist it as vCard (*.vcf) or CSV.
 
