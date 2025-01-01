@@ -49,7 +49,7 @@ public static class Csv
     }
 
     /// <summary>This method analyzes the CSV file referenced by <paramref name="filePath" />
-    /// first and then opens a <see cref="CsvEnumerator"/> to read its content.
+    /// first and then opens a <see cref="CsvReader"/> to read its content.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
@@ -57,7 +57,7 @@ public static class Csv
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
-    /// <returns>An <see cref="CsvEnumerator"/> that allows to iterate the data.</returns>
+    /// <returns>An <see cref="CsvReader"/> that allows to iterate the data.</returns>
     /// 
     /// <remarks>
     /// <para>
@@ -86,7 +86,7 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
-    public static CsvEnumerator OpenReadAnalyzed(string filePath,
+    public static CsvReader OpenReadAnalyzed(string filePath,
                                                  int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         (Encoding encoding, CsvAnalyzerResult results) = Analyze(filePath, analyzedLines);
@@ -102,7 +102,7 @@ public static class Csv
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
     /// 
-    /// <returns>A <see cref="CsvEnumerator"/> that allows you to iterate through the data.</returns>
+    /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the data.</returns>
     /// 
     /// <remarks>
     /// <note type="tip">
@@ -116,7 +116,7 @@ public static class Csv
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the disk.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static CsvEnumerator OpenRead(string filePath,
+    public static CsvReader OpenRead(string filePath,
                                          bool hasHeaderRow = true,
                                          CsvOpts options = CsvOpts.Default,
                                          char delimiter = ',',
@@ -124,7 +124,7 @@ public static class Csv
         => new(filePath, hasHeaderRow, options, delimiter, textEncoding);
 
 
-    /// <summary>Initializes a <see cref="CsvEnumerator"/> instance to read data that is in the 
+    /// <summary>Initializes a <see cref="CsvReader"/> instance to read data that is in the 
     /// CSV format.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
@@ -133,11 +133,11 @@ public static class Csv
     /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
-    /// <returns>A <see cref="CsvEnumerator"/> that allows you to iterate through the CSV data.</returns>
+    /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static CsvEnumerator OpenRead(TextReader reader,
+    public static CsvReader OpenRead(TextReader reader,
                                          bool hasHeaderRow = true,
                                          CsvOpts options = CsvOpts.Default,
                                          char delimiter = ',')
