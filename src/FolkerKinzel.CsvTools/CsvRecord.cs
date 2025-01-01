@@ -27,6 +27,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         _lookupDictionary = source._lookupDictionary;
         Identifier = source.Identifier;
         ColumnNames = source.ColumnNames;
+        HasCaseSensitiveColumnNames = source.HasCaseSensitiveColumnNames;
         Values = new ReadOnlyMemory<char>[Count];
     }
 
@@ -74,6 +75,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     internal CsvRecord(string?[] keys, bool caseSensitive, bool initArr, bool throwException)
     {
         Debug.Assert(keys != null);
+
+        this.HasCaseSensitiveColumnNames = caseSensitive;
 
         IEqualityComparer<string> comparer =
             caseSensitive ?
@@ -171,7 +174,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <c>true</c> if <see cref="Count" /> is Zero or if all fields are
     /// <see cref="ReadOnlyMemory{T}.Empty"/>, otherwise <c>false</c>.
     /// </value>
-    public bool IsEmpty => Count == 0 || Values.All(x => x.IsEmpty);
+    public bool IsEmpty => Count == 0 || Values.All(static x => x.IsEmpty);
 
     /// <summary>Gets the column names.</summary>
     /// <remarks>If the CSV file did not have a header, column names of the type "Column1",
@@ -180,28 +183,6 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 
     /// <summary> Gets the array of data stored in <see cref="CsvRecord" />.</summary>
     public ReadOnlyMemory<char>[] Values { get; }
-
-    /// <summary> Returns a copy of the data stored in <see cref="CsvRecord" /> as <see cref="Dictionary{TKey,
-    /// TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see>, 
-    /// which uses the same <see cref="StringComparer" /> for key comparison that was used to create the 
-    /// <see cref="CsvRecord" /> instance.
-    ///</summary>
-    /// <returns>A copy of the data stored in <see cref="CsvRecord" />.</returns>
-    public Dictionary<string, ReadOnlyMemory<char>> ToDictionary()
-    {
-#if NETSTANDARD2_0 || NET462
-        var dic = new Dictionary<string, ReadOnlyMemory<char>>(this.Count, this._lookupDictionary.Comparer);
-
-        foreach (KeyValuePair<string, ReadOnlyMemory<char>> kvp in this)
-        {
-            dic.Add(kvp.Key, kvp.Value);
-        }
-
-        return dic;
-#else
-        return new Dictionary<string, ReadOnlyMemory<char>>(this, this._lookupDictionary.Comparer);
-#endif
-    }
 
     /// <summary> A hash code that is identical for all <see cref="CsvRecord" /> objects belonging to 
     /// the same read or write operation. </summary>
@@ -220,10 +201,9 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// </summary>
     /// <value><c>true</c> if the <see cref="ColumnNames"/> are treated case-sensitive, 
     /// <c>false</c> if not.</value>
-    public bool HasCaseSensitiveColumnNames
-        => object.ReferenceEquals(_lookupDictionary.Comparer, StringComparer.Ordinal);
+    public bool HasCaseSensitiveColumnNames { get; }
 
-    /// <summary>Sets all data fields of <see cref="CsvRecord" /> to <c>null</c>.</summary>
+    /// <summary>Sets all data fields of <see cref="CsvRecord" /> to <c>default</c>.</summary>
     public void Clear() => Array.Clear(Values, 0, Values.Length);
 
     /// <summary>Tries to get the value associated with the specified column name in the CSV
@@ -255,155 +235,28 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
-    /// <summary>Tries to get the value associated with the specified column index of the CSV
-    /// file.</summary>
-    /// <param name="columnIndex">Zero-based index of the data column of the CSV file.</param>
-    /// <param name="value">When this method returns, the parameter contains the value
-    /// assigned to the column index specified with <paramref name="columnIndex" />
-    /// if the column index exists, or <c>null</c> otherwise. This parameter is passed
-    /// uninitialized.</param>
-    /// <returns> <c>true</c> if a column index with the value of <paramref name="columnIndex"
-    /// /> exists in the CSV file, otherwise <c>false</c>.</returns>
-    public bool TryGetValue(int columnIndex, out ReadOnlyMemory<char> value)
-    {
-        if (columnIndex >= 0 && columnIndex < Count)
-        {
-            value = Values[columnIndex];
-            return true;
-        }
-        else
-        {
-            value = default;
-            return false;
-        }
-    }
-
-    ///// <summary> Fills the <see cref="CsvRecord" /> instance with the contents of a 
-    ///// <see cref="string"/> collection. The collection may contain <c>null</c> values.
-    ///// </summary>
-    ///// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.</param>
-    ///// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    ///// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    ///// more entries than <see cref="CsvRecord.Count" />.</exception>
-    ///// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
-    ///// the remaining fields of <see cref="CsvRecord" /> are filled with 
-    ///// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    //public void Fill(IEnumerable<string?> data)
+    ///// <summary>Tries to get the value associated with the specified column index of the CSV
+    ///// file.</summary>
+    ///// <param name="columnIndex">Zero-based index of the data column of the CSV file.</param>
+    ///// <param name="value">When this method returns, the parameter contains the value
+    ///// assigned to the column index specified with <paramref name="columnIndex" />
+    ///// if the column index exists, or <c>null</c> otherwise. This parameter is passed
+    ///// uninitialized.</param>
+    ///// <returns> <c>true</c> if a column index with the value of <paramref name="columnIndex"
+    ///// /> exists in the CSV file, otherwise <c>false</c>.</returns>
+    //public bool TryGetValue(int columnIndex, out ReadOnlyMemory<char> value)
     //{
-    //    _ArgumentNullException.ThrowIfNull(data, nameof(data));
-    //    DoFill(data.Select(x => x.AsMemory()));
+    //    if (columnIndex >= 0 && columnIndex < Count)
+    //    {
+    //        value = Values[columnIndex];
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        value = default;
+    //        return false;
+    //    }
     //}
-
-    /// <summary> Fills <see cref="Values"/> with the contents of a 
-    /// <see cref="string"/> collection.
-    /// </summary>
-    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.
-    /// The collection may contain <c>null</c> values.</param>
-    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more items than <see cref="CsvRecord.Count" />.</exception>
-    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
-    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
-    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    public void Fill(IEnumerable<string?> data)
-    {
-        _ArgumentNullException.ThrowIfNull(data, nameof(data));
-
-        int i = 0;
-
-        Span<ReadOnlyMemory<char>> span = Values;
-
-        foreach (string? item in data)
-        {
-            if (i >= span.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(data));
-            }
-
-            span[i++] = item.AsMemory();
-        }
-
-        for (int j = i; j < span.Length; j++)
-        {
-            span[j] = default;
-        }
-    }
-
-    /// <summary> Fills <see cref="Values"/> with the contents of a 
-    /// <see cref="string"/> array.
-    /// </summary>
-    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" /> instance.
-    /// The array may contain <c>null</c> values.</param>
-    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more items than <see cref="CsvRecord.Count" />.</exception>
-    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
-    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
-    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    public void Fill(string?[] data) => Fill(data.AsSpan());
-
-    /// <summary> Fills <see cref="Values"/> with the contents 
-    /// of a read-only span of <see cref="string"/>s.
-    /// </summary>
-    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" />
-    /// instance. The span may contain <c>null</c> values.</param>
-    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more entries than <see cref="CsvRecord.Count" />.</exception>
-    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
-    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
-    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    public void Fill(ReadOnlySpan<string?> data)
-    {
-        if (data.Length > Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(data));
-        }
-
-        int i = 0;
-        Span<ReadOnlyMemory<char>> span = Values;
-
-        foreach (string? item in data)
-        {
-            span[i++] = item.AsMemory();
-        }
-
-        for (int j = i; j < span.Length; j++)
-        {
-            span[j] = default;
-        }
-    }
-
-    /// <summary> Fills <see cref="Values"/> with the contents 
-    /// of a read-only span of
-    /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> values.
-    /// </summary>
-    /// <param name="data">The contents with which to populate the <see cref="CsvRecord" />
-    /// instance.</param>
-    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more entries than <see cref="CsvRecord.Count" />.</exception>
-    /// <remarks>If <paramref name="data" /> has fewer entries than <see cref="CsvRecord.Count" />, 
-    /// the remaining fields of <see cref="CsvRecord" /> are filled with 
-    /// <see cref="ReadOnlyMemory{T}.Empty" /> values.</remarks>
-    public void Fill(ReadOnlySpan<ReadOnlyMemory<char>> data)
-    {
-        if (data.Length > Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(data));
-        }
-
-        int i = 0;
-        Span<ReadOnlyMemory<char>> span = Values;
-
-        foreach (ReadOnlyMemory<char> item in data)
-        {
-            span[i++] = item;
-        }
-
-        for (int j = i; j < span.Length; j++)
-        {
-            span[j] = default;
-        }
-    }
 
     /// <summary>Determines whether the <see cref="CsvRecord" /> object contains a column
     /// with the specified column name.</summary>
@@ -426,7 +279,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <returns>The zero-based index of the column in the CSV file with the column
     /// name <paramref name="columnName" /> or -1, if <paramref name="columnName" />
     /// is not one of the column names in the CSV file.</returns>
-    public int IndexOfColumn(string? columnName) => columnName != null && _lookupDictionary.TryGetValue(columnName, out int i) ? i : -1;
+    public int IndexOfColumn(string? columnName)
+        => columnName != null && _lookupDictionary.TryGetValue(columnName, out int i) ? i : -1;
 
     /// <inheritdoc />
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
