@@ -21,7 +21,7 @@ internal static class EnableCachingExample
         
         Console.Write("  Determine with cache enabled:  ");
         // Caching is enabled by default.
-        using (CsvEnumerator csv = Csv.OpenRead(fileName))
+        using (CsvReader csv = Csv.OpenRead(fileName))
         {
             foreach (CsvRecord record in
                 // ToArray() caches the results:
@@ -37,7 +37,7 @@ internal static class EnableCachingExample
         Console.Write("  Determine with cache disabled: ");
         // If you set the flag CsvOpts.DisableCaching and then try to cache the data,
         // you will get the wrong results:
-        using (CsvEnumerator csv = Csv.OpenRead(fileName, 
+        using (CsvReader csv = Csv.OpenRead(fileName, 
                                                 options: CsvOpts.Default.Set(CsvOpts.DisableCaching)))
         {
             foreach (CsvRecord record in

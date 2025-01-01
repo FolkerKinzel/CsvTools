@@ -20,14 +20,14 @@ internal static class CsvExample
 
         File.WriteAllText(filePath, nonStandardCsv, Encoding.Unicode);
 
-        using CsvEnumerator csv = Csv.OpenReadAnalyzed(filePath);
+        using CsvReader csv = Csv.OpenReadAnalyzed(filePath);
         CsvRecord[] data = [.. csv];
 
         using CsvWriter writer = Csv.OpenWrite(filePath, data[0].ColumnNames);
 
         foreach (CsvRecord record in data)
         {
-            writer.Record.Fill(record.Values);
+            writer.Record.FillWith(record.Values);
             writer.WriteRecord();
         }
 

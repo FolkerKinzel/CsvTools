@@ -16,7 +16,7 @@ internal static class LinqOnCsvExample
             John,New York
             """);
 
-        using CsvEnumerator csv = Csv.OpenRead(fileName);
+        using CsvReader csv = Csv.OpenRead(fileName);
         Console.Write("How many people live in New York?: ");
         Console.WriteLine(
             csv.Where(x => x["City"].Span.Equals("New York", StringComparison.Ordinal)).Count());

@@ -11,7 +11,7 @@ using FolkerKinzel.Strings;
 namespace FolkerKinzel.CsvTools.Tests;
 
 [TestClass]
-public class CsvEnumeratorTests
+public class CsvReaderTests
 {
     [NotNull]
     public TestContext? TestContext { get; set; }
@@ -24,7 +24,7 @@ public class CsvEnumeratorTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvEnumerator(stringReader, hasHeaderRow: false);
+        using var csv = new CsvReader(stringReader, hasHeaderRow: false);
 
         int counter = 0;
         foreach (CsvRecord record in csv)
@@ -43,7 +43,7 @@ public class CsvEnumeratorTests
         _ = Directory.CreateDirectory(outDir);
 
         string file = TestFiles.GoogleCsv;
-        using var csv = new CsvEnumerator(file, options: CsvOpts.None);
+        using var csv = new CsvReader(file, options: CsvOpts.None);
 
         foreach (CsvRecord record in csv)
         {
@@ -70,7 +70,7 @@ public class CsvEnumeratorTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvEnumerator(stringReader, hasHeaderRow: false);
+        using var csv = new CsvReader(stringReader, hasHeaderRow: false);
 
         stringReader.Dispose();
 
@@ -90,7 +90,7 @@ public class CsvEnumeratorTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvEnumerator(stringReader, hasHeaderRow: false);
+        using var csv = new CsvReader(stringReader, hasHeaderRow: false);
 
         _ = csv.FirstOrDefault();
         _ = csv.FirstOrDefault();
@@ -105,7 +105,7 @@ public class CsvEnumeratorTests
             ",Spalte \"2\"," + "\r\n";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvEnumerator(stringReader, hasHeaderRow: false);
+        using var csv = new CsvReader(stringReader, hasHeaderRow: false);
 
         IEnumerable numerable = csv;
         int counter = 0;
@@ -123,7 +123,7 @@ public class CsvEnumeratorTests
     [ExpectedException(typeof(ArgumentNullException))]
     public void CsvReaderTest3()
     {
-        using var _ = new CsvEnumerator((string?)null!);
+        using var _ = new CsvReader((string?)null!);
     }
 
 
@@ -131,7 +131,7 @@ public class CsvEnumeratorTests
     [ExpectedException(typeof(ArgumentException))]
     public void CsvReaderTest4()
     {
-        using var _ = new CsvEnumerator("   ");
+        using var _ = new CsvReader("   ");
     }
 
 
@@ -139,7 +139,7 @@ public class CsvEnumeratorTests
     [ExpectedException(typeof(ArgumentNullException))]
     public void CsvReaderTest5()
     {
-        using var _ = new CsvEnumerator((StreamReader?)null!);
+        using var _ = new CsvReader((StreamReader?)null!);
     }
 
 
@@ -155,7 +155,7 @@ public class CsvEnumeratorTests
                 John,New York
                 """;
 
-        using var csvReader = new CsvEnumerator(new StringReader(csv));
+        using var csvReader = new CsvReader(new StringReader(csv));
 
         int cnt = 0;
 
@@ -184,7 +184,7 @@ public class CsvEnumeratorTests
                 John,New York
                 """;
 
-        using var csvReader = new CsvEnumerator(new StringReader(csv));
+        using var csvReader = new CsvReader(new StringReader(csv));
 
         Assert.AreEqual(4, csvReader.Count());
 
@@ -203,7 +203,7 @@ public class CsvEnumeratorTests
                 John,New York
                 """;
 
-        using var csvReader = new CsvEnumerator(new StringReader(csv));
+        using var csvReader = new CsvReader(new StringReader(csv));
 
         Assert.AreEqual(4, csvReader.Count());
     }

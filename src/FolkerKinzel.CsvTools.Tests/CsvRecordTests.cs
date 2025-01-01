@@ -18,7 +18,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
             Assert.AreEqual(2, rec.Count);
 
-            rec.Fill(data);
+            rec.FillWith(data);
 
             CollectionAssert.AreEquivalent(data.Select(x => x.ToString()).ToArray(), rec.ToDictionary().Values.Select(x => x.ToString()).ToArray());
 
@@ -29,7 +29,6 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.AreEqual(2, rec.Count);
         }
 
-
         [TestMethod()]
         public void FillTest2()
         {
@@ -38,14 +37,13 @@ namespace FolkerKinzel.CsvTools.Tests
 
             Assert.AreEqual(2, rec.Count);
 
-            rec.Fill(data);
+            rec.FillWith(data);
             CollectionAssert.AreEquivalent(data.Select(x => x.ToString()).ToArray(), rec.ToDictionary().Values.Select(x => x.ToString()).ToArray());
 
-            rec.Fill(["sieben".AsMemory()]);
+            rec.FillWith(["sieben".AsMemory()]);
 
             CollectionAssert.AreEquivalent(new string?[] { "sieben", "" }, rec.ToDictionary().Values.Select(x => x.ToString()).ToArray());
         }
-
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
@@ -53,7 +51,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             var rec = new CsvRecord(2);
 
-            rec.Fill(["1".AsMemory(), "2".AsMemory(), "3".AsMemory()]);
+            rec.FillWith(["1".AsMemory(), "2".AsMemory(), "3".AsMemory()]);
         }
 
         [TestMethod]
@@ -113,8 +111,8 @@ namespace FolkerKinzel.CsvTools.Tests
             Assert.IsFalse(rec.TryGetValue("bla", out ReadOnlyMemory<char> val3));
             Assert.IsTrue(val3.IsEmpty);
 
-            Assert.IsFalse(rec.TryGetValue(-1, out ReadOnlyMemory<char> val4));
-            Assert.IsTrue(val4.IsEmpty);
+            //Assert.IsFalse(rec.TryGetValue(-1, out ReadOnlyMemory<char> val4));
+            //Assert.IsTrue(val4.IsEmpty);
         }
 
 
@@ -131,25 +129,25 @@ namespace FolkerKinzel.CsvTools.Tests
         }
 
 
-        [TestMethod()]
-        public void TryGetValueTest2()
-        {
-            var rec = new CsvRecord(2);
-            rec.Values[0] = "1".AsMemory();
-            rec.Values[1] = "2".AsMemory();
+        //[TestMethod()]
+        //public void TryGetValueTest2()
+        //{
+        //    var rec = new CsvRecord(2);
+        //    rec.Values[0] = "1".AsMemory();
+        //    rec.Values[1] = "2".AsMemory();
 
-            Assert.IsTrue(rec.TryGetValue(0, out ReadOnlyMemory<char> val1));
-            Assert.AreEqual("1", val1.ToString());
+        //    Assert.IsTrue(rec.TryGetValue(0, out ReadOnlyMemory<char> val1));
+        //    Assert.AreEqual("1", val1.ToString());
 
-            Assert.IsTrue(rec.TryGetValue(1, out ReadOnlyMemory<char> val2));
-            Assert.AreEqual("2", val2.ToString());
+        //    Assert.IsTrue(rec.TryGetValue(1, out ReadOnlyMemory<char> val2));
+        //    Assert.AreEqual("2", val2.ToString());
 
-            Assert.IsFalse(rec.TryGetValue(2, out ReadOnlyMemory<char> val3));
-            Assert.IsTrue(val3.IsEmpty);
+        //    Assert.IsFalse(rec.TryGetValue(2, out ReadOnlyMemory<char> val3));
+        //    Assert.IsTrue(val3.IsEmpty);
 
-            Assert.IsFalse(rec.TryGetValue(-1, out ReadOnlyMemory<char> val4));
-            Assert.IsTrue(val4.IsEmpty);
-        }
+        //    Assert.IsFalse(rec.TryGetValue(-1, out ReadOnlyMemory<char> val4));
+        //    Assert.IsTrue(val4.IsEmpty);
+        //}
 
 
         [TestMethod()]

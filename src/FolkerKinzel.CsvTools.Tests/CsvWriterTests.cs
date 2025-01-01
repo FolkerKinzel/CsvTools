@@ -109,7 +109,7 @@ namespace FolkerKinzel.CsvTools.Tests
             }
 
             //string csv = File.ReadAllText(FILENAME_STANDARD);
-            using var reader = new CsvEnumerator(FILENAME_STANDARD);
+            using var reader = new CsvReader(FILENAME_STANDARD);
 
             Assert.AreEqual(VALUE1, reader.First()[Key1].ToString());
         }
@@ -135,7 +135,7 @@ namespace FolkerKinzel.CsvTools.Tests
                 writer.WriteRecord();
             }
 
-            using var reader = new CsvEnumerator(FILENAME_STANDARD, hasHeaderRow: false);
+            using var reader = new CsvReader(FILENAME_STANDARD, hasHeaderRow: false);
 
             Assert.AreEqual(VALUE1, reader.First().Values[0].ToString());
         }
