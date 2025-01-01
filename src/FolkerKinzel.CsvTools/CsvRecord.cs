@@ -214,6 +214,15 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     [EditorBrowsable(EditorBrowsableState.Never)]
     public IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
+    /// <summary>
+    /// Gets a value indicating whether the <see cref="ColumnNames"/> are treated 
+    /// case-sensitive.
+    /// </summary>
+    /// <value><c>true</c> if the <see cref="ColumnNames"/> are treated case-sensitive, 
+    /// <c>false</c> if not.</value>
+    public bool HasCaseSensitiveColumnNames
+        => object.ReferenceEquals(_lookupDictionary.Comparer, StringComparer.Ordinal);
+
     /// <summary>Sets all data fields of <see cref="CsvRecord" /> to <c>null</c>.</summary>
     public void Clear() => Array.Clear(Values, 0, Values.Length);
 
