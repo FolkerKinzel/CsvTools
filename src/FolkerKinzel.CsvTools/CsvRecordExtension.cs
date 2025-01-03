@@ -2,6 +2,9 @@
 
 namespace FolkerKinzel.CsvTools;
 
+/// <summary>
+/// Extension methods for the <see cref="CsvRecord"/> class.
+/// </summary>
 public static class CsvRecordExtension
 {
     /// <summary> Returns a copy of the data stored in <paramref name="record"/> as <see cref="Dictionary{TKey,
@@ -26,14 +29,14 @@ public static class CsvRecordExtension
 #endif
     }
 
-    /// <summary> Fills <paramref name="record"/> with the contents of a 
+    /// <summary> Fills <paramref name="record"/> with the items of a 
     /// <see cref="string"/> collection.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
-    /// <param name="data">The contents with which to populate <paramref name="record"/>.
+    /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>.
     /// The argument may be <c>null</c> or may contain <c>null</c> values.</param>
     /// 
-    /// <remarks>If <paramref name="data" /> has fewer entries than <paramref name="record"/>, 
+    /// <remarks>If <paramref name="data" /> has fewer items than <paramref name="record"/>, 
     /// the remaining fields of <paramref name="record"/> will be set to <c>default</c>.</remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
@@ -66,13 +69,15 @@ public static class CsvRecordExtension
         }
     }
 
-    /// <summary> Fills <paramref name="record"/> with the contents of a 
+    /// <summary> Fills <paramref name="record"/> with the content of a 
     /// <see cref="string"/> array.
     /// </summary>
-    /// <param name="data">The contents with which to populate <paramref name="record"/>.
+    /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
+    /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>.
     /// The argument may be <c>null</c> or may contain <c>null</c> values.</param>
     /// 
-    /// <remarks>If <paramref name="data" /> has fewer entries than <paramref name="record"/>, 
+    /// <remarks>If the length of <paramref name="data" /> is smaller than the number of items in
+    /// <paramref name="record"/>, 
     /// the remaining fields of <paramref name="record"/> will be set to <c>default</c>.</remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
@@ -81,20 +86,20 @@ public static class CsvRecordExtension
     public static void FillWith(this CsvRecord record, string?[]? data)
         => FillWith(record, data.AsSpan());
 
-    /// <summary> Fills <paramref name="record"/> with the contents 
+    /// <summary> Fills <paramref name="record"/> with the items
     /// of a read-only span of <see cref="string"/>s.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
-    /// <param name="data">The contents with which to populate <paramref name="record"/>. 
+    /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>. 
     /// The span may contain <c>null</c> values.</param>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more entries than <paramref name="record"/>.</exception>
-    /// <remarks>If <paramref name="data" /> has fewer entries than <paramref name="record"/>, 
+    /// more items than <paramref name="record"/>.</exception>
+    /// <remarks>If <paramref name="data" /> has fewer items than <paramref name="record"/>, 
     /// the remaining fields of <paramref name="record"/> will be set to <c>default</c>.</remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more entries than <paramref name="record"/>.</exception>
+    /// more items than <paramref name="record"/>.</exception>
     public static void FillWith(this CsvRecord record, ReadOnlySpan<string?> data)
     {
         _ArgumentNullException.ThrowIfNull(record, nameof(record));
@@ -118,19 +123,20 @@ public static class CsvRecordExtension
         }
     }
 
-    /// <summary> Fills <paramref name="record"/> with the contents 
+    /// <summary> Fills <paramref name="record"/> with the items
     /// of a read-only span of
     /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> values.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
-    /// <param name="data">The contents with which to populate <paramref name="record"/>.</param>
+    /// <param name="data">The <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see>
+    /// values with which to fill <paramref name="record"/>.</param>
     /// 
-    /// <remarks>If <paramref name="data" /> has fewer entries than <paramref name="record"/>, 
+    /// <remarks>If <paramref name="data" /> has fewer items than <paramref name="record"/>, 
     /// the remaining fields of <paramref name="record"/> will be set to <c>default</c>.</remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more entries than <paramref name="record"/>.</exception>
+    /// more items than <paramref name="record"/>.</exception>
     public static void FillWith(this CsvRecord record, ReadOnlySpan<ReadOnlyMemory<char>> data)
     {
         _ArgumentNullException.ThrowIfNull(record, nameof(record));
