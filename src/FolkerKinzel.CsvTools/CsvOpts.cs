@@ -10,6 +10,9 @@ namespace FolkerKinzel.CsvTools;
 /// extension methods of the <see cref="CsvOptsExtension" /> class (see example).
 /// </note>
 /// </remarks>
+/// <seealso cref="CsvReader"/>
+/// <seealso cref="CsvOptsExtension"/>
+/// <seealso cref="Csv"/>
 /// <example>
 /// <para>
 /// Example that demonstrates that setting the flag <see cref="DisableCaching"
