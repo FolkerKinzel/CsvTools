@@ -68,7 +68,7 @@ internal static class CsvOptsAnalyzer
         {
             ReadOnlyMemory<char> mem = row[i];
 
-            if ((mem.IsEmpty && i != csvRow.Count - 1) || mem.Span.ContainsAny(results.Delimiter, 'r', 'n'))
+            if ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny(results.Delimiter, '\r', '\n'))
             {
                 // Has no header if the empty field is not the
                 // last field in the record.
@@ -89,7 +89,7 @@ internal static class CsvOptsAnalyzer
             }
         }//for
 
-        results.ColumnNames = csvRow.Select(x => x.ToString()).ToArray();
+        results.ColumnNames = csvRow.Where(x => !x.Span.IsWhiteSpace()).Select(x => x.ToString()).ToArray();
 
         if (results.ColumnNames.Count == results.ColumnNames.Distinct(StringComparer.Ordinal).Count())
         {

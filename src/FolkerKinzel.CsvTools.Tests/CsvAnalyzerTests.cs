@@ -20,7 +20,6 @@ namespace FolkerKinzel.CsvTools.Tests
         public void AnalyzeTest3()
         {
             CsvAnalyzerResult results = CsvAnalyzer.Analyze(TestFiles.AnalyzerTestCsv);
-
             AssertAnalyzerTestCsv(results);
         }
 
@@ -28,7 +27,6 @@ namespace FolkerKinzel.CsvTools.Tests
         public void AnalyzeTest4()
         {
             CsvAnalyzerResult result = CsvAnalyzer.Analyze(TestFiles.AnalyzerTestCsv, analyzedLines: -42);
-
             AssertAnalyzerTestCsv(result);
         }
 
