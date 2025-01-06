@@ -5,8 +5,8 @@ namespace FolkerKinzel.CsvTools.Intls;
 internal static class CsvOptsAnalyzer
 {
     internal static void InitProperties(CsvStringReader csvStringReader,
-                                       int maxLines,
-                                       CsvAnalyzerResult results)
+                                        int maxLines,
+                                        CsvAnalyzerResult results)
     {
         int analyzedLinesCount = 0;
         int firstLineCount = 0;
