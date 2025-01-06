@@ -57,7 +57,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 
     /// <summary> Initialisiert ein neues <see cref="CsvRecord" />-Objekt mit Spaltennamen.
     /// (Geeignet für CSV-Dateien mit Kopfzeile.) </summary>
-    /// <param name="keys">Spaltennamen. Die Auflistung kann <c>null</c>-Werte enthalten:
+    /// <param name="keys">Spaltennamen. Die Auflistung kann <c>null</c>-Werte, leere Strings oder Whitespace enthalten:
     /// Diese werden dann durch Standardnamen ersetzt.</param>
     /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv
     /// behandelt.</param>
@@ -91,7 +91,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         {
             string? key = keys[i];
 
-            if (key is null)
+            if (string.IsNullOrWhiteSpace(key))
             {
                 key = GetDefaultName();
             }

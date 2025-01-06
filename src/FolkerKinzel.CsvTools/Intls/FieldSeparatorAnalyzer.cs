@@ -25,10 +25,8 @@ internal ref struct FieldSeparatorAnalyzer()
     private RowSeparatorFinds _finds = new();
     private readonly List<RowSeparatorFinds> _findsList = [];
 
-    public char GetFieldSeparator(string fileName, Encoding? encoding)
+    public char GetFieldSeparator(TextReader reader)
     {
-        using StreamReader reader = StreamReaderHelper.InitializeStreamReader(fileName, encoding);
-
         while ((_current = reader.Read()) != EOF && _findsList.Count < MAX_LINES) // Skips BOM
         {
             _rowLength++;

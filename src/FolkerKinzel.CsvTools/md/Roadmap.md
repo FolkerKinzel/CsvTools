@@ -1,5 +1,9 @@
 ﻿# FolkerKinzel.CsvTools
 ## Roadmap
+### 2.0.0-beta.1
+- [ ] Write tests
+- [ ] Write benchmarks
+- [ ] Write examples
 
 ### 2.0.0-alpha.1
 - [x] Add .NET 6.0 support.

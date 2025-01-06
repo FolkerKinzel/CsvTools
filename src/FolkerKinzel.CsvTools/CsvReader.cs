@@ -138,7 +138,6 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <summary>Closes the CSV file.</summary>
     public void Dispose() => _reader.Dispose();
 
-
     /// <summary>Returns the next <see cref="CsvRecord"/> in the CSV file or <c>null</c> 
     /// if the file has been read completely.</summary>
     /// <returns>The next <see cref="CsvRecord"/> in the CSV file or <c>null</c> 
@@ -164,7 +163,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
             if (_hasHeaderRow)
             {
                 bool trimColumns = Options.HasFlag(CsvOpts.TrimColumns);
-                string?[] columnNames = row.Select(x => x.IsEmpty ? null : x.ToString()).ToArray();
+                string[] columnNames = row.Select(x => x.ToString()).ToArray();
 
                 _record = new CsvRecord(columnNames,
                                         Options.HasFlag(CsvOpts.CaseSensitiveKeys),
