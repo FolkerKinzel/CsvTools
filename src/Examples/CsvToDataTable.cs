@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using System.Globalization;
 using FolkerKinzel.CsvTools;
-using FolkerKinzel.CsvTools.Helpers;
-using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.TypeConversions;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace Examples;
 
@@ -50,14 +50,14 @@ public static class CsvToDataTable
 
         dataTable.Clear();
 
-        // Refill the DataTable from the CSV-file:
-        using (var reader = new CsvReader(FILE_NAME))
-        {
-            foreach (CsvRecord record in reader.Read())
+            // Refill the DataTable from the CSV-file:
+            using (var reader = new CsvReader(FILE_NAME))
             {
-                wrapper.Record = record;
-                DataRow dataRow = dataTable.NewRow();
-                dataTable.Rows.Add(dataRow);
+                foreach (CsvRecord record in reader)
+                {
+                    wrapper.Record = record;
+                    DataRow dataRow = dataTable.NewRow();
+                    dataTable.Rows.Add(dataRow);
 
                 // It doesn't matter that the columns in the CSV file have a
                 // different order than the columns of the DataTable:
@@ -72,57 +72,54 @@ public static class CsvToDataTable
 
         WriteConsole(dataTable);
 
-        // Console output:
-        // Csv file:
-        //
-        // Subject,Begin,Name,Day
-        // Piano,14:30:00,Susi Meyer, Wednesday
-        // Piano,15:15:00,Carl Czerny, Thursday
-        // ,, Frederic Chopin,
-        //
-        //
-        // Content of the refilled DataTable:
-        // Susi Meyer      Piano           3               14:30:00
-        // Carl Czerny     Piano           4               15:15:00
-        // Frederic Chopin <DBNull>        < DBNull >      < DBNull >
-    }
+            // Console output:
+            // Csv file:
+            //
+            // Subject,Begin,Name,Day
+            // Piano,14:30:00,Susi Meyer, Wednesday
+            // Piano,15:15:00,Carl Czerny, Thursday
+            // ,, Frederic Chopin,
+            //
+            //
+            // Content of the refilled DataTable:
+            // Susi Meyer      Piano           3               14:30:00
+            // Carl Czerny     Piano           4               15:15:00
+            // Frederic Chopin <DBNull>        <DBNull>       <DBNull>
+        }
 
 
     private static CsvRecordWrapper InitCsvRecordWrapper()
     {
         var wrapper = new CsvRecordWrapper();
 
-        // Store the stringConverter because you can reuse the same 
-        // converter for more than one property in CsvRecordWrapper.
-        ICsvTypeConverter stringConverter =
-            CsvConverterFactory.CreateConverter(CsvTypeCode.String, maybeDBNull: true);
+            // Store the stringConverter because you can reuse the same 
+            // converter for more than one property in CsvRecordWrapper.
+            ICsvTypeConverter stringConverter = new StringConverter(nullable: false).AsDBNullEnabled();
 
-        wrapper.AddProperty
-            (
-                new CsvProperty(PUPILS_NAME,
-                                new string[] { PUPILS_NAME },
-                                stringConverter)
-            );
-        wrapper.AddProperty
-            (
-                new CsvProperty(SUBJECT,
-                                new string[] { SUBJECT },
-                                stringConverter)
-            );
-        wrapper.AddProperty
-            (
-                new CsvProperty(LESSON_DAY,
-                                new string[] { LESSON_DAY },
-                                CsvConverterFactory
-                                    .CreateEnumConverter<DayOfWeek>("G", maybeDBNull: true))
-            );
-        wrapper.AddProperty
-            (
-                new CsvProperty(LESSON_BEGIN,
-                                new string[] { LESSON_BEGIN },
-                                CsvConverterFactory
-                                    .CreateConverter(CsvTypeCode.TimeSpan, maybeDBNull: true))
-            );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty(PUPILS_NAME,
+                                    new string[] { PUPILS_NAME },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty(SUBJECT,
+                                    new string[] { SUBJECT },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty(LESSON_DAY,
+                                    new string[] { LESSON_DAY },
+                                    new EnumConverter<DayOfWeek>(format: "G").AsDBNullEnabled())
+                );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty(LESSON_BEGIN,
+                                    new string[] { LESSON_BEGIN },
+                                    new TimeSpanConverter().AsDBNullEnabled())
+                );
 
         return wrapper;
     }

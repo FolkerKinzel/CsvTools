@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using FolkerKinzel.CsvTools;
-using FolkerKinzel.CsvTools.Helpers;
-using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.TypeConversions;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace Examples;
 
@@ -56,36 +56,33 @@ public static class DeserializingClassesFromCsv
         // of the CSV file.
         var wrapper = new CsvRecordWrapper();
 
-        // Reuse a converter for more than one property:
-        ICsvTypeConverter stringConverter =
-            CsvConverterFactory.CreateConverter(CsvTypeCode.String, nullable: true);
+            // Reuse a converter for more than one property:
+            ICsvTypeConverter stringConverter = new StringConverter();
 
-        wrapper.AddProperty
-            (
-                new CsvProperty("Name",
-                                new string[] { "*name" },
-                                stringConverter)
-            );
-        wrapper.AddProperty
-            (
-                new CsvProperty("Subject",
-                                new string[] { "*subject", "*fach" },
-                                stringConverter)
-            );
-        wrapper.AddProperty
-            (
-                new CsvProperty("LessonDay",
-                                new string[] { "*day", "*tag" },
-                                CsvConverterFactory
-                                    .CreateEnumConverter<DayOfWeek>(nullable: true))
-            );
-        wrapper.AddProperty
-            (
-                new CsvProperty("LessonBegin",
-                                new string[] { "*begin?" },
-                                CsvConverterFactory
-                                    .CreateConverter(CsvTypeCode.TimeSpan, nullable: true))
-            );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty("Name",
+                                    new string[] { "*name" },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty("Subject",
+                                    new string[] { "*subject", "*fach" },
+                                    stringConverter)
+                );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty("LessonDay",
+                                    new string[] { "*day", "*tag" },
+                                    new EnumConverter<DayOfWeek>().AsNullableConverter())
+                );
+            wrapper.AddProperty
+                (
+                    new CsvColumnNameProperty("LessonBegin",
+                                    new string[] { "*begin?" },
+                                    new TimeSpanConverter().AsNullableConverter())
+                );
 
         // Analyze the CSV file to determine the right parameters
         // for proper reading:
@@ -101,9 +98,9 @@ public static class DeserializingClassesFromCsv
 
         var pupilsList = new List<Pupil>();
 
-        foreach (CsvRecord record in reader.Read())
-        {
-            wrapper.Record = record;
+            foreach (CsvRecord record in reader)
+            {
+                wrapper.Record = record;
 
             // Using a dynamic variable enables you to assign
             // the properties without having to explicitely cast them
@@ -147,5 +144,6 @@ Name:        Frederic Chopin
 Subject:     <null>
 LessonDay:   <null>
 LessonBegin: <null>
+
 .
 */

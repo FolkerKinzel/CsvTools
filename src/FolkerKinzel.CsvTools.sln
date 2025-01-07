@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.32014.148
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools", "FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj", "{110B2723-F0A2-4CE0-B4E2-87A157C484BC}"
 EndProject
@@ -11,19 +11,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.github\ISSUE_TEMPLATE\bug_report.md = ..\.github\ISSUE_TEMPLATE\bug_report.md
 		..\.github\ISSUE_TEMPLATE\feature_request.md = ..\.github\ISSUE_TEMPLATE\feature_request.md
 		..\README.md = ..\README.md
-		Reference.md = Reference.md
-		..\docs\PackageReleaseNotes\1.6.4\ReleaseNotes.md = ..\docs\PackageReleaseNotes\1.6.4\ReleaseNotes.md
+		..\SECURITY.md = ..\SECURITY.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolkerKinzel.CsvTools.Tests", "FolkerKinzel.CsvTools.Tests\FolkerKinzel.CsvTools.Tests.csproj", "{A688E97D-48BD-41FF-A3CB-40F316EE7C82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Examples", "Examples\Examples.csproj", "{F850413D-BE94-47C3-92E6-50B03F76FE7D}"
 EndProject
-Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Doku.de", "FolkerKinzel.CsvTools.Doku.de\FolkerKinzel.CsvTools.Doku.de.shfbproj", "{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}"
-EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Reference.en", "FolkerKinzel.CsvTools.Reference.en\FolkerKinzel.CsvTools.Reference.en.shfbproj", "{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{90C696E7-B5B0-408B-A391-B7FA0DEAC255}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "FolkerKinzel.CsvTools.Reference.Website", "FolkerKinzel.CsvTools.Reference.Website\FolkerKinzel.CsvTools.Reference.Website.shfbproj", "{7026C80D-D9B4-4605-92B0-0C1F6F647414}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +42,14 @@ Global
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F850413D-BE94-47C3-92E6-50B03F76FE7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A2861FC-7AF0-4BD8-90A1-63F3330C96E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C9EC3EC-1069-4C4A-B8CB-EDE11488E623}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90C696E7-B5B0-408B-A391-B7FA0DEAC255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7026C80D-D9B4-4605-92B0-0C1F6F647414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7026C80D-D9B4-4605-92B0-0C1F6F647414}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

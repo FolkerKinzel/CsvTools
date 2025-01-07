@@ -1,10 +1,12 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System;
 using System.Runtime.CompilerServices;
 
 [assembly: CLSCompliant(true)]
 
 [assembly: InternalsVisibleTo("FolkerKinzel.CsvTools.Tests")]
+[assembly: InternalsVisibleTo("FolkerKinzel.CsvTools.Mappings.Tests")]
+
 
 // Durch Festlegen von ComVisible auf "false" werden die Typen in dieser Assembly unsichtbar 
 // für COM-Komponenten. Wenn Sie auf einen Typ in dieser Assembly von 

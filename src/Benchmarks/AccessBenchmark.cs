@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FolkerKinzel.CsvTools.Helpers;
+using FolkerKinzel.CsvTools.TypeConversions;
 using FolkerKinzel.CsvTools;
 using BenchmarkDotNet.Attributes;
 using System.IO;
-using FolkerKinzel.CsvTools.Helpers.Converters;
+using FolkerKinzel.CsvTools.TypeConversions.Converters;
 
 namespace Benchmarks
 {
@@ -21,16 +21,16 @@ namespace Benchmarks
         public AccessBenchmark()
         {
             _csv = Properties.Resources.Test1;
-            ICsvTypeConverter conv = CsvConverterFactory.CreateConverter(CsvTypeCode.String);
+            ICsvTypeConverter conv = new StringConverter();
             _indexWrapper = new CsvRecordWrapper();
-            _indexWrapper.AddProperty(new CsvIndexProperty("Column0", 0, conv));
-            _indexWrapper.AddProperty(new CsvIndexProperty("Column1", 1, conv));
-            _indexWrapper.AddProperty(new CsvIndexProperty("Column2", 2, conv));
+            _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column0", 0, conv));
+            _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column1", 1, conv));
+            _indexWrapper.AddProperty(new CsvColumnIndexProperty("Column2", 2, conv));
 
             _nameWrapper = new CsvRecordWrapper();
-            _nameWrapper.AddProperty(new CsvProperty("Column0", new string[] { "Column0" }, conv));
-            _nameWrapper.AddProperty(new CsvProperty("Column1", new string[] { "Column1" }, conv));
-            _nameWrapper.AddProperty(new CsvProperty("Column2", new string[] { "Column2" }, conv));
+            _nameWrapper.AddProperty(new CsvColumnNameProperty("Column0", new string[] { "Column0" }, conv));
+            _nameWrapper.AddProperty(new CsvColumnNameProperty("Column1", new string[] { "Column1" }, conv));
+            _nameWrapper.AddProperty(new CsvColumnNameProperty("Column2", new string[] { "Column2" }, conv));
         }
 
         [Benchmark]
@@ -39,13 +39,13 @@ namespace Benchmarks
             int letters = 0;
 
             var reader = new CsvReader(new StringReader(_csv));
-            foreach (CsvRecord row in reader.Read())
+            foreach (CsvRecord row in reader)
             {
                 _indexWrapper.Record = row;
 
                 for (int i = 0; i < _indexWrapper.Count; i++)
                 {
-                    letters += ((string)_indexWrapper[i]).Length;
+                    letters += ((string?)_indexWrapper[i])!.Length;
                 }
             }
 
@@ -58,13 +58,13 @@ namespace Benchmarks
             int letters = 0;
 
             var reader = new CsvReader(new StringReader(_csv));
-            foreach (CsvRecord row in reader.Read())
+            foreach (CsvRecord row in reader)
             {
                 _nameWrapper.Record = row;
 
                 for (int i = 0; i < _nameWrapper.Count; i++)
                 {
-                    letters += ((string)_nameWrapper[i]).Length;
+                    letters += ((string?)_nameWrapper[i])!.Length;
                 }
             }
 

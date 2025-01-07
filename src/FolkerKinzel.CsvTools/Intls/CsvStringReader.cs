@@ -1,234 +1,279 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Text;
+using FolkerKinzel.CsvTools.Resources;
 
-namespace FolkerKinzel.CsvTools.Intls
+namespace FolkerKinzel.CsvTools.Intls;
+
+/// <summary> Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>"
+/// zurück. </summary>
+internal sealed class CsvStringReader : IDisposable
 {
-    /// <summary>
-    /// Liest eine Csv-Datei vorwärts und ermöglicht es, über die enthaltenen <see cref="string"/>s zu iterieren.
-    /// Da <see cref="CsvStringReader"/>&#160;<see cref="IEnumerable"/> direkt implementiert, kann über das
-    /// <see cref="CsvStringReader"/>-Objekt mit einer doppelten foreach-Schleife iteriert werden. (Eine foreach-Schleife 
-    /// für die Datensätze (Zeilen) und eine innere foreach-Schleife für die Felder der einzelnen Datensätze.)
-    /// </summary>
-    internal sealed class CsvStringReader : IEnumerable<IEnumerable<string?>>, IDisposable
+    private const int INITIAL_COLUMNS_COUNT = 32;
+    private const int INITIAL_STRINGBUILDER_CAPACITY = 64;
+    private readonly TextReader _reader;
+    private readonly CsvRow _row = new(INITIAL_COLUMNS_COUNT);
+    private StringBuilder? _sb;
+    private string? _currentLine;
+    private bool _mustAllocate;
+
+    internal int LineNumber { get; private set; }
+
+    internal int LineIndex { get; private set; }
+
+    /// <summary> ctor </summary>
+    /// <param name="reader">The <see cref="TextReader" /> with which the CSV file is
+    /// read.</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// <param name="options">The parser options.</param>
+    internal CsvStringReader(TextReader reader, char delimiter, CsvOpts options)
     {
-        private readonly TextReader _reader;
-        private readonly char _fieldSeparator;
+        Debug.Assert(reader != null);
 
-        private readonly StringBuilder _sb = new();
-        private readonly bool _skipEmptyLines;
+        this.Options = options;
+        this._reader = reader;
+        this.Delimiter = delimiter;
+    }
 
-        private string? _currentLine;
+    internal CsvOpts Options { get; }
 
-        internal int LineNumber { get; private set; }
+    internal char Delimiter { get; }
 
-        internal int LineIndex { get; private set; }
+    /// <summary>Releases the resources. (Closes the <see cref="TextReader" />.)</summary>
+    public void Dispose() => _reader.Dispose();
 
-
-
-        /// <summary>
-        /// ctor
-        /// </summary>
-        /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
-        /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
-        /// <param name="skipEmptyLines">Wenn <c>true</c>, werden unmaskierte Leerzeilen in der CSV-Datei übersprungen.</param>
-        internal CsvStringReader(TextReader reader, char fieldSeparator, bool skipEmptyLines)
-        {
-            this._skipEmptyLines = skipEmptyLines;
-            this._reader = reader;
-            this._fieldSeparator = fieldSeparator;
-        }
-
-
-        /// <summary>
-        /// Gibt einen Iterator zurück, mit dem über die Zeilen der csv-Datei iteriert werden kann.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<IEnumerable<string?>> GetEnumerator()
-        {
-            while ((_currentLine = _reader.ReadLine()) != null)
-            {
-                if (_currentLine.Length == 0 && _skipEmptyLines)
-                {
-                    continue;
-                }
-
-                yield return GetNextRecord();
-            }
-        }
-
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
-
-        /// <summary>
-        /// Liest die nächste Datenzeile als <see cref="IEnumerable{T}">IEnumerable&lt;string?&gt;</see> und ermöglicht es damit,
-        /// über die Felder der Datenzeile zu iterieren.
-        /// </summary>
-        /// <returns>Die nächste Datenzeile als <see cref="IEnumerable{T}">IEnumerable&lt;string?&gt;</see>.</returns>
-        /// <remarks>Die Methode liest sämtliche Felder, die in der Datei enthalten sind und wirft keine <see cref="Exception"/>,
-        /// wenn es in einer Zeile zu viele oder zu wenige sind.</remarks>
-        private IEnumerable<string?> GetNextRecord()
+    internal CsvRow? Read()
+    {
+        while ((_currentLine = _reader.ReadLine()) != null)
         {
             LineNumber++;
-            LineIndex = 0;
 
-            do
+            if (_currentLine.Length == 0 && !Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
             {
-                yield return GetField();
+                continue;
             }
-            while (LineIndex < _currentLine?.Length);
 
+            ReadNextRecord();
+            return _row;
+        }
 
-            if (_currentLine != null)
+        return null;
+    }
+
+    private void ReadNextRecord()
+    {
+        _row.Clear();
+        LineIndex = 0;
+
+        do
+        {
+            AddField();
+        }
+        while (LineIndex < _currentLine?.Length);
+
+        if (_currentLine != null)
+        {
+            int length = _currentLine.Length;
+
+            if (length != 0 && _currentLine[length - 1] == Delimiter)
             {
-                int length = _currentLine.Length;
-                if (length != 0 && _currentLine[length - 1] == _fieldSeparator)
+                // adds the missing last field if the line ends with the
+                // field separator:
+                _row.Add(default);
+            }
+        }
+    }
+
+    private void AddField()
+    {
+        Debug.Assert(_currentLine != null);
+
+        ReadOnlySpan<char> span = _currentLine.AsSpan();
+
+        if (IsMaskedField(span))
+        {
+            AddAllocatedField();
+            return;
+        }
+
+        ReadOnlyMemory<char> field;
+
+        for (int idx = LineIndex; idx < span.Length; idx++)
+        {
+            if (span[idx] == Delimiter)
+            {
+                field = _currentLine.AsMemory(LineIndex, idx - LineIndex);
+                _row.Add(Options.HasFlag(CsvOpts.TrimColumns) ? field.Trim() : field);
+                LineIndex = idx + 1;
+                return;
+            }
+        }
+
+        // field at the end of a line
+        field = _currentLine.AsMemory(LineIndex);
+        _row.Add(Options.HasFlag(CsvOpts.TrimColumns) ? field.Trim() : field);
+        LineIndex = _currentLine.Length;
+    }
+
+    private bool IsMaskedField(ReadOnlySpan<char> span)
+    {
+        if (LineIndex >= span.Length)
+        {
+            return false;
+        }
+
+        for (int i = LineIndex; i < span.Length; i++)
+        {
+            char c = span[i];
+
+            if (char.IsWhiteSpace(c))
+            {
+                continue;
+            }
+
+            if (c == '\"')
+            {
+                LineIndex = i;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private void AddAllocatedField()
+    {
+        Debug.Assert(_currentLine != null);
+        Debug.Assert(_currentLine.Length > 0);
+
+        int startIndex = LineIndex;
+        bool insideQuotes = false;
+        ReadOnlySpan<char> span = _currentLine.AsSpan();
+        _mustAllocate = false; // if masked Double Quotes or new lines are inside of a field this must be true
+
+        _sb ??= new StringBuilder(INITIAL_STRINGBUILDER_CAPACITY);
+        _ = _sb.Clear();
+
+        while (true)
+        {
+            if (insideQuotes && span.Length == 0) // empty line
+            {
+                _mustAllocate = true;
+                _ = _sb.AppendLine();
+
+                if (!LoadNextLine())
                 {
-                    // ergänzt das fehlende letzte Feld, wenn die Zeile mit dem
-                    // Feldtrennzeichen endet:
-                    yield return null;
+                    return;
                 }
 
-                _currentLine = null;
+                span = _currentLine.AsSpan();
+                continue;
             }
 
-            //////////////////////////////////////////////////
+            char c = span[LineIndex];
 
-            string? GetField()
+            if (c == '\"')
             {
-                int startIndex = LineIndex;
-                bool isQuoted = false;
-                bool isMaskedDoubleQuote = false;
+                insideQuotes = !insideQuotes;
+            }
 
-                _ = _sb.Clear();
-
-                while (true)
+            if (LineIndex == span.Length - 1)
+            {
+                if (insideQuotes)
                 {
-                    if (_currentLine is null) // Dateiende
+                    _mustAllocate = true; // empty line inside of a field
+
+                    _ = _sb.Append(c).AppendLine();
+
+                    if (!LoadNextLine())
                     {
-                        LineIndex = 0;
-                        return InitField();
+                        return;
                     }
 
-                    if (isQuoted && _currentLine.Length == 0) // Leerzeile
+                    span = _currentLine.AsSpan();
+                    continue;
+                }
+                else
+                {
+                    // If the line ends with an empty field this one is ignored here
+                    // but supplemented by GetNextRecord() as default(ReadOnlyMemory<char>).
+                    LineIndex = span.Length;
+                    DoAddAllocatedField(startIndex);
+                    return;
+                }
+            }
+            else // LineIndex < span.Length - 1
+            {
+                if (insideQuotes)
+                {
+                    _ = _sb.Append(c);
+                }
+                else
+                {
+                    Debug.Assert(c is '\"' or ' ');
+
+                    char next = span[LineIndex + 1];
+
+                    if (next == Delimiter)
                     {
-                        _ = _sb.AppendLine();
-                        _currentLine = _reader.ReadLine();
-                        LineNumber++;
-                        LineIndex = 0;
-                        continue;
+                        LineIndex += 2;
+                        DoAddAllocatedField(startIndex);
+                        return;
                     }
-
-                    if (LineIndex >= _currentLine.Length)
+                    else if (next == '\"')
                     {
-                        LineIndex = _currentLine.Length;
-
-                        return InitField();
+                        // masked double quote
+                        _mustAllocate = true;
                     }
-
-                    char c = _currentLine[LineIndex];
-
-                    if (LineIndex == _currentLine.Length - 1)
+                    else if (next == ' ' && this.Delimiter != ' ')
                     {
-                        if (c == '\"') // Feld beginnt mit Leerzeile oder maskiertes Feld endet
-                        {
-                            isQuoted = !isQuoted;
-                        }
-
-                        if (isQuoted)
-                        {
-                            _ = c == '\"' ? _sb.AppendLine() : _sb.Append(c).AppendLine();
-
-                            _currentLine = _reader.ReadLine();
-                            LineIndex = 0;
-                            LineNumber++;
-                            continue;
-                        }
-                        else
-                        {
-                            // Wenn die Datenzeile mit einem leeren Feld endet,
-                            // wird dieses nicht gelesen, aber von GetNextRecord() als null-Wert ergänzt
-                            if (c != _fieldSeparator && c != '\"')
-                            {
-                                _ = _sb.Append(c);
-                            }
-
-
-                            LineIndex = _currentLine.Length;
-                            return InitField();
-                        }
+                        // tolerate spaces after the closing quote if the
+                        // field separator is not a space
                     }
                     else
                     {
-                        if (isQuoted)
-                        {
-                            if (c == '\"')
-                            {
-                                if (isMaskedDoubleQuote)
-                                {
-                                    isMaskedDoubleQuote = false;
-                                    _ = _sb.Append(c);
-                                }
-                                else
-                                {
-                                    char next = _currentLine[LineIndex + 1];
-
-                                    if (next == _fieldSeparator) // Feldende
-                                    {
-                                        LineIndex += 2;
-                                        return InitField();
-                                    }
-                                    else if (next == '\"')
-                                    {
-                                        isMaskedDoubleQuote = true;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                _ = _sb.Append(c);
-                            }
-                        }
-                        else
-                        {
-                            if (LineIndex == startIndex && c == '\"')
-                            {
-                                isQuoted = true;
-                            }
-                            else if (c == _fieldSeparator)
-                            {
-                                LineIndex++;
-                                return InitField();
-                            }
-                            else
-                            {
-                                _ = _sb.Append(c);
-                            }
-                        }
-
-                        LineIndex++;
+                        throw new CsvFormatException(Res.InvalidMasking, CsvError.InvalidMasking, LineNumber, LineIndex);
                     }
-
-
-                }// while
-
-
-                string? InitField()
-                {
-                    string field = _sb.ToString();
-                    return (field.Length == 0) ? null : field;
                 }
+
+                LineIndex++;
             }
+        }// while
+    }
+
+    private bool LoadNextLine()
+    {
+        _currentLine = _reader.ReadLine();
+        LineNumber++;
+        LineIndex = 0;
+
+        if (_currentLine is null) // EOF
+        {
+            if (Options.HasFlag(CsvOpts.ThrowOnTruncatedFiles))
+            {
+                throw new CsvFormatException(Res.FileTruncated, CsvError.FileTruncated, LineNumber, LineIndex);
+            }
+
+            return false;
         }
 
+        return true;
+    }
 
-        /// <summary>
-        /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
-        /// </summary>
-        public void Dispose() => _reader.Dispose();
+    private void DoAddAllocatedField(int startIndex)
+    {
+        Debug.Assert(_sb is not null);
+        Debug.Assert(_sb.Length >= 1);
+
+        if (_mustAllocate)
+        {
+            _row.Add(_sb.ToString().AsMemory(1));
+        }
+        else
+        {
+            _row.Add(_currentLine.AsMemory(startIndex + 1, _sb.Length - 1));
+        }
     }
 }

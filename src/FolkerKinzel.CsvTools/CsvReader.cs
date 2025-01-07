@@ -1,311 +1,242 @@
-﻿using FolkerKinzel.CsvTools.Helpers;
+using System.Collections;
+using System.Data;
+using System.Runtime.InteropServices;
+using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
-namespace FolkerKinzel.CsvTools
+namespace FolkerKinzel.CsvTools;
+
+/// <summary>Provides read-only forward access to the records of a CSV file. (This
+/// means that the <see cref="CsvReader" /> can only read the file forward once.)</summary>
+/// <remarks>
+/// <para>
+/// The class implements <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>. A 
+/// <see cref="CsvReader"/> instance can be iterated with <c>foreach</c> or queried using 
+/// Linq methods. Note that an instance can only be iterated once; if an attempt is made to
+/// iterate it twice, an <see cref="ObjectDisposedException"/> is thrown.
+/// </para>
+/// </remarks>
+/// <example>
+/// <note type="note">
+/// In the following code examples - for easier readability - exception handling
+/// has been omitted.
+/// </note>
+/// <para>
+/// Linq query on a CSV file:
+/// </para>
+/// <code language="cs" source="..\Examples\LinqOnCsvExample.cs" />
+/// </example>
+public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
 {
-    /// <summary>
-    /// Bietet schreibgeschützten Vorwärtszugriff auf die Datensätze einer CSV-Datei. (Das bedeutet, dass der <see cref="CsvReader"/> die Datei nur einmal vorwärts
-    /// lesen kann.)
-    /// </summary>
+    private readonly CsvStringReader _reader;
+    private readonly bool _hasHeaderRow;
+
+    private CsvRecord? _record = null; // Template for additional CsvRecord objects
+    private CsvRecord? _current;
+
+    /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
+    /// <param name="filePath">File path of the CSV file to read.</param>
+    /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
+    /// names.</param>
+    /// <param name="options">Options for reading the CSV file.</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// <param name="textEncoding">The text encoding to be used to read the CSV file
+    /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
+    /// 
     /// <remarks>
-    /// <para>
-    /// Die Methode <see cref="Read"/> gibt einen <see cref="IEnumerator{T}">IEnumerator&lt;CsvRecord&gt;</see> zurück, mit dem Sie über die Datensätze der CSV-Datei iterieren
-    /// können, die in Form von <see cref="CsvRecord"/>-Objekten zurückgegeben werden.
-    /// </para>
-    /// <para>Die Klasse <see cref="CsvRecordWrapper"/> bietet die
-    /// Möglichkeit, die Reihenfolge der Datenspalten der <see cref="CsvRecord"/>-Objekte zur Laufzeit auf die Spaltenreihenfolge einer <see cref="DataTable"/>
-    /// zu mappen und Typkonvertierungen durchzuführen.
-    /// </para>
-    /// <para>Beim Lesen einer unbekannten CSV-Datei können die geeigneten Parameter für den Konstruktor von <see cref="CsvReader"/> mit Hilfe der Klasse
-    /// <see cref="CsvAnalyzer"/> ermittelt werden.</para>
+    /// <note type="tip">
+    /// The optimal constructor parameters can be determined automatically with <see cref="CsvAnalyzer"/>.
+    /// </note>
     /// </remarks>
-    /// <example>
-    /// <note type="note">In den folgenden Code-Beispielen wurde - der leichteren Lesbarkeit wegen - auf Ausnahmebehandlung verzichtet.</note>
-    /// <para>Linq-Abfrage auf einer CSV-Datei:</para>
-    /// <code language="cs" source="..\Examples\LinqOnCsvFile.cs"/>
-    /// <para>Speichern des Inhalts einer <see cref="DataTable"/> als CSV-Datei und Einlesen von Daten einer CSV-Datei in
-    /// eine <see cref="DataTable"/>:</para>
-    /// <code language="cs" source="..\Examples\CsvToDataTable.cs"/>
-    /// <para>Deserialisieren beliebiger Objekte aus CSV-Dateien:</para>
-    /// <code language="cs" source="..\Examples\DeserializingClassesFromCsv.cs"/>
-    /// </example>
-    public sealed class CsvReader : IDisposable
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
+    /// file path.</exception>
+    /// <exception cref="IOException">Error accessing the disk.</exception>
+    public CsvReader(
+        string filePath,
+        bool hasHeaderRow = true,
+        CsvOpts options = CsvOpts.Default,
+        char delimiter = ',',
+        Encoding? textEncoding = null)
     {
-        private readonly CsvStringReader _reader;
-        private readonly CsvOptions _options;
-        private readonly bool _hasHeaderRow;
-        private bool _firstRun = true;
+        StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
 
-        #region ctors
+        this._reader = new CsvStringReader(streamReader, delimiter, options);
+        this._hasHeaderRow = hasHeaderRow;
+    }
 
-        /// <summary>
-        /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
-        /// </summary>
-        /// <param name="fileName">Dateipfad der CSV-Datei.</param>
-        /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
-        /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
-        /// <param name="fieldSeparator">Das Feldtrennzeichen, das in der CSV-Datei Verwendung findet.</param>
-        /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
-        /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
-        public CsvReader(
-            string fileName,
-            bool hasHeaderRow = true,
-            CsvOptions options = CsvOptions.Default,
-            char fieldSeparator = ',',
-            Encoding? textEncoding = null)
+    /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
+    /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
+    /// read.</param>
+    /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
+    /// names, otherwise <c>false</c>.</param>
+    /// <param name="options">Options for reading CSV.</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
+    public CsvReader(
+        TextReader reader,
+        bool hasHeaderRow = true,
+        CsvOpts options = CsvOpts.Default,
+        char delimiter = ',')
+    {
+        _ArgumentNullException.ThrowIfNull(reader, nameof(reader));
+
+        this._reader = new CsvStringReader(reader, delimiter, options);
+        this._hasHeaderRow = hasHeaderRow;
+    }
+
+    /// <summary>
+    /// Gets the options for reading the CSV file.
+    /// </summary>
+    public CsvOpts Options => _reader.Options;
+
+    /// <summary>
+    /// Gets the field separator character.
+    /// </summary>
+    public char Delimiter => _reader.Delimiter;
+
+    /// <inheritdoc/>
+    CsvRecord IEnumerator<CsvRecord>.Current => _current!;
+
+    /// <inheritdoc/>
+    object IEnumerator.Current => ((IEnumerator<CsvRecord>)this).Current;
+
+    /// <inheritdoc/>
+    IEnumerator IEnumerable.GetEnumerator() => this;
+
+    /// <inheritdoc/>
+    public IEnumerator<CsvRecord> GetEnumerator() => this;
+
+    /// <inheritdoc/>
+    /// <exception cref="ObjectDisposedException">The CSV file was already
+    /// closed.</exception>
+    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
+    /// on the <see cref="CsvOpts" /> value, specified in the constructor.</exception>
+    bool IEnumerator.MoveNext()
+    {
+        CsvRecord? record = Read();
+
+        if (record is null)
         {
-            StreamReader streamReader = InitializeStreamReader(fileName, textEncoding);
-
-            this._options = options;
-            this._reader = new CsvStringReader(streamReader, fieldSeparator, options.HasFlag(CsvOptions.ThrowOnEmptyLines));
-            this._hasHeaderRow = hasHeaderRow;
+            return false;
         }
 
+        _current = record;
+        return true;
+    }
 
-        /// <summary>
-        /// Initialisiert ein neues <see cref="CsvReader"/>-Objekt.
-        /// </summary>
-        /// <param name="reader">Der <see cref="TextReader"/>, mit dem die CSV-Datei gelesen wird.</param>
-        /// <param name="hasHeaderRow"><c>true</c>, wenn die CSV-Datei eine Kopfzeile mit den Spaltennamen hat.</param>
-        /// <param name="options">Optionen für das Lesen der CSV-Datei.</param>
-        /// <param name="fieldSeparator">Das Feldtrennzeichen.</param>
-        /// <exception cref="ArgumentNullException"><paramref name="reader"/> ist <c>null</c>.</exception>
-        public CsvReader(
-            TextReader reader,
-            bool hasHeaderRow = true,
-            CsvOptions options = CsvOptions.Default,
-            char fieldSeparator = ',')
+    /// <summary>
+    /// Throws a <see cref="NotSupportedException"/>.
+    /// </summary>
+    /// <exception cref="NotSupportedException">The method has been called.</exception>
+    void IEnumerator.Reset() => throw new NotSupportedException();
+
+    /// <summary>Closes the CSV file.</summary>
+    public void Dispose() => _reader.Dispose();
+
+    /// <summary>Returns the next <see cref="CsvRecord"/> in the CSV file or <c>null</c> 
+    /// if the file has been read completely.</summary>
+    /// <returns>The next <see cref="CsvRecord"/> in the CSV file or <c>null</c> 
+    /// if the file has been read completely.</returns>
+    /// 
+    /// <exception cref="ObjectDisposedException">The CSV file was already
+    /// closed.</exception>
+    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
+    /// on the <see cref="CsvOpts" /> value, specified in the constructor.</exception>
+    public CsvRecord? Read()
+    {
+        CsvRow? row = _reader.Read();
+
+        if (row is null)
         {
-            if (reader is null)
+            Dispose();
+            return null;
+        }
+
+        if (_record is null)
+        {
+            if (_hasHeaderRow)
             {
-                throw new ArgumentNullException(nameof(reader));
+                bool trimColumns = Options.HasFlag(CsvOpts.TrimColumns);
+                string[] columnNames = row.Select(x => x.ToString()).ToArray();
+
+                _record = new CsvRecord(columnNames,
+                                        Options.HasFlag(CsvOpts.CaseSensitiveKeys),
+                                        initArr: Options.HasFlag(CsvOpts.DisableCaching),
+                                        throwException: false);
+                return Read();
+            }
+            else
+            {
+                _record = new CsvRecord(row.Count);
+                Fill(row, _reader);
+                return _record;
+            }
+        }
+
+        if (!Options.HasFlag(CsvOpts.DisableCaching))
+        {
+            _record = new CsvRecord(_record);
+        }
+
+        Fill(row, _reader);
+
+        return _record;
+
+        /////////////////////////////////////////////////////////////////////
+
+        void Fill(CsvRow data, CsvStringReader reader)
+        {
+            if (data.Count > _record.Count && Options.HasFlag(CsvOpts.ThrowOnTooMuchFields))
+            {
+                throw new CsvFormatException(Res.TooMuchFields,
+                                             CsvError.TooMuchFields,
+                                             reader.LineNumber,
+                                             reader.LineIndex);
             }
 
-            this._options = options;
-            this._reader = new CsvStringReader(reader, fieldSeparator, options.HasFlag(CsvOptions.ThrowOnEmptyLines));
-            this._hasHeaderRow = hasHeaderRow;
-        }
+            Span<ReadOnlyMemory<char>> recordSpan = _record.Values;
+            int i;
+            int count = Math.Min(data.Count, _record.Count);
+#if NET8_0_OR_GREATER
+            Span<ReadOnlyMemory<char>> dataSpan = CollectionsMarshal.AsSpan(data);
 
-        #endregion
-
-
-        #region public Methods
-
-        /// <summary>
-        /// Gibt ein <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>-Objekt zurück, mit dem über die Datensätze der CSV-Datei
-        /// iteriert werden kann.
-        /// </summary>
-        /// <returns>Ein <see cref="IEnumerable{T}">IEnumerable&lt;CsvRecord&gt;</see>, mit dem über die Datensätze der CSV-Datei
-        /// iteriert werden kann.</returns>
-        /// <exception cref="InvalidOperationException">Die Methode wurde mehr als einmal aufgerufen.</exception>
-        /// <exception cref="ObjectDisposedException">Der <see cref="Stream"/> war bereits geschlossen.</exception>
-        /// <exception cref="IOException">Fehler beim Zugriff auf den Datenträger.</exception>
-        /// <exception cref="InvalidCsvException">Ungültige CSV-Datei. Die Interpretation ist abhängig vom <see cref="CsvOptions"/>-Wert,
-        /// der im Konstruktor angegeben wurde.</exception>
-#if !NET40
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            for (i = 0; i < count; i++)
+            {
+                ReadOnlyMemory<char> item = dataSpan[i];
+#else
+            for (i = 0; i < data.Count; i++)
+            {
+                ReadOnlyMemory<char> item = data[i];
 #endif
-        public IEnumerable<CsvRecord> Read()
-        {
-            if (!_firstRun)
-            {
-                ThrowInvalidOperationException();
+                recordSpan[i] = item;
             }
 
-            _firstRun = false;
-
-            return new CsvRecordCollection(this);
-        }
-
-
-        /// <summary>
-        /// Gibt die Resourcen frei. (Schließt den <see cref="TextReader"/>.)
-        /// </summary>
-        public void Dispose() => _reader.Dispose();
-
-        #endregion
-
-
-        #region internal
-
-        internal IEnumerator<CsvRecord> GetEnumerator()
-        {
-            CsvRecord? record = null; // Schablone für weitere CsvRecord-Objekte
-            CsvRecord? clone = null;
-
-            foreach (IEnumerable<string?> row in _reader)
+            if (i < _record.Count)
             {
-                if (record is null)
+                if (row.IsEmpty && Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
                 {
-                    bool caseSensitiveColumns = (_options & CsvOptions.CaseSensitiveKeys) == CsvOptions.CaseSensitiveKeys;
-
-                    if (_hasHeaderRow)
-                    {
-                        record = new CsvRecord(row.ToArray(),
-                            caseSensitiveColumns,
-                            (_options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns,
-                            false, false);
-                        continue;
-                    }
-                    else
-                    {
-                        string?[]? arr = row.ToArray();
-
-                        if (arr.Length == 0)
-                        {
-                            continue; // Leerzeile am Anfang
-                        }
-
-                        record = new CsvRecord(arr.Length, caseSensitiveColumns, false);
-                        clone = new CsvRecord(record);
-                        Fill(clone, arr, _reader);
-                    }
-                }
-                else
-                {
-                    if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
-                    {
-                        clone ??= new CsvRecord(record);
-                    }
-                    else
-                    {
-                        clone = new CsvRecord(record);
-                    }
-                    
-                    Fill(clone, row, _reader);
+                    throw new CsvFormatException(Res.EmptyLine, CsvError.EmptyLine, reader.LineNumber, 0);
                 }
 
-                yield return clone;
-            }
-
-            /////////////////////////////////////////////////////////////////////
-
-            void Fill(CsvRecord clone, IEnumerable<string?> data, CsvStringReader reader)
-            {
-                int dataIndex = 0;
-
-                foreach (string? item in data)
+                if (Options.HasFlag(CsvOpts.ThrowOnTooFewFields))
                 {
-                    if (dataIndex >= clone.Count)
-                    {
-                        if ((_options & CsvOptions.ThrowOnTooMuchFields) == CsvOptions.ThrowOnTooMuchFields)
-                        {
-                            throw new InvalidCsvException("Too much fields in a record.", reader.LineNumber, reader.LineIndex);
-                        }
-                        else
-                        {
-                            return;
-                        }
-                    }
-
-                    if (item != null && (_options & CsvOptions.TrimColumns) == CsvOptions.TrimColumns)
-                    {
-                        string? trimmed = item.Trim();
-
-                        if (trimmed.Length == 0)
-                        {
-                            trimmed = null;
-                        }
-
-                        clone[dataIndex++] = trimmed;
-                    }
-                    else
-                    {
-                        clone[dataIndex++] = item;
-                    }
+                    throw new CsvFormatException(Res.TooFewFields, CsvError.TooFewFields, reader.LineNumber, reader.LineIndex);
                 }
 
-
-                if (dataIndex < clone.Count)
+                if (Options.HasFlag(CsvOpts.DisableCaching))
                 {
-                    if (dataIndex == 0 && _options.HasFlag(CsvOptions.ThrowOnEmptyLines))
+                    for (int j = i; j < _record.Count; j++)
                     {
-                        throw new InvalidCsvException("Unmasked empty line.", reader.LineNumber, 0);
-                    }
-
-                    if ((_options & CsvOptions.ThrowOnTooFewFields) == CsvOptions.ThrowOnTooFewFields)
-                    {
-                        throw new InvalidCsvException("Too few fields in a record.", reader.LineNumber, reader.LineIndex);
-                    }
-
-                    if ((_options & CsvOptions.DisableCaching) == CsvOptions.DisableCaching)
-                    {
-                        for (int i = dataIndex; i < clone.Count; i++)
-                        {
-                            clone[i] = null;
-                        }
+                        recordSpan[j] = default;
                     }
                 }
-            }// Fill()
-
-        }// GetEnumerator()
-
-
-        /// <summary>
-        /// Initialisiert einen <see cref="StreamReader"/>.
-        /// </summary>
-        /// <param name="fileName">Dateipfad.</param>
-        /// <param name="textEncoding">Die zum Einlesen der CSV-Datei zu verwendende Textenkodierung oder <c>null</c> für <see cref="Encoding.UTF8"/>.</param>
-        /// <returns>Ein <see cref="StreamReader"/>.</returns>
-        /// <exception cref="ArgumentNullException"><paramref name="fileName"/> ist <c>null</c>.</exception>
-        /// <exception cref="ArgumentException"><paramref name="fileName"/> ist kein gültiger Dateipfad.</exception>
-        /// <exception cref="IOException">Es kann nicht auf den Datenträger zugegriffen werden.</exception>
-        [ExcludeFromCodeCoverage]
-        internal static StreamReader InitializeStreamReader(string fileName, Encoding? textEncoding)
-        {
-            try
-            {
-                return new StreamReader(fileName, textEncoding ?? Encoding.UTF8, true);
             }
-            catch (ArgumentNullException)
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-            catch (ArgumentException e)
-            {
-                throw new ArgumentException(e.Message, nameof(fileName), e);
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                throw new IOException(e.Message, e);
-            }
-            catch (NotSupportedException e)
-            {
-                throw new ArgumentException(e.Message, nameof(fileName), e);
-            }
-            catch (System.Security.SecurityException e)
-            {
-                throw new IOException(e.Message, e);
-            }
-            catch (PathTooLongException e)
-            {
-                throw new ArgumentException(e.Message, nameof(fileName), e);
-            }
-            catch (Exception e)
-            {
-                throw new IOException(e.Message, e);
-            }
-        }
-
-        #endregion
-
-
-        #region private
-
-        [DoesNotReturn]
-        private static void ThrowInvalidOperationException() => throw new InvalidOperationException(Res.NotTwice);
-
-        #endregion
+        }// Fill()
     }
 }

@@ -12,12 +12,11 @@ namespace FolkerKinzel.CsvTools.Tests
         [NotNull]
         public TestContext? TestContext { get; set; }
 
-
         [TestMethod()]
         public void CsvWriterTest()
         {
             using var writer = new CsvWriter("Test", 0);
-            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
+            Assert.IsNotNull(writer);
         }
 
         [TestMethod()]
@@ -37,32 +36,31 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod()]
         public void CsvWriterTest3()
         {
-            using var writer = new CsvWriter("Test", new string[] { "1", "2" });
-            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
+            using var writer = new CsvWriter("Test", ["1", "2"]);
+            Assert.IsNotNull(writer);
         }
-
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
         public void CsvWriterTest4()
         {
-            using var _ = new CsvWriter("  ", new string[] { "1", "2" });
+            using var _ = new CsvWriter("  ", ["1", "2"]);
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
         public void CsvWriterTest5()
         {
-            using var _ = new CsvWriter("Test", new string[] { "1", "1" });
+            using var _ = new CsvWriter("Test", ["1", "1"]);
         }
 
         [TestMethod()]
         public void CsvWriterTest6()
         {
             using var textWriter = new StringWriter();
-            using var writer = new CsvWriter(textWriter, new string[] { "1", "2" });
+            using var writer = new CsvWriter(textWriter, ["1", "2"]);
 
-            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
+            Assert.IsNotNull(writer);
         }
 
         [TestMethod()]
@@ -70,14 +68,14 @@ namespace FolkerKinzel.CsvTools.Tests
         public void CsvWriterTest7()
         {
             using var textWriter = new StringWriter();
-            using var _ = new CsvWriter(textWriter, new string[] { "1", "1" });
+            using var _ = new CsvWriter(textWriter, ["1", "1"]);
         }
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
         public void CsvWriterTest8()
         {
-            using var _ = new CsvWriter((TextWriter?)null!, new string[] { "1", "2" });
+            using var _ = new CsvWriter((TextWriter?)null!, ["1", "2"]);
         }
 
         [TestMethod()]
@@ -86,36 +84,35 @@ namespace FolkerKinzel.CsvTools.Tests
             using var textWriter = new StringWriter();
             using var writer = new CsvWriter(textWriter, 0);
 
-            Assert.IsInstanceOfType(writer, typeof(CsvWriter));
+            Assert.IsNotNull(writer);
         }
-
 
         [TestMethod()]
         public void WriteRecordTest1()
         {
             string VALUE1 = "Ein \"schönes\" Wochenende;" + Environment.NewLine + Environment.NewLine + "Zeile 3";
-            string FILENAME_STANDARD = Path.Combine(TestContext.TestRunResultsDirectory, @"StandardWithHeader.csv");
+            string FILENAME_STANDARD = Path.Combine(TestContext.TestRunResultsDirectory!, @"StandardWithHeader.csv");
 
             const string Key1 = "Key1";
             const string Key2 = "Key2";
 
-            using (var writer = new CsvWriter(FILENAME_STANDARD, new string[] { Key1, Key2 }))
+            using (var writer = new CsvWriter(FILENAME_STANDARD, [Key1, Key2]))
             {
-                writer.Record[Key1] = VALUE1;
+                writer.Record[Key1] = VALUE1.AsMemory();
 
                 writer.WriteRecord();
 
-                writer.Record[Key1] = "Value1";
-                writer.Record[Key2] = "Value2";
+                writer.Record[Key1] = "Value1".AsMemory();
+                writer.Record[Key2] = "Value2".AsMemory();
 
                 writer.WriteRecord();
             }
 
+            //string csv = File.ReadAllText(FILENAME_STANDARD);
             using var reader = new CsvReader(FILENAME_STANDARD);
 
-            Assert.AreEqual(VALUE1, reader.Read().First()[Key1]);
+            Assert.AreEqual(VALUE1, reader.First()[Key1].ToString());
         }
-
 
         /// <summary>
         /// Write CSV without Header.
@@ -124,25 +121,24 @@ namespace FolkerKinzel.CsvTools.Tests
         public void WriteRecordTest2()
         {
             string VALUE1 = "Ein \"schönes\" Wochenende;" + Environment.NewLine + Environment.NewLine + "Zeile 3";
-            string FILENAME_STANDARD = Path.Combine(TestContext.TestRunResultsDirectory, @"NoHeader.csv");
+            string FILENAME_STANDARD = Path.Combine(TestContext.TestRunResultsDirectory!, @"NoHeader.csv");
 
             using (var writer = new CsvWriter(FILENAME_STANDARD, 2))
             {
-                writer.Record[0] = VALUE1;
+                writer.Record.Values[0] = VALUE1.AsMemory();
 
                 writer.WriteRecord();
 
-                writer.Record[0] = "Value1";
-                writer.Record[1] = "Value2";
+                writer.Record.Values[0] = "Value1".AsMemory();
+                writer.Record.Values[1] = "Value2".AsMemory();
 
                 writer.WriteRecord();
             }
 
             using var reader = new CsvReader(FILENAME_STANDARD, hasHeaderRow: false);
 
-            Assert.AreEqual(VALUE1, reader.Read().First()[0]);
+            Assert.AreEqual(VALUE1, reader.First().Values[0].ToString());
         }
-
 
         [TestMethod()]
         [ExpectedException(typeof(ObjectDisposedException))]
@@ -153,7 +149,6 @@ namespace FolkerKinzel.CsvTools.Tests
             writer.Dispose();
             writer.WriteRecord();
         }
-
 
         [TestMethod()]
         public void DisposeTest()
