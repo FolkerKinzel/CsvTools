@@ -1,7 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Condition="False And '$(Configuration)'=='Release' And '$(TargetFramework)' == 'net6.0'">
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-  </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>net8.0;netstandard2.1;netstandard2.0;net462</TargetFrameworks>
     <LangVersion>13.0</LangVersion>
@@ -12,7 +9,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>2.0.0-alpha.1</Version>
-    <FileVersion>2.0.0.126</FileVersion>
+    <FileVersion>2.0.0.131</FileVersion>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0-alpha.1</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
@@ -96,63 +93,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Res.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'net461'">
-    <PackageReference Include="FolkerKinzel.Strings">
-      <Version>4.4.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Translations\en\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net6.0</PackagePath>
-    </None>
-    <None Include="Translations\en\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net5.0</PackagePath>
-    </None>
-    <None Include="Translations\en\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net461</PackagePath>
-    </None>
-    <None Include="Translations\en\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net40</PackagePath>
-    </None>
-    <None Include="Translations\en\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\netstandard2.0</PackagePath>
-    </None>
-    <None Include="Translations\en\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\netstandard2.1</PackagePath>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Translations\de\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net6.0\de</PackagePath>
-    </None>
-    <None Include="Translations\de\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net5.0\de</PackagePath>
-    </None>
-    <None Include="Translations\de\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net461\de</PackagePath>
-    </None>
-    <None Include="Translations\de\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\net40\de</PackagePath>
-    </None>
-    <None Include="Translations\de\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\netstandard2.0\de</PackagePath>
-    </None>
-    <None Include="Translations\de\FolkerKinzel.CsvTools.xml">
-      <Pack>True</Pack>
-      <PackagePath>lib\netstandard2.1\de</PackagePath>
-    </None>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Release if '$(TargetFramework)' == 'netstandard2.1' dotnet $(SolutionDir)IncVersion\IncVersion.dll $(ProjectDir)$(ProjectFileName) --revision" />

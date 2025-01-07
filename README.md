@@ -33,7 +33,7 @@ _(For the sake of better readability exception handling is ommitted in the follo
 - [CSV from and to DataTable](#csv-from-and-to-datatable)
 - [Deserializing Classes from CSV](#deserializing-classes-from-csv)
 
-#### Linq Query on a CSV File:
+### Linq Query on a CSV File:
 ```csharp
 using System.Text;
 using FolkerKinzel.CsvTools;

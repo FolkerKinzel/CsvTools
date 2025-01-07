@@ -7,12 +7,19 @@ namespace FolkerKinzel.CsvTools;
 /// </summary>
 public static class CsvRecordExtension
 {
-    /// <summary> Returns a copy of the data stored in <paramref name="record"/> as <see cref="Dictionary{TKey,
-    /// TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see>, 
+    /// <summary> Converts a <see cref="CsvRecord"/> instance to a 
+    /// <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see>.
+    /// 
+    /// </summary>
+    /// <param name="record">The <see cref="CsvRecord"/> instance to convert.</param>
+    /// <returns>A copy of the data stored in <paramref name="record"/> as 
+    /// <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see>.</returns>
+    /// <remarks>
+    /// The method copies the data stored in <paramref name="record"/> into a newly created <see cref="Dictionary{TKey,
+    /// TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see> instance, 
     /// which uses the same <see cref="StringComparer" /> for key comparison that was used to create 
     /// <paramref name="record"/>.
-    ///</summary>
-    /// <returns>A copy of the data stored in <paramref name="record"/>.</returns>
+    /// </remarks>
     public static Dictionary<string, ReadOnlyMemory<char>> ToDictionary(this CsvRecord record)
     {
 #if NETSTANDARD2_0 || NET462

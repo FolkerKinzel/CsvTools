@@ -172,24 +172,23 @@ namespace FolkerKinzel.CsvTools.Tests
             const string VALUE1 = "1234";
             const string VALUE2 = "4567";
             const string VALUE3 = "\"DemoString\" Some more demo string";
-            string FILENAME_STANDARD = Path.Combine(TestContext.TestRunResultsDirectory, @"NoHeader.csv");
+            //string FILENAME_STANDARD = Path.Combine(TestContext.TestRunResultsDirectory!, @"NoHeader.csv");
 
             using var stringWriter = new StringWriter();
-            using (var writer = new CsvWriter(stringWriter, 3, fieldSeparator: '|'))
+            using (var writer = new CsvWriter(stringWriter, 3, delimiter: '|'))
             {
-                writer.Record[0] = VALUE1;
-                writer.Record[1] = VALUE2;
-                writer.Record[2] = VALUE3;
+                writer.Record[0] = VALUE1.AsMemory();
+                writer.Record[1] = VALUE2.AsMemory();
+                writer.Record[2] = VALUE3.AsMemory();
 
                 writer.WriteRecord();              
             }
 
-            const string csv = "1234|4567|\"DemoString\" Some more demo string|";
+            //const string csv = "1234|4567|\"DemoString\" Some more demo string|";
 
             using var stringReader = new StringReader(stringWriter.ToString());
-            using var reader = new CsvReader(stringReader, hasHeaderRow: false, fieldSeparator: '|');
-            var record = reader.Read().First();
+            using var reader = new CsvReader(stringReader, hasHeaderRow: false, delimiter: '|');
+            CsvRecord record = reader.First();
         }
-
     }
 }   
