@@ -8,7 +8,7 @@ using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Represents a record of the CSV file (row). </summary>
+/// <summary>Represents a record (row) of the CSV file.</summary>
 /// <remarks>
 /// The column order corresponds
 /// to that of the CSV file and all columns are of the 
