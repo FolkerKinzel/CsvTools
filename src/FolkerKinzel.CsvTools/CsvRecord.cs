@@ -8,10 +8,14 @@ using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Represents a record of the CSV file (row). The column order corresponds
-/// to that of the CSV file and all columns are of the <see cref="Type"/>&#160;
-/// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>. The content of the
-/// columns can be accessed with the column name or with its zero-based column index.</summary>
+/// <summary>Represents a record of the CSV file (row). </summary>
+/// <remarks>
+/// The column order corresponds
+/// to that of the CSV file and all columns are of the 
+/// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>&#160;<see cref="Type"/>. 
+/// The content of the columns can be accessed with the column name or with its 
+/// zero-based column index.
+/// </remarks>
 public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<char>>>
 {
     private readonly Dictionary<string, int> _lookupDictionary;

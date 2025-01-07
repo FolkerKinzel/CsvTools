@@ -4,8 +4,7 @@ using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary> <see cref="CsvAnalyzer" /> can perform an analysis on a 
-/// CSV file.</summary>
+/// <summary> Analyzes a CSV file.</summary>
 public static class CsvAnalyzer
 {
     /// <summary>Minimum number of lines in the CSV file to be analyzed.</summary>

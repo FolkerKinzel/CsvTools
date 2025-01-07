@@ -1,7 +1,6 @@
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Extension methods that make working with the <see cref="CsvOpts" /> enum 
-/// easier.</summary>
+/// <summary>Extension methods for the <see cref="CsvOpts" /> enum.</summary>
 public static class CsvOptsExtension
 {
     /// <summary>Sets all flags set in <paramref name="flags" /> in <paramref name="value"
