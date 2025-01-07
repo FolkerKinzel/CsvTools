@@ -79,7 +79,7 @@ public static class Csv
     /// has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\Examples\CsvExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -281,7 +281,7 @@ public static class Csv
     ///// has been omitted.
     ///// </note>
     ///// 
-    ///// <code language="cs" source="..\Examples\CsvExample.cs" />
+    ///// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvExample.cs" />
     ///// </example>
     ///// 
     ///// <exception cref="ArgumentNullException"> <paramref name="filePath" />, or <paramref name="data" />, 

@@ -25,7 +25,7 @@ namespace FolkerKinzel.CsvTools;
 /// <para>
 /// Linq query on a CSV file:
 /// </para>
-/// <code language="cs" source="..\Examples\LinqOnCsvExample.cs" />
+/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\LinqOnCsvExample.cs" />
 /// </example>
 public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
 {

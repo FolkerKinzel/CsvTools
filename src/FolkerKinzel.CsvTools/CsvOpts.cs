@@ -23,7 +23,7 @@ namespace FolkerKinzel.CsvTools;
 /// In the following code example - for easier readability - exception handling
 /// has been omitted.
 /// </note>
-/// <code language="cs" source="..\Examples\DisableCachingExample.cs" />
+/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DisableCachingExample.cs" />
 /// </example>
 [Flags]
 public enum CsvOpts
