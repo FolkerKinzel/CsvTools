@@ -2,7 +2,7 @@
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Static class with methods for reading and writing CSV files.</summary>
+/// <summary>Static class that provides methods for reading and writing CSV files.</summary>
 public static class Csv
 {
     /// <summary>The newline characters to use in CSV files ("\r\n").</summary>
@@ -87,7 +87,7 @@ public static class Csv
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     public static CsvReader OpenReadAnalyzed(string filePath,
-                                                 int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
+                                             int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         (Encoding encoding, CsvAnalyzerResult results) = Analyze(filePath, analyzedLines);
         return new(filePath, results.HasHeaderRow, results.Options, results.Delimiter, encoding);
@@ -117,10 +117,10 @@ public static class Csv
     /// <exception cref="IOException">Error accessing the disk.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
-                                         bool hasHeaderRow = true,
-                                         CsvOpts options = CsvOpts.Default,
-                                         char delimiter = ',',
-                                         Encoding? textEncoding = null)
+                                     bool hasHeaderRow = true,
+                                     CsvOpts options = CsvOpts.Default,
+                                     char delimiter = ',',
+                                     Encoding? textEncoding = null)
         => new(filePath, hasHeaderRow, options, delimiter, textEncoding);
 
 
@@ -138,9 +138,9 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(TextReader reader,
-                                         bool hasHeaderRow = true,
-                                         CsvOpts options = CsvOpts.Default,
-                                         char delimiter = ',')
+                                     bool hasHeaderRow = true,
+                                     CsvOpts options = CsvOpts.Default,
+                                     char delimiter = ',')
         => new(reader, hasHeaderRow, options, delimiter);
 
 

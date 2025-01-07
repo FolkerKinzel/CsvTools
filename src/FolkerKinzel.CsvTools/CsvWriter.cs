@@ -3,7 +3,7 @@ using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Writes data as a CSV file.</summary>
+/// <summary>Writes data as a CSV file (RFC 4180).</summary>
 /// <remarks> <see cref="CsvWriter" /> provides a <see cref="CsvRecord" /> object in its 
 /// <see cref="Record" /> property that represents a buffer for a data record (row) of the 
 /// CSV file. Fill the <see cref="CsvRecord" /> object with data and then write it to the 

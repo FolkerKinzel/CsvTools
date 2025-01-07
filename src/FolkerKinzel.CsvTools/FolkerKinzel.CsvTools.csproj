@@ -13,7 +13,7 @@
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0-alpha.1</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
-    <Description>.NET library to read and write CSV files.</Description>
+    <Description>.NET library for reading and writing CSV files (RFC 4180)</Description>
     <Authors>Folker Kinzel</Authors>
     <Copyright>Copyright © 2020 Folker Kinzel</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

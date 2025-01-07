@@ -7,7 +7,8 @@ namespace FolkerKinzel.CsvTools;
 /// </summary>
 public class CsvAnalyzerResult
 {
-    /// <summary>The column names of the CSV file.</summary>
+    /// <summary>The column names of the CSV file, or <c>null</c> if the
+    /// CSV file has no header row.</summary>
     public IReadOnlyList<string>? ColumnNames { get; internal set; }
 
     /// <summary>Options for reading the CSV file.</summary>
@@ -16,7 +17,8 @@ public class CsvAnalyzerResult
     /// <summary>The field separator character.</summary>
     public char Delimiter { get; internal set; } = ',';
 
-    /// <summary> <c>true</c> if the CSV file has a header with column names,
-    /// otherwise <c>false</c>.</summary>
+    /// <summary>Gets a value that indicates whether the CSV file has a header row.</summary>
+    /// <value><c>true</c> if the CSV file has a header with column names,
+    /// otherwise <c>false</c>.</value>
     public bool HasHeaderRow => ColumnNames != null;
 }
