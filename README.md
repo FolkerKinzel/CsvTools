@@ -2,7 +2,7 @@
 [![NuGet](https://img.shields.io/nuget/v/FolkerKinzel.CsvTools)](https://www.nuget.org/packages/FolkerKinzel.CsvTools/)
 [![GitHub](https://img.shields.io/github/license/FolkerKinzel/CsvTools)](https://github.com/FolkerKinzel/CsvTools/blob/master/LICENSE)
 
-.NET-library to read and write CSV files. ("Comma-Separated Values", RFC 4180) 
+.NET library for reading and writing CSV files (RFC 4180)
 
 It contains
 * `CsvReader`: Reads CSV from files and streams. It enables you to perform Linq-Queries on CSV files.
