@@ -1,6 +1,7 @@
 ﻿# FolkerKinzel.CsvTools
 ## Roadmap
 ### 2.0.0-beta.1
+- [x] .NET 9.0 package
 - [ ] Write tests
 - [ ] Write benchmarks
 - [ ] Write examples

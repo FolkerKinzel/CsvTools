@@ -406,13 +406,14 @@ public static class Csv
             using FileStream fs = File.OpenRead(filePath);
 
 #if NET8_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
-            Span<byte> buf = stackalloc byte[BUF_LENGTH];
-            fs.Read(buf);
+            Span<byte> span = stackalloc byte[BUF_LENGTH];
+            int bytesRead = fs.Read(span);
 #else
             var buf = new byte[BUF_LENGTH];
-            fs.Read(buf, 0, buf.Length);
+            int bytesRead = fs.Read(buf, 0, buf.Length);
+            ReadOnlySpan<byte> span = buf;
 #endif
-            return TextEncodingConverter.GetCodePage(buf, out _);
+            return TextEncodingConverter.GetCodePage(span.Slice(0, bytesRead), out _);
         }
         catch
         {
