@@ -9,7 +9,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>2.0.0-alpha.1</Version>
-    <FileVersion>2.0.0.136</FileVersion>
+    <FileVersion>2.0.0.138</FileVersion>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0-alpha.1</PackageReleaseNotes>
     <PackageTags>.NET CSV C#</PackageTags>
@@ -23,9 +23,8 @@
     <RepositoryUrl>https://github.com/FolkerKinzel/CsvTools.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/FolkerKinzel/CsvTools</PackageProjectUrl>
-    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
     <PackageIconUrl />
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
