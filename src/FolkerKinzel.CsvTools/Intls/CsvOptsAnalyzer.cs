@@ -68,7 +68,7 @@ internal static class CsvOptsAnalyzer
         {
             ReadOnlyMemory<char> mem = row[i];
 
-            if ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny(results.Delimiter, '\r', '\n'))
+            if ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n']))
             {
                 // Has no header if the empty field is not the
                 // last field in the record.
