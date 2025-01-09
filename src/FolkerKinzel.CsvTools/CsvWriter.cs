@@ -33,7 +33,8 @@ public sealed class CsvWriter : IDisposable
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to 
+    /// change the default value.</param>
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
     /// <para>
@@ -62,7 +63,8 @@ public sealed class CsvWriter : IDisposable
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to 
+    /// change the default value.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
@@ -84,7 +86,8 @@ public sealed class CsvWriter : IDisposable
     /// can be chosen whether the comparison is case-sensitive or not.</param>
     /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
-    /// <param name="delimiter">The field separator character.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to 
+    /// change the default value.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
     /// name="columnNames" /> is <c>null.</c></exception>
@@ -113,13 +116,14 @@ public sealed class CsvWriter : IDisposable
     }
 
     private static SearchValuesPolyfill<char> CreateReservedChars(char delimiter) 
-        => SearchValuesPolyfill.Create([delimiter, '\"', '\r', 'n']);
+        => SearchValuesPolyfill.Create([delimiter, '\"', '\r', '\n']);
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data
     /// without a header row.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="delimiter">The field separator character.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to 
+    /// change the default value.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
     public CsvWriter(TextWriter writer,

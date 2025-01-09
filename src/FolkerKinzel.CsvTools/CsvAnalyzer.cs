@@ -10,21 +10,24 @@ public static class CsvAnalyzer
     /// <summary>Minimum number of lines in the CSV file to be analyzed.</summary>
     public const int AnalyzedLinesMinCount = 5;
 
-    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
-    /// </summary>
+    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />. </summary>
+    /// 
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
-    /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
-    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
-    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// <param name="textEncoding">
     /// <para>
-    /// The text encoding to be used to read the CSV file or <c>null</c> for <see cref="Encoding.UTF8" />.
+    /// The text encoding to be used to read the CSV file, or <c>null</c> for <see cref="Encoding.UTF8" />.
     /// </para>
     /// <note type="tip">
-    /// Use <see cref="Csv.Analyze(string, int)"/> to also automatically determine the <see cref="Encoding"/>.
+    /// Use <see cref="Csv.Analyze(string, CsvSupposition, Encoding?, int)"/> to also automatically determine 
+    /// the <see cref="Encoding"/>.
     /// </note>
     /// </param>
+    /// <param name="supposition">A supposition that is made about the presence of a header row.</param>
+    /// <param name="analyzedLinesCount">Maximum number of lines to analyze in the CSV file. The minimum 
+    /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
+    /// <paramref name="analyzedLinesCount" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
+    /// 
     /// <returns>The results of the analysis.</returns>
     /// 
     /// <remarks>
@@ -39,32 +42,50 @@ public static class CsvAnalyzer
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="supposition"/> is not a defined value of 
+    /// the <see cref="CsvSupposition"/> enum.</para>
+    /// <para> - or -</para>
+    /// <para><paramref name="supposition"/> is a combination of <see cref="CsvSupposition"/> values.</para>
+    /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     public static CsvAnalyzerResult Analyze(string filePath,
-                                            int analyzedLines = AnalyzedLinesMinCount,
-                                            Encoding? textEncoding = null)
+                                            Encoding? textEncoding = null,
+                                            CsvSupposition supposition = CsvSupposition.ProbablyHeaderPresent,
+                                            int analyzedLinesCount = AnalyzedLinesMinCount)
     {
-        CsvAnalyzerResult results = new();
+        ValidateSupposition(supposition);
+        CsvAnalyzerResult result = new();
 
-        if (analyzedLines < AnalyzedLinesMinCount)
+        if (analyzedLinesCount < AnalyzedLinesMinCount)
         {
-            analyzedLines = AnalyzedLinesMinCount;
+            analyzedLinesCount = AnalyzedLinesMinCount;
         }
 
         using (StreamReader reader1 = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding))
         {
-            results.Delimiter = new FieldSeparatorAnalyzer().GetFieldSeparator(reader1);
+            result.Delimiter = new FieldSeparatorAnalyzer().GetFieldSeparator(reader1);
         }
 
-
         using StreamReader reader2 = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
-        using var csvStringReader = new CsvStringReader(reader2, results.Delimiter, results.Options);
+        using var csvStringReader = new CsvStringReader(reader2, result.Delimiter, result.Options);
 
-        CsvOptsAnalyzer.InitProperties(csvStringReader,
-                                       analyzedLines,
-                                       results);
-        return results;
+        CsvPropertiesAnalyzer.InitProperties(csvStringReader,
+                                       analyzedLinesCount,
+                                       supposition,
+                                       result);
+        return result;
+
+        ///////////////////////////////////
+
+        static void ValidateSupposition(CsvSupposition supposition)
+        {
+            if (!(supposition is CsvSupposition.ProbablyHeaderPresent or CsvSupposition.HeaderPresent or CsvSupposition.HeaderAbsent))
+            {
+                throw new ArgumentOutOfRangeException(nameof(supposition));
+            }
+        }
     }
 }

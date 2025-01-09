@@ -2,14 +2,15 @@
 
 namespace FolkerKinzel.CsvTools.Intls;
 
-internal static class CsvOptsAnalyzer
+internal static class CsvPropertiesAnalyzer
 {
     internal static void InitProperties(CsvStringReader csvStringReader,
                                         int maxLines,
-                                        CsvAnalyzerResult results)
+                                        CsvSupposition supposition,
+                                        CsvAnalyzerResult result)
     {
         int analyzedLinesCount = 0;
-        int firstLineCount = 0;
+        //int firstLineCount = 0;
         CsvRow? row;
 
         bool hasEmptyLine = false;
@@ -28,21 +29,38 @@ internal static class CsvOptsAnalyzer
 
                 if (hasEmptyLine)
                 {
-                    results.Options = results.Options.Unset(CsvOpts.ThrowOnEmptyLines);
+                    result.Options = result.Options.Unset(CsvOpts.ThrowOnEmptyLines);
                 }
 
                 analyzedLinesCount++;
 
                 if (analyzedLinesCount == 1)
                 {
-                    firstLineCount = row.Count;
-                    ParseFirstLine(row, results);
+                    result.RowLength = row.Count;
+
+                    if (supposition != CsvSupposition.HeaderAbsent)
+                    {
+                        ParseHeader(row, supposition, result);
+                    }
                 }
-                else if (row.Count != firstLineCount)
+                else if (row.Count != result.RowLength)
                 {
-                    results.Options = row.Count < firstLineCount
-                        ? results.Options.Unset(CsvOpts.ThrowOnTooFewFields)
-                        : results.Options.Unset(CsvOpts.ThrowOnTooMuchFields);
+                    if (row.Count < result.RowLength)
+                    {
+                        result.Options = result.Options.Unset(CsvOpts.ThrowOnTooFewFields);
+                    }
+                    else
+                    {
+                        if (result.HeaderPresent)
+                        {
+                            result.Options = result.Options.Unset(CsvOpts.ThrowOnTooMuchFields);
+                        }
+                        else
+                        {
+                            result.Options = result.Options.Unset(CsvOpts.ThrowOnTooFewFields);
+                            result.RowLength = row.Count;
+                        }
+                    }
                 }
             }
         }
@@ -52,13 +70,14 @@ internal static class CsvOptsAnalyzer
             {
                 // This can only happen at EOF.
                 // A repeated parsing is not required.
-                results.Options = results.Options.Unset(CsvOpts.ThrowOnTruncatedFiles);
+                result.Options = result.Options.Unset(CsvOpts.ThrowOnTruncatedFiles);
             }
         }
     }
 
-    private static void ParseFirstLine(CsvRow csvRow, CsvAnalyzerResult results)
+    private static void ParseHeader(CsvRow csvRow, CsvSupposition supposition, CsvAnalyzerResult results)
     {
+        Debug.Assert(supposition != CsvSupposition.HeaderAbsent);
 #if NET8_0_OR_GREATER
         Span<ReadOnlyMemory<char>> row = CollectionsMarshal.AsSpan(csvRow);
 #else
@@ -68,7 +87,7 @@ internal static class CsvOptsAnalyzer
         {
             ReadOnlyMemory<char> mem = row[i];
 
-            if ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n']))
+            if (supposition == CsvSupposition.ProbablyHeaderPresent && ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n'])))
             {
                 // Has no header if the empty field is not the
                 // last field in the record.
@@ -89,7 +108,7 @@ internal static class CsvOptsAnalyzer
             }
         }//for
 
-        results.ColumnNames = csvRow.Where(x => !x.Span.IsWhiteSpace()).Select(x => x.ToString()).ToArray();
+        results.ColumnNames = csvRow.Where(x => !x.Span.IsEmpty).Select(x => x.ToString()).ToArray();
 
         if (results.ColumnNames.Count == results.ColumnNames.Distinct(StringComparer.Ordinal).Count())
         {
@@ -97,6 +116,8 @@ internal static class CsvOptsAnalyzer
             {
                 results.Options = results.Options.Set(CsvOpts.CaseSensitiveKeys);
             }
+
+            results.RowLength = results.ColumnNames.Count;
         }
         else // duplicate column names: no header
         {

@@ -11,7 +11,8 @@ internal static class CsvExample
 
 
             First # "Second # Column"   
-            1,"2",3 # Too much get's # LOST
+            1,"2",3 # "Get's
+            too much" # LOST?
 
             too few
 
@@ -23,12 +24,13 @@ internal static class CsvExample
         using CsvReader csv = Csv.OpenReadAnalyzed(filePath);
         CsvRecord[] data = [.. csv];
 
-        using CsvWriter writer = Csv.OpenWrite(filePath, data[0].ColumnNames);
-
-        foreach (CsvRecord record in data)
+        using (CsvWriter writer = Csv.OpenWrite(filePath, data[0].ColumnNames))
         {
-            writer.Record.FillWith(record.Values);
-            writer.WriteRecord();
+            foreach (CsvRecord record in data)
+            {
+                writer.Record.FillWith(record.Values);
+                writer.WriteRecord();
+            }
         }
 
         Console.WriteLine(File.ReadAllText(filePath));
@@ -38,8 +40,10 @@ internal static class CsvExample
 /*
  Console output:
 
-First,Second # Column
-"1,""2"",3",Too much get's
-too few,
+Column1,Column2,Column3
+First ,Second # Column,
+"1,""2"",3 ","Get's
+too much", LOST?
+too few,,
 
 */

@@ -20,5 +20,11 @@ public class CsvAnalyzerResult
     /// <summary>Gets a value that indicates whether the CSV file has a header row.</summary>
     /// <value><c>true</c> if the CSV file has a header with column names,
     /// otherwise <c>false</c>.</value>
-    public bool HasHeaderRow => ColumnNames != null;
+    public bool HeaderPresent => ColumnNames != null;
+
+    /// <summary>
+    /// Gets the number of fields in a data row of the CSV file.
+    /// </summary>
+    /// <value>At least 1.</value>
+    public int RowLength { get; internal set; } = 1;
 }

@@ -135,7 +135,7 @@ namespace FolkerKinzel.CsvTools.Tests
                 writer.WriteRecord();
             }
 
-            using var reader = new CsvReader(FILENAME_STANDARD, hasHeaderRow: false);
+            using var reader = new CsvReader(FILENAME_STANDARD, headerPresent: false);
 
             Assert.AreEqual(VALUE1, reader.First().Values[0].ToString());
         }
@@ -187,7 +187,7 @@ namespace FolkerKinzel.CsvTools.Tests
             //const string csv = "1234|4567|\"DemoString\" Some more demo string|";
 
             using var stringReader = new StringReader(stringWriter.ToString());
-            using var reader = new CsvReader(stringReader, hasHeaderRow: false, delimiter: '|');
+            using var reader = new CsvReader(stringReader, headerPresent: false, delimiter: '|');
             CsvRecord record = reader.First();
         }
     }

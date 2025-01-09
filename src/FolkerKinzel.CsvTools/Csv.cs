@@ -11,9 +11,14 @@ public static class Csv
     /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
+    /// <param name="supposition">A supposition that is made about the presence of a header row.</param>
+    /// <param name="textEncoding">
+    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the <see cref="Encoding"/>
+    /// automatically from the byte order mark (BOM).
+    /// </param>
+    /// <param name="analyzedLinesCount">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
-    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <paramref name="analyzedLinesCount" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
     /// <returns>The results of the analysis.</returns>
@@ -28,23 +33,34 @@ public static class Csv
     /// The analysis is time-consuming because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
-    /// This method also automatically determines the <see cref="Encoding"/> of the CSV file.
+    /// This method also automatically determines the <see cref="Encoding"/> of the CSV file from the
+    /// byte order mark (BOM) if the argument of the <paramref name="textEncoding"/> parameter is <c>null</c>.
+    /// If the <see cref="Encoding"/> cannot be determined automatically, <see cref="Encoding.UTF8"/> is used.
     /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="supposition"/> is not a defined value of 
+    /// the <see cref="CsvSupposition"/> enum.</para>
+    /// <para> - or -</para>
+    /// <para><paramref name="supposition"/> is a combination of <see cref="CsvSupposition"/> values.</para>
+    /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     public static (Encoding, CsvAnalyzerResult) Analyze(string filePath,
-                                                        int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
+                                                        CsvSupposition supposition = CsvSupposition.ProbablyHeaderPresent,
+                                                        Encoding? textEncoding = null,
+                                                        int analyzedLinesCount = CsvAnalyzer.AnalyzedLinesMinCount)
     {
-        Encoding? encoding = TextEncodingConverter.TryGetEncoding(GetCodePage(filePath), out encoding)
+        Encoding? encoding = textEncoding is null 
+            ? TextEncodingConverter.TryGetEncoding(GetCodePage(filePath), out encoding)
                                   ? encoding
-                                  : Encoding.UTF8;
+                                  : Encoding.UTF8
+            : textEncoding;
 
-        CsvAnalyzerResult results = CsvAnalyzer.Analyze(filePath, analyzedLines, encoding);
-
+        CsvAnalyzerResult results = CsvAnalyzer.Analyze(filePath, encoding, supposition, analyzedLinesCount);
         return (encoding, results);
     }
 
@@ -52,12 +68,19 @@ public static class Csv
     /// first and then opens a <see cref="CsvReader"/> to read its content.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
+    /// <param name="supposition">A supposition that is made about the presence of a header row.</param>
+    /// <param name="textEncoding">
+    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the <see cref="Encoding"/>
+    /// automatically from the byte order mark (BOM).
+    /// </param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
+    /// <param name="disableCaching"><c>true</c> to set the <see cref="CsvOpts.DisableCaching"/> flag, 
+    /// otherwise <c>false</c>.</param>
     /// 
-    /// <returns>An <see cref="CsvReader"/> that allows to iterate the data.</returns>
+    /// <returns>A <see cref="CsvReader"/> that allows to iterate the data.</returns>
     /// 
     /// <remarks>
     /// <para>
@@ -69,7 +92,9 @@ public static class Csv
     /// The analysis is time-consuming because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
-    /// This method also automatically determines the <see cref="Encoding"/> of the CSV file.
+    /// This method also automatically determines the <see cref="Encoding"/> of the CSV file from the
+    /// byte order mark (BOM) if the argument of the <paramref name="textEncoding"/> parameter is <c>null</c>.
+    /// If the <see cref="Encoding"/> cannot be determined automatically, <see cref="Encoding.UTF8"/> is used.
     /// </para>
     /// </remarks>
     /// 
@@ -83,31 +108,43 @@ public static class Csv
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="supposition"/> is not a defined value of 
+    /// the <see cref="CsvSupposition"/> enum.</para>
+    /// <para> - or -</para>
+    /// <para><paramref name="supposition"/> is a combination of <see cref="CsvSupposition"/> values.</para>
+    /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     public static CsvReader OpenReadAnalyzed(string filePath,
-                                             int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
+                                             CsvSupposition supposition = CsvSupposition.ProbablyHeaderPresent,
+                                             Encoding? textEncoding = null,
+                                             int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount,
+                                             bool disableCaching = false)
     {
-        (Encoding encoding, CsvAnalyzerResult results) = Analyze(filePath, analyzedLines);
-        return new(filePath, results.HasHeaderRow, results.Options, results.Delimiter, encoding);
+        (Encoding encoding, CsvAnalyzerResult result) = Analyze(filePath, supposition, textEncoding, analyzedLines);
+        result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
+        return result.HeaderPresent 
+            ? new(filePath, headerPresent: true, result.Options, result.Delimiter, encoding)
+            : new(filePath, result, encoding);
     }
 
     /// <summary>Opens the CSV file referenced with <paramref name="filePath"/> for reading.</summary>
     /// <param name="filePath">File path of the CSV file to read.</param>
-    /// <param name="hasHeaderRow"> <c>true</c>, if the CSV file has a header with column
+    /// <param name="headerPresent"> <c>true</c>, if the CSV file has a header with column
     /// names.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
     /// 
-    /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the data.</returns>
+    /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
     /// 
     /// <remarks>
     /// <note type="tip">
     /// The optimal parameters can be determined automatically with <see cref="CsvAnalyzer"/> - or use
-    /// <see cref="OpenReadAnalyzed(string, int)"/>.
+    /// <see cref="OpenReadAnalyzed(string, CsvSupposition, Encoding?, int, bool)"/>.
     /// </note>
     /// </remarks>
     /// 
@@ -117,18 +154,18 @@ public static class Csv
     /// <exception cref="IOException">Error accessing the disk.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
-                                     bool hasHeaderRow = true,
+                                     bool headerPresent = true,
                                      CsvOpts options = CsvOpts.Default,
                                      char delimiter = ',',
                                      Encoding? textEncoding = null)
-        => new(filePath, hasHeaderRow, options, delimiter, textEncoding);
+        => new(filePath, headerPresent, options, delimiter, textEncoding);
 
 
     /// <summary>Initializes a <see cref="CsvReader"/> instance to read data that is in the 
     /// CSV format.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
-    /// <param name="hasHeaderRow"> <c>true</c>, if the CSV data has a header with column
+    /// <param name="headerPresent"> <c>true</c>, if the CSV data has a header with column
     /// names, otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
@@ -138,10 +175,10 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(TextReader reader,
-                                     bool hasHeaderRow = true,
+                                     bool headerPresent = true,
                                      CsvOpts options = CsvOpts.Default,
                                      char delimiter = ',')
-        => new(reader, hasHeaderRow, options, delimiter);
+        => new(reader, headerPresent, options, delimiter);
 
 
     /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> instance

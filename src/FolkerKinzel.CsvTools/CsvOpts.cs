@@ -34,9 +34,17 @@ public enum CsvOpts
 
     /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
     /// /> if a data row contains more fields than the first data row.
-    /// <note>
+    /// <note type="note">
+    /// <para>
     /// If a data row has more Fields than the first data row, this is a strong indication
     /// of a read error. The flag should therefore usually be set.
+    /// </para>
+    /// <para>
+    /// Unset this flag only if the CSV file has a header and if you are not interested
+    /// in the surplus fields. Alternatively use 
+    /// <see cref="Csv.OpenReadAnalyzed(string, CsvSupposition, System.Text.Encoding?, int, bool)"/>
+    /// with <see cref="int.MaxValue"/> for the number of rows to analyze.
+    /// </para>
     /// </note>
     /// </summary>
     ThrowOnTooMuchFields = 1,
