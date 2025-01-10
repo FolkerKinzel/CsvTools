@@ -160,7 +160,6 @@ public static class Csv
                                      Encoding? textEncoding = null)
         => new(filePath, isHeaderPresent, options, delimiter, textEncoding);
 
-
     /// <summary>Initializes a <see cref="CsvReader"/> instance to read data that is in the 
     /// CSV format.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
@@ -179,7 +178,6 @@ public static class Csv
                                      CsvOpts options = CsvOpts.Default,
                                      char delimiter = ',')
         => new(reader, isHeaderPresent, options, delimiter);
-
 
     /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> instance
     /// to write data to it. If the target file already exists, it is truncated and overwritten.</summary>
