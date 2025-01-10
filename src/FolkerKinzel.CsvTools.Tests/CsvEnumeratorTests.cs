@@ -24,7 +24,7 @@ public class CsvReaderTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvReader(stringReader, headerPresent: false);
+        using var csv = new CsvReader(stringReader, isHeaderPresent: false);
 
         int counter = 0;
         foreach (CsvRecord record in csv)
@@ -70,7 +70,7 @@ public class CsvReaderTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvReader(stringReader, headerPresent: false);
+        using var csv = new CsvReader(stringReader, isHeaderPresent: false);
 
         stringReader.Dispose();
 
@@ -90,7 +90,7 @@ public class CsvReaderTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvReader(stringReader, headerPresent: false);
+        using var csv = new CsvReader(stringReader, isHeaderPresent: false);
 
         _ = csv.FirstOrDefault();
         _ = csv.FirstOrDefault();
@@ -105,7 +105,7 @@ public class CsvReaderTests
             ",Spalte \"2\"," + "\r\n";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvReader(stringReader, headerPresent: false);
+        using var csv = new CsvReader(stringReader, isHeaderPresent: false);
 
         IEnumerable numerable = csv;
         int counter = 0;

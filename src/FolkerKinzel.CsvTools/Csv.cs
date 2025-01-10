@@ -11,7 +11,7 @@ public static class Csv
     /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="supposition">A supposition that is made about the presence of a header row.</param>
+    /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="textEncoding">
     /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the <see cref="Encoding"/>
     /// automatically from the byte order mark (BOM).
@@ -41,16 +41,16 @@ public static class Csv
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// <para><paramref name="supposition"/> is not a defined value of 
-    /// the <see cref="CsvSupposition"/> enum.</para>
+    /// <para><paramref name="header"/> is not a defined value of 
+    /// the <see cref="Header"/> enum.</para>
     /// <para> - or -</para>
-    /// <para><paramref name="supposition"/> is a combination of <see cref="CsvSupposition"/> values.</para>
+    /// <para><paramref name="header"/> is a combination of <see cref="Header"/> values.</para>
     /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     public static (Encoding, CsvAnalyzerResult) Analyze(string filePath,
-                                                        CsvSupposition supposition = CsvSupposition.ProbablyHeaderPresent,
+                                                        Header header = Header.ProbablyPresent,
                                                         Encoding? textEncoding = null,
                                                         int analyzedLinesCount = CsvAnalyzer.AnalyzedLinesMinCount)
     {
@@ -60,7 +60,7 @@ public static class Csv
                                   : Encoding.UTF8
             : textEncoding;
 
-        CsvAnalyzerResult results = CsvAnalyzer.Analyze(filePath, encoding, supposition, analyzedLinesCount);
+        CsvAnalyzerResult results = CsvAnalyzer.Analyze(filePath, encoding, header, analyzedLinesCount);
         return (encoding, results);
     }
 
@@ -68,7 +68,7 @@ public static class Csv
     /// first and then opens a <see cref="CsvReader"/> to read its content.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="supposition">A supposition that is made about the presence of a header row.</param>
+    /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="textEncoding">
     /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the <see cref="Encoding"/>
     /// automatically from the byte order mark (BOM).
@@ -109,30 +109,30 @@ public static class Csv
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// <para><paramref name="supposition"/> is not a defined value of 
-    /// the <see cref="CsvSupposition"/> enum.</para>
+    /// <para><paramref name="header"/> is not a defined value of 
+    /// the <see cref="Header"/> enum.</para>
     /// <para> - or -</para>
-    /// <para><paramref name="supposition"/> is a combination of <see cref="CsvSupposition"/> values.</para>
+    /// <para><paramref name="header"/> is a combination of <see cref="Header"/> values.</para>
     /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
     public static CsvReader OpenReadAnalyzed(string filePath,
-                                             CsvSupposition supposition = CsvSupposition.ProbablyHeaderPresent,
+                                             Header header = Header.ProbablyPresent,
                                              Encoding? textEncoding = null,
                                              int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount,
                                              bool disableCaching = false)
     {
-        (Encoding encoding, CsvAnalyzerResult result) = Analyze(filePath, supposition, textEncoding, analyzedLines);
+        (Encoding encoding, CsvAnalyzerResult result) = Analyze(filePath, header, textEncoding, analyzedLines);
         result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
-        return result.HeaderPresent 
-            ? new(filePath, headerPresent: true, result.Options, result.Delimiter, encoding)
+        return result.IsHeaderPresent 
+            ? new(filePath, isHeaderPresent: true, result.Options, result.Delimiter, encoding)
             : new(filePath, result, encoding);
     }
 
     /// <summary>Opens the CSV file referenced with <paramref name="filePath"/> for reading.</summary>
     /// <param name="filePath">File path of the CSV file to read.</param>
-    /// <param name="headerPresent"> <c>true</c>, if the CSV file has a header with column
+    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV file has a header with column
     /// names.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
@@ -144,7 +144,7 @@ public static class Csv
     /// <remarks>
     /// <note type="tip">
     /// The optimal parameters can be determined automatically with <see cref="CsvAnalyzer"/> - or use
-    /// <see cref="OpenReadAnalyzed(string, CsvSupposition, Encoding?, int, bool)"/>.
+    /// <see cref="OpenReadAnalyzed(string, Header, Encoding?, int, bool)"/>.
     /// </note>
     /// </remarks>
     /// 
@@ -154,18 +154,18 @@ public static class Csv
     /// <exception cref="IOException">Error accessing the disk.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
-                                     bool headerPresent = true,
+                                     bool isHeaderPresent = true,
                                      CsvOpts options = CsvOpts.Default,
                                      char delimiter = ',',
                                      Encoding? textEncoding = null)
-        => new(filePath, headerPresent, options, delimiter, textEncoding);
+        => new(filePath, isHeaderPresent, options, delimiter, textEncoding);
 
 
     /// <summary>Initializes a <see cref="CsvReader"/> instance to read data that is in the 
     /// CSV format.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
-    /// <param name="headerPresent"> <c>true</c>, if the CSV data has a header with column
+    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV data has a header with column
     /// names, otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
@@ -175,10 +175,10 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(TextReader reader,
-                                     bool headerPresent = true,
+                                     bool isHeaderPresent = true,
                                      CsvOpts options = CsvOpts.Default,
                                      char delimiter = ',')
-        => new(reader, headerPresent, options, delimiter);
+        => new(reader, isHeaderPresent, options, delimiter);
 
 
     /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> instance

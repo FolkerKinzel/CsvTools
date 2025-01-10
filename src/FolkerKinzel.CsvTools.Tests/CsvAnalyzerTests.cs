@@ -32,7 +32,7 @@ namespace FolkerKinzel.CsvTools.Tests
 
         private static void AssertAnalyzerTestCsv(CsvAnalyzerResult result)
         {
-            Assert.IsTrue(result.HeaderPresent);
+            Assert.IsTrue(result.IsHeaderPresent);
             Assert.AreEqual(';', result.Delimiter);
             CollectionAssert.AreEqual(result.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei" });
             Assert.IsTrue(result.Options.HasFlag(CsvOpts.CaseSensitiveKeys));
@@ -48,7 +48,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             CsvAnalyzerResult result = CsvAnalyzer.Analyze(TestFiles.GoogleCsv);
 
-            Assert.IsTrue(result.HeaderPresent);
+            Assert.IsTrue(result.IsHeaderPresent);
             Assert.AreEqual(',', result.Delimiter);
 
             Assert.AreEqual(result.Options, CsvOpts.Default);

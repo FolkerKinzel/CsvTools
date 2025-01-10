@@ -6,7 +6,7 @@ internal static class CsvPropertiesAnalyzer
 {
     internal static void InitProperties(CsvStringReader csvStringReader,
                                         int maxLines,
-                                        CsvSupposition supposition,
+                                        Header header,
                                         CsvAnalyzerResult result)
     {
         int analyzedLinesCount = 0;
@@ -38,9 +38,9 @@ internal static class CsvPropertiesAnalyzer
                 {
                     result.RowLength = row.Count;
 
-                    if (supposition != CsvSupposition.HeaderAbsent)
+                    if (header != Header.Absent)
                     {
-                        ParseHeader(row, supposition, result);
+                        ParseHeader(row, header, result);
                     }
                 }
                 else if (row.Count != result.RowLength)
@@ -51,7 +51,7 @@ internal static class CsvPropertiesAnalyzer
                     }
                     else
                     {
-                        if (result.HeaderPresent)
+                        if (result.IsHeaderPresent)
                         {
                             result.Options = result.Options.Unset(CsvOpts.ThrowOnTooMuchFields);
                         }
@@ -75,9 +75,9 @@ internal static class CsvPropertiesAnalyzer
         }
     }
 
-    private static void ParseHeader(CsvRow csvRow, CsvSupposition supposition, CsvAnalyzerResult results)
+    private static void ParseHeader(CsvRow csvRow, Header supposition, CsvAnalyzerResult results)
     {
-        Debug.Assert(supposition != CsvSupposition.HeaderAbsent);
+        Debug.Assert(supposition != Header.Absent);
 #if NET8_0_OR_GREATER
         Span<ReadOnlyMemory<char>> row = CollectionsMarshal.AsSpan(csvRow);
 #else
@@ -87,7 +87,7 @@ internal static class CsvPropertiesAnalyzer
         {
             ReadOnlyMemory<char> mem = row[i];
 
-            if (supposition == CsvSupposition.ProbablyHeaderPresent && ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n'])))
+            if (supposition == Header.ProbablyPresent && ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n'])))
             {
                 // Has no header if the empty field is not the
                 // last field in the record.

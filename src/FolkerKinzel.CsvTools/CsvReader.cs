@@ -46,7 +46,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="filePath">File path of the CSV file to read.</param>
-    /// <param name="headerPresent"> <c>true</c>, if the CSV file has a header with column
+    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV file has a header with column
     /// names.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
@@ -64,7 +64,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the disk.</exception>
     public CsvReader(string filePath,
-                     bool headerPresent = true,
+                     bool isHeaderPresent = true,
                      CsvOpts options = CsvOpts.Default,
                      char delimiter = ',',
                      Encoding? textEncoding = null)
@@ -72,27 +72,27 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
         StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
 
         this._reader = new CsvStringReader(streamReader, delimiter, options);
-        this._hasHeaderRow = headerPresent;
+        this._hasHeaderRow = isHeaderPresent;
     }
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
-    /// <param name="headerPresent"> <c>true</c>, if the CSV file has a header with column
+    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV file has a header with column
     /// names, otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     public CsvReader(TextReader reader,
-                     bool headerPresent = true,
+                     bool isHeaderPresent = true,
                      CsvOpts options = CsvOpts.Default,
                      char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(reader, nameof(reader));
 
         this._reader = new CsvStringReader(reader, delimiter, options);
-        this._hasHeaderRow = headerPresent;
+        this._hasHeaderRow = isHeaderPresent;
     }
 
     /// <summary>
