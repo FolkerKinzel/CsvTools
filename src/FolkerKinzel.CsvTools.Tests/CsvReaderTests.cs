@@ -24,7 +24,7 @@ public class CsvReaderTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvReader(stringReader, isHeaderPresent: false);
+        using CsvReader csv = Csv.OpenRead(stringReader, isHeaderPresent: false);
 
         int counter = 0;
         foreach (CsvRecord record in csv)
@@ -43,7 +43,7 @@ public class CsvReaderTests
         _ = Directory.CreateDirectory(outDir);
 
         string file = TestFiles.GoogleCsv;
-        using var csv = new CsvReader(file, options: CsvOpts.None);
+        using CsvReader csv = Csv.OpenRead(file, options: CsvOpts.None);
 
         foreach (CsvRecord record in csv)
         {
@@ -70,7 +70,7 @@ public class CsvReaderTests
             ",Spalte \"2\",";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvReader(stringReader, isHeaderPresent: false);
+        using CsvReader csv = Csv.OpenRead(stringReader, isHeaderPresent: false);
 
         stringReader.Dispose();
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using FolkerKinzel.CsvTools.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,10 +18,15 @@ namespace FolkerKinzel.CsvTools.Tests
         public void AnalyzeTest2() => CsvAnalyzer.Analyze("  ");
 
         [TestMethod()]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void AnalyzeTest2b() => CsvAnalyzer.Analyze("Test", header: (Header)4711);
+
+        [TestMethod()]
         public void AnalyzeTest3()
         {
-            CsvAnalyzerResult results = CsvAnalyzer.Analyze(TestFiles.AnalyzerTestCsv);
+            (CsvAnalyzerResult results, Encoding enc) = Csv.Analyze(TestFiles.AnalyzerTestCsv);
             AssertAnalyzerTestCsv(results);
+            Assert.IsNotNull(enc);
         }
 
         [TestMethod]
@@ -34,7 +40,7 @@ namespace FolkerKinzel.CsvTools.Tests
         {
             Assert.IsTrue(result.IsHeaderPresent);
             Assert.AreEqual(';', result.Delimiter);
-            CollectionAssert.AreEqual(result.ColumnNames?.ToArray(), new string[] { "Eins", "eins", "zwei", "drei" });
+            CollectionAssert.AreEqual(result.ColumnNames?.ToArray(), new string?[] { "Eins", "eins", "zwei", "drei", null });
             Assert.IsTrue(result.Options.HasFlag(CsvOpts.CaseSensitiveKeys));
             Assert.IsTrue(result.Options.HasFlag(CsvOpts.TrimColumns));
             Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnTooFewFields));

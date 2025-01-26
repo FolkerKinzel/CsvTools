@@ -216,7 +216,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
             {
                 ReadOnlyMemory<char> item = dataSpan[i];
 #else
-            for (i = 0; i < data.Count; i++)
+            for (i = 0; i < count; i++)
             {
                 ReadOnlyMemory<char> item = data[i];
 #endif

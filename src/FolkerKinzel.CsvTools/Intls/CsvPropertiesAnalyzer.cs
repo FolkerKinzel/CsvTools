@@ -10,7 +10,6 @@ internal static class CsvPropertiesAnalyzer
                                         CsvAnalyzerResult result)
     {
         int analyzedLinesCount = 0;
-        //int firstLineCount = 0;
         CsvRow? row;
 
         bool hasEmptyLine = false;
@@ -75,9 +74,9 @@ internal static class CsvPropertiesAnalyzer
         }
     }
 
-    private static void ParseHeader(CsvRow csvRow, Header supposition, CsvAnalyzerResult results)
+    private static void ParseHeader(CsvRow csvRow, Header header, CsvAnalyzerResult results)
     {
-        Debug.Assert(supposition != Header.Absent);
+        Debug.Assert(header != Header.Absent);
 #if NET8_0_OR_GREATER
         Span<ReadOnlyMemory<char>> row = CollectionsMarshal.AsSpan(csvRow);
 #else
@@ -87,7 +86,7 @@ internal static class CsvPropertiesAnalyzer
         {
             ReadOnlyMemory<char> mem = row[i];
 
-            if (supposition == Header.ProbablyPresent && ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n'])))
+            if (header == Header.ProbablyPresent && ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n'])))
             {
                 // Has no header if the empty field is not the
                 // last field in the record.
@@ -108,18 +107,18 @@ internal static class CsvPropertiesAnalyzer
             }
         }//for
 
-        results.ColumnNames = csvRow.Where(x => !x.Span.IsEmpty).Select(x => x.ToString()).ToArray();
+        results.ColumnNames = csvRow.Select(x => x.Span.IsWhiteSpace() ? null : x.ToString()).ToArray();
 
-        if (results.ColumnNames.Count == results.ColumnNames.Distinct(StringComparer.Ordinal).Count())
+        string[] columnNamesWithoutWS = results.ColumnNames.OfType<string>().ToArray();
+
+        if (columnNamesWithoutWS.Length == columnNamesWithoutWS.Distinct(StringComparer.Ordinal).Count())
         {
-            if (results.ColumnNames.Count != results.ColumnNames.Distinct(StringComparer.OrdinalIgnoreCase).Count())
+            if (columnNamesWithoutWS.Length != columnNamesWithoutWS.Distinct(StringComparer.OrdinalIgnoreCase).Count())
             {
                 results.Options = results.Options.Set(CsvOpts.CaseSensitiveKeys);
             }
-
-            results.RowLength = results.ColumnNames.Count;
         }
-        else // duplicate column names: no header
+        else if (header == Header.ProbablyPresent) // duplicate column names: no header
         {
             results.ColumnNames = null;
             results.Options = results.Options.Unset(CsvOpts.TrimColumns);

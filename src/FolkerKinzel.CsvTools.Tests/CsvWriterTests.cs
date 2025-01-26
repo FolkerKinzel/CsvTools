@@ -15,7 +15,7 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod()]
         public void CsvWriterTest()
         {
-            using var writer = new CsvWriter("Test", 0);
+            using var writer = Csv.OpenWrite("Test", 0);
             Assert.IsNotNull(writer);
         }
 
@@ -36,7 +36,7 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod()]
         public void CsvWriterTest3()
         {
-            using var writer = new CsvWriter("Test", ["1", "2"]);
+            using CsvWriter writer = Csv.OpenWrite("Test", ["1", "2"]);
             Assert.IsNotNull(writer);
         }
 
@@ -58,7 +58,7 @@ namespace FolkerKinzel.CsvTools.Tests
         public void CsvWriterTest6()
         {
             using var textWriter = new StringWriter();
-            using var writer = new CsvWriter(textWriter, ["1", "2"]);
+            using var writer = Csv.OpenWrite(textWriter, ["1", "2"]);
 
             Assert.IsNotNull(writer);
         }
@@ -82,7 +82,7 @@ namespace FolkerKinzel.CsvTools.Tests
         public void CsvWriterTest9()
         {
             using var textWriter = new StringWriter();
-            using var writer = new CsvWriter(textWriter, 0);
+            using var writer = Csv.OpenWrite(textWriter, 0);
 
             Assert.IsNotNull(writer);
         }

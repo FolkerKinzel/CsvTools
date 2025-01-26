@@ -9,7 +9,7 @@ public class CsvAnalyzerResult
 {
     /// <summary>The column names of the CSV file, or <c>null</c> if the
     /// CSV file has no header row.</summary>
-    public IReadOnlyList<string>? ColumnNames { get; internal set; }
+    public IReadOnlyList<string?>? ColumnNames { get; internal set; }
 
     /// <summary>Options for reading the CSV file.</summary>
     public CsvOpts Options { get; internal set; } = CsvOpts.Default;
@@ -20,6 +20,7 @@ public class CsvAnalyzerResult
     /// <summary>Gets a value that indicates whether the CSV file has a header row.</summary>
     /// <value><c>true</c> if the CSV file has a header with column names,
     /// otherwise <c>false</c>.</value>
+    [MemberNotNullWhen(true, nameof(ColumnNames))]
     public bool IsHeaderPresent => ColumnNames != null;
 
     /// <summary>

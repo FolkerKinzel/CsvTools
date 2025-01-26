@@ -56,7 +56,7 @@ public static class CsvAnalyzer
                                             Header header = Header.ProbablyPresent,
                                             int analyzedLinesCount = AnalyzedLinesMinCount)
     {
-        ValidateHeaderSupposition(header);
+        Validate(header);
         CsvAnalyzerResult result = new();
 
         if (analyzedLinesCount < AnalyzedLinesMinCount)
@@ -73,14 +73,14 @@ public static class CsvAnalyzer
         using var csvStringReader = new CsvStringReader(reader2, result.Delimiter, result.Options);
 
         CsvPropertiesAnalyzer.InitProperties(csvStringReader,
-                                       analyzedLinesCount,
-                                       header,
-                                       result);
+                                             analyzedLinesCount,
+                                             header,
+                                             result);
         return result;
 
         ///////////////////////////////////
 
-        static void ValidateHeaderSupposition(Header header)
+        static void Validate(Header header)
         {
             if (!(header is Header.ProbablyPresent or Header.Present or Header.Absent))
             {
