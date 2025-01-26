@@ -26,6 +26,8 @@ public class CsvReaderTests
         using var stringReader = new StringReader(testCsv);
         using CsvReader csv = Csv.OpenRead(stringReader, isHeaderPresent: false);
 
+        Assert.AreEqual(',', csv.Delimiter);
+
         int counter = 0;
         foreach (CsvRecord record in csv)
         {
@@ -206,5 +208,14 @@ public class CsvReaderTests
         using var csvReader = new CsvReader(new StringReader(csv));
 
         Assert.AreEqual(4, csvReader.Count());
+    }
+
+
+    [TestMethod]
+    [ExpectedException(typeof(NotSupportedException))]
+    public void ResetTest1()
+    {
+        using var reader = new CsvReader("Test");
+        ((IEnumerator)reader).Reset();
     }
 }
