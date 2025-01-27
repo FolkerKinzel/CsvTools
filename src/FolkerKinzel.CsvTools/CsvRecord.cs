@@ -242,29 +242,6 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
-    ///// <summary>Tries to get the value associated with the specified column index of the CSV
-    ///// file.</summary>
-    ///// <param name="columnIndex">Zero-based index of the data column of the CSV file.</param>
-    ///// <param name="value">When this method returns, the parameter contains the value
-    ///// assigned to the column index specified with <paramref name="columnIndex" />
-    ///// if the column index exists, or <c>null</c> otherwise. This parameter is passed
-    ///// uninitialized.</param>
-    ///// <returns> <c>true</c> if a column index with the value of <paramref name="columnIndex"
-    ///// /> exists in the CSV file, otherwise <c>false</c>.</returns>
-    //public bool TryGetValue(int columnIndex, out ReadOnlyMemory<char> value)
-    //{
-    //    if (columnIndex >= 0 && columnIndex < Count)
-    //    {
-    //        value = Values[columnIndex];
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        value = default;
-    //        return false;
-    //    }
-    //}
-
     /// <summary>Determines whether the <see cref="CsvRecord" /> object contains a column
     /// with the specified column name.</summary>
     /// <param name="columnName">The column name of the CSV file column to search for.</param>

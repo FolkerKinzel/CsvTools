@@ -50,7 +50,7 @@ public static class CsvAnalyzer
     /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
-    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     public static CsvAnalyzerResult AnalyzeFile(string filePath,
                                                 Encoding? textEncoding = null,
                                                 Header header = Header.ProbablyPresent,

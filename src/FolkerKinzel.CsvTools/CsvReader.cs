@@ -35,13 +35,24 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     private CsvRecord? _record = null; // Template for additional CsvRecord objects
     private CsvRecord? _current;
 
+
+    /// <summary>
+    /// Initializes a new <see cref="CsvReader"/> instance to read a CSV file without header row.
+    /// </summary>
+    /// <param name="filePath">The path to the CSV file to be read.</param>
+    /// <param name="analyzerResult">The results of the analysis of the CSV file.</param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to use, or <c>null</c> for 
+    /// <see cref="Encoding.UTF8"/>.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="filePath"/> is not a valid file path.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     internal CsvReader(string filePath,
-                       CsvAnalyzerResult result,
+                       CsvAnalyzerResult analyzerResult,
                        Encoding? textEncoding = null)
     {
         StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
-        this._reader = new CsvStringReader(streamReader, result.Delimiter, result.Options);
-        _rowLength = result.RowLength;
+        this._reader = new CsvStringReader(streamReader, analyzerResult.Delimiter, analyzerResult.Options);
+        _rowLength = analyzerResult.RowLength;
     }
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
@@ -62,7 +73,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
-    /// <exception cref="IOException">Error accessing the disk.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     public CsvReader(string filePath,
                      bool isHeaderPresent = true,
                      CsvOpts options = CsvOpts.Default,
@@ -127,7 +138,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <inheritdoc/>
     /// <exception cref="ObjectDisposedException">The CSV file was already
     /// closed.</exception>
-    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
     /// on the <see cref="CsvOpts" /> value, specified in the constructor.</exception>
     bool IEnumerator.MoveNext()
@@ -159,7 +170,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// 
     /// <exception cref="ObjectDisposedException">The CSV file was already
     /// closed.</exception>
-    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
     /// on the <see cref="CsvOpts" /> value, specified in the constructor.</exception>
     public CsvRecord? Read()

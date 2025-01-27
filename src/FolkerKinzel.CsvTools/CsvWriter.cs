@@ -12,12 +12,13 @@ namespace FolkerKinzel.CsvTools;
 /// so that the <see cref="CsvRecord" /> object can be filled again.</remarks>
 public sealed class CsvWriter : IDisposable
 {
+    private static readonly SearchValuesPolyfill<char> _reservedCharsDefault
+       = SearchValuesPolyfill.Create([',', '\"', '\r', '\n']);
+
     private bool _isHeaderRowWritten;
     private bool _isDataWritten;
     private readonly SearchValuesPolyfill<char> _reservedChars;
-
     private readonly char _fieldSeparator;
-
     private readonly TextWriter _writer;
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
@@ -35,6 +36,10 @@ public sealed class CsvWriter : IDisposable
     /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to 
     /// change the default value.</param>
+    /// 
+    /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. 
+    /// If the file already exists, it is truncated and overwritten.</remarks>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
     /// <para>
@@ -48,7 +53,7 @@ public sealed class CsvWriter : IDisposable
     /// can be chosen whether the comparison is case-sensitive or not.
     /// </para>
     /// </exception>
-    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     public CsvWriter(string filePath,
                      IEnumerable<string?> columnNames,
                      bool caseSensitive = false,
@@ -66,10 +71,13 @@ public sealed class CsvWriter : IDisposable
     /// <param name="delimiter">The field separator character. It's not recommended to 
     /// change the default value.</param>
     /// 
+    /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. 
+    /// If the file already exists, it is truncated and overwritten.</remarks>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
-    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     public CsvWriter(string filePath,
                      int columnsCount,
                      Encoding? textEncoding = null,
@@ -115,9 +123,6 @@ public sealed class CsvWriter : IDisposable
             throwException: true);
     }
 
-    private static SearchValuesPolyfill<char> CreateReservedChars(char delimiter) 
-        => SearchValuesPolyfill.Create([delimiter, '\"', '\r', '\n']);
-
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data
     /// without a header row.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
@@ -132,13 +137,14 @@ public sealed class CsvWriter : IDisposable
                      char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
+        Record = new CsvRecord(columnsCount);
+
         this._writer = writer;
         writer.NewLine = Csv.NewLine;
 
         _isHeaderRowWritten = true;
         _fieldSeparator = delimiter;
         _reservedChars = CreateReservedChars(delimiter);
-        Record = new CsvRecord(columnsCount);
     }
 
     /// <summary>The record to be written to the file. Fill the <see cref="CsvRecord"
@@ -150,11 +156,16 @@ public sealed class CsvWriter : IDisposable
     /// <summary> Writes the contents of <see cref="Record" /> to the CSV file and then sets all
     /// fields of <see cref="Record" /> to <see cref="ReadOnlyMemory{T}.Empty" />. (The first 
     /// time it is called, the header row may also be written.)</summary>
-    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     /// <exception cref="ObjectDisposedException">The file was already closed.</exception>
     public void WriteRecord()
     {
         int recordLength = Record.Count;
+        
+        if(recordLength == 0)
+        {
+            return;
+        }
 
         if (!_isHeaderRowWritten)
         {
@@ -242,6 +253,9 @@ public sealed class CsvWriter : IDisposable
 
     /// <summary>Releases the resources. (Closes the CSV file.)</summary>
     public void Dispose() => _writer.Dispose();
+
+    private static SearchValuesPolyfill<char> CreateReservedChars(char delimiter)
+       => delimiter == ',' ? _reservedCharsDefault : SearchValuesPolyfill.Create([delimiter, '\"', '\r', '\n']);
 
     /// <summary> Initialisiert einen <see cref="StreamWriter" /> mit der angegebenen
     /// Textkodierung mit dem Namen der zu schreibenden Datei. </summary>

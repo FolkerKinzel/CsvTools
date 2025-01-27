@@ -51,7 +51,7 @@ public static class Csv
     /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
-    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     public static (CsvAnalyzerResult, Encoding) AnalyzeFile(string filePath,
                                                             Header header = Header.ProbablyPresent,
                                                             Encoding? textEncoding = null,
@@ -151,7 +151,7 @@ public static class Csv
     /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
-    /// <exception cref="IOException">Error accessing the file.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     public static CsvReader OpenReadAnalyzed(string filePath,
                                              Header header = Header.ProbablyPresent,
                                              Encoding? textEncoding = null,
@@ -186,7 +186,7 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
-    /// <exception cref="IOException">Error accessing the disk.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
                                      bool isHeaderPresent = true,
@@ -231,7 +231,7 @@ public static class Csv
     /// <remarks>
     /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."/>
+    /// <see cref="CsvWriter"/> directly.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -247,7 +247,7 @@ public static class Csv
     /// can be chosen whether the comparison is case-sensitive or not.
     /// </para>
     /// </exception>
-    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
                                       IEnumerable<string?> columnNames,
@@ -273,7 +273,7 @@ public static class Csv
     /// <remarks>
     /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."/>
+    /// <see cref="CsvWriter"/> directly.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
@@ -297,16 +297,21 @@ public static class Csv
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
     /// <remarks>
+    /// <para>Creates a new CSV file. If the target file already exists, it is 
+    /// truncated and overwritten.
+    /// </para>
+    /// <para>
     /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."/>
+    /// <see cref="CsvWriter"/> directly.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
-    /// <exception cref="IOException">I/O-Error</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
                                       int columnsCount,
@@ -322,9 +327,14 @@ public static class Csv
     /// the <see cref="TextWriter"/>.</returns>
     /// 
     /// <remarks>
+    /// <para>Creates a new CSV file. If the target file already exists, it is 
+    /// truncated and overwritten.
+    /// </para>
+    /// <para>
     /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."/>
+    /// <see cref="CsvWriter"/> directly.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
@@ -351,6 +361,8 @@ public static class Csv
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
+    /// <exception cref="CsvFormatException">Invalid CSV. The interpretation depends
+    /// on <paramref name="options"/>.</exception>
     public static CsvRecord[] Parse(string csv,
                                     bool isHeaderPresent = true,
                                     CsvOpts options = CsvOpts.Default,
@@ -401,8 +413,7 @@ public static class Csv
     /// <para><paramref name="header"/> is a combination of <see cref="Header"/> values.</para>
     /// </exception>
     /// <exception cref="CsvFormatException">Invalid CSV file. Try to increase the value of 
-    /// <paramref name="analyzedLines"/>
-    /// to get better analyzer results.</exception>
+    /// <paramref name="analyzedLines"/> to get a better analyzer result!</exception>
     public static CsvRecord[] ParseAnalyzed(string csv,
                                             Header header = Header.ProbablyPresent,
                                             int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
@@ -448,8 +459,28 @@ public static class Csv
         return writer.ToString();
     }
 
-
-
+    /// <summary>
+    /// Saves the content of <paramref name="data"/> as a CSV file.
+    /// </summary>
+    /// <param name="data">The data to save.</param>
+    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// 
+    /// <remarks>
+    /// <para>Creates a new CSV file. If the target file already exists, it is 
+    /// truncated and overwritten.
+    /// </para>
+    /// <para>
+    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// <see cref="CsvWriter"/> directly."
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
+    /// <paramref name="filePath"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
+    /// valid file path.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
     internal static void Save(IEnumerable<IEnumerable<string?>?> data, string filePath)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
