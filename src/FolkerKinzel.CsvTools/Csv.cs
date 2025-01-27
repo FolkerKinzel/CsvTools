@@ -425,25 +425,42 @@ public static class Csv
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
-        int maxLen = data.Max(x => x?.Count() ?? 0);
+        int maxLen = data.Max(static x => x?.Count() ?? 0);
 
         if (maxLen == 0)
         {
             return string.Empty;
         }
 
-        IEnumerable<string?>? header = data.FirstOrDefault(x => x?.Any(x => !string.IsNullOrWhiteSpace(x)) ?? false);
-
         using var writer = new StringWriter();
         using var csvWriter = new CsvWriter(writer, maxLen);
 
-        foreach (IEnumerable<string?>? record in data)
+        CsvRecord record = csvWriter.Record;
+
+        foreach (IEnumerable<string?>? coll in data)
         {
-            csvWriter.Record.FillWith(record);
+            record.FillWith(coll);
             csvWriter.WriteRecord();
         }
 
         return writer.ToString();
+    }
+
+    internal static void Save(IEnumerable<IEnumerable<string?>?> data, string filePath)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+
+        int maxLen = data.Max(static x => x?.Count() ?? 0);
+
+        using var csvWriter = new CsvWriter(filePath, maxLen);
+
+        CsvRecord record = csvWriter.Record;
+
+        foreach (IEnumerable<string?>? coll in data)
+        {
+            record.FillWith(coll);
+            csvWriter.WriteRecord();
+        }
     }
 
     private static int GetCodePage(string filePath)

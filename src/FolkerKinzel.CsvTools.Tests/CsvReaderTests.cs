@@ -191,7 +191,6 @@ public class CsvReaderTests
         Assert.AreEqual(4, csvReader.Count());
     }
 
-
     [TestMethod]
     [ExpectedException(typeof(NotSupportedException))]
     public void ResetTest1()

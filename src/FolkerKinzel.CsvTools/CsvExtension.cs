@@ -23,6 +23,7 @@ public static class CsvExtension
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string ToCsv(this IEnumerable<IEnumerable<string?>?> data)
         => Csv.AsString(data);
 
@@ -36,5 +37,16 @@ public static class CsvExtension
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
         return Csv.AsString(Enumerable.Repeat(data, 1));
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void SaveCsv(this IEnumerable<IEnumerable<string?>?> data, 
+                               string filePath) => Csv.Save(data, filePath);
+
+    public static void SaveCsv(this IEnumerable<string?> data,
+                               string filePath)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+        Csv.Save(Enumerable.Repeat(data, 1), filePath);
     }
 }
