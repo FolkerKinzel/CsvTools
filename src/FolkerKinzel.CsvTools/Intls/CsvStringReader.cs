@@ -45,12 +45,6 @@ internal sealed class CsvStringReader : IDisposable
         while ((_currentLine = _reader.ReadLine()) != null)
         {
             LineNumber++;
-
-            if (_currentLine.Length == 0 && !Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
-            {
-                continue;
-            }
-
             ReadNextRecord();
             return _row;
         }

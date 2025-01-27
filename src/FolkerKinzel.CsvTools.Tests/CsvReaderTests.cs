@@ -51,7 +51,6 @@ public class CsvReaderTests
         }
     }
 
-
     [TestMethod]
     [ExpectedException(typeof(ObjectDisposedException))]
     public void ReadTest3()
@@ -87,7 +86,6 @@ public class CsvReaderTests
         _ = csv.FirstOrDefault();
     }
 
-
     [TestMethod()]
     public void ReadTest5()
     {
@@ -101,14 +99,12 @@ public class CsvReaderTests
         Assert.AreEqual(2, csv.Length);
     }
 
-
     [TestMethod()]
     [ExpectedException(typeof(ArgumentNullException))]
     public void CsvReaderTest3()
     {
         using var _ = new CsvReader((string?)null!);
     }
-
 
     [TestMethod()]
     [ExpectedException(typeof(ArgumentException))]
@@ -117,14 +113,12 @@ public class CsvReaderTests
         using var _ = new CsvReader("   ");
     }
 
-
     [TestMethod()]
     [ExpectedException(typeof(ArgumentNullException))]
     public void CsvReaderTest5()
     {
         using var _ = new CsvReader((StreamReader?)null!);
     }
-
 
     [TestMethod]
     [ExpectedException(typeof(ObjectDisposedException))]
@@ -174,7 +168,6 @@ public class CsvReaderTests
         _ = csvReader.Count();
     }
 
-
     [TestMethod]
     public void MyTestMethod()
     {
@@ -197,5 +190,66 @@ public class CsvReaderTests
     {
         using var reader = new CsvReader("Test");
         ((IEnumerator)reader).Reset();
+    }
+
+    [TestMethod]
+    public void IEnumerableTest()
+    {
+        const string csv = "a,b,c";
+        using var stringReader = new StringReader(csv);
+        using var reader = new CsvReader(stringReader, isHeaderPresent: false);
+
+        IEnumerator enumerator = ((IEnumerable)reader).GetEnumerator();
+        Assert.AreSame(reader, enumerator);
+        Assert.IsTrue(enumerator.MoveNext());
+        Assert.IsNotNull(enumerator.Current);
+        Assert.AreEqual(',', reader.Delimiter);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(CsvFormatException))]
+    public void TooMuchFieldsTest()
+    {
+        const string csv = """
+            a,b
+            1,2,3
+            """;
+        _ = Csv.Parse(csv);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(CsvFormatException))]
+    public void EmptyLineTest1()
+    {
+        const string csv = """
+            a,b
+
+            1,2
+            """;
+        _ = Csv.Parse(csv);
+    }
+
+    [TestMethod]
+    public void EmptyLineTest2()
+    {
+        const string csv = """
+            a,b
+
+            1,2
+            """;
+
+        CsvRecord[] result = Csv.Parse(csv, options: CsvOpts.Default.Unset(CsvOpts.ThrowOnEmptyLines));
+        Assert.AreEqual(2, result.Length);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(CsvFormatException))]
+    public void TooFewFieldsTest()
+    {
+        const string csv = """
+            a,b,c
+            1,2
+            """;
+        _ = Csv.Parse(csv);
     }
 }

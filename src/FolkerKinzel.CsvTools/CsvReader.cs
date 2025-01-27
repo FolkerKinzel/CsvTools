@@ -243,12 +243,14 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
 
             if (i < _record.Count)
             {
-                if (row.IsEmpty && Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
+                if (row.IsEmpty)
                 {
-                    throw new CsvFormatException(Res.EmptyLine, CsvError.EmptyLine, reader.LineNumber, 0);
+                    if(Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
+{
+                        throw new CsvFormatException(Res.EmptyLine, CsvError.EmptyLine, reader.LineNumber, 0);
+                    }
                 }
-
-                if (Options.HasFlag(CsvOpts.ThrowOnTooFewFields))
+                else if (Options.HasFlag(CsvOpts.ThrowOnTooFewFields))
                 {
                     throw new CsvFormatException(Res.TooFewFields, CsvError.TooFewFields, reader.LineNumber, reader.LineIndex);
                 }
