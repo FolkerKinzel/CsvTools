@@ -56,7 +56,7 @@ public class CsvTests
     [TestMethod]
     public void AnalyzeTest1()
     {
-        (CsvAnalyzerResult _, Encoding encoding) = Csv.Analyze(TestFiles.AnalyzerTestCsv, textEncoding: TextEncodingConverter.GetEncoding("iso-8859-1"));
+        (CsvAnalyzerResult _, Encoding encoding) = Csv.AnalyzeFile(TestFiles.AnalyzerTestCsv, textEncoding: TextEncodingConverter.GetEncoding("iso-8859-1"));
         Assert.AreEqual("iso-8859-1", encoding.WebName, true, CultureInfo.InvariantCulture);
     }
 }

@@ -10,7 +10,7 @@ public static class CsvAnalyzer
     /// <summary>Minimum number of lines in the CSV file to be analyzed.</summary>
     public const int AnalyzedLinesMinCount = 5;
 
-    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />. </summary>
+    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.</summary>
     /// 
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="textEncoding">
@@ -18,14 +18,14 @@ public static class CsvAnalyzer
     /// The text encoding to be used to read the CSV file, or <c>null</c> for <see cref="Encoding.UTF8" />.
     /// </para>
     /// <note type="tip">
-    /// Use <see cref="Csv.Analyze(string, Header, Encoding?, int)"/> to also automatically determine 
+    /// Use <see cref="Csv.AnalyzeFile(string, Header, Encoding?, int)"/> to also automatically determine 
     /// the <see cref="Encoding"/>.
     /// </note>
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
-    /// <param name="analyzedLinesCount">Maximum number of lines to analyze in the CSV file. The minimum 
+    /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="AnalyzedLinesMinCount" />. If the file has fewer lines than 
-    /// <paramref name="analyzedLinesCount" />, it will be analyzed completely. (You can specify 
+    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
     /// <returns>The results of the analysis.</returns>
@@ -51,18 +51,14 @@ public static class CsvAnalyzer
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
-    public static CsvAnalyzerResult Analyze(string filePath,
-                                            Encoding? textEncoding = null,
-                                            Header header = Header.ProbablyPresent,
-                                            int analyzedLinesCount = AnalyzedLinesMinCount)
+    public static CsvAnalyzerResult AnalyzeFile(string filePath,
+                                                Encoding? textEncoding = null,
+                                                Header header = Header.ProbablyPresent,
+                                                int analyzedLines = AnalyzedLinesMinCount)
     {
         Validate(header);
+        analyzedLines = Normalize(analyzedLines);
         CsvAnalyzerResult result = new();
-
-        if (analyzedLinesCount < AnalyzedLinesMinCount)
-        {
-            analyzedLinesCount = AnalyzedLinesMinCount;
-        }
 
         using (StreamReader reader1 = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding))
         {
@@ -73,19 +69,78 @@ public static class CsvAnalyzer
         using var csvStringReader = new CsvStringReader(reader2, result.Delimiter, result.Options);
 
         CsvPropertiesAnalyzer.InitProperties(csvStringReader,
-                                             analyzedLinesCount,
+                                             analyzedLines,
                                              header,
                                              result);
         return result;
+    }
+    
+    /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the 
+    /// appropriate parameters for parsing.</summary>
+    /// 
+    /// <param name="csv">The CSV-<see cref="string"/> to analyze.</param>
+    /// 
+    /// <param name="header">A supposition that is made about the presence of a header row.</param>
+    /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The minimum 
+    /// value is <see cref="AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines than 
+    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)</param>
+    /// 
+    /// <returns>The results of the analysis.</returns>
+    /// 
+    /// <remarks>
+    /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
+    /// of the analysis is therefore always only an estimate, 
+    /// the accuracy of which increases with the number of lines analyzed.
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="header"/> is not a defined value of 
+    /// the <see cref="Header"/> enum.</para>
+    /// <para> - or -</para>
+    /// <para><paramref name="header"/> is a combination of <see cref="Header"/> values.</para>
+    /// </exception>
+    public static CsvAnalyzerResult AnalyzeString(string csv,
+                                                  Header header = Header.ProbablyPresent,
+                                                  int analyzedLines = AnalyzedLinesMinCount)
+    {
+        _ArgumentNullException.ThrowIfNull(csv, nameof(csv));
 
-        ///////////////////////////////////
+        Validate(header);
+        analyzedLines = Normalize(analyzedLines);
+        CsvAnalyzerResult result = new();
 
-        static void Validate(Header header)
+        using (StringReader reader1 = new(csv))
         {
-            if (!(header is Header.ProbablyPresent or Header.Present or Header.Absent))
-            {
-                throw new ArgumentOutOfRangeException(nameof(header));
-            }
+            result.Delimiter = new FieldSeparatorAnalyzer().GetFieldSeparator(reader1);
+        }
+
+        using StringReader reader2 = new(csv);
+        using var csvStringReader = new CsvStringReader(reader2, result.Delimiter, result.Options);
+
+        CsvPropertiesAnalyzer.InitProperties(csvStringReader,
+                                             analyzedLines,
+                                             header,
+                                             result);
+        return result;
+    }
+
+    private static int Normalize(int analyzedLinesCount)
+    {
+        if (analyzedLinesCount < AnalyzedLinesMinCount)
+        {
+            analyzedLinesCount = AnalyzedLinesMinCount;
+        }
+
+        return analyzedLinesCount;
+    }
+
+    private static void Validate(Header header)
+    {
+        if (!(header is Header.ProbablyPresent or Header.Present or Header.Absent))
+        {
+            throw new ArgumentOutOfRangeException(nameof(header));
         }
     }
 }

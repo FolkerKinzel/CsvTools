@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -16,9 +17,9 @@ public static class Csv
     /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the <see cref="Encoding"/>
     /// automatically from the byte order mark (BOM).
     /// </param>
-    /// <param name="analyzedLinesCount">Maximum number of lines to analyze in the CSV file. The minimum 
+    /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
-    /// <paramref name="analyzedLinesCount" />, it will be analyzed completely. (You can specify 
+    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
     /// <returns>The results of the analysis.</returns>
@@ -51,10 +52,10 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the file.</exception>
-    public static (CsvAnalyzerResult, Encoding) Analyze(string filePath,
-                                                        Header header = Header.ProbablyPresent,
-                                                        Encoding? textEncoding = null,
-                                                        int analyzedLinesCount = CsvAnalyzer.AnalyzedLinesMinCount)
+    public static (CsvAnalyzerResult, Encoding) AnalyzeFile(string filePath,
+                                                            Header header = Header.ProbablyPresent,
+                                                            Encoding? textEncoding = null,
+                                                            int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         if (textEncoding is null)
         {
@@ -62,11 +63,43 @@ public static class Csv
             textEncoding = encoding;
         }
 
-        CsvAnalyzerResult results = CsvAnalyzer.Analyze(filePath, textEncoding, header, analyzedLinesCount);
+        CsvAnalyzerResult results = CsvAnalyzer.AnalyzeFile(filePath, textEncoding, header, analyzedLines);
         return (results, textEncoding!);
     }
 
-    /// <summary>This method analyzes the CSV file referenced by <paramref name="filePath" />
+    /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the 
+    /// appropriate parameters for parsing.</summary>
+    /// 
+    /// <param name="csv">The CSV-<see cref="string"/> to analyze.</param>
+    /// 
+    /// <param name="header">A supposition that is made about the presence of a header row.</param>
+    /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The minimum 
+    /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines than 
+    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)</param>
+    /// 
+    /// <returns>The results of the analysis.</returns>
+    /// 
+    /// <remarks>
+    /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
+    /// of the analysis is therefore always only an estimate, 
+    /// the accuracy of which increases with the number of lines analyzed.
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="header"/> is not a defined value of 
+    /// the <see cref="Header"/> enum.</para>
+    /// <para> - or -</para>
+    /// <para><paramref name="header"/> is a combination of <see cref="Header"/> values.</para>
+    /// </exception>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static CsvAnalyzerResult AnalyzeString(string csv,
+                                                  Header header = Header.ProbablyPresent,
+                                                  int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount) 
+        => CsvAnalyzer.AnalyzeString(csv, header, analyzedLines);
+
+    /// <summary>Analyzes the CSV file referenced by <paramref name="filePath" />
     /// first and then opens a <see cref="CsvReader"/> to read its content.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
@@ -125,17 +158,17 @@ public static class Csv
                                              int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount,
                                              bool disableCaching = false)
     {
-        (CsvAnalyzerResult result, Encoding encoding) = Analyze(filePath, header, textEncoding, analyzedLines);
+        (CsvAnalyzerResult result, Encoding encoding) = AnalyzeFile(filePath, header, textEncoding, analyzedLines);
         result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
-        return result.IsHeaderPresent 
+        return result.IsHeaderPresent
             ? new(filePath, isHeaderPresent: true, result.Options, result.Delimiter, encoding)
             : new(filePath, result, encoding);
     }
 
     /// <summary>Opens the CSV file referenced with <paramref name="filePath"/> for reading.</summary>
     /// <param name="filePath">File path of the CSV file to read.</param>
-    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV file has a header with column
-    /// names.</param>
+    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
+    /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
@@ -166,8 +199,8 @@ public static class Csv
     /// CSV format.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
-    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV data has a header with column
-    /// names, otherwise <c>false</c>.</param>
+    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
+    /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
@@ -297,6 +330,121 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(TextWriter writer, int columnsCount)
         => new(writer, columnsCount);
+
+    /// <summary>Parses the specified CSV-<see cref="string"/> to make its content accessible.</summary>
+    /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
+    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
+    /// otherwise <c>false</c>.</param>
+    /// <param name="options">Parsing options. (The flag <see cref="CsvOpts.DisableCaching"/>
+    /// will be ignored.)</param>
+    /// <param name="delimiter">The field separator character.</param>
+    /// 
+    /// <returns>An array of <see cref="CsvRecord"/> objects containing the parsed data.</returns>
+    /// 
+    /// <remarks>
+    /// <note type="tip">
+    /// The optimal parameters can be determined automatically with <see cref="CsvAnalyzer"/> - or use
+    /// <see cref="ParseAnalyzed(string, Header, int)"/>.
+    /// </note>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
+    public static CsvRecord[] Parse(string csv,
+                                    bool isHeaderPresent = true,
+                                    CsvOpts options = CsvOpts.Default,
+                                    char delimiter = ',')
+    {
+        _ArgumentNullException.ThrowIfNull(csv, nameof(csv));
+
+        using var stringReader = new StringReader(csv);
+        using var reader = 
+            new CsvReader(stringReader, isHeaderPresent, options.Unset(CsvOpts.DisableCaching), delimiter);
+
+        return [.. reader];
+    }
+
+    /// <summary>Analyzes the specified CSV-<see cref="string"/>
+    /// first and then parses it content.
+    /// </summary>
+    /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
+    /// <param name="header">A supposition that is made about the presence of a header row.</param>
+    /// 
+    /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The minimum 
+    /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines than 
+    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)</param>
+    /// 
+    /// <returns>An array of <see cref="CsvRecord"/> objects containing the parsed data.</returns>
+    /// 
+    /// <remarks>
+    /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
+    /// of the analysis is therefore always only an estimate, 
+    /// the accuracy of which increases with the number of lines analyzed.
+    /// </remarks>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\StringExample.cs" />
+    /// </example>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="header"/> is not a defined value of 
+    /// the <see cref="Header"/> enum.</para>
+    /// <para> - or -</para>
+    /// <para><paramref name="header"/> is a combination of <see cref="Header"/> values.</para>
+    /// </exception>
+    /// <exception cref="CsvFormatException">Invalid CSV file. Try to increase the value of 
+    /// <paramref name="analyzedLines"/>
+    /// to get better analyzer results.</exception>
+    public static CsvRecord[] ParseAnalyzed(string csv,
+                                            Header header = Header.ProbablyPresent,
+                                            int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
+    {
+        CsvAnalyzerResult result = CsvAnalyzer.AnalyzeString(csv, header, analyzedLines);
+
+        using var stringReader = new StringReader(csv);
+        using CsvReader reader = result.IsHeaderPresent
+            ? new(stringReader, isHeaderPresent: true, result.Options, result.Delimiter)
+            : new(stringReader, result);
+
+        return [.. reader];
+    }
+
+    /// <summary>
+    /// Converts the content of <paramref name="data"/> to a comma-separated values <see cref="string"/> (CSV, RFC 4180).
+    /// </summary>
+    /// <param name="data">The data to convert.</param>
+    /// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    public static string AsString(IEnumerable<IEnumerable<string?>?> data)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+
+        int maxLen = data.Max(x => x?.Count() ?? 0);
+
+        if (maxLen == 0)
+        {
+            return string.Empty;
+        }
+
+        IEnumerable<string?>? header = data.FirstOrDefault(x => x?.Any(x => !string.IsNullOrWhiteSpace(x)) ?? false);
+
+        using var writer = new StringWriter();
+        using var csvWriter = new CsvWriter(writer, maxLen);
+
+        foreach (IEnumerable<string?>? record in data)
+        {
+            csvWriter.Record.FillWith(record);
+            csvWriter.WriteRecord();
+        }
+
+        return writer.ToString();
+    }
 
     private static int GetCodePage(string filePath)
     {

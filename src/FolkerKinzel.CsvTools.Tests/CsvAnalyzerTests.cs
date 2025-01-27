@@ -11,20 +11,20 @@ namespace FolkerKinzel.CsvTools.Tests
     {
         [TestMethod()]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void AnalyzeTest1() => CsvAnalyzer.Analyze(null!);
+        public void AnalyzeTest1() => CsvAnalyzer.AnalyzeFile(null!);
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentException))]
-        public void AnalyzeTest2() => CsvAnalyzer.Analyze("  ");
+        public void AnalyzeTest2() => CsvAnalyzer.AnalyzeFile("  ");
 
         [TestMethod()]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void AnalyzeTest2b() => CsvAnalyzer.Analyze("Test", header: (Header)4711);
+        public void AnalyzeTest2b() => CsvAnalyzer.AnalyzeFile("Test", header: (Header)4711);
 
         [TestMethod()]
         public void AnalyzeTest3()
         {
-            (CsvAnalyzerResult results, Encoding enc) = Csv.Analyze(TestFiles.AnalyzerTestCsv);
+            (CsvAnalyzerResult results, Encoding enc) = Csv.AnalyzeFile(TestFiles.AnalyzerTestCsv);
             AssertAnalyzerTestCsv(results);
             Assert.IsNotNull(enc);
         }
@@ -32,7 +32,7 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod]
         public void AnalyzeTest4()
         {
-            CsvAnalyzerResult result = CsvAnalyzer.Analyze(TestFiles.AnalyzerTestCsv, analyzedLinesCount: -42);
+            CsvAnalyzerResult result = CsvAnalyzer.AnalyzeFile(TestFiles.AnalyzerTestCsv, analyzedLines: -42);
             AssertAnalyzerTestCsv(result);
         }
 
@@ -52,7 +52,7 @@ namespace FolkerKinzel.CsvTools.Tests
         [TestMethod()]
         public void AnalyzeTest5()
         {
-            CsvAnalyzerResult result = CsvAnalyzer.Analyze(TestFiles.GoogleCsv);
+            CsvAnalyzerResult result = CsvAnalyzer.AnalyzeFile(TestFiles.GoogleCsv);
 
             Assert.IsTrue(result.IsHeaderPresent);
             Assert.AreEqual(',', result.Delimiter);

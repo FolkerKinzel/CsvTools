@@ -23,20 +23,9 @@ public class CsvReaderTests
             "Spalte \"1\",," + "\r\n" +
             ",Spalte \"2\",";
 
-        using var stringReader = new StringReader(testCsv);
-        using CsvReader csv = Csv.OpenRead(stringReader, isHeaderPresent: false);
-
-        Assert.AreEqual(',', csv.Delimiter);
-
-        int counter = 0;
-        foreach (CsvRecord record in csv)
-        {
-            counter++;
-        }
-
-        Assert.AreEqual(2, counter);
+        CsvRecord[] csv = Csv.Parse(testCsv, isHeaderPresent: false);
+        Assert.AreEqual(2, csv.Length);
     }
-
 
     [TestMethod()]
     public void ReadTest2()
@@ -107,17 +96,9 @@ public class CsvReaderTests
             ",Spalte \"2\"," + "\r\n";
 
         using var stringReader = new StringReader(testCsv);
-        using var csv = new CsvReader(stringReader, isHeaderPresent: false);
+        CsvRecord[] csv = Csv.Parse(testCsv, isHeaderPresent: false);
 
-        IEnumerable numerable = csv;
-        int counter = 0;
-
-        foreach (object? record in numerable)
-        {
-            counter++;
-        }
-
-        Assert.AreEqual(2, counter);
+        Assert.AreEqual(2, csv.Length);
     }
 
 

@@ -46,8 +46,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="filePath">File path of the CSV file to read.</param>
-    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV file has a header with column
-    /// names.</param>
+    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
+    /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
@@ -78,8 +78,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
-    /// <param name="isHeaderPresent"> <c>true</c>, if the CSV file has a header with column
-    /// names, otherwise <c>false</c>.</param>
+    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
+    /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
@@ -93,6 +93,13 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
 
         this._reader = new CsvStringReader(reader, delimiter, options);
         this._hasHeaderRow = isHeaderPresent;
+    }
+
+    internal CsvReader(TextReader reader,
+                       CsvAnalyzerResult result)
+    {
+        this._reader = new CsvStringReader(reader, result.Delimiter, result.Options);
+        _rowLength = result.RowLength;
     }
 
     /// <summary>
