@@ -305,6 +305,7 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
     /// <exception cref="IOException">I/O-Error</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
@@ -327,6 +328,7 @@ public static class Csv
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(TextWriter writer, int columnsCount)
         => new(writer, columnsCount);
@@ -445,6 +447,8 @@ public static class Csv
 
         return writer.ToString();
     }
+
+
 
     internal static void Save(IEnumerable<IEnumerable<string?>?> data, string filePath)
     {

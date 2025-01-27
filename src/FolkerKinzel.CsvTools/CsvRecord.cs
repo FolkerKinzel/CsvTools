@@ -39,8 +39,11 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// für die Spalten ("Column1", "Column2" etc). (Geeignet für CSV-Dateien ohne Kopfzeile.)
     /// </summary>
     /// <param name="columnsCount">Anzahl der Spalten.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
     internal CsvRecord(int columnsCount)
     {
+        _ArgumentOutOfRangeException.ThrowIfNegative(columnsCount, nameof(columnsCount));
+
         IEqualityComparer<string> comparer = StringComparer.OrdinalIgnoreCase;
 
         this._lookupDictionary = new Dictionary<string, int>(columnsCount, comparer);

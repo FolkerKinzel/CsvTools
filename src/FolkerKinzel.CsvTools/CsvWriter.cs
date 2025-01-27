@@ -126,6 +126,7 @@ public sealed class CsvWriter : IDisposable
     /// change the default value.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
     public CsvWriter(TextWriter writer,
                      int columnsCount,
                      char delimiter = ',')
