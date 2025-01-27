@@ -20,8 +20,8 @@ public class CsvTests
     {
         using CsvReader reader = Csv.OpenReadAnalyzed(TestFiles.AnalyzerTestCsv);
         CsvRecord[] arr = [.. reader];
-        Assert.AreEqual(3, arr.Length);
-        Assert.AreEqual(3, arr.Distinct().Count()); 
+        Assert.AreEqual(4, arr.Length);
+        Assert.AreEqual(4, arr.Distinct().Count()); 
     }
 
     [TestMethod]
@@ -29,7 +29,7 @@ public class CsvTests
     {
         using CsvReader reader = Csv.OpenReadAnalyzed(TestFiles.AnalyzerTestCsv, disableCaching: true);
         CsvRecord[] arr = [.. reader];
-        Assert.AreEqual(3, arr.Length);
+        Assert.AreEqual(4, arr.Length);
         Assert.AreEqual(1, arr.Distinct().Count());
     }
 
@@ -38,7 +38,7 @@ public class CsvTests
     {
         using CsvReader reader = Csv.OpenReadAnalyzed(TestFiles.AnalyzerTestCsv, header: Header.Absent, disableCaching: true);
         CsvRecord[] arr = [.. reader];
-        Assert.AreEqual(4, arr.Length);
+        Assert.AreEqual(5, arr.Length);
         Assert.AreEqual(8, arr[0].Count);
         Assert.AreEqual(1, arr.Distinct().Count());
     }
@@ -48,8 +48,8 @@ public class CsvTests
     {
         using CsvReader reader = Csv.OpenReadAnalyzed(TestFiles.AnalyzerTestCsv, header: Header.Absent);
         CsvRecord[] arr = [.. reader];
-        Assert.AreEqual(4, arr.Length);
-        Assert.AreEqual(4, arr.Distinct().Count());
+        Assert.AreEqual(5, arr.Length);
+        Assert.AreEqual(5, arr.Distinct().Count());
         Assert.AreEqual(8, arr[0].Count);
     }
 

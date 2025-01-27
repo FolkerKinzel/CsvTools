@@ -233,6 +233,7 @@ public class CsvReaderTests
     public void EmptyLineTest2()
     {
         const string csv = """
+
             a,b
 
             1,2
@@ -251,5 +252,39 @@ public class CsvReaderTests
             1,2
             """;
         _ = Csv.Parse(csv);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(CsvFormatException))]
+    public void FileTruncatedTest1()
+    {
+        const string csv = """
+            a,b
+            1,"2
+            """;
+        _ = Csv.Parse(csv);
+    }
+
+    [TestMethod]
+    public void FileTruncatedTest2()
+    {
+        const string csv = """
+            a,b
+            1,"2
+            """;
+        Assert.AreEqual(1, Csv.ParseAnalyzed(csv).Length);
+    }
+
+    [TestMethod]
+    public void FileTruncatedTest3()
+    {
+        const string csv = """
+            a,b
+            1, "2
+
+
+            """;
+        CsvRecord[] result = Csv.ParseAnalyzed(csv);
+        Assert.AreEqual(1, result.Length);
     }
 }

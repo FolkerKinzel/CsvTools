@@ -73,8 +73,11 @@ public enum CsvOpts
     /// <summary>If set, <see cref="CsvReader" /> throws an <see cref="CsvFormatException"
     /// /> if a masked field at the end of the file is not properly closed.
     /// <note>
-    /// An unclosed masked field at the end of a CSV file is a data error. However, by removing the flag, 
-    /// <see cref="CsvReader" /> will be able to parse the rest of the file.
+    /// An unclosed masked field at the end of a CSV file is a data error. However, by 
+    /// removing the flag, 
+    /// <see cref="CsvReader" /> will be able to parse the rest of the file. The 
+    /// <see cref="ThrowOnTooFewFields"/> flag should also be unset in this case because a CSV
+    /// row could be truncated by the unclosed masked field.
     /// </note>
     /// </summary>
     ThrowOnTruncatedFiles = 1 << 3,

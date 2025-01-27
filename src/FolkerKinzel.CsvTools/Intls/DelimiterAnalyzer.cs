@@ -2,7 +2,7 @@
 
 namespace FolkerKinzel.CsvTools.Intls;
 
-internal ref struct FieldSeparatorAnalyzer()
+internal ref struct DelimiterAnalyzer()
 {
     private const int EOF = -1;
     private const int MAX_LINES = 5;
@@ -45,7 +45,7 @@ internal ref struct FieldSeparatorAnalyzer()
                     _rowLength--; // current is \n or the first character of the next line
                     HandleNewLine();
 
-                    if (_current is '\n' or '\r')
+                    if (_current == '\n' || _current == '\r')
                     {
                         // line ending is \r\n,
                         // or line ending is \r and two empty lines follow each other
@@ -90,7 +90,7 @@ internal ref struct FieldSeparatorAnalyzer()
 
         _rowLength = 0;
 
-        if(!_finds.IsEmpty)
+        if (!_finds.IsEmpty)
         {
             _findsList.Add(_finds);
             _finds = new RowSeparatorFinds();
@@ -166,29 +166,26 @@ internal ref struct FieldSeparatorAnalyzer()
             }
         }
 
-        if (findsList[0].Comma == 0)
+        if (findsList[0].Comma != 0)
         {
-            if (findsList[0].Semicolon > 0)
-            {
-                return ';';
-            }
-
-            if (findsList[0].Hash > 0)
-            {
-                return '#';
-            }
-
-            if (findsList[0].Tab > 0)
-            {
-                return '\t';
-            }
-
-            if (findsList[0].Space > 0)
-            {
-                return ' ';
-            }
+            return ',';
         }
 
-        return ',';
+        if (findsList[0].Semicolon > 0)
+        {
+            return ';';
+        }
+
+        if (findsList[0].Hash > 0)
+        {
+            return '#';
+        }
+
+        if (findsList[0].Tab > 0)
+        {
+            return '\t';
+        }
+
+        return ' ';
     }
 }

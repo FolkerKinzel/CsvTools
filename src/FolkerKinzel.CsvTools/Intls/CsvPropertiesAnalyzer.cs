@@ -67,9 +67,10 @@ internal static class CsvPropertiesAnalyzer
         {
             if (e.Error == CsvError.FileTruncated)
             {
-                // This can only happen at EOF.
+                // This can only happen at EOF. In case the CsvRow was truncated by a broken masked field,
+                // the CsvOpts.ThrowOnTooFewFields flag is also unset.
                 // A repeated parsing is not required.
-                result.Options = result.Options.Unset(CsvOpts.ThrowOnTruncatedFiles);
+                result.Options = result.Options.Unset(CsvOpts.ThrowOnTruncatedFiles | CsvOpts.ThrowOnTooFewFields);
             }
         }
     }

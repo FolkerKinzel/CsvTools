@@ -3,8 +3,8 @@ using FolkerKinzel.CsvTools.Resources;
 
 namespace FolkerKinzel.CsvTools.Intls;
 
-/// <summary> Liest eine Csv-Datei vorwärts und gibt ihre Datenzeilen als <c>IList&lt;ReadOnlyMemory&lt;char&gt;&gt;</c>"
-/// zurück. </summary>
+/// <summary> Read a CSV file once forward and returns its contents als <see cref="CsvRow "/>
+/// objects. </summary>
 internal sealed class CsvStringReader : IDisposable
 {
     private const int INITIAL_COLUMNS_COUNT = 32;
@@ -14,6 +14,7 @@ internal sealed class CsvStringReader : IDisposable
     private StringBuilder? _sb;
     private string? _currentLine;
     private bool _mustAllocate;
+    private bool _firstLineFound;
 
     internal int LineNumber { get; private set; }
 
@@ -45,6 +46,15 @@ internal sealed class CsvStringReader : IDisposable
         while ((_currentLine = _reader.ReadLine()) != null)
         {
             LineNumber++;
+
+            if (!_firstLineFound 
+                && _currentLine.Length == 0 
+                && !Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
+            {
+                continue;
+            }
+
+            _firstLineFound = true;
             ReadNextRecord();
             return _row;
         }
@@ -118,7 +128,7 @@ internal sealed class CsvStringReader : IDisposable
         {
             char c = span[i];
 
-            if (char.IsWhiteSpace(c))
+            if (c == ' ')
             {
                 continue;
             }
@@ -159,6 +169,7 @@ internal sealed class CsvStringReader : IDisposable
 
                 if (!LoadNextLine())
                 {
+                    DoAddAllocatedField(startIndex);
                     return;
                 }
 
@@ -183,6 +194,7 @@ internal sealed class CsvStringReader : IDisposable
 
                     if (!LoadNextLine())
                     {
+                        DoAddAllocatedField(startIndex);
                         return;
                     }
 
@@ -206,7 +218,7 @@ internal sealed class CsvStringReader : IDisposable
                 }
                 else
                 {
-                    Debug.Assert(c is '\"' or ' ');
+                    Debug.Assert(c == '\"' || c == ' ');
 
                     char next = span[LineIndex + 1];
 
@@ -221,7 +233,7 @@ internal sealed class CsvStringReader : IDisposable
                         // masked double quote
                         _mustAllocate = true;
                     }
-                    else if (next == ' ' && this.Delimiter != ' ')
+                    else if (next == ' ')
                     {
                         // tolerate spaces after the closing quote if the
                         // field separator is not a space

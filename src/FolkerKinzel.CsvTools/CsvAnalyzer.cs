@@ -62,7 +62,7 @@ public static class CsvAnalyzer
 
         using (StreamReader reader1 = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding))
         {
-            result.Delimiter = new FieldSeparatorAnalyzer().GetFieldSeparator(reader1);
+            result.Delimiter = new DelimiterAnalyzer().GetFieldSeparator(reader1);
         }
 
         using StreamReader reader2 = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
@@ -113,7 +113,7 @@ public static class CsvAnalyzer
 
         using (StringReader reader1 = new(csv))
         {
-            result.Delimiter = new FieldSeparatorAnalyzer().GetFieldSeparator(reader1);
+            result.Delimiter = new DelimiterAnalyzer().GetFieldSeparator(reader1);
         }
 
         using StringReader reader2 = new(csv);
