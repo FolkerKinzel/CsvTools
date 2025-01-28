@@ -82,9 +82,9 @@ public static class CsvRecordExtension
 
         if(resetExcess)
         {
-            for (int j = i; j < span.Length; j++)
+            for (; i < span.Length; i++)
             {
-                span[j] = default;
+                span[i] = default;
             }
         }
     }
@@ -157,9 +157,9 @@ public static class CsvRecordExtension
 
         if (resetExcess)
         {
-            for (int j = i; j < span.Length; j++)
+            for (; i < span.Length; i++)
             {
-                span[j] = default;
+                span[i] = default;
             }
         }
     }
@@ -208,9 +208,9 @@ public static class CsvRecordExtension
 
         if (resetExcess)
         {
-            for (int j = i; j < span.Length; j++)
+            for (; i < span.Length; i++)
             {
-                span[j] = default;
+                span[i] = default;
             }
         }
     }
