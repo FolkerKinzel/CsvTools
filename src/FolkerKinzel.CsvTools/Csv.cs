@@ -14,8 +14,8 @@ public static class Csv
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="textEncoding">
-    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the <see cref="Encoding"/>
-    /// automatically from the byte order mark (BOM).
+    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the 
+    /// <see cref="Encoding"/> automatically from the byte order mark (BOM).
     /// </param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
@@ -472,7 +472,7 @@ public static class Csv
 
         foreach (IEnumerable<string?>? coll in data)
         {
-            record.FillWith(coll);
+            record.FillWith(coll, resetExcess: false);
             csvWriter.WriteRecord();
         }
 
@@ -513,7 +513,7 @@ public static class Csv
 
         foreach (IEnumerable<string?>? coll in data)
         {
-            record.FillWith(coll);
+            record.FillWith(coll, resetExcess: false);
             csvWriter.WriteRecord();
         }
     }
