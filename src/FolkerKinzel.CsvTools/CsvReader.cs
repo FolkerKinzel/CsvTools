@@ -73,6 +73,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public CsvReader(string filePath,
                      bool isHeaderPresent = true,
@@ -80,6 +82,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
                      char delimiter = ',',
                      Encoding? textEncoding = null)
     {
+        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+
         StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
 
         this._reader = new CsvStringReader(streamReader, delimiter, options);
@@ -95,12 +99,15 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     public CsvReader(TextReader reader,
                      bool isHeaderPresent = true,
                      CsvOpts options = CsvOpts.Default,
                      char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(reader, nameof(reader));
+        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 
         this._reader = new CsvStringReader(reader, delimiter, options);
         this._hasHeaderRow = isHeaderPresent;

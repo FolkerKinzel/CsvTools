@@ -18,7 +18,7 @@ public sealed class CsvWriter : IDisposable
     private bool _isHeaderRowWritten;
     private bool _isDataWritten;
     private readonly SearchValuesPolyfill<char> _reservedChars;
-    private readonly char _fieldSeparator;
+    private readonly char _delimiter;
     private readonly TextWriter _writer;
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
@@ -53,13 +53,32 @@ public sealed class CsvWriter : IDisposable
     /// can be chosen whether the comparison is case-sensitive or not.
     /// </para>
     /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public CsvWriter(string filePath,
                      IEnumerable<string?> columnNames,
                      bool caseSensitive = false,
                      Encoding? textEncoding = null,
                      char delimiter = ',')
-         : this(InitStreamWriter(filePath, textEncoding), columnNames, caseSensitive, delimiter) { }
+    {
+        _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
+        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+
+        this.Record = new CsvRecord(
+            columnNames.ToArray(),
+            caseSensitive,
+            initArr: true,
+            throwException: true);
+
+        // Don't change the order: _writer will not be disposed if an exception is thrown
+        // after it had been initialized.
+        _writer = InitStreamWriter(filePath, textEncoding);
+        _writer.NewLine = Csv.NewLine;
+
+        _delimiter = delimiter;
+        _reservedChars = CreateReservedChars(delimiter);
+    }
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
     /// without a header row.</summary>
@@ -77,12 +96,35 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para>
+    /// <paramref name="columnsCount"/> is negative
+    /// </para>
+    /// <para>- or -</para>
+    /// <para>
+    /// <paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').
+    /// </para>
+    /// </exception>
     /// <exception cref="IOException">I/O error.</exception>
     public CsvWriter(string filePath,
                      int columnsCount,
                      Encoding? textEncoding = null,
                      char delimiter = ',')
-         : this(InitStreamWriter(filePath, textEncoding), columnsCount, delimiter) { }
+    {
+        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+
+        Record = new CsvRecord(columnsCount);
+
+        // Don't change the order: _writer will not be disposed if an exception is thrown
+        // after it had been initialized.
+        this._writer = InitStreamWriter(filePath, textEncoding);
+        _writer.NewLine = Csv.NewLine;
+
+        _isHeaderRowWritten = true;
+        _delimiter = delimiter;
+        _reservedChars = CreateReservedChars(delimiter);
+    }
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
@@ -102,6 +144,8 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
     /// /> occurs twice. With <paramref name="caseSensitive"/> can be chosen whether 
     /// the comparison is case-sensitive or not.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     public CsvWriter(TextWriter writer,
                      IEnumerable<string?> columnNames,
                      bool caseSensitive = false,
@@ -109,18 +153,19 @@ public sealed class CsvWriter : IDisposable
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
         _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
-
-        _writer = writer;
-        _writer.NewLine = Csv.NewLine;
-
-        _fieldSeparator = delimiter;
-        _reservedChars = CreateReservedChars(delimiter);
+        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 
         this.Record = new CsvRecord(
             columnNames.ToArray(),
             caseSensitive,
             initArr: true,
             throwException: true);
+
+        _writer = writer;
+        _writer.NewLine = Csv.NewLine;
+
+        _delimiter = delimiter;
+        _reservedChars = CreateReservedChars(delimiter);
     }
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data
@@ -131,27 +176,51 @@ public sealed class CsvWriter : IDisposable
     /// change the default value.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para>
+    /// <paramref name="columnsCount"/> is negative
+    /// </para>
+    /// <para>- or -</para>
+    /// <para>
+    /// <paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').
+    /// </para>
+    /// </exception>
     public CsvWriter(TextWriter writer,
                      int columnsCount,
                      char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
+        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+
         Record = new CsvRecord(columnsCount);
 
         this._writer = writer;
         writer.NewLine = Csv.NewLine;
 
         _isHeaderRowWritten = true;
-        _fieldSeparator = delimiter;
+        _delimiter = delimiter;
         _reservedChars = CreateReservedChars(delimiter);
     }
 
-    /// <summary>The record to be written to the file. Fill the <see cref="CsvRecord"
-    /// /> object with data and call then <see cref="WriteRecord" /> to write this data
-    /// to the file. <see cref="CsvWriter" /> clears the contents of <see cref="Record"
-    /// /> after each call of the <see cref="WriteRecord" /> method.</summary>
+    /// <summary>Gets the record to be written to the file. </summary>
+    /// <remarks>
+    /// <para>
+    /// Fill the <see cref="CsvRecord" /> object with data and then call
+    /// the <see cref="WriteRecord" /> method to write this data to the file. 
+    /// </para>
+    /// <para>
+    /// The <see cref="CsvRecord" /> is the same with each call. <see cref="CsvWriter" /> 
+    /// clears the contents of this <see cref="CsvRecord" /> instance after each call of 
+    /// the <see cref="WriteRecord" /> method.
+    /// </para>
+    /// </remarks>
     public CsvRecord Record { get; }
+
+    /// <summary>
+    /// Gets the field separator character.
+    /// </summary>
+    public char Delimiter => _delimiter;
 
     /// <summary> Writes the contents of <see cref="Record" /> to the CSV file and then sets all
     /// fields of <see cref="Record" /> to <see cref="ReadOnlyMemory{T}.Empty" />. (The first 
@@ -175,7 +244,7 @@ public sealed class CsvWriter : IDisposable
             for (int i = 0; i < recordLength - 1; i++)
             {
                 WriteField(columns[i].AsSpan());
-                _writer.Write(_fieldSeparator);
+                _writer.Write(_delimiter);
             }
 
             WriteField(columns[recordLength - 1].AsSpan());
@@ -201,7 +270,7 @@ public sealed class CsvWriter : IDisposable
                 values[j] = default;
             }
 
-            _writer.Write(_fieldSeparator);
+            _writer.Write(_delimiter);
         }
 
         ReadOnlyMemory<char> lastString = values[recordLength - 1];

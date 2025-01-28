@@ -34,10 +34,12 @@ public static class CsvAnalyzer
     /// <para>
     /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the CSV file to find the appropriate 
     /// parameters for reading the file. The result of the analysis is therefore always only an estimate, 
-    /// the accuracy of which increases with the number of lines analyzed.
+    /// the accuracy of which increases with the number of lines analyzed. The analysis is time-consuming 
+    /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
-    /// The analysis is time-consuming because the CSV file has to be accessed for reading.
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
+    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
     /// </para>
     /// </remarks>
     /// 
@@ -74,7 +76,7 @@ public static class CsvAnalyzer
                                              result);
         return result;
     }
-    
+
     /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the 
     /// appropriate parameters for parsing.</summary>
     /// 
@@ -89,9 +91,15 @@ public static class CsvAnalyzer
     /// <returns>The results of the analysis.</returns>
     /// 
     /// <remarks>
+    /// <para>
     /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
     /// of the analysis is therefore always only an estimate, 
     /// the accuracy of which increases with the number of lines analyzed.
+    /// </para>
+    /// <para>
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
+    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>

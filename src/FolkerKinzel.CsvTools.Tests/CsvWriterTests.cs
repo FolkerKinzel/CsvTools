@@ -87,6 +87,98 @@ public class CsvWriterTests
         Assert.IsNotNull(writer);
     }
 
+    [DataTestMethod]
+    [DataRow(',')]
+    [DataRow(';')]
+    [DataRow('#')]
+    [DataRow('\t')]
+    [DataRow(' ')]
+    public void CsvWriterTest10(char delimiter)
+    {
+        string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest10.csv");
+        using var writer = new CsvWriter(fileName, [], delimiter: delimiter);
+    }
+
+    [DataTestMethod]
+    [DataRow('\"')]
+    [DataRow('\r')]
+    [DataRow('\n')]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void CsvWriterTest11(char delimiter)
+    {
+        string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest11.csv");
+        using var writer = new CsvWriter(fileName, [], delimiter: delimiter);
+    }
+
+    [DataTestMethod]
+    [DataRow(',')]
+    [DataRow(';')]
+    [DataRow('#')]
+    [DataRow('\t')]
+    [DataRow(' ')]
+    public void CsvWriterTest12(char delimiter)
+    {
+        string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest12.csv");
+        using var writer = new CsvWriter(fileName, 2, delimiter: delimiter);
+    }
+
+    [DataTestMethod]
+    [DataRow('\"')]
+    [DataRow('\r')]
+    [DataRow('\n')]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void CsvWriterTest13(char delimiter)
+    {
+        string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest13.csv");
+        using var writer = new CsvWriter(fileName, 2, delimiter: delimiter);
+    }
+
+    [DataTestMethod]
+    [DataRow(',')]
+    [DataRow(';')]
+    [DataRow('#')]
+    [DataRow('\t')]
+    [DataRow(' ')]
+    public void CsvWriterTest14(char delimiter)
+    {
+        using var stringWriter = new StringWriter();
+        using var writer = new CsvWriter(stringWriter, [], delimiter: delimiter);
+    }
+
+    [DataTestMethod]
+    [DataRow('\"')]
+    [DataRow('\r')]
+    [DataRow('\n')]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void CsvWriterTest15(char delimiter)
+    {
+        using var stringWriter = new StringWriter();
+        using var writer = new CsvWriter(stringWriter, [], delimiter: delimiter);
+    }
+
+    [DataTestMethod]
+    [DataRow(',')]
+    [DataRow(';')]
+    [DataRow('#')]
+    [DataRow('\t')]
+    [DataRow(' ')]
+    public void CsvWriterTest16(char delimiter)
+    {
+        using var stringWriter = new StringWriter();
+        using var writer = new CsvWriter(stringWriter, 2, delimiter: delimiter);
+    }
+
+    [DataTestMethod]
+    [DataRow('\"')]
+    [DataRow('\r')]
+    [DataRow('\n')]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void CsvWriterTest17(char delimiter)
+    {
+        using var stringWriter = new StringWriter();
+        using var writer = new CsvWriter(stringWriter, 2, delimiter: delimiter);
+    }
+
     [TestMethod()]
     public void WriteRecordTest1()
     {
@@ -181,7 +273,7 @@ public class CsvWriterTests
             writer.Record[1] = VALUE2.AsMemory();
             writer.Record[2] = VALUE3.AsMemory();
 
-            writer.WriteRecord();              
+            writer.WriteRecord();
         }
 
         //const string csv = "1234|4567|\"DemoString\" Some more demo string|";

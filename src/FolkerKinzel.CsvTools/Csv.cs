@@ -28,10 +28,8 @@ public static class Csv
     /// <para>
     /// The method performs a statistical analysis on the CSV file to find the appropriate 
     /// parameters for reading the file. The result of the analysis is therefore always only an estimate, 
-    /// the accuracy of which increases with the number of lines analyzed.
-    /// </para>
-    /// <para>
-    /// The analysis is time-consuming because the CSV file has to be accessed for reading.
+    /// the accuracy of which increases with the number of lines analyzed. The analysis is time-consuming 
+    /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
     /// If the argument of the <paramref name="textEncoding"/> parameter is <c>null</c>, this method 
@@ -39,6 +37,10 @@ public static class Csv
     /// determines the <see cref="Encoding"/> of the CSV file from the byte order mark (BOM).
     /// <see cref="Encoding.UTF8"/> is used as fallback value if the <see cref="Encoding"/> cannot be 
     /// determined automatically.
+    /// </para>
+    /// <para>
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
+    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
     /// </para>
     /// </remarks>
     /// 
@@ -81,9 +83,15 @@ public static class Csv
     /// <returns>The results of the analysis.</returns>
     /// 
     /// <remarks>
+    /// <para>
     /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
     /// of the analysis is therefore always only an estimate, 
     /// the accuracy of which increases with the number of lines analyzed.
+    /// </para>
+    /// <para>
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
+    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
@@ -121,15 +129,17 @@ public static class Csv
     /// <para>
     /// The method performs a statistical analysis on the CSV file to find the appropriate 
     /// parameters for reading the file. The result of the analysis is therefore always only an estimate, 
-    /// the accuracy of which increases with the number of lines analyzed.
-    /// </para>
-    /// <para>
-    /// The analysis is time-consuming because the CSV file has to be accessed for reading.
+    /// the accuracy of which increases with the number of lines analyzed. The analysis is time-consuming 
+    /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
     /// This method also automatically determines the <see cref="Encoding"/> of the CSV file from the
     /// byte order mark (BOM) if the argument of the <paramref name="textEncoding"/> parameter is <c>null</c>.
     /// If the <see cref="Encoding"/> cannot be determined automatically, <see cref="Encoding.UTF8"/> is used.
+    /// </para>
+    /// <para>
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
+    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
     /// </para>
     /// </remarks>
     /// 
@@ -186,6 +196,8 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
@@ -207,6 +219,8 @@ public static class Csv
     /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
+    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(TextReader reader,
                                      bool isHeaderPresent = true,
@@ -391,9 +405,15 @@ public static class Csv
     /// <returns>An array of <see cref="CsvRecord"/> objects containing the parsed data.</returns>
     /// 
     /// <remarks>
+    /// <para>
     /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
     /// of the analysis is therefore always only an estimate, 
     /// the accuracy of which increases with the number of lines analyzed.
+    /// </para>
+    /// <para>
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
+    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
+    /// </para>
     /// </remarks>
     /// 
     /// <example>

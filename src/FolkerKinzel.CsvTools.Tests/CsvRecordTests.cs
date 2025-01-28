@@ -33,30 +33,16 @@ public class CsvRecordTests
         Assert.AreEqual(2, rec.Count);
     }
 
-    [TestMethod()]
-    public void FillTest2()
-    {
-        ReadOnlyMemory<char>[] data = ["eins".AsMemory(), "zwei".AsMemory()];
-        var rec = new CsvRecord(2);
+    
 
-        Assert.AreEqual(2, rec.Count);
+    //[TestMethod]
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    //public void FillTest3()
+    //{
+    //    var rec = new CsvRecord(2);
 
-        rec.FillWith(data);
-        CollectionAssert.AreEquivalent(data.Select(x => x.ToString()).ToArray(), rec.ToDictionary().Values.Select(x => x.ToString()).ToArray());
-
-        rec.FillWith(["sieben".AsMemory()]);
-
-        CollectionAssert.AreEquivalent(new string?[] { "sieben", "" }, rec.ToDictionary().Values.Select(x => x.ToString()).ToArray());
-    }
-
-    [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void FillTest3()
-    {
-        var rec = new CsvRecord(2);
-
-        rec.FillWith(["1".AsMemory(), "2".AsMemory(), "3".AsMemory()]);
-    }
+    //    rec.FillWith(["1".AsMemory(), "2".AsMemory(), "3".AsMemory()]);
+    //}
 
     [TestMethod]
     [ExpectedException(typeof(IndexOutOfRangeException))]

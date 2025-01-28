@@ -3,7 +3,7 @@
 namespace FolkerKinzel.CsvTools.Tests;
 
 [TestClass()]
-public class CsvOptionsExtensionsTests
+public class CsvOptsExtensionTests
 {
     [TestMethod()]
     public void SetTest()
