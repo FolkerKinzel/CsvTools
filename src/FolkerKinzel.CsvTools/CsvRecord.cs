@@ -289,7 +289,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     {
         if (this.Count == 0)
         {
-            return base.ToString() ?? string.Empty;
+            return "<Empty>";
         }
 
         var sb = new StringBuilder();

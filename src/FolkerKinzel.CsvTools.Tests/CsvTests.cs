@@ -114,27 +114,20 @@ public class CsvTests
     [DataRow('#')]
     [DataRow('\t')]
     [DataRow(' ')]
-    public void OpenReadTest5(char delimiter)
-    {
-        _ = Csv.Parse("Hi", delimiter: delimiter);
-    }
+    public void OpenReadTest5(char delimiter) => _ = Csv.Parse("Hi", delimiter: delimiter);
 
     [DataTestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
     [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void OpenReadTest6(char delimiter)
-    {
-        _ = Csv.Parse("Hi", delimiter: delimiter);
-    }
-
+    public void OpenReadTest6(char delimiter) => _ = Csv.Parse("Hi", delimiter: delimiter);
 
     [TestMethod]
     public void OpenWriteTest1()
     {
         string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "OpenWriteTest1.csv");
-        using var writer = Csv.OpenWrite(fileName, 2);
+        using CsvWriter writer = Csv.OpenWrite(fileName, 2);
         Assert.AreEqual(',', writer.Delimiter);
     }
 
@@ -142,7 +135,7 @@ public class CsvTests
     public void OpenWriteTest2()
     {
         string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "OpenWriteTest1.csv");
-        using var writer = Csv.OpenWrite(fileName, []);
+        using CsvWriter writer = Csv.OpenWrite(fileName, []);
         Assert.AreEqual(',', writer.Delimiter);
     }
 
@@ -150,7 +143,7 @@ public class CsvTests
     public void OpenWriteTest3()
     {
         using var stringWriter = new StringWriter();
-        using var writer = Csv.OpenWrite(stringWriter, []);
+        using CsvWriter writer = Csv.OpenWrite(stringWriter, []);
         Assert.AreEqual(',', writer.Delimiter);
     }
 
@@ -158,7 +151,21 @@ public class CsvTests
     public void OpenWriteTest4()
     {
         using var stringWriter = new StringWriter();
-        using var writer = Csv.OpenWrite(stringWriter, 2);
+        using CsvWriter writer = Csv.OpenWrite(stringWriter, 2);
         Assert.AreEqual(',', writer.Delimiter);
+    }
+
+    [TestMethod]
+    public void ParseTest1()
+    {
+        CsvRecord[] result = Csv.Parse("""
+            A,A,A
+            1,2,3
+            """);
+
+        Assert.AreEqual(1, result.Length);
+        Assert.AreEqual("A", result[0].ColumnNames[0]);
+        Assert.AreEqual("A2", result[0].ColumnNames[1]);
+        Assert.AreEqual("A3", result[0].ColumnNames[2]);
     }
 }

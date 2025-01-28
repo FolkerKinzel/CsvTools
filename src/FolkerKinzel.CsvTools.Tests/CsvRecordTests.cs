@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace FolkerKinzel.CsvTools.Tests;
 
@@ -150,6 +151,15 @@ public class CsvRecordTests
         Assert.AreEqual(3, rec.Select(x => int.Parse(x.Value!.ToString(), CultureInfo.InvariantCulture)).Sum());
     }
 
+    [TestMethod]
+    public void GetEnumeratorTest2()
+    {
+        var record = new CsvRecord(1);
+        IEnumerator enumerator = ((IEnumerable)record).GetEnumerator();
+        IEnumerator<KeyValuePair<string, ReadOnlyMemory<char>>> enumerator2 = record.GetEnumerator();
+        Assert.AreEqual(enumerator2.GetType(), enumerator.GetType());
+    }
+
     [TestMethod()]
     public void ToStringTest()
     {
@@ -223,4 +233,26 @@ public class CsvRecordTests
         Assert.AreEqual(-1, rec.IndexOfColumn("bla"));
         Assert.AreEqual(-1, rec.IndexOfColumn(null));
     }
+
+    [TestMethod]
+    public void IsEmptyTest1()
+    {
+        var record = new CsvRecord(0);
+        Assert.IsTrue(record.IsEmpty);
+        Assert.IsNotNull(record.ToString());    
+    }
+
+    [TestMethod]
+    public void IsEmptyTest2()
+    {
+        var record = new CsvRecord(1);
+        Assert.IsTrue(record.IsEmpty);
+        Assert.IsNotNull(record.ToString());
+
+        record.Values[0] = "1".AsMemory();
+        Assert.IsFalse(record.IsEmpty);
+        Assert.IsNotNull(record.ToString());
+    }
+
+    
 }
