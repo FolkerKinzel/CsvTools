@@ -42,6 +42,17 @@ public static class CsvRecordExtension
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>.
     /// The argument may be <c>null</c> or may contain <c>null</c> values.</param>
+    /// <param name="resetExcess">
+    /// <para>
+    /// If <paramref name="data"/> has fewer items than <paramref name="record"/> fields and this
+    /// parameter is <c>true</c>, the  surplus fields in <paramref name="record"/> will be reset 
+    /// to the default value .
+    /// </para>
+    /// <para>
+    /// For performance reasons this parameter can be set to <c>false</c> when writing CSV because 
+    /// <see cref = "CsvWriter.WriteRecord" /> resets all fields in <paramref name = "record" />.
+    /// </para>
+    /// </param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
@@ -84,6 +95,17 @@ public static class CsvRecordExtension
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>.
     /// The argument may be <c>null</c> or may contain <c>null</c> values.</param>
+    /// <param name="resetExcess">
+    /// <para>
+    /// If <paramref name="data"/> has fewer items than <paramref name="record"/> fields and this
+    /// parameter is <c>true</c>, the  surplus fields in <paramref name="record"/> will be reset 
+    /// to the default value .
+    /// </para>
+    /// <para>
+    /// For performance reasons this parameter can be set to <c>false</c> when writing CSV because 
+    /// <see cref = "CsvWriter.WriteRecord" /> resets all fields in <paramref name = "record" />.
+    /// </para>
+    /// </param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
@@ -97,6 +119,17 @@ public static class CsvRecordExtension
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>. 
     /// The span may contain <c>null</c> values.</param>
+    /// <param name="resetExcess">
+    /// <para>
+    /// If <paramref name="data"/> has fewer items than <paramref name="record"/> fields and this
+    /// parameter is <c>true</c>, the  surplus fields in <paramref name="record"/> will be reset 
+    /// to the default value .
+    /// </para>
+    /// <para>
+    /// For performance reasons this parameter can be set to <c>false</c> when writing CSV because 
+    /// <see cref = "CsvWriter.WriteRecord" /> resets all fields in <paramref name = "record" />.
+    /// </para>
+    /// </param>
     /// 
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
     /// more items than <paramref name="record"/>.</exception>
@@ -137,9 +170,19 @@ public static class CsvRecordExtension
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see>
-    /// values with which to fill <paramref name="record"/>.</param>
-    /// 
-    /// 
+    /// values with which to fill <paramref name="record"/>.
+    /// </param>
+    /// <param name="resetExcess">
+    /// <para>
+    /// If <paramref name="data"/> has fewer items than <paramref name="record"/> fields and this
+    /// parameter is <c>true</c>, the  surplus fields in <paramref name="record"/> will be reset 
+    /// to the default value .
+    /// </para>
+    /// <para>
+    /// For performance reasons this parameter can be set to <c>false</c> when writing CSV because 
+    /// <see cref = "CsvWriter.WriteRecord" /> resets all fields in <paramref name = "record" />.
+    /// </para>
+    /// </param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
