@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections;
+using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
@@ -452,9 +453,14 @@ public static class Csv
     /// Converts the content of <paramref name="data"/> to a comma-separated values <see cref="string"/> (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
-    /// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
+    /// <returns>A CSV-<see cref="string"/> containing the contents of <paramref name="data"/>.</returns>
+    /// 
+    /// <remarks>
+    /// <see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// </remarks>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    public static string AsString(IEnumerable<IEnumerable<string?>?> data)
+    public static string AsString(IEnumerable<IEnumerable<object?>?> data)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
@@ -470,9 +476,9 @@ public static class Csv
 
         CsvRecord record = csvWriter.Record;
 
-        foreach (IEnumerable<string?>? coll in data)
+        foreach (IEnumerable<object?>? coll in data)
         {
-            record.FillWith(coll, resetExcess: false);
+            record.FillWith(coll?.Select(x => x?.ToString()), resetExcess: false);
             csvWriter.WriteRecord();
         }
 
@@ -480,7 +486,7 @@ public static class Csv
     }
 
     /// <summary>
-    /// Saves the content of <paramref name="data"/> as a CSV file.
+    /// Saves the contents of <paramref name="data"/> as a CSV file.
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
@@ -494,6 +500,9 @@ public static class Csv
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly."
     /// </para>
+    /// <para>
+    /// <see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
@@ -501,7 +510,7 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    internal static void Save(IEnumerable<IEnumerable<string?>?> data, string filePath)
+    internal static void Save(IEnumerable<IEnumerable<object?>?> data, string filePath)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
@@ -511,9 +520,9 @@ public static class Csv
 
         CsvRecord record = csvWriter.Record;
 
-        foreach (IEnumerable<string?>? coll in data)
+        foreach (IEnumerable<object?>? coll in data)
         {
-            record.FillWith(coll, resetExcess: false);
+            record.FillWith(coll?.Select(x => x?.ToString()), resetExcess: false);
             csvWriter.WriteRecord();
         }
     }

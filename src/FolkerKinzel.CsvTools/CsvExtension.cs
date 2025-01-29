@@ -12,7 +12,10 @@ public static class CsvExtension
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
-    /// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
+    /// <returns>A CSV-<see cref="string"/> containing the contents of <paramref name="data"/>.</returns>
+    /// 
+    /// <remarks><see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// </remarks>
     /// 
     /// <example>
     /// <note type="note">
@@ -25,7 +28,7 @@ public static class CsvExtension
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string ToCsv(this IEnumerable<IEnumerable<string?>?> data)
+    public static string ToCsv(this IEnumerable<IEnumerable<object?>?> data)
         => Csv.AsString(data);
 
     /// <summary>
@@ -33,15 +36,19 @@ public static class CsvExtension
     /// </summary>
     /// <param name="data">The data to convert.</param>
     /// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
+    /// 
+    /// <remarks><see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// </remarks>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    public static string ToCsv(this IEnumerable<string?> data)
+    public static string ToCsv(this IEnumerable<object?> data)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
         return Csv.AsString(Enumerable.Repeat(data, 1));
     }
 
     /// <summary>
-    /// Saves the content of <paramref name="data"/> as a CSV file.
+    /// Saves the contents of <paramref name="data"/> as a CSV file.
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
@@ -55,6 +62,9 @@ public static class CsvExtension
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly.
     /// </para>
+    /// <para>
+    /// <see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
@@ -63,7 +73,7 @@ public static class CsvExtension
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SaveCsv(this IEnumerable<IEnumerable<string?>?> data, 
+    public static void SaveCsv(this IEnumerable<IEnumerable<object?>?> data, 
                                string filePath) => Csv.Save(data, filePath);
 
     /// <summary>
@@ -81,6 +91,9 @@ public static class CsvExtension
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly.
     /// </para>
+    /// <para>
+    /// <see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
@@ -88,7 +101,7 @@ public static class CsvExtension
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    public static void SaveCsv(this IEnumerable<string?> data,
+    public static void SaveCsv(this IEnumerable<object?> data,
                                string filePath)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));

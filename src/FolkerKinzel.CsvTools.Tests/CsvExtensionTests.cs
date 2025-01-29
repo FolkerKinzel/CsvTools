@@ -67,7 +67,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest3()
     {
-        string csv = new string?[]?[] { null }.ToCsv();
+        string csv = new object?[]?[] { null, [7] }.ToCsv();
         Assert.IsNotNull(csv);
         Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
     }
@@ -83,7 +83,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest5()
     {
-        string csv = new string?[]?[] { ["a", "b", "c"] }.ToCsv();
+        string csv = new string?[]?[] { ["a", "b", null, "c"] }.ToCsv();
         Assert.IsNotNull(csv);
         Assert.AreEqual(1, Csv.ParseAnalyzed(csv, header: Header.Absent).Length);
     }
