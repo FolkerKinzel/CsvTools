@@ -213,4 +213,20 @@ public class CsvAnalyzerTests
         CsvAnalyzerResult result = Csv.AnalyzeString(csv);
         Assert.AreEqual(' ', result.Delimiter);
     }
+
+    [TestMethod]
+    public void AnalyzeStringTest()
+    {
+        const string csv = """
+                Unterrichtstag;Unterrichtsbeginn;Vollständiger Name;Unterrichtsfach;
+                Wednesday;14:30;Susi Meyer;Piano
+                Thursday;15:15;Carl Czerny;Piano;
+                ;;Frederic Chopin
+                """;
+
+        CsvAnalyzerResult res = Csv.AnalyzeString(csv);
+        Assert.AreEqual(';', res.Delimiter);
+        Assert.IsTrue(res.IsHeaderPresent);
+        Assert.AreEqual(5, res.ColumnNames.Count);
+    }
 }

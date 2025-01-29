@@ -158,7 +158,9 @@ internal ref struct DelimiterAnalyzer()
             }
         }
 
-        if (findsList[0].Space > 0)
+        // Equal occurrence of SPACE could be coincidence:
+        if (findsList[0].Space > 0 
+            && findsList[0].Comma == 0 && findsList[0].Semicolon == 0 && findsList[0].Tab == 0 && findsList[0].Hash == 0)
         {
             if (!findsList.Skip(1).Any(f => f.Space != findsList[0].Space))
             {
