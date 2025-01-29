@@ -1,4 +1,5 @@
-﻿using FolkerKinzel.CsvTools;
+﻿using System.Globalization;
+using FolkerKinzel.CsvTools;
 
 namespace Examples;
 
@@ -6,17 +7,19 @@ internal static class StringExample
 {
     public static void CsvExample()
     {
-        string[][] data =
+        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
+        object?[][] data =
         [
-            [ "Color", "Direction"],
-            [ "brown", "right"],
-            ["red", "left"],
-            ["AliceBlue", "Somewhere \"over\" the Rainbow"],
+            [ "Color", "Direction", "Number"],
+            [ "brown", "right", 0],
+            ["red", "left", 42],
+            [null, "Somewhere \"over\" the Rainbow"],
             ["""
              Blue
              in 
              Green
-             """, "Up, or down"]
+             """, "Up, or down", -3.14]
         ];
 
         string csv = data.ToCsv();
@@ -36,18 +39,18 @@ internal static class StringExample
 /*
 Console Output:
 
-Color,Direction
-brown,right
-red,left
-AliceBlue,"Somewhere ""over"" the Rainbow"
+Color,Direction,Number
+brown,right,0
+red,left,42
+,"Somewhere ""over"" the Rainbow",
 "Blue
 in
-Green","Up, or down"
+Green","Up, or down",-3.14
 
-Color: brown, Direction: right
-Color: red, Direction: left
-Color: AliceBlue, Direction: Somewhere "over" the Rainbow
+Color: brown, Direction: right, Number: 0
+Color: red, Direction: left, Number: 42
+Color: , Direction: Somewhere "over" the Rainbow, Number:
 Color: Blue
 in
-Green, Direction: Up, or down
+Green, Direction: Up, or down, Number: -3.14
 */
