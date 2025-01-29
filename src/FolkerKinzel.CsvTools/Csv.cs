@@ -366,7 +366,7 @@ public static class Csv
     /// will be ignored.)</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
-    /// <returns>An array of <see cref="CsvRecord"/> objects containing the parsed data.</returns>
+    /// <returns>A collection of <see cref="CsvRecord"/> objects containing the parsed data.</returns>
     /// 
     /// <remarks>
     /// <note type="tip">
@@ -378,18 +378,28 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
     /// <exception cref="CsvFormatException">Invalid CSV. The interpretation depends
     /// on <paramref name="options"/>.</exception>
-    public static CsvRecord[] Parse(string csv,
-                                    bool isHeaderPresent = true,
-                                    CsvOpts options = CsvOpts.Default,
-                                    char delimiter = ',')
+    public static IEnumerable<CsvRecord> Parse(string csv,
+                                               bool isHeaderPresent = true,
+                                               CsvOpts options = CsvOpts.Default,
+                                               char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(csv, nameof(csv));
 
-        using var stringReader = new StringReader(csv);
-        using var reader = 
-            new CsvReader(stringReader, isHeaderPresent, options.Unset(CsvOpts.DisableCaching), delimiter);
+        return ParseIterator(csv, isHeaderPresent, options, delimiter);
 
-        return [.. reader];
+        //////////////////////////////////////////////////////////////////////////////////////
+
+        static IEnumerable<CsvRecord> ParseIterator(string csv, bool isHeaderPresent, CsvOpts options, char delimiter)
+        {
+            using var stringReader = new StringReader(csv);
+            using var reader =
+                new CsvReader(stringReader, isHeaderPresent, options.Unset(CsvOpts.DisableCaching), delimiter);
+
+            foreach(CsvRecord record in reader)
+            {
+                yield return record;
+            }
+        }
     }
 
     /// <summary>Analyzes the specified CSV-<see cref="string"/>
