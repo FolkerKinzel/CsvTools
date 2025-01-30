@@ -8,7 +8,7 @@ namespace FolkerKinzel.CsvTools;
 public static class CsvExtension
 {
     /// <summary>
-    /// Converts the content of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
+    /// Converts the contents of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
@@ -32,7 +32,7 @@ public static class CsvExtension
         => Csv.AsString(data);
 
     /// <summary>
-    /// Converts the content of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
+    /// Converts the contents of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
@@ -78,7 +78,7 @@ public static class CsvExtension
                                string filePath) => Csv.Save(data, filePath);
 
     /// <summary>
-    /// Saves the content of <paramref name="data"/> as a CSV file.
+    /// Saves the contents of <paramref name="data"/> as a CSV file.
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
