@@ -32,7 +32,8 @@ public static class CsvExtension
         => Csv.AsString(data);
 
     /// <summary>
-    /// Converts the content of <paramref name="data"/> to a comma-separated values <see cref="string"/> (CSV, RFC 4180).
+    /// Converts the content of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
+    /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
     /// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
