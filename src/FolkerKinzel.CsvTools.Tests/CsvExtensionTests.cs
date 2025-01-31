@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Tests;
@@ -13,7 +14,7 @@ public class CsvExtensionTests
     public void SaveCsvTest1()
     {
         string path = Path.Combine(TestContext.TestRunResultsDirectory!, "SaveCsvTest1.csv");
-        Array.Empty<string>().SaveCsv(path);
+        Array.Empty<string>().SaveCsv(path, null);
         Assert.IsTrue(File.Exists(path));
 
         using CsvReader reader = Csv.OpenRead(path);
@@ -26,7 +27,7 @@ public class CsvExtensionTests
     public void SaveCsvTest2()
     {
         string path = Path.Combine(TestContext.TestRunResultsDirectory!, "SaveCsvTest1.csv");
-        new string?[] {null}.SaveCsv(path);
+        new string?[] {null}.SaveCsv(path, null);
         Assert.IsTrue(File.Exists(path));
 
         using CsvReader reader = Csv.OpenRead(path);
@@ -39,7 +40,7 @@ public class CsvExtensionTests
     public void SaveCsvTest3()
     {
         string path = Path.Combine(TestContext.TestRunResultsDirectory!, "SaveCsvTest1.csv");
-        new string?[]?[] { null }.SaveCsv(path);
+        new string?[]?[] { null }.SaveCsv(path, null);
         Assert.IsTrue(File.Exists(path));
 
         using CsvReader reader = Csv.OpenRead(path, isHeaderPresent: false);
@@ -51,7 +52,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest1()
     {
-        string csv = Array.Empty<string>().ToCsv();
+        string csv = Array.Empty<string>().ToCsv(null);
         Assert.IsNotNull(csv);
         Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
     }
@@ -59,7 +60,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest2()
     {
-        string csv = new string?[] { null }.ToCsv();
+        string csv = new string?[] { null }.ToCsv(null);
         Assert.IsNotNull(csv);
         Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
     }
@@ -67,7 +68,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest3()
     {
-        string csv = new object?[]?[] { null, [7] }.ToCsv();
+        string csv = new object?[]?[] { null, [7] }.ToCsv(null);
         Assert.IsNotNull(csv);
         Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
     }
@@ -75,7 +76,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest4()
     {
-        string csv = new string?[]?[] { ["a", "b", "c"] }.ToCsv();
+        string csv = new string?[]?[] { ["a", "b", "c"] }.ToCsv(CultureInfo.InvariantCulture);
         Assert.IsNotNull(csv);
         Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
     }
@@ -83,8 +84,17 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest5()
     {
-        string csv = new string?[]?[] { ["a", "b", null, "c"] }.ToCsv();
+        string csv = new string?[]?[] { ["a", "b", null, "c"] }.ToCsv(null);
         Assert.IsNotNull(csv);
         Assert.AreEqual(1, Csv.ParseAnalyzed(csv, header: Header.Absent).Length);
     }
+
+    [TestMethod]
+    public void ToCsvTest6()
+    {
+        string csv = new object[]{ 3.14 }.ToCsv(CultureInfo.CreateSpecificCulture("de-DE"));
+        Assert.IsNotNull(csv);
+        Assert.AreEqual("\"3,14\"", csv);
+    }
+
 }
