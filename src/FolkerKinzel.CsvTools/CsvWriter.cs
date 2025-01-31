@@ -37,7 +37,7 @@ public sealed class CsvWriter : IDisposable
     /// of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
     /// names.
     /// </para>
-    /// 
+    /// </param>
     ///<param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
@@ -148,7 +148,7 @@ public sealed class CsvWriter : IDisposable
     /// of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
     /// names.
     /// </para>
-    /// 
+    /// </param>
     /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to 

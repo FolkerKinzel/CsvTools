@@ -300,7 +300,7 @@ public static class Csv
     /// of the <see cref="CsvWriter"/> instance, which the method returns, can be accessed with this column 
     /// names.
     /// </para>
-    /// 
+    /// </param>
     /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// 
