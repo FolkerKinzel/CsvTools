@@ -34,7 +34,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
 
     private CsvRecord? _record = null; // Template for additional CsvRecord objects
     private CsvRecord? _current;
-
+    private bool _disposed;
 
     /// <summary>
     /// Initializes a new <see cref="CsvReader"/> instance to read a CSV file without header row.
@@ -168,7 +168,15 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     void IEnumerator.Reset() => throw new NotSupportedException();
 
     /// <summary>Closes the CSV file.</summary>
-    public void Dispose() => _reader.Dispose();
+    public void Dispose()
+    {
+        if(!_disposed)
+        {
+            _disposed = true;
+            _reader.Dispose();
+            GC.SuppressFinalize(this);
+        }
+    }
 
     /// <summary>Returns the next <see cref="CsvRecord"/> in the CSV file or <c>null</c> 
     /// if the file has been read completely.</summary>

@@ -17,6 +17,7 @@ public sealed class CsvWriter : IDisposable
 
     private bool _isHeaderRowWritten;
     private bool _isDataWritten;
+    private bool _disposed;
     private readonly SearchValuesPolyfill<char> _reservedChars;
     private readonly char _delimiter;
     private readonly TextWriter _writer;
@@ -321,7 +322,15 @@ public sealed class CsvWriter : IDisposable
     }
 
     /// <summary>Releases the resources. (Closes the CSV file.)</summary>
-    public void Dispose() => _writer.Dispose();
+    public void Dispose()
+    {
+        if (!_disposed)
+        {
+            _disposed = true;
+            _writer.Dispose();
+            GC.SuppressFinalize(this);
+        }
+    }
 
     private static SearchValuesPolyfill<char> CreateReservedChars(char delimiter)
        => delimiter == ',' ? _reservedCharsDefault : SearchValuesPolyfill.Create([delimiter, '\"', '\r', '\n']);

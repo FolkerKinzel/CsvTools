@@ -7,8 +7,6 @@ internal static class StringExample
 {
     public static void CsvExample()
     {
-        Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-
         object?[][] data =
         [
             [ "Color", "Direction", "Number"],
@@ -22,7 +20,7 @@ internal static class StringExample
              """, "Up, or down", -3.14]
         ];
 
-        string csv = data.ToCsv();
+        string csv = data.ToCsv(CultureInfo.InvariantCulture);
 
         Console.WriteLine(csv);
         Console.WriteLine();

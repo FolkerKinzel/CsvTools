@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Globalization;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -105,7 +105,7 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvAnalyzerResult AnalyzeString(string csv,
                                                   Header header = Header.ProbablyPresent,
-                                                  int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount) 
+                                                  int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
         => CsvAnalyzer.AnalyzeString(csv, header, analyzedLines);
 
     /// <summary>Analyzes the CSV file referenced by <paramref name="filePath" />
@@ -386,7 +386,7 @@ public static class Csv
         _ArgumentNullException.ThrowIfNull(csv, nameof(csv));
 
         using var stringReader = new StringReader(csv);
-        using var reader = 
+        using var reader =
             new CsvReader(stringReader, isHeaderPresent, options.Unset(CsvOpts.DisableCaching), delimiter);
 
         return [.. reader];
@@ -454,6 +454,17 @@ public static class Csv
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
     /// <returns>A CSV-<see cref="string"/> containing the contents of <paramref name="data"/>.</returns>
     /// 
     /// <remarks>
@@ -461,7 +472,7 @@ public static class Csv
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    public static string AsString(IEnumerable<IEnumerable<object?>?> data)
+    public static string AsString(IEnumerable<IEnumerable<object?>?> data, IFormatProvider? formatProvider = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
@@ -475,13 +486,7 @@ public static class Csv
         using var writer = new StringWriter();
         using var csvWriter = new CsvWriter(writer, maxLen);
 
-        CsvRecord record = csvWriter.Record;
-
-        foreach (IEnumerable<object?>? coll in data)
-        {
-            record.FillWith(coll?.Select(x => x?.ToString()), resetExcess: false);
-            csvWriter.WriteRecord();
-        }
+        AsCsvIntl(data, csvWriter, formatProvider);
 
         return writer.ToString();
     }
@@ -491,6 +496,17 @@ public static class Csv
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is 
@@ -511,19 +527,35 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    internal static void Save(IEnumerable<IEnumerable<object?>?> data, string filePath)
+    internal static void Save(IEnumerable<IEnumerable<object?>?> data, string filePath, IFormatProvider? formatProvider = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
         int maxLen = data.Max(static x => x?.Count() ?? 0);
 
+        formatProvider ??= CultureInfo.InvariantCulture;
+
         using var csvWriter = new CsvWriter(filePath, maxLen);
 
+        AsCsvIntl(data, csvWriter, formatProvider);
+    }
+
+    private static void AsCsvIntl(IEnumerable<IEnumerable<object?>?> data, CsvWriter csvWriter, IFormatProvider? formatProvider)
+    {
+        formatProvider ??= CultureInfo.InvariantCulture;
         CsvRecord record = csvWriter.Record;
 
         foreach (IEnumerable<object?>? coll in data)
         {
-            record.FillWith(coll?.Select(x => x?.ToString()), resetExcess: false);
+            record.FillWith(coll?.Select(
+                                    x => x switch
+                                    {
+                                        null => null,
+                                        IFormattable formattable => formattable.ToString(null, formatProvider),
+                                        _ => x.ToString()
+                                    }),
+                           resetExcess: false);
+
             csvWriter.WriteRecord();
         }
     }

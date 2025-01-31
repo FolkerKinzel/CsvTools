@@ -1,4 +1,5 @@
-﻿using FolkerKinzel.CsvTools.Intls;
+﻿using System.Globalization;
+using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -12,6 +13,17 @@ public static class CsvExtension
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
     /// <returns>A CSV-<see cref="string"/> containing the contents of <paramref name="data"/>.</returns>
     /// 
     /// <remarks><see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
@@ -28,24 +40,35 @@ public static class CsvExtension
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static string ToCsv(this IEnumerable<IEnumerable<object?>?> data)
-        => Csv.AsString(data);
+    public static string ToCsv(this IEnumerable<IEnumerable<object?>?> data, IFormatProvider? formatProvider = null)
+        => Csv.AsString(data, formatProvider);
 
     /// <summary>
     /// Converts the contents of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
     /// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
     /// 
     /// <remarks><see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    public static string ToCsv(this IEnumerable<object?> data)
+    public static string ToCsv(this IEnumerable<object?> data, IFormatProvider? formatProvider = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
-        return Csv.AsString(Enumerable.Repeat(data, 1));
+        return Csv.AsString(Enumerable.Repeat(data, 1), formatProvider);
     }
 
     /// <summary>
@@ -53,6 +76,17 @@ public static class CsvExtension
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is 
@@ -75,13 +109,25 @@ public static class CsvExtension
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SaveCsv(this IEnumerable<IEnumerable<object?>?> data, 
-                               string filePath) => Csv.Save(data, filePath);
+                               string filePath,
+                               IFormatProvider? formatProvider = null) => Csv.Save(data, filePath, formatProvider);
 
     /// <summary>
     /// Saves the contents of <paramref name="data"/> as a CSV file.
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is 
@@ -103,9 +149,10 @@ public static class CsvExtension
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static void SaveCsv(this IEnumerable<object?> data,
-                               string filePath)
+                               string filePath,
+                               IFormatProvider? formatProvider = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
-        Csv.Save(Enumerable.Repeat(data, 1), filePath);
+        Csv.Save(Enumerable.Repeat(data, 1), filePath, formatProvider);
     }
 }
