@@ -26,11 +26,18 @@ public sealed class CsvWriter : IDisposable
     /// for the header row to be written.</summary>
     /// <param name="filePath">The file path of the CSV file to be written. If the file
     /// exists, it will be overwritten.</param>
-    /// <param name="columnNames">A collection of column names for the header to be written.
-    /// The collection will be copied. If the collection contains <c>null</c> values, these 
-    /// are replaced by automatically generated column names. Column names cannot appear twice. 
-    /// With <paramref name="caseSensitive"/>
-    /// can be chosen whether the comparison is case-sensitive or not.</param>
+    /// 
+    /// <param name="columnNames">
+    /// <para>
+    /// A collection of column names for the header to be written.
+    /// </para>
+    /// <para>
+    /// The collection determines the order in which the columns appear in the CSV file and their index in 
+    /// <see cref="CsvRecord"/>. The <see cref="CsvRecord"/> instance, which the <see cref="Record"/> property
+    /// of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
+    /// names.
+    /// </para>
+    /// 
     ///<param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
@@ -130,11 +137,18 @@ public sealed class CsvWriter : IDisposable
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
-    /// <param name="columnNames">A collection of column names for the header to be written.
-    /// The collection will be copied. If the collection contains <c>null</c> values, these 
-    /// are replaced with automatically
-    /// generated column names. Column names cannot appear twice. With <paramref name="caseSensitive"/>
-    /// can be chosen whether the comparison is case-sensitive or not.</param>
+    /// 
+    /// <param name="columnNames">
+    /// <para>
+    /// A collection of column names for the header to be written.
+    /// </para>
+    /// <para>
+    /// The collection determines the order in which the columns appear in the CSV and their index in 
+    /// <see cref="CsvRecord"/>. The <see cref="CsvRecord"/> instance, which the <see cref="Record"/> property
+    /// of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
+    /// names.
+    /// </para>
+    /// 
     /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to 

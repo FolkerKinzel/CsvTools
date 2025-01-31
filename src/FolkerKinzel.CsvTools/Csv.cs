@@ -232,12 +232,26 @@ public static class Csv
     /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> instance
     /// to write data to it. If the target file already exists, it is truncated and overwritten.</summary>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
-    /// <param name="columnNames">A collection of column names for the header to be written.
+    /// <param name="columnNames">
+    /// <para>
+    /// A collection of column names for the header to be written.
+    /// </para>
+    /// <para>
+    /// The collection determines the order in which the columns appear in the CSV file and their index in 
+    /// <see cref="CsvRecord"/>. The 
+    /// <see cref="CsvWriter.Record"/>
+    /// of the <see cref="CsvWriter"/> instance, which the method returns, can be accessed with this column 
+    /// names.
+    /// </para>
+    /// <para>
     /// The collection will be copied. If the collection contains <c>null</c> values, these 
     /// are replaced by automatically generated column names. Column names cannot appear twice. 
-    /// With <paramref name="caseSensitive"/> can be chosen whether the comparison is case-sensitive or not.</param>
-    ///  <param name="caseSensitive">If <c>true</c>, column names that differ only in 
-    /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
+    /// With <paramref name="caseSensitive"/> can be chosen whether the comparison is case-sensitive or not.
+    /// </para>
+    /// </param>
+    /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
+    /// upper and lower case are also accepted, otherwise <c>false</c>.
+    /// </param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// 
@@ -274,11 +288,19 @@ public static class Csv
     /// Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
-    /// <param name="columnNames">A collection of column names for the header to be written.
-    /// The collection will be copied. If the collection contains <c>null</c> values, these 
-    /// are replaced with automatically
-    /// generated column names. Column names cannot appear twice. With <paramref name="caseSensitive"/>
-    /// can be chosen whether the comparison is case-sensitive or not.</param>
+    /// 
+    /// <param name="columnNames">
+    /// <para>
+    /// A collection of column names for the header to be written.
+    /// </para>
+    /// <para>
+    /// The collection determines the order in which the columns appear in the CSV and their index in 
+    /// <see cref="CsvRecord"/>. The 
+    /// <see cref="CsvWriter.Record"/>
+    /// of the <see cref="CsvWriter"/> instance, which the method returns, can be accessed with this column 
+    /// names.
+    /// </para>
+    /// 
     /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// 
