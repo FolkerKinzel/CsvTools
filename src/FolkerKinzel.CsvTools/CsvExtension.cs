@@ -51,7 +51,7 @@ public static class CsvExtension
     /// has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\StringExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvStringExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>

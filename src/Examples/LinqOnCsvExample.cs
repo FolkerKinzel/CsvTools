@@ -4,11 +4,9 @@ namespace Examples;
 
 internal static class LinqOnCsvExample
 {
-    public static void LinqOnCsvFile()
+    public static void LinqOnCsvFile(string filePath)
     {
-        const string fileName = "LinqTest.csv";
-
-        File.WriteAllText(fileName, """
+        File.WriteAllText(filePath, """
             Name,City
             Ingrid,Berlin
             Joyce,New York
@@ -16,7 +14,7 @@ internal static class LinqOnCsvExample
             John,New York
             """);
 
-        using CsvReader csv = Csv.OpenRead(fileName);
+        using CsvReader csv = Csv.OpenRead(filePath);
         Console.Write("How many people live in New York?: ");
         Console.WriteLine(
             csv.Where(x => x["City"].Span.Equals("New York", StringComparison.Ordinal)).Count());

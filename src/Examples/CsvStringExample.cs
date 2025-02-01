@@ -3,9 +3,9 @@ using FolkerKinzel.CsvTools;
 
 namespace Examples;
 
-internal static class StringExample
+internal static class CsvStringExample
 {
-    public static void CsvExample()
+    public static void ConvertingCsvStrings()
     {
         object?[][] data =
         [

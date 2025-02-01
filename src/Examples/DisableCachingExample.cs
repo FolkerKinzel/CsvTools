@@ -4,11 +4,9 @@ namespace Examples;
 
 internal static class DisableCachingExample
 {
-    public static void DisableCachingSideEffects()
+    public static void DisableCachingSideEffects(string filePath)
     {
-        const string fileName = "LinqTest.csv";
-
-        File.WriteAllText(fileName, """
+        File.WriteAllText(filePath, """
             Name,City
             Ingrid,Berlin
             Joyce,New York
@@ -17,11 +15,10 @@ internal static class DisableCachingExample
             """);
 
         Console.WriteLine("Which people live in New York?: ");
-
-        
         Console.Write("  Determine with cache enabled:  ");
+
         // Caching is enabled by default.
-        using (CsvReader csv = Csv.OpenRead(fileName))
+        using (CsvReader csv = Csv.OpenRead(filePath))
         {
             foreach (CsvRecord record in
                 // ToArray() caches the results:
@@ -35,13 +32,14 @@ internal static class DisableCachingExample
         }
 
         Console.Write("  Determine with cache disabled: ");
+
         // If you set the flag CsvOpts.DisableCaching and then try to cache the data,
         // you will get the wrong results:
-        using (CsvReader csv = Csv.OpenRead(fileName, 
-                                                options: CsvOpts.Default.Set(CsvOpts.DisableCaching)))
+        using (CsvReader csv = Csv.OpenRead(filePath, 
+                                            options: CsvOpts.Default.Set(CsvOpts.DisableCaching)))
         {
             foreach (CsvRecord record in
-                // NOTICE: Removing ".ToArray()" would cause the correct results.
+                // NOTE: Removing ".ToArray()" would cause the correct results.
                 csv.Where(x => x["City"].Span.Equals("New York", StringComparison.Ordinal)).ToArray())
             {
                 Console.Write(record["Name"]);

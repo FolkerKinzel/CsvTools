@@ -3,9 +3,9 @@ using FolkerKinzel.CsvTools;
 
 namespace Examples;
 
-internal static class CsvExample
+internal static class CsvAnalyzerExample
 {
-    public static void HandleForeignCsvFile(string filePath)
+    public static void ParseForeignCsvFile(string filePath)
     {
         const string nonStandardCsv = """
 

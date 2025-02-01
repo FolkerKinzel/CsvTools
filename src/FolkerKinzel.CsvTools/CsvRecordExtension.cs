@@ -1,4 +1,5 @@
-﻿using FolkerKinzel.CsvTools.Intls;
+﻿using System.Globalization;
+using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -34,6 +35,89 @@ public static class CsvRecordExtension
 #else
         return new Dictionary<string, ReadOnlyMemory<char>>(record, record.Comparer);
 #endif
+    }
+
+    /// <summary> Fills <paramref name="record"/> with the items of an 
+    /// <see cref="object"/> collection.
+    /// </summary>
+    /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
+    /// <param name="data">The <see cref="object"/>s with which to fill <paramref name="record"/>.
+    /// The argument may be <c>null</c> or may contain <c>null</c> values.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// 
+    /// <param name="resetExcess">
+    /// <para>
+    /// If <paramref name="data"/> has fewer items than <paramref name="record"/> fields and this
+    /// parameter is <c>true</c>, the  surplus fields in <paramref name="record"/> will be reset 
+    /// to the default value .
+    /// </para>
+    /// <para>
+    /// For performance reasons this parameter can be set to <c>false</c> when writing CSV because 
+    /// <see cref = "CsvWriter.WriteRecord" /> resets all fields in <paramref name = "record" />.
+    /// </para>
+    /// </param>
+    /// 
+    /// <remarks>
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
+    /// more items than <paramref name="record"/>.</exception>
+    public static void FillWith(this CsvRecord record,
+                                IEnumerable<object?>? data,
+                                IFormatProvider? formatProvider = null,
+                                string? format = null,
+                                bool resetExcess = true)
+    {
+        _ArgumentNullException.ThrowIfNull(record, nameof(record));
+
+        int i = 0;
+
+        Span<ReadOnlyMemory<char>> span = record.Values;
+
+        if (data is not null)
+        {
+            foreach (object? item in data)
+            {
+                if (i >= span.Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(data));
+                }
+
+                span[i++] = item switch
+                {
+                    null => default,
+                    string s => s.AsMemory(),
+                    IFormattable formattable => formattable.ToString(format, formatProvider).AsMemory(),
+                    _ => item.ToString().AsMemory()
+                };
+            }
+        }
+
+        if (resetExcess)
+        {
+            for (; i < span.Length; i++)
+            {
+                span[i] = default;
+            }
+        }
     }
 
     /// <summary> Fills <paramref name="record"/> with the items of a 
@@ -183,6 +267,15 @@ public static class CsvRecordExtension
     /// <see cref = "CsvWriter.WriteRecord" /> resets all fields in <paramref name = "record" />.
     /// </para>
     /// </param>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+    /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains

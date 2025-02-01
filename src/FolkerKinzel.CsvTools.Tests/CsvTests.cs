@@ -25,7 +25,7 @@ public class CsvTests
         using CsvReader reader = Csv.OpenReadAnalyzed(TestFiles.AnalyzerTestCsv);
         CsvRecord[] arr = [.. reader];
         Assert.AreEqual(4, arr.Length);
-        Assert.AreEqual(4, arr.Distinct().Count()); 
+        Assert.AreEqual(4, arr.Distinct().Count());
     }
 
     [TestMethod]
@@ -167,5 +167,12 @@ public class CsvTests
         Assert.AreEqual("A", result[0].ColumnNames[0]);
         Assert.AreEqual("A2", result[0].ColumnNames[1]);
         Assert.AreEqual("A3", result[0].ColumnNames[2]);
+    }
+
+    [TestMethod]
+    public void ParseAnalyzedTest1()
+    {
+        var result = Csv.ParseAnalyzed("");
+        Assert.AreEqual(0, result.Length);
     }
 }

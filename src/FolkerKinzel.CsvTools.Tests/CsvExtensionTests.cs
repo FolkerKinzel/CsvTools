@@ -54,7 +54,7 @@ public class CsvExtensionTests
     {
         string csv = Array.Empty<string>().ToCsv(null);
         Assert.IsNotNull(csv);
-        Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
+        Assert.AreEqual(0, csv.Length);
     }
 
     [TestMethod]
@@ -62,7 +62,7 @@ public class CsvExtensionTests
     {
         string csv = new string?[] { null }.ToCsv(null);
         Assert.IsNotNull(csv);
-        Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
+        Assert.AreEqual(0, csv.Length);
     }
 
     [TestMethod]
@@ -70,23 +70,23 @@ public class CsvExtensionTests
     {
         string csv = new object?[]?[] { null, [7] }.ToCsv(null);
         Assert.IsNotNull(csv);
-        Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
+        Assert.AreEqual("\r\n7", csv);
     }
 
     [TestMethod]
     public void ToCsvTest4()
     {
-        string csv = new string?[]?[] { ["a", "b", "c"] }.ToCsv(CultureInfo.InvariantCulture);
+        string csv = new string[] { "a", "b", "c" }.ToCsv(CultureInfo.InvariantCulture);
         Assert.IsNotNull(csv);
-        Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
+        Assert.AreEqual("a,b,c", csv);
     }
 
     [TestMethod]
     public void ToCsvTest5()
     {
-        string csv = new string?[]?[] { ["a", "b", null, "c"] }.ToCsv(null);
+        string csv = new string?[] { "a", "b", null, "c" }.ToCsv(null);
         Assert.IsNotNull(csv);
-        Assert.AreEqual(1, Csv.ParseAnalyzed(csv, header: Header.Absent).Length);
+        Assert.AreEqual("a,b,,c", csv);
     }
 
     [TestMethod]

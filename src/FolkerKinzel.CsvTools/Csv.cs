@@ -151,7 +151,7 @@ public static class Csv
     /// has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -194,6 +194,16 @@ public static class Csv
     /// <see cref="OpenReadAnalyzed(string, Header, Encoding?, int, bool)"/>.
     /// </note>
     /// </remarks>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DisableCachingExample.cs" />
+    /// </example>
+    /// 
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
@@ -267,6 +277,15 @@ public static class Csv
     /// <see cref="CsvWriter"/> directly.
     /// </para>
     /// </remarks>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+    /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
@@ -447,7 +466,7 @@ public static class Csv
     /// has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\StringExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvStringExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
@@ -592,16 +611,7 @@ public static class Csv
 
         foreach (IEnumerable<object?>? coll in data)
         {
-            record.FillWith(coll?.Select(
-                                    x => x switch
-                                    {
-                                        null => null,
-                                        string s => s,
-                                        IFormattable formattable => formattable.ToString(format, formatProvider),
-                                        _ => x.ToString()
-                                    }),
-                           resetExcess: false);
-
+            record.FillWith(coll, formatProvider, format, resetExcess: false);
             csvWriter.WriteRecord();
         }
     }

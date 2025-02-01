@@ -238,6 +238,16 @@ public sealed class CsvWriter : IDisposable
     /// <summary> Writes the contents of <see cref="Record" /> to the CSV file and then sets all
     /// fields of <see cref="Record" /> to <see cref="ReadOnlyMemory{T}.Empty" />. (The first 
     /// time it is called, the header row may also be written.)</summary>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+    /// </example>
+    /// 
     /// <exception cref="IOException">I/O error.</exception>
     /// <exception cref="ObjectDisposedException">The file was already closed.</exception>
     public void WriteRecord()
