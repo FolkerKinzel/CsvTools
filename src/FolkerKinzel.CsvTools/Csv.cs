@@ -590,7 +590,7 @@ public static class Csv
         formatProvider ??= CultureInfo.InvariantCulture;
         CsvRecord record = csvWriter.Record;
 
-        foreach (IEnumerable<object?>? coll in data.Cast<object?>())
+        foreach (IEnumerable<object?>? coll in data)
         {
             record.FillWith(coll?.Select(
                                     x => x switch
