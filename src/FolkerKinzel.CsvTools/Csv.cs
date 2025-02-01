@@ -510,9 +510,9 @@ public static class Csv
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    public static string AsString(IEnumerable<IEnumerable<object?>?> data,
-                                  IFormatProvider? formatProvider = null,
-                                  string? format = null)
+    public static string AsString<TItem>(IEnumerable<IEnumerable<TItem>?> data,
+                                         IFormatProvider? formatProvider = null,
+                                         string? format = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
@@ -566,11 +566,11 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    internal static void Save(IEnumerable<IEnumerable<object?>?> data,
-                              string filePath,
-                              IFormatProvider? formatProvider = null,
-                              string? format = null,
-                              Encoding? textEncoding = null)
+    internal static void Save<TItem>(IEnumerable<IEnumerable<TItem>?> data,
+                                     string filePath,
+                                     IFormatProvider? formatProvider = null,
+                                     string? format = null,
+                                     Encoding? textEncoding = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
@@ -578,10 +578,10 @@ public static class Csv
         AsCsvIntl(data, streamWriter, formatProvider, format);
     }
 
-    private static void AsCsvIntl(IEnumerable<IEnumerable<object?>?> data,
-                                  TextWriter streamWriter,
-                                  IFormatProvider? formatProvider,
-                                  string? format)
+    private static void AsCsvIntl<TItem>(IEnumerable<IEnumerable<TItem>?> data,
+                                         TextWriter streamWriter,
+                                         IFormatProvider? formatProvider,
+                                         string? format)
     {
         int maxLen = data.Max(static x => x?.Count() ?? 0);
 
@@ -590,7 +590,7 @@ public static class Csv
         formatProvider ??= CultureInfo.InvariantCulture;
         CsvRecord record = csvWriter.Record;
 
-        foreach (IEnumerable<object?>? coll in data)
+        foreach (IEnumerable<object?>? coll in data.Cast<object?>())
         {
             record.FillWith(coll?.Select(
                                     x => x switch

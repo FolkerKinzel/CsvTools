@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -66,9 +67,17 @@ public class CsvExtensionTests
     }
 
     [TestMethod]
+    public void ToCsvTest2b()
+    {
+        string csv = new string[] { "1", "2", "3" }.ToCsv(null);
+        Assert.IsNotNull(csv);
+        Assert.AreEqual("1,2,3", csv);
+    }
+
+    [TestMethod]
     public void ToCsvTest3()
     {
-        string csv = new object?[]?[] { null, [7] }.ToCsv(null);
+        string csv = new object[]?[] { null, [7] }.ToCsv(null);
         Assert.IsNotNull(csv);
         Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
     }
@@ -76,7 +85,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest4()
     {
-        string csv = new string?[]?[] { ["a", "b", "c"] }.ToCsv(CultureInfo.InvariantCulture);
+        string csv = new string[][] { ["a", "b", "c"] }.ToCsv(CultureInfo.InvariantCulture);
         Assert.IsNotNull(csv);
         Assert.AreEqual(0, Csv.ParseAnalyzed(csv).Length);
     }
@@ -84,7 +93,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest5()
     {
-        string csv = new string?[]?[] { ["a", "b", null, "c"] }.ToCsv(null);
+        string csv = new string?[][] { ["a", "b", null, "c"] }.ToCsv(null);
         Assert.IsNotNull(csv);
         Assert.AreEqual(1, Csv.ParseAnalyzed(csv, header: Header.Absent).Length);
     }
@@ -92,7 +101,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest6()
     {
-        string csv = new object[]{ 3.14 }.ToCsv(CultureInfo.CreateSpecificCulture("de-DE"));
+        string csv = new double[][]{ [3.14] }.ToCsv(CultureInfo.CreateSpecificCulture("de-DE"));
         Assert.IsNotNull(csv);
         Assert.AreEqual("\"3,14\"", csv);
     }
@@ -100,7 +109,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest7()
     {
-        string csv = new Version[] { new(2,1,7) }.ToCsv(null);
+        string csv = new Version[][] { [new(2,1,7)] }.ToCsv(null);
         Assert.IsNotNull(csv);
         Assert.AreEqual("2.1.7", csv);
     }
@@ -108,7 +117,7 @@ public class CsvExtensionTests
     [TestMethod]
     public void ToCsvTest8()
     {
-        string csv = new object[] { 7 }.ToCsv(null, "000");
+        string csv = new int[][] { [7] }.ToCsv(null, "000");
         Assert.IsNotNull(csv);
         Assert.AreEqual("007", csv);
     }
