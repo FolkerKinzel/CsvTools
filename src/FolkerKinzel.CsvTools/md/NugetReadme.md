@@ -3,7 +3,11 @@
 # FolkerKinzel.CsvTools
 .NET library for reading and writing CSV files (RFC 4180)
 
-- [Version History](https://github.com/FolkerKinzel/CsvTools/releases)
+[Project Reference and Release Notes](https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0)
+
+[See code examples on GitHub](https://github.com/FolkerKinzel/CsvTools)
+
+[Version History](https://github.com/FolkerKinzel/CsvTools/releases)
 
 
 
