@@ -88,8 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\Welcome.aml" />
-    <None Include="Help\FolkerKinzel.CsvTools.en.chm" />
-    <None Include="Help\LastBuild.log" />
     <None Include="VersionHistory\v1.0.0.0.aml" />
     <None Include="VersionHistory\VersionHistory.aml" />
   </ItemGroup>
