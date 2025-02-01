@@ -61,50 +61,58 @@ public static class CsvExtension
                                       string? format = null)
         => Csv.AsString(data, formatProvider, format);
 
-    ///// <summary>
-    ///// Converts the contents of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
-    ///// (CSV, RFC 4180).
-    ///// </summary>
-    ///// <param name="data">The data to convert.</param>
-    ///// <param name="formatProvider">
-    ///// <para>
-    ///// The provider to use to format the value.
-    ///// </para>
-    ///// <para>
-    ///// - or -
-    ///// </para>
-    ///// <para>
-    ///// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
-    ///// </para>
-    ///// </param>
-    ///// <param name="format">
-    ///// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
-    ///// <para>- or -</para>
-    ///// <para>A <c>null</c> reference to use the default format for each item.</para>
-    ///// </param>
-    ///// 
-    ///// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
-    ///// 
-    ///// <remarks>
-    ///// <para>
-    ///// The CSV that this method creates uses the comma ',' (%x2C) as field delimiter.
-    ///// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    ///// <see cref="CsvWriter"/> directly."
-    ///// </para>
-    ///// <para>
-    ///// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
-    ///// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
-    ///// </para>
-    ///// </remarks>
-    ///// 
-    ///// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    //public static string ToCsv<TItem>(this IEnumerable<TItem> data,
-    //                                  IFormatProvider? formatProvider = null,
-    //                                  string? format = null)
-    //{
-    //    _ArgumentNullException.ThrowIfNull(data, nameof(data));
-    //    return Csv.AsString(Enumerable.Repeat(data, 1), formatProvider, format);
-    //}
+    /// <summary>
+    /// Converts the contents of <paramref name="data"/> to a comma-separated values <see cref="string"/> 
+    /// (CSV, RFC 4180).
+    /// </summary>
+    /// <param name="data">The data to convert.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// 
+    /// <returns>A CSV-<see cref="string"/> containing the content of <paramref name="data"/>.</returns>
+    /// 
+    /// <remarks>
+    /// <para>
+    /// The CSV that this method creates uses the comma ',' (%x2C) as field delimiter.
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// <see cref="CsvWriter"/> directly."
+    /// </para>
+    /// <para>
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    public static string ToCsv<TItem>(this IEnumerable<TItem> data,
+                                      IFormatProvider? formatProvider = null,
+                                      string? format = null)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+        return Csv.AsString([data], formatProvider, format);
+    }
+
+    public static string ToCsv(this IEnumerable<string?> data,
+                               IFormatProvider? formatProvider = null,
+                               string? format = null)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+        return Csv.AsString([data], formatProvider, format);
+    }
 
     /// <summary>
     /// Saves the contents of <paramref name="data"/> as a CSV file.
@@ -158,57 +166,68 @@ public static class CsvExtension
                                       Encoding? textEncoding = null) 
         => Csv.Save(data, filePath, formatProvider, format, textEncoding);
 
-    ///// <summary>
-    ///// Saves the contents of <paramref name="data"/> as a CSV file.
-    ///// </summary>
-    ///// <param name="data">The data to save.</param>
-    ///// <param name="filePath">The file path of the CSV file to be written.</param>
-    ///// <param name="formatProvider">
-    ///// <para>
-    ///// The provider to use to format the value.
-    ///// </para>
-    ///// <para>
-    ///// - or -
-    ///// </para>
-    ///// <para>
-    ///// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
-    ///// </para>
-    ///// </param>
-    ///// <param name="format">
-    ///// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
-    ///// <para>- or -</para>
-    ///// <para>A <c>null</c> reference to use the default format for each item.</para>
-    ///// </param>
-    ///// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
-    ///// cref="Encoding.UTF8" />.</param>
-    ///// 
-    ///// <remarks>
-    ///// <para>Creates a new CSV file. If the target file already exists, it is 
-    ///// truncated and overwritten.
-    ///// </para>
-    ///// <para>
-    ///// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    ///// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    ///// <see cref="CsvWriter"/> directly."
-    ///// </para>
-    ///// <para>
-    ///// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
-    ///// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
-    ///// </para>
-    ///// </remarks>
-    ///// 
-    ///// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
-    ///// <paramref name="filePath"/> is <c>null</c>.</exception>
-    ///// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
-    ///// valid file path.</exception>
-    ///// <exception cref="IOException">I/O error.</exception>
-    //public static void SaveCsv<TItem>(this IEnumerable<TItem> data,
-    //                                  string filePath,
-    //                                  IFormatProvider? formatProvider = null,
-    //                                  string? format = null,
-    //                                  Encoding? textEncoding = null)
-    //{
-    //    _ArgumentNullException.ThrowIfNull(data, nameof(data));
-    //    Csv.Save(Enumerable.Repeat(data, 1), filePath, formatProvider, format, textEncoding);
-    //}
+    /// <summary>
+    /// Saves the contents of <paramref name="data"/> as a CSV file.
+    /// </summary>
+    /// <param name="data">The data to save.</param>
+    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
+    /// 
+    /// <remarks>
+    /// <para>Creates a new CSV file. If the target file already exists, it is 
+    /// truncated and overwritten.
+    /// </para>
+    /// <para>
+    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// <see cref="CsvWriter"/> directly."
+    /// </para>
+    /// <para>
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
+    /// <paramref name="filePath"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
+    /// valid file path.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
+    public static void SaveCsv<TItem>(this IEnumerable<TItem> data,
+                                      string filePath,
+                                      IFormatProvider? formatProvider = null,
+                                      string? format = null,
+                                      Encoding? textEncoding = null)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+        Csv.Save(Enumerable.Repeat(data, 1), filePath, formatProvider, format, textEncoding);
+    }
+
+
+    public static void SaveCsv(this IEnumerable<string?> data,
+                                     string filePath,
+                                     IFormatProvider? formatProvider = null,
+                                     string? format = null,
+                                     Encoding? textEncoding = null)
+    {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+        Csv.Save([data], filePath, formatProvider, format, textEncoding);
+    }
 }
