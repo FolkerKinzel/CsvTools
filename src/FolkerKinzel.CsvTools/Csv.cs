@@ -536,7 +536,7 @@ public static class Csv
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
         using var writer = new StringWriter();
-        AsCsvIntl(data, writer, formatProvider, format);
+        WriteCsvIntl(data, writer, formatProvider, format);
 
         return writer.ToString();
     }
@@ -594,10 +594,10 @@ public static class Csv
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        AsCsvIntl(data, streamWriter, formatProvider, format);
+        WriteCsvIntl(data, streamWriter, formatProvider, format);
     }
 
-    private static void AsCsvIntl(IEnumerable<IEnumerable<object?>?> data,
+    private static void WriteCsvIntl(IEnumerable<IEnumerable<object?>?> data,
                                   TextWriter streamWriter,
                                   IFormatProvider? formatProvider,
                                   string? format)
