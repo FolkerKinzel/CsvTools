@@ -24,8 +24,7 @@ public sealed class CsvWriter : IDisposable
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
     /// for the header row to be written.</summary>
-    /// <param name="filePath">The file path of the CSV file to be written. If the file
-    /// exists, it will be overwritten.</param>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// 
     /// <param name="columnNames">
     /// <para>
@@ -40,7 +39,7 @@ public sealed class CsvWriter : IDisposable
     /// </param>
     ///<param name="caseSensitive">If <c>true</c>, column names that differ only in 
     /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
-    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to 
     /// change the default value.</param>
@@ -81,7 +80,7 @@ public sealed class CsvWriter : IDisposable
 
         // Don't change the order: _writer will not be disposed if an exception is thrown
         // after it had been initialized.
-        _writer = InitStreamWriter(filePath, textEncoding);
+        _writer = StreamHelper.InitStreamWriter(filePath, textEncoding);
         _writer.NewLine = Csv.NewLine;
 
         _delimiter = delimiter;
@@ -90,10 +89,9 @@ public sealed class CsvWriter : IDisposable
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
     /// without a header row.</summary>
-    /// <param name="filePath">The file path of the CSV file to be written. If the file
-    /// exists, it will be overwritten.</param>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to 
     /// change the default value.</param>
@@ -126,7 +124,7 @@ public sealed class CsvWriter : IDisposable
 
         // Don't change the order: _writer will not be disposed if an exception is thrown
         // after it had been initialized.
-        this._writer = InitStreamWriter(filePath, textEncoding);
+        this._writer = StreamHelper.InitStreamWriter(filePath, textEncoding);
         _writer.NewLine = Csv.NewLine;
 
         _isHeaderRowWritten = true;
@@ -348,53 +346,4 @@ public sealed class CsvWriter : IDisposable
 
     private static SearchValuesPolyfill<char> CreateReservedChars(char delimiter)
        => delimiter == ',' ? _reservedCharsDefault : SearchValuesPolyfill.Create([delimiter, '\"', '\r', '\n']);
-
-    /// <summary> Initialisiert einen <see cref="StreamWriter" /> mit der angegebenen
-    /// Textkodierung mit dem Namen der zu schreibenden Datei. </summary>
-    /// <param name="fileName">Dateipfad.</param>
-    /// <param name="textEncoding">Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
-    /// <returns> <see cref="StreamWriter" /> </returns>
-    /// <exception cref="ArgumentNullException"> <paramref name="fileName" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"> <paramref name="fileName" /> is not a valid
-    /// file path.</exception>
-    /// <exception cref="IOException">I/O-Error</exception>
-    [ExcludeFromCodeCoverage]
-    private static StreamWriter InitStreamWriter(string fileName, Encoding? textEncoding)
-    {
-        try
-        {
-            return new StreamWriter(fileName, false, textEncoding ?? Encoding.UTF8) // UTF-8-Encoding mit BOM
-            {
-                NewLine = Csv.NewLine
-            };
-        }
-        catch (ArgumentNullException)
-        {
-            throw new ArgumentNullException(nameof(fileName));
-        }
-        catch (ArgumentException e)
-        {
-            throw new ArgumentException(e.Message, nameof(fileName), e);
-        }
-        catch (UnauthorizedAccessException e)
-        {
-            throw new IOException(e.Message, e);
-        }
-        catch (NotSupportedException e)
-        {
-            throw new ArgumentException(e.Message, nameof(fileName), e);
-        }
-        catch (System.Security.SecurityException e)
-        {
-            throw new IOException(e.Message, e);
-        }
-        catch (PathTooLongException e)
-        {
-            throw new ArgumentException(e.Message, nameof(fileName), e);
-        }
-        catch (Exception e)
-        {
-            throw new IOException(e.Message, e);
-        }
-    }
 }

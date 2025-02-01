@@ -62,12 +62,12 @@ public static class CsvAnalyzer
         analyzedLines = Normalize(analyzedLines);
         CsvAnalyzerResult result = new();
 
-        using (StreamReader reader1 = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding))
+        using (StreamReader reader1 = StreamHelper.InitStreamReader(filePath, textEncoding))
         {
             result.Delimiter = new DelimiterAnalyzer().GetFieldSeparator(reader1);
         }
 
-        using StreamReader reader2 = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
+        using StreamReader reader2 = StreamHelper.InitStreamReader(filePath, textEncoding);
         using var csvStringReader = new CsvStringReader(reader2, result.Delimiter, result.Options);
 
         CsvPropertiesAnalyzer.InitProperties(csvStringReader,

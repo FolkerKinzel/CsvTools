@@ -39,7 +39,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <summary>
     /// Initializes a new <see cref="CsvReader"/> instance to read a CSV file without header row.
     /// </summary>
-    /// <param name="filePath">The path to the CSV file to be read.</param>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="analyzerResult">The results of the analysis of the CSV file.</param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to use, or <c>null</c> for 
     /// <see cref="Encoding.UTF8"/>.</param>
@@ -50,13 +50,13 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
                        CsvAnalyzerResult analyzerResult,
                        Encoding? textEncoding = null)
     {
-        StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
+        StreamReader streamReader = StreamHelper.InitStreamReader(filePath, textEncoding);
         this._reader = new CsvStringReader(streamReader, analyzerResult.Delimiter, analyzerResult.Options);
         _rowLength = analyzerResult.RowLength;
     }
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
-    /// <param name="filePath">File path of the CSV file to read.</param>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
@@ -84,7 +84,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     {
         _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 
-        StreamReader streamReader = StreamReaderHelper.InitializeStreamReader(filePath, textEncoding);
+        StreamReader streamReader = StreamHelper.InitStreamReader(filePath, textEncoding);
 
         this._reader = new CsvStringReader(streamReader, delimiter, options);
         this._hasHeaderRow = isHeaderPresent;

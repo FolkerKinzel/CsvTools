@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -177,7 +178,7 @@ public static class Csv
     }
 
     /// <summary>Opens the CSV file referenced with <paramref name="filePath"/> for reading.</summary>
-    /// <param name="filePath">File path of the CSV file to read.</param>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
@@ -208,8 +209,7 @@ public static class Csv
                                      Encoding? textEncoding = null)
         => new(filePath, isHeaderPresent, options, delimiter, textEncoding);
 
-    /// <summary>Initializes a <see cref="CsvReader"/> instance to read data that is in the 
-    /// CSV format.</summary>
+    /// <summary>Initializes a <see cref="CsvReader"/> instance to read CSV data.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
@@ -230,8 +230,8 @@ public static class Csv
         => new(reader, isHeaderPresent, options, delimiter);
 
     /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> instance
-    /// to write data to it. If the target file already exists, it is truncated and overwritten.</summary>
-    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// to write data to it.</summary>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnNames">
     /// <para>
     /// A collection of column names for the header to be written.
@@ -258,9 +258,14 @@ public static class Csv
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
     /// <remarks>
+    /// <para>
+    /// If the target file already exists, it is truncated and overwritten.
+    /// </para>
+    /// <para>
     /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -325,8 +330,8 @@ public static class Csv
         => new(writer, columnNames, caseSensitive);
 
     /// <summary>Creates a new CSV file without a header row and initializes a <see cref="CsvWriter"/> 
-    /// instance to write data to it. If the target file already exists, it is truncated and overwritten.</summary>
-    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// instance to write data to it.</summary>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
@@ -364,9 +369,6 @@ public static class Csv
     /// the <see cref="TextWriter"/>.</returns>
     /// 
     /// <remarks>
-    /// <para>Creates a new CSV file. If the target file already exists, it is 
-    /// truncated and overwritten.
-    /// </para>
     /// <para>
     /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
@@ -487,28 +489,35 @@ public static class Csv
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
     /// </para>
     /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// 
     /// <returns>A CSV-<see cref="string"/> containing the contents of <paramref name="data"/>.</returns>
     /// 
     /// <remarks>
-    /// <see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// <para>
+    /// The CSV that this method creates uses the comma ',' (%x2C) as field delimiter.
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// <see cref="CsvWriter"/> directly."
+    /// </para>
+    /// <para>
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
-    public static string AsString(IEnumerable<IEnumerable<object?>?> data, IFormatProvider? formatProvider = null)
+    public static string AsString(IEnumerable<IEnumerable<object?>?> data,
+                                  IFormatProvider? formatProvider = null,
+                                  string? format = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
-        int maxLen = data.Max(static x => x?.Count() ?? 0);
-
-        if (maxLen == 0)
-        {
-            return string.Empty;
-        }
-
         using var writer = new StringWriter();
-        using var csvWriter = new CsvWriter(writer, maxLen);
-
-        AsCsvIntl(data, csvWriter, formatProvider);
+        AsCsvIntl(data, writer, formatProvider, format);
 
         return writer.ToString();
     }
@@ -517,7 +526,7 @@ public static class Csv
     /// Saves the contents of <paramref name="data"/> as a CSV file.
     /// </summary>
     /// <param name="data">The data to save.</param>
-    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -529,6 +538,13 @@ public static class Csv
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
     /// </para>
     /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is 
@@ -540,7 +556,8 @@ public static class Csv
     /// <see cref="CsvWriter"/> directly."
     /// </para>
     /// <para>
-    /// <see cref="object.ToString()"/> is used to serialize the contents of <paramref name="data"/>.
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -549,21 +566,27 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    internal static void Save(IEnumerable<IEnumerable<object?>?> data, string filePath, IFormatProvider? formatProvider = null)
+    internal static void Save(IEnumerable<IEnumerable<object?>?> data,
+                              string filePath,
+                              IFormatProvider? formatProvider = null,
+                              string? format = null,
+                              Encoding? textEncoding = null)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
-        int maxLen = data.Max(static x => x?.Count() ?? 0);
-
-        formatProvider ??= CultureInfo.InvariantCulture;
-
-        using var csvWriter = new CsvWriter(filePath, maxLen);
-
-        AsCsvIntl(data, csvWriter, formatProvider);
+        using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
+        AsCsvIntl(data, streamWriter, formatProvider, format);
     }
 
-    private static void AsCsvIntl(IEnumerable<IEnumerable<object?>?> data, CsvWriter csvWriter, IFormatProvider? formatProvider)
+    private static void AsCsvIntl(IEnumerable<IEnumerable<object?>?> data,
+                                  TextWriter streamWriter,
+                                  IFormatProvider? formatProvider,
+                                  string? format)
     {
+        int maxLen = data.Max(static x => x?.Count() ?? 0);
+
+        using var csvWriter = new CsvWriter(streamWriter, maxLen);
+
         formatProvider ??= CultureInfo.InvariantCulture;
         CsvRecord record = csvWriter.Record;
 
@@ -573,7 +596,8 @@ public static class Csv
                                     x => x switch
                                     {
                                         null => null,
-                                        IFormattable formattable => formattable.ToString(null, formatProvider),
+                                        string s => s,
+                                        IFormattable formattable => formattable.ToString(format, formatProvider),
                                         _ => x.ToString()
                                     }),
                            resetExcess: false);

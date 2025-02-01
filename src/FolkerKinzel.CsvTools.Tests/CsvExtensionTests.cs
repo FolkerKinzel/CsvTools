@@ -97,4 +97,20 @@ public class CsvExtensionTests
         Assert.AreEqual("\"3,14\"", csv);
     }
 
+    [TestMethod]
+    public void ToCsvTest7()
+    {
+        string csv = new Version[] { new(2,1,7) }.ToCsv(null);
+        Assert.IsNotNull(csv);
+        Assert.AreEqual("2.1.7", csv);
+    }
+
+    [TestMethod]
+    public void ToCsvTest8()
+    {
+        string csv = new object[] { 7 }.ToCsv(null, "000");
+        Assert.IsNotNull(csv);
+        Assert.AreEqual("007", csv);
+    }
+
 }
