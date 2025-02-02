@@ -5,7 +5,7 @@ using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary>Static class that provides methods for reading and writing CSV files.</summary>
+/// <summary>Static class that provides methods for reading, writing and analyzing CSV data.</summary>
 public static class Csv
 {
     /// <summary>The newline characters to use in CSV files ("\r\n").</summary>
