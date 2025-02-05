@@ -156,6 +156,15 @@ public class CsvTests
     }
 
     [TestMethod]
+    public void OpenWriteTest5()
+    {
+        using var stringWriter = new StringWriter();
+        using CsvWriter writer = Csv.OpenWrite(stringWriter, ["NAME", "name"]);
+        Assert.AreEqual(',', writer.Delimiter);
+        Assert.IsFalse(writer.Record.Comparer.Equals("A", "a"));
+    }
+
+    [TestMethod]
     public void ParseTest1()
     {
         CsvRecord[] result = Csv.Parse("""

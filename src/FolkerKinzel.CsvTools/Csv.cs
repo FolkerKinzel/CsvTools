@@ -254,13 +254,11 @@ public static class Csv
     /// names.
     /// </para>
     /// <para>
-    /// The collection will be copied. If the collection contains <c>null</c> values, these 
-    /// are replaced by automatically generated column names. Column names cannot appear twice. 
-    /// With <paramref name="caseSensitive"/> can be chosen whether the comparison is case-sensitive or not.
+    /// The collection will be copied. If the collection contains <c>null</c> values, empty strings or white space, these 
+    /// are replaced by automatically generated column names. Column names cannot appear twice. By default the 
+    /// comparison is case-sensitive but it will be reset to a case-insensitive comparison if the column names are 
+    /// also unique when treated case-insensitive.
     /// </para>
-    /// </param>
-    /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
-    /// upper and lower case are also accepted, otherwise <c>false</c>.
     /// </param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
@@ -296,17 +294,15 @@ public static class Csv
     /// - or -
     /// </para>
     /// <para>
-    /// a column name in <paramref name="columnNames" /> occurs twice. With <paramref name="caseSensitive"/>
-    /// can be chosen whether the comparison is case-sensitive or not.
+    /// a column name in <paramref name="columnNames" /> occurs twice.
     /// </para>
     /// </exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
-                                      IEnumerable<string?> columnNames,
-                                      bool caseSensitive = false,
-                                      Encoding? textEncoding = null)
-        => new(filePath, columnNames, caseSensitive, textEncoding);
+                                      IReadOnlyCollection<string?> columnNames,
+                                      Encoding? textEncoding = null) 
+        => new(filePath, columnNames, CaseSensitive(columnNames), textEncoding);
 
     /// <summary>
     /// Initializes a new <see cref="CsvWriter" /> object with the column names
@@ -324,9 +320,13 @@ public static class Csv
     /// of the <see cref="CsvWriter"/> instance, which the method returns, can be accessed with this column 
     /// names.
     /// </para>
+    /// <para>
+    /// The collection will be copied. If the collection contains <c>null</c> values, empty strings or white space, these 
+    /// are replaced by automatically generated column names. Column names cannot appear twice. By default the 
+    /// comparison is case-sensitive but it will be reset to a case-insensitive comparison if the column names are 
+    /// also unique when treated case-insensitive.
+    /// </para>
     /// </param>
-    /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
-    /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
     /// <paramref name="writer"/>.</returns>
@@ -340,13 +340,11 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
     /// name="columnNames" /> is <c>null.</c></exception>
     /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
-    /// /> occurs twice. With <paramref name="caseSensitive"/> can be chosen whether 
-    /// the comparison is case-sensitive or not.</exception>
+    /// /> occurs twice. </exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(TextWriter writer,
-                                      IEnumerable<string?> columnNames,
-                                      bool caseSensitive = false)
-        => new(writer, columnNames, caseSensitive);
+                                      IReadOnlyCollection<string?> columnNames)
+        => new(writer, columnNames, CaseSensitive(columnNames));
 
     /// <summary>Creates a new CSV file without a header row and initializes a <see cref="CsvWriter"/> 
     /// instance to write data to it.</summary>
@@ -614,6 +612,24 @@ public static class Csv
             record.FillWith(coll, formatProvider, format, resetExcess: false);
             csvWriter.WriteRecord();
         }
+    }
+
+    /// <summary>
+    /// Determines whether <paramref name="columnNames"/> should be treated 
+    /// case-sensitive.
+    /// </summary>
+    /// <param name="columnNames">The column names to examine.</param>
+    /// <returns><c>true</c> if the <paramref name="columnNames"/> should be treated 
+    /// case-sensitive, otherwise <c>false</c>.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="columnNames"/> is <c>null</c>.</exception>
+    private static bool CaseSensitive(IReadOnlyCollection<string?> columnNames)
+    {
+        _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
+        return columnNames.Where(x => !string.IsNullOrWhiteSpace(x))
+                          .Count() 
+            != columnNames.Where(x => !string.IsNullOrWhiteSpace(x))
+                          .Distinct(StringComparer.OrdinalIgnoreCase)
+                          .Count();
     }
 
     private static int GetCodePage(string filePath)
