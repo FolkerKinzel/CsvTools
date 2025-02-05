@@ -43,16 +43,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FolkerKinzel.Strings">
-			<Version>9.2.1</Version>
-		</PackageReference>
-	</ItemGroup>
-
-	<!-- Conditionally obtain references for the .NET Framework 4.5 target -->
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-		<Reference Include="System.Data.DataSetExtensions" />
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\FolkerKinzel.CsvTools\FolkerKinzel.CsvTools.csproj" />
 	</ItemGroup>
 	<ItemGroup>

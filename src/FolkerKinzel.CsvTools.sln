@@ -51,7 +51,6 @@ Global
 		{813EF7B4-A4EE-4163-BEDC-FEA87D6A2B64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{813EF7B4-A4EE-4163-BEDC-FEA87D6A2B64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{813EF7B4-A4EE-4163-BEDC-FEA87D6A2B64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{813EF7B4-A4EE-4163-BEDC-FEA87D6A2B64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
