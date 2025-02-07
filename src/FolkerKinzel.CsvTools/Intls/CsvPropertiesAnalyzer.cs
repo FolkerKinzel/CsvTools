@@ -86,11 +86,12 @@ internal static class CsvPropertiesAnalyzer
         for (int i = 0; i < csvRow.Count; i++)
         {
             ReadOnlyMemory<char> mem = row[i];
-            ReadOnlySpan<char> memSpan = mem.Span;
+            ReadOnlyMemory<char> trimmed = mem.Trim();
+            ReadOnlySpan<char> span = trimmed.Span;
 
-            if (header == Header.ProbablyPresent && ((memSpan.IsWhiteSpace() && i != csvRow.Count - 1)
-                                                     || (memSpan.Length > 0 && memSpan[0].IsAsciiDigit())
-                                                     || memSpan.ContainsAny([results.Delimiter, '\"', '\r', '\n']) ))
+            if (header == Header.ProbablyPresent && ((span.IsWhiteSpace() && i != csvRow.Count - 1)
+                                                     || (span.Length > 0 && span[0].IsAsciiDigit()) // Starts with 0-9
+                                                     || span.ContainsAny([results.Delimiter, '\"', '\r', '\n']) ))
             {
                 // Has no header if the empty field is not the
                 // last field in the record.
@@ -101,8 +102,7 @@ internal static class CsvPropertiesAnalyzer
                 results.Options = results.Options.Unset(CsvOpts.TrimColumns);
                 return;
             }
-
-            ReadOnlyMemory<char> trimmed = mem.Trim();
+            
             row[i] = trimmed;
 
             if (trimmed.Length != mem.Length)
