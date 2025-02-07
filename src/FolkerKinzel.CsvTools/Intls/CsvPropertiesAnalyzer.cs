@@ -86,8 +86,11 @@ internal static class CsvPropertiesAnalyzer
         for (int i = 0; i < csvRow.Count; i++)
         {
             ReadOnlyMemory<char> mem = row[i];
+            ReadOnlySpan<char> memSpan = mem.Span;
 
-            if (header == Header.ProbablyPresent && ((mem.Span.IsWhiteSpace() && i != csvRow.Count - 1) || mem.Span.ContainsAny([results.Delimiter, '\"', '\r', '\n'])))
+            if (header == Header.ProbablyPresent && ((memSpan.IsWhiteSpace() && i != csvRow.Count - 1)
+                                                     || (memSpan.Length > 0 && memSpan[0].IsAsciiDigit())
+                                                     || memSpan.ContainsAny([results.Delimiter, '\"', '\r', '\n']) ))
             {
                 // Has no header if the empty field is not the
                 // last field in the record.

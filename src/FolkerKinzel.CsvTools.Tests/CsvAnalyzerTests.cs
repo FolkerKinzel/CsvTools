@@ -147,6 +147,18 @@ public class CsvAnalyzerTests
     }
 
     [TestMethod]
+    public void HeaderTest7()
+    {
+        const string csv = """
+            1,2,3
+            """;
+
+        CsvAnalyzerResult result = Csv.AnalyzeString(csv);
+        Assert.IsFalse(result.IsHeaderPresent);
+        Assert.AreEqual(CsvOpts.Default, result.Options);
+    }
+
+    [TestMethod]
     public void DelimiterTest1()
     {
         const string csv = "a#b\r1#2";
