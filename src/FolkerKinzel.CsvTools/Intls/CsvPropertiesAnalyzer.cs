@@ -89,8 +89,8 @@ internal static class CsvPropertiesAnalyzer
             ReadOnlyMemory<char> trimmed = mem.Trim();
             ReadOnlySpan<char> span = trimmed.Span;
 
-            if (header == Header.ProbablyPresent && ((span.IsWhiteSpace() && i != csvRow.Count - 1)
-                                                     || (span.Length > 0 && span[0].IsAsciiDigit()) // Starts with 0-9
+            if (header == Header.ProbablyPresent && ((span.IsEmpty && i != csvRow.Count - 1)
+                                                     || (!span.IsEmpty && span[0].IsAsciiDigit()) // Starts with 0-9
                                                      || span.ContainsAny([results.Delimiter, '\"', '\r', '\n']) ))
             {
                 // Has no header if the empty field is not the
@@ -98,6 +98,8 @@ internal static class CsvPropertiesAnalyzer
                 // RFC 4180 says: "The last field in the
                 // record must not be followed by a comma."
                 // Bad implementations - like Thunderbird - do other.
+                // Has no header if a field starts with a digit (0-9).
+                // Has no header if a field contains reserved characters.
                 results.ColumnNames = null;
                 results.Options = results.Options.Unset(CsvOpts.TrimColumns);
                 return;
