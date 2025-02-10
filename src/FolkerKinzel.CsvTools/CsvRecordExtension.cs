@@ -22,6 +22,17 @@ public static class CsvRecordExtension
     /// which uses the same <see cref="StringComparer" /> for key comparison that was used to create 
     /// <paramref name="record"/>.
     /// </remarks>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// <para>
+    /// Saving a CSV file:
+    /// </para>
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+    /// </example>
     public static Dictionary<string, ReadOnlyMemory<char>> ToDictionary(this CsvRecord record)
     {
 #if NETSTANDARD2_0 || NET462

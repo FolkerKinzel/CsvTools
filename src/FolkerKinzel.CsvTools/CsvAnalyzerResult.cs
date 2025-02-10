@@ -5,7 +5,7 @@ namespace FolkerKinzel.CsvTools;
 /// <summary>
 /// Result of the analysis of a CSV file.
 /// </summary>
-public class CsvAnalyzerResult
+public sealed class CsvAnalyzerResult
 {
     /// <summary>The column names of the CSV file, or <c>null</c> if the
     /// CSV file has no header row.</summary>

@@ -4,12 +4,24 @@ using FolkerKinzel.CsvTools.Intls;
 namespace FolkerKinzel.CsvTools;
 
 /// <summary>Writes string data as CSV (RFC 4180).</summary>
+/// 
 /// <remarks> <see cref="CsvWriter" /> provides a <see cref="CsvRecord" /> object in its 
 /// <see cref="Record" /> property that represents a buffer for a data record (row) of the 
 /// CSV file. Fill the <see cref="CsvRecord" /> object with data and then write it to the 
 /// file using the <see cref="WriteRecord" /> method! After the <see cref="WriteRecord" /> 
 /// returns all fields of <see cref="Record" /> are reset to <see cref="ReadOnlyMemory{T}.Empty"/>
 /// so that the <see cref="CsvRecord" /> object can be filled again.</remarks>
+/// 
+/// <example>
+/// <note type="note">
+/// In the following code examples - for easier readability - exception handling
+/// has been omitted.
+/// </note>
+/// <para>
+/// Saving a CSV file:
+/// </para>
+/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+/// </example>
 public sealed class CsvWriter : IDisposable
 {
     private static readonly SearchValuesPolyfill<char> _reservedCharsDefault

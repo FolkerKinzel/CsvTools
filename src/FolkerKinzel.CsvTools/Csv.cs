@@ -6,6 +6,16 @@ using FolkerKinzel.CsvTools.Intls;
 namespace FolkerKinzel.CsvTools;
 
 /// <summary>Static class that provides methods for reading, writing and analyzing CSV data.</summary>
+/// <example>
+/// <note type="note">
+/// In the following code examples - for easier readability - exception handling
+/// has been omitted.
+/// </note>
+/// <para>
+/// Reading and writing a CSV file:
+/// </para>
+/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+/// </example>
 public static class Csv
 {
     /// <summary>The newline characters to use in CSV files ("\r\n").</summary>
@@ -603,7 +613,7 @@ public static class Csv
     /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
     /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
     /// in the CSV file, or <c>null</c> to save
-    /// the whole <see cref="DataTable"/> in its current column order. 
+    /// the whole <see cref="DataTable"/> with its current column order. 
     /// </para>
     /// <para>
     /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
@@ -677,7 +687,7 @@ public static class Csv
     /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
     /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
     /// in the CSV file, or <c>null</c> to save
-    /// the whole <see cref="DataTable"/> in its current column order. 
+    /// the whole <see cref="DataTable"/> with its current column order. 
     /// </para>
     /// <para>
     /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
