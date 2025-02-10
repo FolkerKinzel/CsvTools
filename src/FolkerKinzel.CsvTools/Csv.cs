@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using System.IO;
+﻿using System.Data;
+using System.Globalization;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -301,7 +301,7 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
                                       IReadOnlyCollection<string?> columnNames,
-                                      Encoding? textEncoding = null) 
+                                      Encoding? textEncoding = null)
         => new(filePath, columnNames, CaseSensitive(columnNames), textEncoding);
 
     /// <summary>
@@ -531,10 +531,8 @@ public static class Csv
                                   IFormatProvider? formatProvider = null,
                                   string? format = null)
     {
-        _ArgumentNullException.ThrowIfNull(data, nameof(data));
-
         using var writer = new StringWriter();
-        WriteCsvIntl(data, writer, formatProvider, format);
+        WriteIntl(data, writer, formatProvider, format);
 
         return writer.ToString();
     }
@@ -583,26 +581,235 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
     /// valid file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    internal static void Save(IEnumerable<IEnumerable<object?>?> data,
-                              string filePath,
-                              IFormatProvider? formatProvider = null,
-                              string? format = null,
-                              Encoding? textEncoding = null)
+    public static void Save(IEnumerable<IEnumerable<object?>?> data,
+                            string filePath,
+                            IFormatProvider? formatProvider = null,
+                            string? format = null,
+                            Encoding? textEncoding = null)
     {
-        _ArgumentNullException.ThrowIfNull(data, nameof(data));
-
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        WriteCsvIntl(data, streamWriter, formatProvider, format);
+        WriteIntl(data, streamWriter, formatProvider, format);
     }
 
-    private static void WriteCsvIntl(IEnumerable<IEnumerable<object?>?> data,
-                                  TextWriter streamWriter,
+    /// <summary>
+    /// Writes the content of a <see cref="DataTable"/> as a CSV file. The 
+    /// <see cref="DataColumn.ColumnName"/>s of <paramref name="dataTable"/> form 
+    /// the header row of this file. 
+    /// </summary>
+    /// <param name="dataTable">The <see cref="DataTable"/> to save.</param>
+    /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="columnNames">
+    /// <para>
+    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
+    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
+    /// in the CSV file, or <c>null</c> to save
+    /// the whole <see cref="DataTable"/> in its current column order. 
+    /// </para>
+    /// <para>
+    /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
+    /// <paramref name="dataTable"/>.
+    /// </para>
+    /// </param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
+    /// 
+    /// <remarks>
+    /// <para>Creates a new CSV file. If the target file already exists, it is 
+    /// truncated and overwritten.
+    /// </para>
+    /// <para>
+    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// <see cref="CsvWriter"/> directly."
+    /// </para>
+    /// <para>
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
+    /// <paramref name="filePath"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">
+    /// <para><paramref name="filePath" /> is not a 
+    /// valid file path.</para>
+    /// <para>- or -</para>
+    /// <para>
+    /// <paramref name="columnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
+    /// in <paramref name="dataTable"/>.
+    /// </para>
+    /// </exception>
+    /// <exception cref="IOException">I/O error.</exception>
+    public static void Save(DataTable dataTable,
+                            string filePath,
+                            IEnumerable<string>? columnNames = null,
+                            IFormatProvider? formatProvider = null,
+                            string? format = null,
+                            Encoding? textEncoding = null)
+    {
+        using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
+        WriteIntl(dataTable, streamWriter, columnNames, formatProvider, format);
+    }
+
+    /// <summary>
+    /// Writes the contents of a <see cref="DataTable"/> as CSV.
+    /// </summary>
+    /// <param name="dataTable">The <see cref="DataTable"/> whose content is written.</param>
+    /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
+    /// <param name="columnNames">
+    /// <para>
+    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
+    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
+    /// in the CSV file, or <c>null</c> to save
+    /// the whole <see cref="DataTable"/> in its current column order. 
+    /// </para>
+    /// <para>
+    /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
+    /// <paramref name="dataTable"/>.
+    /// </para>
+    /// </param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// 
+    /// <remarks>
+    /// <para>
+    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// <see cref="CsvWriter"/> directly."
+    /// </para>
+    /// <para>
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
+    /// <paramref name="textWriter"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">
+    /// <paramref name="columnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
+    /// in <paramref name="dataTable"/>.
+    /// </exception>
+    /// <exception cref="IOException">I/O error.</exception>
+    public static void Write(DataTable dataTable,
+                             TextWriter textWriter,
+                             IEnumerable<string>? columnNames = null,
+                             IFormatProvider? formatProvider = null,
+                             string? format = null)
+    {
+        _ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
+        WriteIntl(dataTable, textWriter, columnNames, formatProvider, format);
+    }
+
+    /// <summary>
+    /// Writes the contents of <paramref name="data"/> as CSV.
+    /// </summary>
+    /// <param name="data">The data to write.</param>
+    /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
+    /// <param name="formatProvider">
+    /// <para>
+    /// The provider to use to format the value.
+    /// </para>
+    /// <para>
+    /// - or -
+    /// </para>
+    /// <para>
+    /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="format">
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>- or -</para>
+    /// <para>A <c>null</c> reference to use the default format for each item.</para>
+    /// </param>
+    /// 
+    /// <remarks>
+    /// <para>
+    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// <see cref="CsvWriter"/> directly."
+    /// </para>
+    /// <para>
+    /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
+    /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
+    /// <paramref name="textWriter"/> is <c>null</c>.</exception>
+    /// <exception cref="IOException">I/O error.</exception>
+    public static void Write(IEnumerable<IEnumerable<object?>?> data,
+                             TextWriter textWriter,
+                             IFormatProvider? formatProvider = null,
+                             string? format = null)
+    {
+        _ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
+        WriteIntl(data, textWriter, formatProvider, format);
+    }
+
+    private static void WriteIntl(DataTable dataTable,
+                                  TextWriter textWriter,
+                                  IEnumerable<string?>? columnNames = null,
+                                  IFormatProvider? formatProvider = null,
+                                  string? format = null)
+    {
+        _ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
+
+        formatProvider ??= CultureInfo.InvariantCulture;
+
+        columnNames ??= dataTable.Columns
+                                 .Cast<DataColumn>()
+                                 .Select(x => x.ColumnName);
+
+        using CsvWriter csvWriter = new(textWriter, columnNames);
+        CsvRecord record = csvWriter.Record;
+
+        foreach (DataRow row in dataTable.Rows)
+        {
+            record.FillWith(row, formatProvider, format);
+            csvWriter.WriteRecord();
+        }
+    }
+
+    private static void WriteIntl(IEnumerable<IEnumerable<object?>?> data,
+                                  TextWriter textWriter,
                                   IFormatProvider? formatProvider,
                                   string? format)
     {
+        _ArgumentNullException.ThrowIfNull(data, nameof(data));
+
         int maxLen = data.Max(static x => x?.Count() ?? 0);
 
-        using var csvWriter = new CsvWriter(streamWriter, maxLen);
+        using var csvWriter = new CsvWriter(textWriter, maxLen);
 
         formatProvider ??= CultureInfo.InvariantCulture;
         CsvRecord record = csvWriter.Record;
@@ -626,7 +833,7 @@ public static class Csv
     {
         _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
         return columnNames.Where(x => !string.IsNullOrWhiteSpace(x))
-                          .Count() 
+                          .Count()
             != columnNames.Where(x => !string.IsNullOrWhiteSpace(x))
                           .Distinct(StringComparer.OrdinalIgnoreCase)
                           .Count();

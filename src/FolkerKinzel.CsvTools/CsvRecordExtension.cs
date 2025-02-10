@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Data;
+using System.Globalization;
 using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
@@ -164,7 +165,7 @@ public static class CsvRecordExtension
             }
         }
 
-        if(resetExcess)
+        if (resetExcess)
         {
             for (; i < span.Length; i++)
             {
@@ -305,6 +306,35 @@ public static class CsvRecordExtension
             {
                 span[i] = default;
             }
+        }
+    }
+
+    internal static void FillWith(this CsvRecord record,
+                                  DataRow dataRow,
+                                  IFormatProvider? formatProvider,
+                                  string? format)
+    {
+        if (dataRow.RowState == DataRowState.Deleted)
+        {
+            return;
+        }
+
+        Debug.Assert(record.ColumnNames is string[]);
+
+        ReadOnlySpan<string> columnNames = (string[])record.ColumnNames;
+        Span<ReadOnlyMemory<char>> recordSpan = record.Values;
+
+        for (int i = 0; i < recordSpan.Length; i++)
+        {
+            object item = dataRow[columnNames[i]];
+
+            recordSpan[i] = item switch
+            {
+                DBNull => default,
+                string s => s.AsMemory(),
+                IFormattable formattable => formattable.ToString(format, formatProvider).AsMemory(),
+                _ => item.ToString().AsMemory()
+            };
         }
     }
 }

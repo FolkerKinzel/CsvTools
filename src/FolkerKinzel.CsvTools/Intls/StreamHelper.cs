@@ -64,7 +64,7 @@ internal static class StreamHelper
     {
         try
         {
-            return new StreamWriter(filePath, false, textEncoding ?? Encoding.UTF8) // UTF-8-Encoding mit BOM
+            return new StreamWriter(filePath, false, textEncoding ?? Encoding.UTF8) // UTF-8 with BOM
             {
                 NewLine = Csv.NewLine
             };
