@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections;
+using System.Data;
 using System.Globalization;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
@@ -805,8 +806,11 @@ public static class Csv
 
         foreach (DataRow row in dataTable.Rows)
         {
-            record.FillWith(row, formatProvider, format);
-            csvWriter.WriteRecord();
+            if (row.RowState != DataRowState.Deleted)
+            {
+                record.FillWith(row, formatProvider, format);
+                csvWriter.WriteRecord();
+            }
         }
     }
 

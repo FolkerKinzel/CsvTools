@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections;
+using System.Data;
 using System.Globalization;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -49,8 +50,7 @@ public static class CsvRecordExtension
 #endif
     }
 
-    /// <summary> Fills <paramref name="record"/> with the items of an 
-    /// <see cref="object"/> collection.
+    /// <summary> Fills <paramref name="record"/> with the items of an <see cref="IEnumerable"/>.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="object"/>s with which to fill <paramref name="record"/>.
@@ -325,11 +325,8 @@ public static class CsvRecordExtension
                                   IFormatProvider? formatProvider,
                                   string? format)
     {
-        if (dataRow.RowState == DataRowState.Deleted)
-        {
-            return;
-        }
 
+        Debug.Assert(dataRow.RowState != DataRowState.Deleted);
         Debug.Assert(record.ColumnNames is string[]);
 
         ReadOnlySpan<string> columnNames = (string[])record.ColumnNames;

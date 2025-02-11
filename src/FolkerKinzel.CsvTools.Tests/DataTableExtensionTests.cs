@@ -33,7 +33,6 @@ public class DataTableExtensionTests
             A,B
             1,2
             3,
-            ,
             """, csv);
     }
 
@@ -59,7 +58,6 @@ public class DataTableExtensionTests
             A,B
             1,2
             3,
-            ,
             """, csv);
     }
 
@@ -85,7 +83,6 @@ public class DataTableExtensionTests
             A,B
             1,2
             3,
-            ,
             """, csv);
     }
 
@@ -110,7 +107,6 @@ public class DataTableExtensionTests
         Assert.AreEqual("""
             B
             2
-            
             
             """, csv);
     }
