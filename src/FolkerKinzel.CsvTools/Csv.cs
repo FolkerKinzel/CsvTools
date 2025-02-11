@@ -804,8 +804,10 @@ public static class Csv
         using CsvWriter csvWriter = new(textWriter, columnNames);
         CsvRecord record = csvWriter.Record;
 
-        foreach (DataRow row in dataTable.Rows)
+        for (int i = 0; i < dataTable.Rows.Count; i++) 
         {
+            DataRow row = dataTable.Rows[i];
+
             if (row.RowState != DataRowState.Deleted)
             {
                 record.FillWith(row, formatProvider, format);
