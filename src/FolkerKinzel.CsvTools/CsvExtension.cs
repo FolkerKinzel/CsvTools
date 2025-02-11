@@ -45,11 +45,6 @@ public static class CsvExtension
     /// </remarks>
     /// 
     /// <example>
-    /// <note type="note">
-    /// In the following code examples - for easier readability - exception handling
-    /// has been omitted.
-    /// </note>
-    /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvStringExample.cs" />
     /// </example>
     /// 
@@ -143,6 +138,15 @@ public static class CsvExtension
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// </remarks>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling
+    /// has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\LinqOnCsvExample.cs" />
+    /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
     /// <paramref name="filePath"/> is <c>null</c>.</exception>

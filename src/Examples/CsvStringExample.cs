@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using FolkerKinzel.CsvTools;
+﻿using FolkerKinzel.CsvTools;
 
 namespace Examples;
 
@@ -20,7 +19,7 @@ internal static class CsvStringExample
              """, "Up, or down", -3.14]
         ];
 
-        string csv = data.ToCsv(CultureInfo.InvariantCulture);
+        string csv = data.ToCsv();
 
         Console.WriteLine(csv);
         Console.WriteLine();

@@ -6,15 +6,16 @@ internal static class DisableCachingExample
 {
     public static void DisableCachingSideEffects(string filePath)
     {
-        File.WriteAllText(filePath, """
-            Name,City
-            Ingrid,Berlin
-            Joyce,New York
-            Horst,Hamburg
-            John,New York
-            """);
+        string[][] friends = [
+                                ["Name", "City"],
+                                ["Ingrid","Berlin"],
+                                ["Joyce","New York"],
+                                ["Horst","Hamburg"],
+                                ["John","New York"],
+                             ];
+        friends.SaveCsv(filePath);
 
-        Console.WriteLine("Which people live in New York?: ");
+        Console.WriteLine("Which friends live in New York?: ");
         Console.Write("  Determine with cache enabled:  ");
 
         // Caching is enabled by default.
@@ -46,12 +47,12 @@ internal static class DisableCachingExample
                 Console.Write(' ');
             }
         }
-
-        Console.WriteLine();
-
-        // Console Output: 
-        // Which people live in New York?:
-        //   Determine with cache enabled:  Joyce John
-        //   Determine with cache disabled: John John
     }
 }
+/*
+Console Output:
+
+Which friends live in New York?:
+  Determine with cache enabled:  Joyce John
+  Determine with cache disabled: John John
+*/
