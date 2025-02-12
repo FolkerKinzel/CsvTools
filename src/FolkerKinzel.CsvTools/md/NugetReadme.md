@@ -7,7 +7,7 @@ Starting with version 2.0.0, mapping functionality and type converters
 are in the separate package [FolkerKinzel.CsvTools.Mappings](https://www.nuget.org/packages/FolkerKinzel.CsvTools.Mappings/). This ensures that only what is really needed needs to be installed.
 
 You can use this small library independently
-- for analyzing CSV files and strings (delimiter, header row, column names, text encoding, and required options for reading non-standard CSV)
+- for analyzing CSV files and CSV strings (delimiter, header row, column names, text encoding, and required options for reading non-standard CSV)
 - serializing collections of any data and DataTables as CSV with simple formatting options. (Use [FolkerKinzel.CsvTools.Mappings](https://www.nuget.org/packages/FolkerKinzel.CsvTools.Mappings/) for advanced object serializing and deserializing.)
 - parsing the string content of CSV files and CSV strings, e.g., with Linq. (Use [FolkerKinzel.CsvTools.Mappings](https://www.nuget.org/packages/FolkerKinzel.CsvTools.Mappings/) for deserializing data tables and data types other than strings.)
 
