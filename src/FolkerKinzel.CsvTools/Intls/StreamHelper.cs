@@ -4,12 +4,13 @@ namespace FolkerKinzel.CsvTools.Intls;
 
 internal static class StreamHelper
 {
-    /// <summary> Initialisiert einen <see cref="StreamReader" />. </summary>
-    /// <param name="filePath">Dateipfad.</param>
+    /// <summary> Initializes a <see cref="StreamReader" /> instance. </summary>
+    /// <param name="filePath">The file path.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
-    /// <returns>Ein <see cref="StreamReader" />.</returns>
-    /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
+    /// <returns>The newly created <see cref="StreamReader" /> instance.</returns>
+    /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.
+    /// </exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">Error accessing the disk.</exception>
@@ -50,11 +51,11 @@ internal static class StreamHelper
         }
     }
 
-    /// <summary> Initialisiert einen <see cref="StreamWriter" /> mit der angegebenen
-    /// Textkodierung mit dem Namen der zu schreibenden Datei. </summary>
-    /// <param name="filePath">Dateipfad.</param>
-    /// <param name="textEncoding">Textkodierung oder <c>null</c> für UTF-8 mit BOM.</param>
-    /// <returns> <see cref="StreamWriter" /> </returns>
+    /// <summary> Initializes a new <see cref="StreamWriter" /> instance. </summary>
+    /// <param name="filePath">The file path.</param>
+    /// <param name="textEncoding">The text encoding to be used to write the CSV file
+    /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
+    /// <returns> The newly created <see cref="StreamWriter" /> instance. </returns>
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>

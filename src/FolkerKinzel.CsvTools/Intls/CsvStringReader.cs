@@ -3,8 +3,8 @@ using FolkerKinzel.CsvTools.Resources;
 
 namespace FolkerKinzel.CsvTools.Intls;
 
-/// <summary> Read a CSV file once forward and returns its contents als <see cref="CsvRow "/>
-/// objects. </summary>
+/// <summary> Read a CSV file once forward and returns its contents as 
+/// <see cref="CsvRow "/> objects. </summary>
 internal sealed class CsvStringReader : IDisposable
 {
     private const int INITIAL_COLUMNS_COUNT = 32;
@@ -21,8 +21,8 @@ internal sealed class CsvStringReader : IDisposable
     internal int LineIndex { get; private set; }
 
     /// <summary> ctor </summary>
-    /// <param name="reader">The <see cref="TextReader" /> with which the CSV file is
-    /// read.</param>
+    /// <param name="reader">The <see cref="TextReader" /> with which the 
+    /// CSV file is read.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="options">The parser options.</param>
     internal CsvStringReader(TextReader reader, char delimiter, CsvOpts options)
@@ -47,8 +47,8 @@ internal sealed class CsvStringReader : IDisposable
         {
             LineNumber++;
 
-            if (!_firstLineFound 
-                && _currentLine.Length == 0 
+            if (!_firstLineFound
+                && _currentLine.Length == 0
                 && !Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
             {
                 continue;
@@ -240,7 +240,10 @@ internal sealed class CsvStringReader : IDisposable
                     }
                     else
                     {
-                        throw new CsvFormatException(Res.InvalidMasking, CsvError.InvalidMasking, LineNumber, LineIndex);
+                        throw new CsvFormatException(Res.InvalidMasking,
+                                                     CsvError.InvalidMasking,
+                                                     LineNumber,
+                                                     LineIndex);
                     }
                 }
 
@@ -259,7 +262,10 @@ internal sealed class CsvStringReader : IDisposable
         {
             if (Options.HasFlag(CsvOpts.ThrowOnTruncatedFiles))
             {
-                throw new CsvFormatException(Res.FileTruncated, CsvError.FileTruncated, LineNumber, LineIndex);
+                throw new CsvFormatException(Res.FileTruncated,
+                                             CsvError.FileTruncated,
+                                             LineNumber,
+                                             LineIndex);
             }
 
             return false;

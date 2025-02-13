@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace FolkerKinzel.CsvTools.Intls;
+﻿namespace FolkerKinzel.CsvTools.Intls;
 
 internal ref struct DelimiterAnalyzer()
 {
@@ -15,7 +13,11 @@ internal ref struct DelimiterAnalyzer()
         internal int Tab { get; set; }
         internal int Space { get; set; }
 
-        internal bool IsEmpty => Comma == 0 && Semicolon == 0 && Hash == 0 && Tab == 0 && Space == 0;
+        internal bool IsEmpty => Comma == 0
+                              && Semicolon == 0
+                              && Hash == 0
+                              && Tab == 0
+                              && Space == 0;
     }
 
     private int _last = '\0';
@@ -27,7 +29,8 @@ internal ref struct DelimiterAnalyzer()
 
     public char GetFieldSeparator(TextReader reader)
     {
-        while ((_current = reader.Read()) != EOF && _findsList.Count < MAX_LINES) // Skips BOM
+        while ((_current = reader.Read()) != EOF
+                    && _findsList.Count < MAX_LINES) // Skips BOM
         {
             _rowLength++;
 
@@ -126,64 +129,69 @@ internal ref struct DelimiterAnalyzer()
             return ','; // default
         }
 
-        if (findsList[0].Comma > 0)
+        RowSeparatorFinds firstRow = findsList[0];
+
+        if (firstRow.Comma > 0)
         {
-            if (!findsList.Skip(1).Any(f => f.Comma != findsList[0].Comma))
+            if (!findsList.Skip(1).Any(f => f.Comma != firstRow.Comma))
             {
                 return ',';
             }
         }
 
-        if (findsList[0].Semicolon > 0)
+        if (firstRow.Semicolon > 0)
         {
-            if (!findsList.Skip(1).Any(f => f.Semicolon != findsList[0].Semicolon))
+            if (!findsList.Skip(1).Any(f => f.Semicolon != firstRow.Semicolon))
             {
                 return ';';
             }
         }
 
-        if (findsList[0].Hash > 0)
+        if (firstRow.Hash > 0)
         {
-            if (!findsList.Skip(1).Any(f => f.Hash != findsList[0].Hash))
+            if (!findsList.Skip(1).Any(f => f.Hash != firstRow.Hash))
             {
                 return '#';
             }
         }
 
-        if (findsList[0].Tab > 0)
+        if (firstRow.Tab > 0)
         {
-            if (!findsList.Skip(1).Any(f => f.Tab != findsList[0].Tab))
+            if (!findsList.Skip(1).Any(f => f.Tab != firstRow.Tab))
             {
                 return '\t';
             }
         }
 
         // Equal occurrence of SPACE could be coincidence:
-        if (findsList[0].Space > 0 
-            && findsList[0].Comma == 0 && findsList[0].Semicolon == 0 && findsList[0].Tab == 0 && findsList[0].Hash == 0)
+        if (firstRow.Space > 0
+            && firstRow.Comma == 0
+            && firstRow.Semicolon == 0
+            && firstRow.Tab == 0
+            && firstRow.Hash == 0)
         {
-            if (!findsList.Skip(1).Any(f => f.Space != findsList[0].Space))
+            if (!findsList.Skip(1).Any(f => f.Space != firstRow.Space))
             {
                 return ' ';
             }
         }
 
-        if (findsList[0].Comma != 0)
+        if (firstRow.Comma != 0)
         {
             return ',';
         }
 
-        if (findsList[0].Semicolon > 0)
+        if (firstRow.Semicolon > 0)
         {
             return ';';
         }
 
-        if (findsList[0].Hash > 0)
+        if (firstRow.Hash > 0)
         {
             return '#';
         }
 
-        if (findsList[0].Tab > 0)
+        if (firstRow.Tab > 0)
         {
             return '\t';
         }
