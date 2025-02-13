@@ -275,25 +275,18 @@ public static class Csv
     /// </param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
     /// <remarks>
-    /// <para>
     /// If the target file already exists, it is truncated and overwritten.
-    /// </para>
-    /// <para>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
-    /// delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly.
-    /// </para>
     /// </remarks>
     /// 
     /// <example>
     /// <note type="note">
-    /// In the following code examples - for easier readability - exception handling
-    /// has been omitted.
+    /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
@@ -311,12 +304,15 @@ public static class Csv
     /// a column name in <paramref name="columnNames" /> occurs twice.
     /// </para>
     /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
                                       IReadOnlyCollection<string?> columnNames,
-                                      Encoding? textEncoding = null)
-        => new(filePath, columnNames, CaseSensitive(columnNames), textEncoding);
+                                      Encoding? textEncoding = null,
+                                      char delimiter = ',')
+        => new(filePath, columnNames, CaseSensitive(columnNames), textEncoding, delimiter);
 
     /// <summary>
     /// Initializes a new <see cref="CsvWriter" /> object with the column names for the header row 
@@ -341,25 +337,23 @@ public static class Csv
     /// comparison if the column names are also unique when treated case-insensitive.
     /// </para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
     /// <paramref name="writer"/>.</returns>
     /// 
-    /// <remarks>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
-    /// delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly.
-    /// </remarks>
-    /// 
-    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
-    /// name="columnNames" /> is <c>null.</c></exception>
-    /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
-    /// /> occurs twice. </exception>
+    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref name="columnNames" />
+    /// is <c>null.</c></exception>
+    /// <exception cref="ArgumentException">A column name in <paramref name="columnNames" /> occurs twice. 
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(TextWriter writer,
-                                      IReadOnlyCollection<string?> columnNames)
-        => new(writer, columnNames, CaseSensitive(columnNames));
+                                      IReadOnlyCollection<string?> columnNames,
+                                      char delimiter = ',')
+        => new(writer, columnNames, CaseSensitive(columnNames), delimiter);
 
     /// <summary>Creates a new CSV file without a header row and initializes a <see cref="CsvWriter"/> 
     /// instance to write data to it.</summary>
@@ -367,54 +361,52 @@ public static class Csv
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
     /// <remarks>
-    /// <para>Creates a new CSV file. If the target file already exists, it is 
-    /// truncated and overwritten.
-    /// </para>
-    /// <para>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
-    /// delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly.
-    /// </para>
+    /// Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
-    /// file path.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid file path.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="columnsCount"/> is negative.</para>
+    /// <para>- or -</para>
+    /// <para><paramref name="delimiter"/> is either the double quotes <c>"</c> or a line break character 
+    /// ('\r' or  '\n').</para>
+    /// </exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
                                       int columnsCount,
-                                      Encoding? textEncoding = null)
-        => new(filePath, columnsCount, textEncoding);
+                                      Encoding? textEncoding = null,
+                                      char delimiter = ',')
+        => new(filePath, columnsCount, textEncoding, delimiter);
 
-    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data
-    /// without a header row.</summary>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data without a header row.
+    /// </summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// <param name="columnsCount">Number of columns in the CSV.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
     /// the <see cref="TextWriter"/>.</returns>
     /// 
-    /// <remarks>
-    /// <para>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
-    /// delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly.
-    /// </para>
-    /// </remarks>
-    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// <para><paramref name="columnsCount"/> is negative.</para>
+    /// <para>- or -</para>
+    /// <para><paramref name="delimiter"/> is either the double quotes <c>"</c> or a line break character 
+    /// ('\r' or  '\n').</para>
+    /// </exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static CsvWriter OpenWrite(TextWriter writer, int columnsCount)
-        => new(writer, columnsCount);
+    public static CsvWriter OpenWrite(TextWriter writer, int columnsCount, char delimiter = ',')
+        => new(writer, columnsCount, delimiter);
 
     /// <summary>Parses the specified CSV-<see cref="string"/> to make its content accessible.</summary>
     /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
@@ -466,8 +458,8 @@ public static class Csv
     /// <remarks>
     /// <para>
     /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
-    /// of the analysis is therefore always only an estimate, 
-    /// the accuracy of which increases with the number of lines analyzed.
+    /// of the analysis is therefore always only an estimate, the accuracy of which increases with the number 
+    /// of lines analyzed.
     /// </para>
     /// <para>
     /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
@@ -527,28 +519,26 @@ public static class Csv
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <returns>A CSV-<see cref="string"/> containing the contents of <paramref name="data"/>.</returns>
     /// 
     /// <remarks>
-    /// <para>
-    /// The CSV that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."
-    /// </para>
-    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
-    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     public static string AsString(IEnumerable<IEnumerable<object?>?> data,
                                   IFormatProvider? formatProvider = null,
-                                  string? format = null)
+                                  string? format = null,
+                                  char delimiter = ',')
     {
         using var writer = new StringWriter();
-        WriteIntl(data, writer, formatProvider, format);
+        WriteIntl(data, writer, formatProvider, format, delimiter);
 
         return writer.ToString();
     }
@@ -577,15 +567,11 @@ public static class Csv
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <remarks>
-    /// <para>Creates a new CSV file. If the target file already exists, it is 
-    /// truncated and overwritten.
-    /// </para>
-    /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."
+    /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
     /// </para>
     /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
@@ -597,15 +583,18 @@ public static class Csv
     /// <paramref name="filePath"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a 
     /// valid file path.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static void Save(IEnumerable<IEnumerable<object?>?> data,
                             string filePath,
                             IFormatProvider? formatProvider = null,
                             string? format = null,
-                            Encoding? textEncoding = null)
+                            Encoding? textEncoding = null,
+                            char delimiter = ',')
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        WriteIntl(data, streamWriter, formatProvider, format);
+        WriteIntl(data, streamWriter, formatProvider, format, delimiter);
     }
 
     /// <summary>
@@ -619,8 +608,8 @@ public static class Csv
     /// <para>
     /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
     /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
-    /// in the CSV file, or <c>null</c> to save
-    /// the whole <see cref="DataTable"/> with its current column order. 
+    /// in the CSV file, or <c>null</c> to save the whole <see cref="DataTable"/> with its current column 
+    /// order. 
     /// </para>
     /// <para>
     /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
@@ -646,15 +635,11 @@ public static class Csv
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <remarks>
-    /// <para>Creates a new CSV file. If the target file already exists, it is 
-    /// truncated and overwritten.
-    /// </para>
-    /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor
-    /// of <see cref="CsvWriter"/> directly.
+    /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
     /// </para>
     /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
@@ -673,16 +658,19 @@ public static class Csv
     /// in <paramref name="dataTable"/>.
     /// </para>
     /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static void Save(DataTable dataTable,
                             string filePath,
                             IEnumerable<string>? columnNames = null,
                             IFormatProvider? formatProvider = null,
                             string? format = null,
-                            Encoding? textEncoding = null)
+                            Encoding? textEncoding = null,
+                            char delimiter = ',')
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        WriteIntl(dataTable, streamWriter, columnNames, formatProvider, format);
+        WriteIntl(dataTable, streamWriter, columnNames, formatProvider, format, delimiter);
     }
 
     /// <summary>
@@ -719,17 +707,12 @@ public static class Csv
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <remarks>
-    /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."
-    /// </para>
-    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
-    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
@@ -738,15 +721,18 @@ public static class Csv
     /// <paramref name="columnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
     /// in <paramref name="dataTable"/>.
     /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static void Write(DataTable dataTable,
                              TextWriter textWriter,
                              IEnumerable<string>? columnNames = null,
                              IFormatProvider? formatProvider = null,
-                             string? format = null)
+                             string? format = null, 
+                             char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
-        WriteIntl(dataTable, textWriter, columnNames, formatProvider, format);
+        WriteIntl(dataTable, textWriter, columnNames, formatProvider, format, delimiter);
     }
 
     /// <summary>
@@ -771,36 +757,35 @@ public static class Csv
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <remarks>
-    /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."
-    /// </para>
-    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
-    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or <paramref name="textWriter"/> 
     /// is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static void Write(IEnumerable<IEnumerable<object?>?> data,
                              TextWriter textWriter,
                              IFormatProvider? formatProvider = null,
-                             string? format = null)
+                             string? format = null,
+                             char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
-        WriteIntl(data, textWriter, formatProvider, format);
+        WriteIntl(data, textWriter, formatProvider, format, delimiter);
     }
 
     private static void WriteIntl(DataTable dataTable,
                                   TextWriter textWriter,
-                                  IEnumerable<string?>? columnNames = null,
-                                  IFormatProvider? formatProvider = null,
-                                  string? format = null)
+                                  IEnumerable<string?>? columnNames,
+                                  IFormatProvider? formatProvider,
+                                  string? format,
+                                  char delimiter)
     {
         _ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
 
@@ -810,7 +795,8 @@ public static class Csv
                                  .Cast<DataColumn>()
                                  .Select(x => x.ColumnName);
 
-        using CsvWriter csvWriter = new(textWriter, columnNames);
+        // DataColumn.ColumnName is not case-sensitive
+        using CsvWriter csvWriter = new(textWriter, columnNames, caseSensitive: false, delimiter: delimiter);
         CsvRecord record = csvWriter.Record;
 
         for (int i = 0; i < dataTable.Rows.Count; i++)
@@ -828,13 +814,14 @@ public static class Csv
     private static void WriteIntl(IEnumerable<IEnumerable<object?>?> data,
                                   TextWriter textWriter,
                                   IFormatProvider? formatProvider,
-                                  string? format)
+                                  string? format,
+                                  char delimiter)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 
         int maxLen = data.Max(static x => x?.Count() ?? 0);
 
-        using var csvWriter = new CsvWriter(textWriter, maxLen);
+        using var csvWriter = new CsvWriter(textWriter, maxLen, delimiter);
 
         formatProvider ??= CultureInfo.InvariantCulture;
         CsvRecord record = csvWriter.Record;

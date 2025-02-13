@@ -47,15 +47,11 @@ public static class DataTableExtension
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <remarks>
-    /// <para>Creates a new CSV file. If the target file already exists, it is 
-    /// truncated and overwritten.
-    /// </para>
-    /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter. This complies 
-    /// with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."
+    /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
     /// </para>
     /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
@@ -74,6 +70,8 @@ public static class DataTableExtension
     /// in <paramref name="dataTable"/>.
     /// </para>
     /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteCsv(this DataTable dataTable,
@@ -81,8 +79,9 @@ public static class DataTableExtension
                                 IEnumerable<string>? columnNames = null,
                                 IFormatProvider? formatProvider = null,
                                 string? format = null,
-                                Encoding? textEncoding = null)
-        => Csv.Save(dataTable, filePath, columnNames, formatProvider, format, textEncoding);
+                                Encoding? textEncoding = null,
+                                char delimiter = ',')
+        => Csv.Save(dataTable, filePath, columnNames, formatProvider, format, textEncoding, delimiter);
 
     /// <summary>
     /// Writes the contents of the <see cref="DataTable"/> as CSV.
@@ -118,17 +117,12 @@ public static class DataTableExtension
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
     /// <remarks>
-    /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter. This complies 
-    /// with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."
-    /// </para>
-    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
-    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
@@ -137,12 +131,15 @@ public static class DataTableExtension
     /// <paramref name="columnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
     /// in <paramref name="dataTable"/>.
     /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteCsv(this DataTable dataTable,
                                 TextWriter textWriter,
                                 IEnumerable<string>? columnNames = null,
                                 IFormatProvider? formatProvider = null,
-                                string? format = null)
-        => Csv.Write(dataTable, textWriter, columnNames, formatProvider, format);
+                                string? format = null,
+                                char delimiter = ',')
+        => Csv.Write(dataTable, textWriter, columnNames, formatProvider, format, delimiter);
 }

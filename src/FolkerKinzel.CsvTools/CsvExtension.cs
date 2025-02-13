@@ -30,6 +30,8 @@ public static class CsvExtension
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the
+    /// default value.</param>
     /// 
     /// <returns>A CSV-<see cref="string"/> containing the contents of 
     /// <paramref name="data"/>.</returns>
@@ -51,11 +53,14 @@ public static class CsvExtension
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the 
+    /// double quotes <c>"</c> or a line break character ('\r' or '\n').</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string ToCsv(this IEnumerable<IEnumerable<object?>?> data,
                                IFormatProvider? formatProvider = null,
-                               string? format = null)
-        => Csv.AsString(data, formatProvider, format);
+                               string? format = null,
+                               char delimiter = ',')
+        => Csv.AsString(data, formatProvider, format, delimiter);
 
     /// <summary>
     /// Saves the contents of <paramref name="data"/> as a CSV file.
@@ -81,6 +86,8 @@ public static class CsvExtension
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for 
     /// <see cref="Encoding.UTF8" />.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change 
+    /// the default value.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is 
@@ -110,14 +117,17 @@ public static class CsvExtension
     /// is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid file path.
     /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the 
+    /// double quotes <c>"</c> or a line break character ('\r' or '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SaveCsv(this IEnumerable<IEnumerable<object?>?> data,
                                string filePath,
                                IFormatProvider? formatProvider = null,
                                string? format = null,
-                               Encoding? textEncoding = null)
-        => Csv.Save(data, filePath, formatProvider, format, textEncoding);
+                               Encoding? textEncoding = null,
+                               char delimiter = ',')
+        => Csv.Save(data, filePath, formatProvider, format, textEncoding, delimiter);
 
     /// <summary>
     /// Writes the contents of <paramref name="data"/> as CSV.
@@ -141,6 +151,8 @@ public static class CsvExtension
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the
+    /// default value.</param>
     /// 
     /// <remarks>
     /// <para>
@@ -156,11 +168,14 @@ public static class CsvExtension
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
     /// <paramref name="textWriter"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the 
+    /// double quotes <c>"</c> or a line break character ('\r' or '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteCsv(this IEnumerable<IEnumerable<object?>?> data,
                                 TextWriter textWriter,
                                 IFormatProvider? formatProvider = null,
-                                string? format = null)
-        => Csv.Write(data, textWriter, formatProvider, format);
+                                string? format = null,
+                                char delimiter = ',')
+        => Csv.Write(data, textWriter, formatProvider, format, delimiter);
 }
