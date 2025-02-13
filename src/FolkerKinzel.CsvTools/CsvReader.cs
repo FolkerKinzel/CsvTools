@@ -44,7 +44,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <param name="textEncoding">The <see cref="Encoding"/> to use, or <c>null</c> for 
     /// <see cref="Encoding.UTF8"/>.</param>
     /// <exception cref="ArgumentNullException"><paramref name="filePath"/> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"><paramref name="filePath"/> is not a valid file path.</exception>
+    /// <exception cref="ArgumentException"><paramref name="filePath"/> is not a valid file path.
+    /// </exception>
     /// <exception cref="IOException">I/O error.</exception>
     internal CsvReader(string filePath,
                        CsvAnalyzerResult analyzerResult,
@@ -57,12 +58,12 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
-    /// otherwise <c>false</c>.</param>
+    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, otherwise 
+    /// <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
-    /// <param name="textEncoding">The text encoding to be used to read the CSV file
-    /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
+    /// <param name="textEncoding">The text encoding to be used to read the CSV file or <c>null</c> for 
+    /// <see cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>
     /// <note type="tip">
@@ -71,10 +72,10 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
-    /// file path.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
-    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid file path.
+    /// </exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double 
+    /// quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public CsvReader(string filePath,
                      bool isHeaderPresent = true,
@@ -91,10 +92,9 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     }
 
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
-    /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
-    /// read.</param>
-    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
-    /// otherwise <c>false</c>.</param>
+    /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is read.</param>
+    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, otherwise 
+    /// <c>false</c>.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// 
@@ -143,11 +143,10 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     public IEnumerator<CsvRecord> GetEnumerator() => this;
 
     /// <inheritdoc/>
-    /// <exception cref="ObjectDisposedException">The CSV file was already
-    /// closed.</exception>
+    /// <exception cref="ObjectDisposedException">The CSV file was already closed.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends
-    /// on the <see cref="CsvOpts" /> value, specified in the constructor.</exception>
+    /// <exception cref="CsvFormatException">Invalid CSV file. The interpretation depends on the 
+    /// <see cref="CsvOpts" /> value, specified in the constructor.</exception>
     bool IEnumerator.MoveNext()
     {
         CsvRecord? record = Read();
@@ -170,7 +169,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <summary>Closes the CSV file.</summary>
     public void Dispose()
     {
-        if(!_disposed)
+        if (!_disposed)
         {
             _disposed = true;
             _reader.Dispose();
@@ -260,14 +259,20 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
             {
                 if (row.IsEmpty)
                 {
-                    if(Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
-{
-                        throw new CsvFormatException(Res.EmptyLine, CsvError.EmptyLine, reader.LineNumber, 0);
+                    if (Options.HasFlag(CsvOpts.ThrowOnEmptyLines))
+                    {
+                        throw new CsvFormatException(Res.EmptyLine,
+                                                     CsvError.EmptyLine,
+                                                     reader.LineNumber,
+                                                     0);
                     }
                 }
                 else if (Options.HasFlag(CsvOpts.ThrowOnTooFewFields))
                 {
-                    throw new CsvFormatException(Res.TooFewFields, CsvError.TooFewFields, reader.LineNumber, reader.LineIndex);
+                    throw new CsvFormatException(Res.TooFewFields,
+                                                 CsvError.TooFewFields,
+                                                 reader.LineNumber,
+                                                 reader.LineIndex);
                 }
 
                 if (Options.HasFlag(CsvOpts.DisableCaching))

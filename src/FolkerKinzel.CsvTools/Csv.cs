@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Data;
+﻿using System.Data;
 using System.Globalization;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
@@ -9,8 +8,7 @@ namespace FolkerKinzel.CsvTools;
 /// <summary>Static class that provides methods for reading, writing and analyzing CSV data.</summary>
 /// <example>
 /// <note type="note">
-/// In the following code examples - for easier readability - exception handling
-/// has been omitted.
+/// In the following code examples - for easier readability - exception handling has been omitted.
 /// </note>
 /// <para>
 /// Reading and writing a CSV file:
@@ -52,8 +50,9 @@ public static class Csv
     /// determined automatically.
     /// </para>
     /// <para>
-    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
-    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), 
+    /// HASH (<c>'#'</c>, %x23), TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized 
+    /// automatically.
     /// </para>
     /// </remarks>
     /// 
@@ -67,10 +66,11 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    public static (CsvAnalyzerResult, Encoding) AnalyzeFile(string filePath,
-                                                            Header header = Header.ProbablyPresent,
-                                                            Encoding? textEncoding = null,
-                                                            int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
+    public static (CsvAnalyzerResult, Encoding)
+        AnalyzeFile(string filePath,
+                    Header header = Header.ProbablyPresent,
+                    Encoding? textEncoding = null,
+                    int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         if (textEncoding is null)
         {
@@ -88,10 +88,11 @@ public static class Csv
     /// <param name="csv">The CSV-<see cref="string"/> to analyze.</param>
     /// 
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
-    /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The minimum 
-    /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines than 
-    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
-    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)</param>
+    /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The 
+    /// minimum value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If <paramref name="csv"/> has 
+    /// fewer lines than <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)
+    /// </param>
     /// 
     /// <returns>The results of the analysis.</returns>
     /// 
@@ -126,8 +127,8 @@ public static class Csv
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="textEncoding">
-    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the <see cref="Encoding"/>
-    /// automatically from the byte order mark (BOM).
+    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the 
+    /// <see cref="Encoding"/> automatically from the byte order mark (BOM).
     /// </param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
@@ -181,7 +182,8 @@ public static class Csv
                                              int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount,
                                              bool disableCaching = false)
     {
-        (CsvAnalyzerResult result, Encoding encoding) = AnalyzeFile(filePath, header, textEncoding, analyzedLines);
+        (CsvAnalyzerResult result, Encoding encoding) =
+            AnalyzeFile(filePath, header, textEncoding, analyzedLines);
         result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
         return result.IsHeaderPresent
             ? new(filePath, isHeaderPresent: true, result.Options, result.Delimiter, encoding)
@@ -250,8 +252,8 @@ public static class Csv
                                      char delimiter = ',')
         => new(reader, isHeaderPresent, options, delimiter);
 
-    /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> instance
-    /// to write data to it.</summary>
+    /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> 
+    /// instance to write data to it.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnNames">
     /// <para>
@@ -265,10 +267,10 @@ public static class Csv
     /// names.
     /// </para>
     /// <para>
-    /// The collection will be copied. If the collection contains <c>null</c> values, empty strings or white space, these 
-    /// are replaced by automatically generated column names. Column names cannot appear twice. By default the 
-    /// comparison is case-sensitive but it will be reset to a case-insensitive comparison if the column names are 
-    /// also unique when treated case-insensitive.
+    /// The collection will be copied. If the collection contains <c>null</c> values, empty strings or white
+    /// space, these are replaced by automatically generated column names. Column names cannot appear twice. 
+    /// By default the comparison is case-sensitive but it will be reset to a case-insensitive comparison if 
+    /// the column names are also unique when treated case-insensitive.
     /// </para>
     /// </param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
@@ -281,7 +283,8 @@ public static class Csv
     /// If the target file already exists, it is truncated and overwritten.
     /// </para>
     /// <para>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
+    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
+    /// delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly.
     /// </para>
@@ -316,8 +319,8 @@ public static class Csv
         => new(filePath, columnNames, CaseSensitive(columnNames), textEncoding);
 
     /// <summary>
-    /// Initializes a new <see cref="CsvWriter" /> object with the column names
-    /// for the header row to be written.</summary>
+    /// Initializes a new <see cref="CsvWriter" /> object with the column names for the header row 
+    /// to be written.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// 
     /// <param name="columnNames">
@@ -328,14 +331,14 @@ public static class Csv
     /// The collection determines the order in which the columns appear in the CSV and their index in 
     /// <see cref="CsvRecord"/>. The 
     /// <see cref="CsvWriter.Record"/>
-    /// of the <see cref="CsvWriter"/> instance, which the method returns, can be accessed with this column 
-    /// names.
+    /// of the <see cref="CsvWriter"/> instance, which the method returns, can be accessed with this 
+    /// column names.
     /// </para>
     /// <para>
-    /// The collection will be copied. If the collection contains <c>null</c> values, empty strings or white space, these 
-    /// are replaced by automatically generated column names. Column names cannot appear twice. By default the 
-    /// comparison is case-sensitive but it will be reset to a case-insensitive comparison if the column names are 
-    /// also unique when treated case-insensitive.
+    /// The collection will be copied. If the collection contains <c>null</c> values, empty strings or 
+    /// white space, these are replaced by automatically generated column names. Column names cannot appear
+    /// twice. By default the comparison is case-sensitive but it will be reset to a case-insensitive 
+    /// comparison if the column names are also unique when treated case-insensitive.
     /// </para>
     /// </param>
     /// 
@@ -343,7 +346,8 @@ public static class Csv
     /// <paramref name="writer"/>.</returns>
     /// 
     /// <remarks>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
+    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
+    /// delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly.
     /// </remarks>
@@ -371,7 +375,8 @@ public static class Csv
     /// truncated and overwritten.
     /// </para>
     /// <para>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
+    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
+    /// delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly.
     /// </para>
@@ -398,7 +403,8 @@ public static class Csv
     /// 
     /// <remarks>
     /// <para>
-    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field delimiter.
+    /// This method initializes a <see cref="CsvWriter"/> instance that uses the comma ',' (%x2C) as field 
+    /// delimiter.
     /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly.
     /// </para>
@@ -444,16 +450,16 @@ public static class Csv
         return [.. reader];
     }
 
-    /// <summary>Analyzes the specified CSV-<see cref="string"/>
-    /// first and then parses it content.
+    /// <summary>Analyzes the specified CSV-<see cref="string"/> first and then parses it content.
     /// </summary>
     /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// 
     /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The minimum 
-    /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines than 
-    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
-    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)</param>
+    /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines 
+    /// than <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)
+    /// </param>
     /// 
     /// <returns>An array of <see cref="CsvRecord"/> objects containing the parsed data.</returns>
     /// 
@@ -471,8 +477,7 @@ public static class Csv
     /// 
     /// <example>
     /// <note type="note">
-    /// In the following code examples - for easier readability - exception handling
-    /// has been omitted.
+    /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvStringExample.cs" />
@@ -480,8 +485,7 @@ public static class Csv
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// <para><paramref name="header"/> is not a defined value of 
-    /// the <see cref="Header"/> enum.</para>
+    /// <para><paramref name="header"/> is not a defined value of  the <see cref="Header"/> enum.</para>
     /// <para> - or -</para>
     /// <para><paramref name="header"/> is a combination of <see cref="Header"/> values.</para>
     /// </exception>
@@ -518,7 +522,8 @@ public static class Csv
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
@@ -565,7 +570,8 @@ public static class Csv
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
@@ -604,8 +610,8 @@ public static class Csv
 
     /// <summary>
     /// Writes the content of a <see cref="DataTable"/> as a CSV file. The 
-    /// <see cref="DataColumn.ColumnName"/>s of <paramref name="dataTable"/> form 
-    /// the header row of this file. 
+    /// <see cref="DataColumn.ColumnName"/>s of <paramref name="dataTable"/> form  the header row 
+    /// of this file. 
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
@@ -633,7 +639,8 @@ public static class Csv
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
@@ -646,8 +653,8 @@ public static class Csv
     /// </para>
     /// <para>
     /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
-    /// <see cref="CsvWriter"/> directly."
+    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor
+    /// of <see cref="CsvWriter"/> directly.
     /// </para>
     /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
@@ -707,7 +714,8 @@ public static class Csv
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
@@ -758,7 +766,8 @@ public static class Csv
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
@@ -775,8 +784,8 @@ public static class Csv
     /// </para>
     /// </remarks>
     /// 
-    /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
-    /// <paramref name="textWriter"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"> <paramref name="data" /> or <paramref name="textWriter"/> 
+    /// is <c>null</c>.</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static void Write(IEnumerable<IEnumerable<object?>?> data,
                              TextWriter textWriter,
@@ -804,7 +813,7 @@ public static class Csv
         using CsvWriter csvWriter = new(textWriter, columnNames);
         CsvRecord record = csvWriter.Record;
 
-        for (int i = 0; i < dataTable.Rows.Count; i++) 
+        for (int i = 0; i < dataTable.Rows.Count; i++)
         {
             DataRow row = dataTable.Rows[i];
 
@@ -838,13 +847,13 @@ public static class Csv
     }
 
     /// <summary>
-    /// Determines whether <paramref name="columnNames"/> should be treated 
-    /// case-sensitive.
+    /// Determines whether <paramref name="columnNames"/> should be treated case-sensitive.
     /// </summary>
     /// <param name="columnNames">The column names to examine.</param>
     /// <returns><c>true</c> if the <paramref name="columnNames"/> should be treated 
     /// case-sensitive, otherwise <c>false</c>.</returns>
-    /// <exception cref="ArgumentNullException"><paramref name="columnNames"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="columnNames"/> is <c>null</c>.
+    /// </exception>
     private static bool CaseSensitive(IReadOnlyCollection<string?> columnNames)
     {
         _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));

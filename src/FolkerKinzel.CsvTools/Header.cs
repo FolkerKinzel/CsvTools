@@ -18,8 +18,9 @@ public enum Header
     ProbablyPresent = 0,
 
     /// <summary>
-    /// Indicates that the first row of the CSV file should be treated as a header row. (This information can 
-    /// be taken from the <c>header</c> parameter of the <c>text/csv</c> MIME type.)
+    /// Indicates that the first row of the CSV file should be treated as a header row. 
+    /// (This information can be taken from the <c>header</c> parameter of the 
+    /// <c>text/csv</c> MIME type.)
     /// </summary>
     Present = 1
 }

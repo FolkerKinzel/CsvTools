@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 
@@ -15,11 +14,12 @@ public static class CsvAnalyzer
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="textEncoding">
     /// <para>
-    /// The text encoding to be used to read the CSV file, or <c>null</c> for <see cref="Encoding.UTF8" />.
+    /// The text encoding to be used to read the CSV file, or <c>null</c> for 
+    /// <see cref="Encoding.UTF8" />.
     /// </para>
     /// <note type="tip">
-    /// Use <see cref="Csv.AnalyzeFile(string, Header, Encoding?, int)"/> to also automatically determine 
-    /// the <see cref="Encoding"/>.
+    /// Use <see cref="Csv.AnalyzeFile(string, Header, Encoding?, int)"/> to also automatically 
+    /// determine the <see cref="Encoding"/>.
     /// </note>
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
@@ -38,8 +38,9 @@ public static class CsvAnalyzer
     /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
-    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
-    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), 
+    /// HASH (<c>'#'</c>, %x23), TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized 
+    /// automatically.
     /// </para>
     /// </remarks>
     /// 
@@ -83,10 +84,11 @@ public static class CsvAnalyzer
     /// <param name="csv">The CSV-<see cref="string"/> to analyze.</param>
     /// 
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
-    /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The minimum 
-    /// value is <see cref="AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines than 
-    /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
-    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any case.)</param>
+    /// <param name="analyzedLines">Maximum number of lines to analyze in <paramref name="csv"/>. The 
+    /// minimum value is <see cref="AnalyzedLinesMinCount" />. If <paramref name="csv"/> has fewer lines
+    /// than <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
+    /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire <see cref="string"/> in any 
+    /// case.)</param>
     /// 
     /// <returns>The results of the analysis.</returns>
     /// 
@@ -97,8 +99,9 @@ public static class CsvAnalyzer
     /// the accuracy of which increases with the number of lines analyzed.
     /// </para>
     /// <para>
-    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
-    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), 
+    /// HASH (<c>'#'</c>, %x23), TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized 
+    /// automatically.
     /// </para>
     /// </remarks>
     /// 

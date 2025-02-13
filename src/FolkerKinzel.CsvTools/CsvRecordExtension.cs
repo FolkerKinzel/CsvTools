@@ -16,18 +16,18 @@ public static class CsvRecordExtension
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord"/> instance to convert.</param>
     /// <returns>A copy of the data stored in <paramref name="record"/> as 
-    /// <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see>.</returns>
+    /// <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see>.
+    /// </returns>
     /// <remarks>
-    /// The method copies the data stored in <paramref name="record"/> into a newly created <see cref="Dictionary{TKey,
-    /// TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see> instance, 
-    /// which uses the same <see cref="StringComparer" /> for key comparison that was used to create 
-    /// <paramref name="record"/>.
+    /// The method copies the data stored in <paramref name="record"/> into a newly created 
+    /// <see cref="Dictionary{TKey, TValue}">Dictionary&lt;string, ReadOnlyMemory&lt;char&gt;&gt;</see> 
+    /// instance, which uses the same <see cref="StringComparer" /> for key comparison that was used to 
+    /// create <paramref name="record"/>.
     /// </remarks>
     /// 
     /// <example>
     /// <note type="note">
-    /// In the following code examples - for easier readability - exception handling
-    /// has been omitted.
+    /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// <para>
     /// Saving a CSV file:
@@ -67,7 +67,8 @@ public static class CsvRecordExtension
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
@@ -132,8 +133,7 @@ public static class CsvRecordExtension
         }
     }
 
-    /// <summary> Fills <paramref name="record"/> with the items of a 
-    /// <see cref="string"/> collection.
+    /// <summary> Fills <paramref name="record"/> with the items of a <see cref="string"/> collection.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>.
@@ -185,8 +185,7 @@ public static class CsvRecordExtension
         }
     }
 
-    /// <summary> Fills <paramref name="record"/> with the content of a 
-    /// <see cref="string"/> array.
+    /// <summary> Fills <paramref name="record"/> with the content of a <see cref="string"/> array.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>.
@@ -209,8 +208,8 @@ public static class CsvRecordExtension
     public static void FillWith(this CsvRecord record, string?[]? data, bool resetExcess = true)
         => FillWith(record, data.AsSpan(), resetExcess);
 
-    /// <summary> Fills <paramref name="record"/> with the items
-    /// of a read-only span of <see cref="string"/>s.
+    /// <summary> Fills <paramref name="record"/> with the items of a read-only span of 
+    /// <see cref="string"/>s.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
     /// <param name="data">The <see cref="string"/>s with which to fill <paramref name="record"/>. 
@@ -260,8 +259,7 @@ public static class CsvRecordExtension
         }
     }
 
-    /// <summary> Fills <paramref name="record"/> with the items
-    /// of a read-only span of
+    /// <summary> Fills <paramref name="record"/> with the items of a read-only span of
     /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;Char&gt;</see> values.
     /// </summary>
     /// <param name="record">The <see cref="CsvRecord" /> instance to be filled.</param>
@@ -282,16 +280,15 @@ public static class CsvRecordExtension
     /// 
     /// <example>
     /// <note type="note">
-    /// In the following code examples - for easier readability - exception handling
-    /// has been omitted.
+    /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains
-    /// more items than <paramref name="record"/>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="data" /> contains more items than 
+    /// <paramref name="record"/>.</exception>
     public static void FillWith(this CsvRecord record,
                                 ReadOnlySpan<ReadOnlyMemory<char>> data,
                                 bool resetExcess = true)

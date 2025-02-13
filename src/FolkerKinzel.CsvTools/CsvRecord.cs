@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Globalization;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
@@ -10,17 +8,15 @@ namespace FolkerKinzel.CsvTools;
 
 /// <summary>Represents a record (row) of the CSV file.</summary>
 /// <remarks>
-/// The column order corresponds
-/// to that of the CSV file and all columns are of the 
+/// The column order corresponds to that of the CSV file and all columns are of the 
 /// <see cref="ReadOnlyMemory{T}">ReadOnlyMemory&lt;char&gt;</see>&#160;<see cref="Type"/>. 
-/// The content of the columns can be accessed with the column name or with its 
-/// zero-based column index.
+/// The content of the columns can be accessed with the column name or with its zero-based 
+/// column index.
 /// </remarks>
 /// 
 /// <example>
 /// <note type="note">
-/// In the following code examples - for easier readability - exception handling
-/// has been omitted.
+/// In the following code examples - for easier readability - exception handling has been omitted.
 /// </note>
 /// <para>
 /// Saving a CSV file:
@@ -31,11 +27,10 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
 {
     private readonly Dictionary<string, int> _lookupDictionary;
 
-    /// <summary> Initialisiert aus <paramref name="source" />, das als Vorlage dient,
-    /// ein neues <see cref="CsvRecord" />-Objekt, das die unveränderlichen Teile der
-    /// Vorlage referenziert bzw. kopiert. (Ctor, der von <see cref="CsvReader" /> verwendet
-    /// wird.) </summary>
-    /// <param name="source"> <see cref="CsvRecord" />-Objekt, das als Vorlage dient.</param>
+    /// <summary> Initializes a new <see cref="CsvRecord" /> object from <paramref name="source" />, 
+    /// which serves as a template, that references the immutable parts of the template. 
+    /// (Ctor used by <see cref="CsvReader" />.) </summary>
+    /// <param name="source"> The <see cref="CsvRecord" /> object that serves as a template.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal CsvRecord(CsvRecord source)
     {
@@ -46,11 +41,12 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         Values = new ReadOnlyMemory<char>[Count];
     }
 
-    /// <summary> Initialisiert ein <see cref="CsvRecord" />-Objekt mit Standardnamen
-    /// für die Spalten ("Column1", "Column2" etc). (Geeignet für CSV-Dateien ohne Kopfzeile.)
+    /// <summary> Initializes a new <see cref="CsvRecord" /> object with default names for the columns 
+    /// ("Column1", "Column2" etc.). (Used for CSV files without header.)
     /// </summary>
-    /// <param name="columnsCount">Anzahl der Spalten.</param>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.</exception>
+    /// <param name="columnsCount">The number of columns.</param>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="columnsCount"/> is negative.
+    /// </exception>
     internal CsvRecord(int columnsCount)
     {
         _ArgumentOutOfRangeException.ThrowIfNegative(columnsCount, nameof(columnsCount));
@@ -73,23 +69,21 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         Values = new ReadOnlyMemory<char>[columnsCount];
     }
 
-    /// <summary> Initialisiert ein neues <see cref="CsvRecord" />-Objekt mit Spaltennamen.
-    /// (Geeignet für CSV-Dateien mit Kopfzeile.) </summary>
-    /// <param name="keys">Spaltennamen. Die Auflistung kann <c>null</c>-Werte, leere Strings oder Whitespace enthalten:
-    /// Diese werden dann durch Standardnamen ersetzt.</param>
-    /// <param name="caseSensitive">Wenn <c>true</c>, werden die Spaltennamen case-sensitiv
-    /// behandelt.</param>
-    /// <param name="initArr">Wenn <c>false</c>, wird das Datenarray nicht initialisiert.
-    /// Das Objekt taugt dann nur als Kopierschablone für weitere <see cref="CsvRecord"
-    /// />-Objekte. (Wird von <see cref="CsvReader" /> verwendet.</param>
-    /// <param name="throwException">Wenn <c>true</c>, wird eine <see cref="ArgumentException"
-    /// /> geworfen, wenn <paramref name="keys" /> 2 identische Spaltennamen enthält.
-    /// Beim Lesen einer Datei sollte der Parameter auf <c>false</c> gesetzt werden,
-    /// um die Spaltennamen automatisch so abzuwandeln, dass sie eindeutig sind.</param>
+    /// <summary> Initializes a new <see cref="CsvRecord" /> object with column names. (Used for CSV 
+    /// files with header row.)</summary>
+    /// <param name="keys">Column names. The array can contain <c>null</c> values, empty strings or
+    /// whitespace: these are then replaced by standard names.</param>
+    /// <param name="caseSensitive">If <c>true</c>, the column names are treated case-sensitively.</param>
+    /// <param name="initArr">If <c>false</c>, the data array is not initialized. The newly created 
+    /// <see cref="CsvRecord"/> object is then only suitable as a copy template for further 
+    /// <see cref="CsvRecord" /> objects. (Used by <see cref="CsvReader" />.)</param>
+    /// <param name="throwException">If <c>true</c>, an <see cref="ArgumentException" /> is thrown if 
+    /// <paramref name="keys" /> contains two identical column names. When reading a file, the parameter 
+    /// should be set to <c>false</c> to automatically modify the column names to be unique.</param>
     /// 
-    /// <exception cref="ArgumentException">Ein Spaltenname war bereits im Dictionary
-    /// enthalten. Die Exception wird nur dann geworfen, wenn <paramref name="throwException"
-    /// /><c>true</c> ist.</exception>
+    /// <exception cref="ArgumentException">A column name was already contained in the 
+    /// <see cref="_lookupDictionary"/>. The exception is only thrown if <paramref name="throwException" />
+    /// is <c>true</c>.</exception>
     internal CsvRecord(string?[] keys, bool caseSensitive, bool initArr, bool throwException)
     {
         Debug.Assert(keys != null);
@@ -158,13 +152,13 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
         }
     }
 
-    /// <summary>Gets or sets the value of the column in the CSV file that is at the
+    /// <summary>Gets or sets the value of the column in the CSV file that is at the 
     /// specified index.</summary>
-    /// <param name="index">The zero-based index of the column in the CSV file whose
+    /// <param name="index">The zero-based index of the column in the CSV file whose 
     /// value is being obtained or set.</param>
     /// <returns>The item at the specified index.</returns>
-    /// <exception cref="IndexOutOfRangeException"> <paramref name="index" /> is
-    /// less than Zero or greater or equal than <see cref="Count" />.</exception>
+    /// <exception cref="IndexOutOfRangeException"> <paramref name="index" /> is less 
+    /// than Zero or greater or equal than <see cref="Count" />.</exception>
     public ReadOnlyMemory<char> this[int index]
     {
         get => Values[index];
@@ -177,7 +171,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <returns>The value associated with the specified column name.</returns>
     /// <exception cref="KeyNotFoundException">The column name specified with <paramref
     /// name="columnName" /> does not exist.</exception>
-    /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.
+    /// </exception>
     public ReadOnlyMemory<char> this[string columnName]
     {
         get => Values[_lookupDictionary[columnName]];
@@ -202,8 +197,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <summary> Gets the array of data stored in <see cref="CsvRecord" />.</summary>
     public ReadOnlyMemory<char>[] Values { get; }
 
-    /// <summary> A hash code that is identical for all <see cref="CsvRecord" /> objects belonging to 
-    /// the same read or write operation. </summary>
+    /// <summary> A hash code that is identical for all <see cref="CsvRecord" /> objects belonging
+    /// to the same read or write operation. </summary>
     /// <remarks>Used by the package FolkerKinzel.CsvTools.TypeConversions.</remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int Identifier { get; }
@@ -214,8 +209,7 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     public IEqualityComparer<string> Comparer => _lookupDictionary.Comparer;
 
     /// <summary>
-    /// Gets a value indicating whether the <see cref="ColumnNames"/> are treated 
-    /// case-sensitive.
+    /// Gets a value indicating whether the <see cref="ColumnNames"/> are treated case-sensitive.
     /// </summary>
     /// <value><c>true</c> if the <see cref="ColumnNames"/> are treated case-sensitive, 
     /// <c>false</c> if not.</value>
@@ -229,11 +223,13 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <param name="columnName">The column name in the CSV file whose value is being
     /// obtained.</param>
     /// <param name="value">After the method has finished, the argument contains the
-    /// value associated with the column name specified with <paramref name="columnName"
-    /// /> if the key was found, or <c>null</c> otherwise. The parameter is passed uninitialized.</param>
+    /// value associated with the column name specified with <paramref name="columnName" /> if 
+    /// the key was found, or <c>null</c> otherwise. The parameter is passed uninitialized.
+    /// </param>
     /// <returns> <c>true</c> if it contains a column name with the value of <paramref
     /// name="columnName" />, otherwise <c>false</c>.</returns>
-    /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.
+    /// </exception>
     public bool TryGetValue(string columnName, out ReadOnlyMemory<char> value)
     {
         if (columnName is null)
@@ -258,7 +254,8 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     /// <param name="columnName">The column name of the CSV file column to search for.</param>
     /// <returns> <c>true</c> if <paramref name="columnName" /> is one of the column
     /// names of the <see cref="CsvRecord" /> object.</returns>
-    /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentNullException"> <paramref name="columnName" /> is <c>null</c>.
+    /// </exception>
     public bool ContainsColumn(string columnName)
     {
         return columnName is null
@@ -266,14 +263,14 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
             : _lookupDictionary.ContainsKey(columnName);
     }
 
-    /// <summary>Returns the zero-based index of the column in the CSV file, that has
-    /// the specified column name, or -1, if <paramref name="columnName" /> is not one
-    /// of the column names in the CSV file.</summary>
-    /// <param name="columnName">The column name to be checked for the index of <see
-    /// cref="CsvRecord" /> that it refers to.</param>
-    /// <returns>The zero-based index of the column in the CSV file with the column
-    /// name <paramref name="columnName" /> or -1, if <paramref name="columnName" />
-    /// is not one of the column names in the CSV file.</returns>
+    /// <summary>Returns the zero-based index of the column in the CSV file, that has the specified
+    /// column name, or -1, if <paramref name="columnName" /> is not one of the column names in the 
+    /// CSV file.</summary>
+    /// <param name="columnName">The column name to be checked for the index of <see cref="CsvRecord" />
+    /// that it refers to.</param>
+    /// <returns>The zero-based index of the column in the CSV file with the column name 
+    /// <paramref name="columnName" /> or -1, if <paramref name="columnName" /> is not one of the column 
+    /// names in the CSV file.</returns>
     public int IndexOfColumn(string? columnName)
         => columnName != null && _lookupDictionary.TryGetValue(columnName, out int i) ? i : -1;
 
@@ -281,12 +278,13 @@ public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <summary>Returns an <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string,
-    /// string?&gt;&gt;</see> to iterate over the <see cref="CsvRecord" /> object. The
-    /// <see cref="KeyValuePair{TKey, TValue}">KeyValuePair&lt;string, string?&gt;</see>
+    /// ReadOnlyMemory&lt;Char&gt;&gt;&gt;</see> to iterate over the <see cref="CsvRecord" /> object. The
+    /// <see cref="KeyValuePair{TKey, TValue}">KeyValuePair&lt;string,
+    /// ReadOnlyMemory&lt;Char&gt;&gt;</see>
     /// contains the column name as <see cref="KeyValuePair{TKey, TValue}.Key" /> and
     /// the content of the column as <see cref="KeyValuePair{TKey, TValue}.Value" />.</summary>
     /// <returns>An <see cref="IEnumerator{T}">IEnumerator&lt;KeyValuePair&lt;string,
-    /// string?&gt;&gt;</see>.</returns>
+    /// ReadOnlyMemory&lt;Char&gt;&gt;&gt;</see>.</returns>
     public IEnumerator<KeyValuePair<string, ReadOnlyMemory<char>>> GetEnumerator()
     {
         for (int i = 0; i < Count; i++)

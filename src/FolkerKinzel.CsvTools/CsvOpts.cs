@@ -53,8 +53,8 @@ public enum CsvOpts
     /// if a data row contains fewer fields than the first data row.
     /// <note>
     /// Other software may not mark empty fields at the end of the line with field separators. 
-    /// However, the absence of fields at the end of the line can also be an indication of a data
-    /// error.
+    /// However, the absence of fields at the end of the line can also be an indication of a 
+    /// data error.
     /// </note>
     /// </summary>
     ThrowOnTooFewFields = 1 << 1,
@@ -76,8 +76,8 @@ public enum CsvOpts
     /// An unclosed masked field at the end of a CSV file is a data error. However, by 
     /// removing the flag, 
     /// <see cref="CsvReader" /> will be able to parse the rest of the file. The 
-    /// <see cref="ThrowOnTooFewFields"/> flag should also be unset in this case because a CSV
-    /// row could be truncated by the unclosed masked field.
+    /// <see cref="ThrowOnTooFewFields"/> flag should also be unset in this case because a 
+    /// CSV row could be truncated by the unclosed masked field.
     /// </note>
     /// </summary>
     ThrowOnTruncatedFiles = 1 << 3,
@@ -99,9 +99,9 @@ public enum CsvOpts
     /// separators and newline characters are always tolerated.)</summary>
     Default = ThrowOnTooMuchFields | ThrowOnTooFewFields | ThrowOnEmptyLines | ThrowOnTruncatedFiles,
 
-    /// <summary>Set this flag to gain performance benefits when parsing large files. Note that if this flag is 
-    /// set, the results of the read operation cannot be cached: the <see cref="CsvRecord" /> instance 
-    /// provided by <see cref="CsvReader"/> will then always be the same. Only the values ​​it contains will 
-    /// update with each iteration.</summary>
+    /// <summary>Set this flag to gain performance benefits when parsing large files. Note that if 
+    /// this flag is set, the results of the read operation cannot be cached: the <see cref="CsvRecord" />
+    /// instance provided by <see cref="CsvReader"/> will then always be the same. Only the values ​​it 
+    /// contains will update with each iteration.</summary>
     DisableCaching = 1 << 6
 }

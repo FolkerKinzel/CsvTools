@@ -11,17 +11,17 @@ public static class DataTableExtension
 {
     /// <summary>
     /// Writes the content of the <see cref="DataTable"/> as a CSV file. The 
-    /// <see cref="DataColumn.ColumnName"/>s of <paramref name="dataTable"/> form 
-    /// the header row of this file. 
+    /// <see cref="DataColumn.ColumnName"/>s of <paramref name="dataTable"/> form the header row 
+    /// of this file. 
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
     /// <param name="columnNames">
     /// <para>
     /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
-    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
-    /// in the CSV file, or <c>null</c> to save
-    /// the whole <see cref="DataTable"/> with its current column order. 
+    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their 
+    /// order in the CSV file, or <c>null</c> to save the whole <see cref="DataTable"/> with its
+    /// current column order. 
     /// </para>
     /// <para>
     /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
@@ -40,7 +40,8 @@ public static class DataTableExtension
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
@@ -52,8 +53,8 @@ public static class DataTableExtension
     /// truncated and overwritten.
     /// </para>
     /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter. This complies 
+    /// with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly."
     /// </para>
     /// <para>
@@ -112,15 +113,16 @@ public static class DataTableExtension
     /// </para>
     /// </param>
     /// <param name="format">
-    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.</para>
+    /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
+    /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
     /// 
     /// <remarks>
     /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the constructor of
+    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter. This complies 
+    /// with the RFC 4180 standard. If another delimiter is required, use the constructor of
     /// <see cref="CsvWriter"/> directly."
     /// </para>
     /// <para>

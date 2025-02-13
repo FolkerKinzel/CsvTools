@@ -14,8 +14,7 @@ namespace FolkerKinzel.CsvTools;
 /// 
 /// <example>
 /// <note type="note">
-/// In the following code examples - for easier readability - exception handling
-/// has been omitted.
+/// In the following code examples - for easier readability - exception handling has been omitted.
 /// </note>
 /// <para>
 /// Saving a CSV file:
@@ -34,8 +33,8 @@ public sealed class CsvWriter : IDisposable
     private readonly char _delimiter;
     private readonly TextWriter _writer;
 
-    /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
-    /// for the header row to be written.</summary>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names for the header 
+    /// row to be written.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// 
     /// <param name="columnNames">
@@ -44,20 +43,20 @@ public sealed class CsvWriter : IDisposable
     /// </para>
     /// <para>
     /// The collection determines the order in which the columns appear in the CSV file and their index in 
-    /// <see cref="CsvRecord"/>. The <see cref="CsvRecord"/> instance, which the <see cref="Record"/> property
-    /// of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
+    /// <see cref="CsvRecord"/>. The <see cref="CsvRecord"/> instance, which the <see cref="Record"/> 
+    /// property of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
     /// names.
     /// </para>
     /// </param>
-    ///<param name="caseSensitive">If <c>true</c>, column names that differ only in 
-    /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
+    ///<param name="caseSensitive">If <c>true</c>, column names that differ only in upper and lower case are 
+    ///also accepted, otherwise <c>false</c>.</param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to 
-    /// change the default value.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// 
-    /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. 
-    /// If the file already exists, it is truncated and overwritten.</remarks>
+    /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. If the file
+    /// already exists, it is truncated and overwritten.</remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
@@ -72,8 +71,8 @@ public sealed class CsvWriter : IDisposable
     /// can be chosen whether the comparison is case-sensitive or not.
     /// </para>
     /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
-    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
+    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public CsvWriter(string filePath,
                      IEnumerable<string?> columnNames,
@@ -99,21 +98,20 @@ public sealed class CsvWriter : IDisposable
         _reservedChars = CreateReservedChars(delimiter);
     }
 
-    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file
-    /// without a header row.</summary>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file without a header row.
+    /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to 
-    /// change the default value.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default 
+    /// value.</param>
     /// 
-    /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. 
-    /// If the file already exists, it is truncated and overwritten.</remarks>
+    /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. If the file 
+    /// already exists, it is truncated and overwritten.</remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
-    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
-    /// file path.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid file path.</exception>
     /// <exception cref="ArgumentOutOfRangeException">
     /// <para>
     /// <paramref name="columnsCount"/> is negative
@@ -144,8 +142,8 @@ public sealed class CsvWriter : IDisposable
         _reservedChars = CreateReservedChars(delimiter);
     }
 
-    /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names
-    /// for the header row to be written.</summary>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names for the header
+    /// row to be written.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// 
     /// <param name="columnNames">
@@ -154,23 +152,23 @@ public sealed class CsvWriter : IDisposable
     /// </para>
     /// <para>
     /// The collection determines the order in which the columns appear in the CSV and their index in 
-    /// <see cref="CsvRecord"/>. The <see cref="CsvRecord"/> instance, which the <see cref="Record"/> property
-    /// of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
+    /// <see cref="CsvRecord"/>. The <see cref="CsvRecord"/> instance, which the <see cref="Record"/> 
+    /// property of the newly initialized <see cref="CsvWriter"/> gets, can be accessed with this column 
     /// names.
     /// </para>
     /// </param>
-    /// <param name="caseSensitive">If <c>true</c>, column names that differ only in 
-    /// upper and lower case are also accepted, otherwise <c>false</c>.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to 
-    /// change the default value.</param>
+    /// <param name="caseSensitive">If <c>true</c>, column names that differ only in upper and lower 
+    /// case are also accepted, otherwise <c>false</c>.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default 
+    /// value.</param>
     /// 
-    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref
-    /// name="columnNames" /> is <c>null.</c></exception>
-    /// <exception cref="ArgumentException">A column name in <paramref name="columnNames"
-    /// /> occurs twice. With <paramref name="caseSensitive"/> can be chosen whether 
-    /// the comparison is case-sensitive or not.</exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
-    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
+    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or 
+    /// <paramref name="columnNames" /> is <c>null.</c></exception>
+    /// <exception cref="ArgumentException">A column name in <paramref name="columnNames" /> occurs twice.
+    /// With <paramref name="caseSensitive"/> can be chosen whether the comparison is case-sensitive or 
+    /// not.</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double 
+    /// quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     public CsvWriter(TextWriter writer,
                      IEnumerable<string?> columnNames,
                      bool caseSensitive = false,
@@ -193,23 +191,23 @@ public sealed class CsvWriter : IDisposable
         _reservedChars = CreateReservedChars(delimiter);
     }
 
-    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data
-    /// without a header row.</summary>
+    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data without a 
+    /// header row.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to 
-    /// change the default value.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the 
+    /// default value.</param>
     /// 
-    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
+    /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c>
+    /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     /// <para>
     /// <paramref name="columnsCount"/> is negative
     /// </para>
     /// <para>- or -</para>
     /// <para>
-    /// <paramref name="delimiter"/> is either 
-    /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').
-    /// </para>
+    /// <paramref name="delimiter"/> is either the double quotes <c>"</c> or a line break character 
+    /// ('\r' or  '\n'). </para>
     /// </exception>
     public CsvWriter(TextWriter writer,
                      int columnsCount,
@@ -231,13 +229,13 @@ public sealed class CsvWriter : IDisposable
     /// <summary>Gets the record to be written to the file. </summary>
     /// <remarks>
     /// <para>
-    /// Fill the <see cref="CsvRecord" /> object with data and then call
-    /// the <see cref="WriteRecord" /> method to write this data to the file. 
+    /// Fill the <see cref="CsvRecord" /> object with data and then call the <see cref="WriteRecord" />
+    /// method to write this data to the file. 
     /// </para>
     /// <para>
-    /// The <see cref="CsvRecord" /> is the same with each call. <see cref="CsvWriter" /> 
-    /// clears the contents of this <see cref="CsvRecord" /> instance after each call of 
-    /// the <see cref="WriteRecord" /> method.
+    /// The <see cref="CsvRecord" /> is the same with each call. <see cref="CsvWriter" /> clears the 
+    /// contents of this <see cref="CsvRecord" /> instance after each call of the 
+    /// <see cref="WriteRecord" /> method.
     /// </para>
     /// </remarks>
     public CsvRecord Record { get; }
@@ -248,13 +246,12 @@ public sealed class CsvWriter : IDisposable
     public char Delimiter => _delimiter;
 
     /// <summary> Writes the contents of <see cref="Record" /> to the CSV file and then sets all
-    /// fields of <see cref="Record" /> to <see cref="ReadOnlyMemory{T}.Empty" />. (The first 
-    /// time it is called, the header row may also be written.)</summary>
+    /// fields of <see cref="Record" /> to <see cref="ReadOnlyMemory{T}.Empty" />. (The first time it 
+    /// is called, the header row may also be written.)</summary>
     /// 
     /// <example>
     /// <note type="note">
-    /// In the following code examples - for easier readability - exception handling
-    /// has been omitted.
+    /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
@@ -265,8 +262,8 @@ public sealed class CsvWriter : IDisposable
     public void WriteRecord()
     {
         int recordLength = Record.Count;
-        
-        if(recordLength == 0)
+
+        if (recordLength == 0)
         {
             return;
         }
