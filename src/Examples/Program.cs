@@ -6,8 +6,10 @@ internal static class Program
     private static void Main()
     {
         //LinqOnCsvExample.LinqOnCsv("LinqTest.csv");
-        DisableCachingExample.DisableCachingSideEffects("DisableCachingTest.csv");
+        //DisableCachingExample.DisableCachingSideEffects("DisableCachingTest.csv");
         //CsvAnalyzerExample.ParseForeignCsvFile("foreign.csv");
         //CsvStringExample.ConvertingCsvStrings();
+
+        DataTableExample.SerializingDataTablesAsCsv("DataTableExample.csv");
     }
 }
