@@ -38,11 +38,6 @@ public static class CsvExtension
     /// 
     /// <remarks>
     /// <para>
-    /// The CSV that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use
-    /// the constructor of <see cref="CsvWriter"/> directly."
-    /// </para>
-    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is
     /// used if the item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
@@ -94,13 +89,12 @@ public static class CsvExtension
     /// truncated and overwritten.
     /// </para>
     /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the 
-    /// constructor of <see cref="CsvWriter"/> directly.
-    /// </para>
-    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used
     /// if the item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -156,13 +150,12 @@ public static class CsvExtension
     /// 
     /// <remarks>
     /// <para>
-    /// The CSV file that this method creates uses the comma ',' (%x2C) as field delimiter.
-    /// This complies with the RFC 4180 standard. If another delimiter is required, use the 
-    /// constructor of <see cref="CsvWriter"/> directly.
-    /// </para>
-    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used 
     /// if the item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 

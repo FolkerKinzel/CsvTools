@@ -252,4 +252,12 @@ public class CsvAnalyzerTests
         Assert.IsTrue(res.IsHeaderPresent);
         Assert.AreEqual(5, res.ColumnNames.Count);
     }
+
+    [TestMethod]
+    public void GetExcelParametersTest1()
+    {
+        (IFormatProvider FormatProvider, char Delimiter) res = CsvAnalyzer.GetExcelParameters();
+
+        
+    }
 }

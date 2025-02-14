@@ -57,6 +57,10 @@ public static class DataTableExtension
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
@@ -121,8 +125,14 @@ public static class DataTableExtension
     /// value.</param>
     /// 
     /// <remarks>
+    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 

@@ -33,7 +33,7 @@ public static class Csv
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
-    /// <returns>The results of the analysis.</returns>
+    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the results of the analysis.</returns>
     /// 
     /// <remarks>
     /// <para>
@@ -66,7 +66,7 @@ public static class Csv
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
-    public static (CsvAnalyzerResult, Encoding)
+    public static (CsvAnalyzerResult AnalyzerResult, Encoding Encoding)
         AnalyzeFile(string filePath,
                     Header header = Header.ProbablyPresent,
                     Encoding? textEncoding = null,
@@ -281,7 +281,13 @@ public static class Csv
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
     /// <remarks>
+    /// <para>
     /// If the target file already exists, it is truncated and overwritten.
+    /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <example>
@@ -343,6 +349,11 @@ public static class Csv
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
     /// <paramref name="writer"/>.</returns>
     /// 
+    /// <remarks>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </remarks>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref name="columnNames" />
     /// is <c>null.</c></exception>
     /// <exception cref="ArgumentException">A column name in <paramref name="columnNames" /> occurs twice. 
@@ -367,7 +378,12 @@ public static class Csv
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
     /// <remarks>
-    /// Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
+    /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
+    /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -396,6 +412,11 @@ public static class Csv
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
     /// the <see cref="TextWriter"/>.</returns>
+    /// 
+    /// <remarks>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
     /// <exception cref="ArgumentOutOfRangeException">
@@ -577,6 +598,10 @@ public static class Csv
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or 
@@ -645,6 +670,10 @@ public static class Csv
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
@@ -711,8 +740,14 @@ public static class Csv
     /// value.</param>
     /// 
     /// <remarks>
+    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
@@ -761,8 +796,14 @@ public static class Csv
     /// value.</param>
     /// 
     /// <remarks>
+    /// <para>
     /// For serialization <see cref="IFormattable.ToString(string, IFormatProvider)"/> is used if the
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
+    /// </para>
+    /// <para>
+    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or <paramref name="textWriter"/> 
