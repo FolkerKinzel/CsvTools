@@ -227,6 +227,17 @@ public class CsvAnalyzerTests
     }
 
     [TestMethod]
+    public void DelimiterTest8()
+    {
+        const string csv = """
+                  17;4;48,7
+                  1;2;1.003,5
+                  """;
+        CsvAnalyzerResult result = Csv.AnalyzeString(csv);
+        Assert.AreEqual(';', result.Delimiter);
+    }
+
+    [TestMethod]
     public void AnalyzeStringTest()
     {
         const string csv = """

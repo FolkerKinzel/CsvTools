@@ -131,11 +131,11 @@ internal ref struct DelimiterAnalyzer()
 
         RowSeparatorFinds firstRow = findsList[0];
 
-        if (firstRow.Comma > 0)
+        if (firstRow.Tab > 0)
         {
-            if (!findsList.Skip(1).Any(f => f.Comma != firstRow.Comma))
+            if (!findsList.Skip(1).Any(f => f.Tab != firstRow.Tab))
             {
-                return ',';
+                return '\t';
             }
         }
 
@@ -155,11 +155,16 @@ internal ref struct DelimiterAnalyzer()
             }
         }
 
-        if (firstRow.Tab > 0)
+        // Check the Comma not first because Comma is a decimal separator in
+        // some cultures
+        if (firstRow.Comma > 0
+            && firstRow.Semicolon == 0
+            && firstRow.Tab == 0
+            && firstRow.Hash == 0)
         {
-            if (!findsList.Skip(1).Any(f => f.Tab != firstRow.Tab))
+            if (!findsList.Skip(1).Any(f => f.Comma != firstRow.Comma))
             {
-                return '\t';
+                return ',';
             }
         }
 
@@ -176,9 +181,9 @@ internal ref struct DelimiterAnalyzer()
             }
         }
 
-        if (firstRow.Comma != 0)
+        if (firstRow.Tab > 0)
         {
-            return ',';
+            return '\t';
         }
 
         if (firstRow.Semicolon > 0)
@@ -186,16 +191,20 @@ internal ref struct DelimiterAnalyzer()
             return ';';
         }
 
+        // not first checked because Comma could be a decimal separator
+        // in a CSV file without header
+        if (firstRow.Comma != 0)
+        {
+            return ',';
+        }
+
+        // last because could be part of a header name
         if (firstRow.Hash > 0)
         {
             return '#';
         }
 
-        if (firstRow.Tab > 0)
-        {
-            return '\t';
-        }
-
+        // fallback
         return ' ';
     }
 }
