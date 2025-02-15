@@ -50,8 +50,7 @@ public sealed class CsvWriter : IDisposable
     /// </param>
     ///<param name="caseSensitive">If <c>true</c>, column names that differ only in upper and lower case are 
     ///also accepted, otherwise <c>false</c>.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// 
@@ -102,8 +101,7 @@ public sealed class CsvWriter : IDisposable
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default 
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// 
@@ -159,8 +157,7 @@ public sealed class CsvWriter : IDisposable
     /// </param>
     /// <param name="caseSensitive">If <c>true</c>, column names that differ only in upper and lower 
     /// case are also accepted, otherwise <c>false</c>.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default 
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or 
     /// <paramref name="columnNames" /> is <c>null.</c></exception>
@@ -195,8 +192,7 @@ public sealed class CsvWriter : IDisposable
     /// header row.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the 
-    /// default value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c>
     /// </exception>

@@ -28,8 +28,7 @@ public static class DataTableExtension
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -104,8 +103,7 @@ public static class DataTableExtension
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.

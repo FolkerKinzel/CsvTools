@@ -13,8 +13,7 @@ public static class CsvExtension
     /// <see cref="string"/> (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the
-    /// default value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -62,8 +61,7 @@ public static class CsvExtension
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change 
-    /// the default value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -128,8 +126,7 @@ public static class CsvExtension
     /// </summary>
     /// <param name="data">The data to write.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the
-    /// default value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.

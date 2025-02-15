@@ -303,8 +303,7 @@ public static class Csv
     /// the column names are also unique when treated case-insensitive.
     /// </para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// 
@@ -373,8 +372,7 @@ public static class Csv
     /// comparison if the column names are also unique when treated case-insensitive.
     /// </para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
     /// <paramref name="writer"/>.</returns>
@@ -400,8 +398,7 @@ public static class Csv
     /// instance to write data to it.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
     /// 
@@ -437,8 +434,7 @@ public static class Csv
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// <param name="columnsCount">Number of columns in the CSV.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <returns>A <see cref="CsvWriter" /> instance that allows you to write CSV data with
     /// the <see cref="TextWriter"/>.</returns>
@@ -553,8 +549,7 @@ public static class Csv
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -599,8 +594,7 @@ public static class Csv
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -671,8 +665,7 @@ public static class Csv
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -749,8 +742,7 @@ public static class Csv
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -805,8 +797,7 @@ public static class Csv
     /// </summary>
     /// <param name="data">The data to write.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
