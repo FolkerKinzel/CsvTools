@@ -26,7 +26,7 @@ public class DataTableExtensionTests
         dataTable.Rows[2].Delete();
 
         using var stringWriter = new StringWriter();
-        dataTable.WriteCsv(stringWriter, null, formatProvider: CultureInfo.InvariantCulture);
+        dataTable.WriteCsv(stringWriter, formatProvider: CultureInfo.InvariantCulture, csvColumnNames: null);
 
         string csv = stringWriter.ToString();
         Assert.AreEqual("""
@@ -51,7 +51,7 @@ public class DataTableExtensionTests
         dataTable.Rows[2].Delete();
 
         using var stringWriter = new StringWriter();
-        dataTable.WriteCsv(stringWriter, null, formatProvider: CultureInfo.InvariantCulture);
+        dataTable.WriteCsv(stringWriter, formatProvider: CultureInfo.InvariantCulture, csvColumnNames: null);
 
         string csv = stringWriter.ToString();
         Assert.AreEqual("""
@@ -76,7 +76,7 @@ public class DataTableExtensionTests
         dataTable.Rows[2].Delete();
 
         using var stringWriter = new StringWriter();
-        dataTable.WriteCsv(stringWriter, null, formatProvider: null);
+        dataTable.WriteCsv(stringWriter, formatProvider: null, csvColumnNames: null);
 
         string csv = stringWriter.ToString();
         Assert.AreEqual("""

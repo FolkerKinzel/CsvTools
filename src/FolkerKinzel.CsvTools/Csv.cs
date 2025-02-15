@@ -156,6 +156,8 @@ public static class Csv
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
+    /// <param name="disableCaching"><c>true</c> to set the <see cref="CsvOpts.DisableCaching"/> flag, 
+    /// otherwise <c>false</c>.</param>
     /// <param name="textEncoding">
     /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the 
     /// <see cref="Encoding"/> automatically from the byte order mark (BOM).
@@ -164,8 +166,6 @@ public static class Csv
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
-    /// <param name="disableCaching"><c>true</c> to set the <see cref="CsvOpts.DisableCaching"/> flag, 
-    /// otherwise <c>false</c>.</param>
     /// 
     /// <returns>A <see cref="CsvReader"/> that allows to iterate the data.</returns>
     /// 
@@ -208,23 +208,23 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     public static CsvReader OpenReadAnalyzed(string filePath,
                                              Header header = Header.ProbablyPresent,
+                                             bool disableCaching = false,
                                              Encoding? textEncoding = null,
-                                             int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount,
-                                             bool disableCaching = false)
+                                             int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         (CsvAnalyzerResult result, Encoding encoding) =
             AnalyzeFile(filePath, header, textEncoding, analyzedLines);
         result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
         return result.IsHeaderPresent
-            ? new(filePath, isHeaderPresent: true, delimiter: result.Delimiter, options: result.Options, textEncoding: encoding)
+            ? new(filePath, result.Delimiter, true, result.Options, encoding)
             : new(filePath, result, encoding);
     }
 
     /// <summary>Opens the CSV file referenced with <paramref name="filePath"/> for reading.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
-    /// <param name="delimiter">The field separator character.</param>
     /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
@@ -234,7 +234,7 @@ public static class Csv
     /// <remarks>
     /// <note type="tip">
     /// The optimal parameters can be determined automatically with <see cref="CsvAnalyzer"/> - or use
-    /// <see cref="OpenReadAnalyzed(string, Header, Encoding?, int, bool)"/>.
+    /// <see cref="OpenReadAnalyzed(string, Header, bool, Encoding?, int)"/>.
     /// </note>
     /// </remarks>
     /// 
@@ -256,18 +256,18 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
-                                     bool isHeaderPresent = true,
                                      char delimiter = ',',
+                                     bool isHeaderPresent = true,
                                      CsvOpts options = CsvOpts.Default,
                                      Encoding? textEncoding = null)
-        => new(filePath, isHeaderPresent, delimiter, options, textEncoding);
+        => new(filePath, delimiter, isHeaderPresent, options, textEncoding);
 
     /// <summary>Initializes a <see cref="CsvReader"/> instance to read CSV data.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
-    /// <param name="delimiter">The field separator character.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// 
     /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
@@ -277,10 +277,10 @@ public static class Csv
     /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(TextReader reader,
-                                     bool isHeaderPresent = true,
                                      char delimiter = ',',
+                                     bool isHeaderPresent = true,
                                      CsvOpts options = CsvOpts.Default)
-        => new(reader, isHeaderPresent, delimiter, options);
+        => new(reader, delimiter, isHeaderPresent, options);
 
     /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> 
     /// instance to write data to it.</summary>
@@ -457,9 +457,9 @@ public static class Csv
 
     /// <summary>Parses the specified CSV-<see cref="string"/> to make its content accessible.</summary>
     /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
-    /// <param name="delimiter">The field separator character.</param>
     /// <param name="options">Parsing options. (The flag <see cref="CsvOpts.DisableCaching"/>
     /// will be ignored.)</param>
     /// 
@@ -476,15 +476,15 @@ public static class Csv
     /// <exception cref="CsvFormatException">Invalid CSV. The interpretation depends
     /// on <paramref name="options"/>.</exception>
     public static CsvRecord[] Parse(string csv,
-                                    bool isHeaderPresent = true,
                                     char delimiter = ',',
+                                    bool isHeaderPresent = true,
                                     CsvOpts options = CsvOpts.Default)
     {
         _ArgumentNullException.ThrowIfNull(csv, nameof(csv));
 
         using var stringReader = new StringReader(csv);
         using var reader =
-            new CsvReader(stringReader, isHeaderPresent, delimiter, options.Unset(CsvOpts.DisableCaching));
+            new CsvReader(stringReader, delimiter, isHeaderPresent, options.Unset(CsvOpts.DisableCaching));
 
         return [.. reader];
     }
@@ -538,7 +538,7 @@ public static class Csv
 
         using var stringReader = new StringReader(csv);
         using CsvReader reader = result.IsHeaderPresent
-            ? new(stringReader, isHeaderPresent: true, delimiter: result.Delimiter, options: result.Options)
+            ? new(stringReader, delimiter: result.Delimiter, isHeaderPresent: true, options: result.Options)
             : new(stringReader, result);
 
         return [.. reader];
@@ -722,7 +722,7 @@ public static class Csv
                             string? format = null)
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        WriteIntl(dataTable, streamWriter, csvColumnNames, delimiter, formatProvider, format);
+        WriteIntl(dataTable, streamWriter, delimiter, formatProvider, csvColumnNames, format);
     }
 
     /// <summary>
@@ -730,18 +730,6 @@ public static class Csv
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> whose content is written.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
-    /// <param name="columnNames">
-    /// <para>
-    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
-    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
-    /// in the CSV file, or <c>null</c> to save
-    /// the whole <see cref="DataTable"/> with its current column order. 
-    /// </para>
-    /// <para>
-    /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
-    /// <paramref name="dataTable"/>.
-    /// </para>
-    /// </param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
@@ -752,6 +740,18 @@ public static class Csv
     /// </para>
     /// <para>
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="csvColumnNames">
+    /// <para>
+    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
+    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
+    /// in the CSV file, or <c>null</c> to save
+    /// the whole <see cref="DataTable"/> with its current column order. 
+    /// </para>
+    /// <para>
+    /// Each item in this collection MUST be a <see cref="DataColumn.ColumnName"/> in 
+    /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
     /// <param name="format">
@@ -775,7 +775,7 @@ public static class Csv
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
     /// <paramref name="textWriter"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
-    /// <paramref name="columnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
+    /// <paramref name="csvColumnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
     /// in <paramref name="dataTable"/>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
@@ -783,13 +783,13 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     public static void Write(DataTable dataTable,
                              TextWriter textWriter,
-                             IEnumerable<string>? columnNames = null,
                              char delimiter = ',',
                              IFormatProvider? formatProvider = null,
+                             IEnumerable<string>? csvColumnNames = null,
                              string? format = null)
     {
         _ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
-        WriteIntl(dataTable, textWriter, columnNames, delimiter, formatProvider, format);
+        WriteIntl(dataTable, textWriter, delimiter, formatProvider, csvColumnNames, format);
     }
 
     /// <summary>
@@ -844,21 +844,21 @@ public static class Csv
 
     private static void WriteIntl(DataTable dataTable,
                                   TextWriter textWriter,
-                                  IEnumerable<string?>? columnNames,
                                   char delimiter,
                                   IFormatProvider? formatProvider,
+                                  IEnumerable<string?>? csvColumnNames,
                                   string? format)
     {
         _ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
 
         formatProvider ??= CultureInfo.InvariantCulture;
 
-        columnNames ??= dataTable.Columns
+        csvColumnNames ??= dataTable.Columns
                                  .Cast<DataColumn>()
                                  .Select(x => x.ColumnName);
 
         // DataColumn.ColumnName is not case-sensitive
-        using CsvWriter csvWriter = new(textWriter, columnNames, caseSensitive: false, delimiter: delimiter);
+        using CsvWriter csvWriter = new(textWriter, csvColumnNames, caseSensitive: false, delimiter: delimiter);
         CsvRecord record = csvWriter.Record;
 
         for (int i = 0; i < dataTable.Rows.Count; i++)

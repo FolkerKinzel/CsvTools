@@ -42,7 +42,7 @@ public enum CsvOpts
     /// <para>
     /// Unset this flag only if the CSV file has a header and if you are not interested
     /// in the surplus fields. Alternatively use 
-    /// <see cref="Csv.OpenReadAnalyzed(string, Header, System.Text.Encoding?, int, bool)"/>
+    /// <see cref="Csv.OpenReadAnalyzed(string, Header, bool, System.Text.Encoding?, int)"/>
     /// with <see cref="int.MaxValue"/> for the number of rows to analyze.
     /// </para>
     /// </note>

@@ -62,6 +62,16 @@ public static class DataTableExtension
     /// </para>
     /// </remarks>
     /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling has been omitted.
+    /// </note>
+    /// <para>
+    /// Simple DataTable serialization with CSV:
+    /// </para>
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DataTableExample.cs" />
+    /// </example>
+    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
     /// <paramref name="filePath"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
@@ -91,18 +101,6 @@ public static class DataTableExtension
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> whose content is written.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
-    /// <param name="columnNames">
-    /// <para>
-    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
-    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
-    /// in the CSV file, or <c>null</c> to save
-    /// the whole <see cref="DataTable"/> with its current column order. 
-    /// </para>
-    /// <para>
-    /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
-    /// <paramref name="dataTable"/>.
-    /// </para>
-    /// </param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
@@ -113,6 +111,18 @@ public static class DataTableExtension
     /// </para>
     /// <para>
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
+    /// </para>
+    /// </param>
+    /// <param name="csvColumnNames">
+    /// <para>
+    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
+    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
+    /// in the CSV file, or <c>null</c> to save
+    /// the whole <see cref="DataTable"/> with its current column order. 
+    /// </para>
+    /// <para>
+    /// Each item in this collection MUST be a <see cref="DataColumn.ColumnName"/> in 
+    /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
     /// <param name="format">
@@ -136,7 +146,7 @@ public static class DataTableExtension
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
     /// <paramref name="textWriter"/> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException">
-    /// <paramref name="columnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
+    /// <paramref name="csvColumnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
     /// in <paramref name="dataTable"/>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
@@ -145,9 +155,9 @@ public static class DataTableExtension
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteCsv(this DataTable dataTable,
                                 TextWriter textWriter,
-                                IEnumerable<string>? columnNames = null,
                                 char delimiter = ',',
                                 IFormatProvider? formatProvider = null,
+                                IEnumerable<string>? csvColumnNames = null,
                                 string? format = null)
-        => Csv.Write(dataTable, textWriter, columnNames, delimiter, formatProvider, format);
+        => Csv.Write(dataTable, textWriter, delimiter, formatProvider, csvColumnNames, format);
 }

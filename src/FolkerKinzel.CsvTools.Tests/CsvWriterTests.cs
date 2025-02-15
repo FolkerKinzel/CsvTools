@@ -279,7 +279,7 @@ public class CsvWriterTests
         //const string csv = "1234|4567|\"DemoString\" Some more demo string|";
 
         using var stringReader = new StringReader(stringWriter.ToString());
-        using var reader = new CsvReader(stringReader, isHeaderPresent: false, delimiter: '|');
+        using var reader = new CsvReader(stringReader, delimiter: '|', isHeaderPresent: false);
         CsvRecord record = reader.First();
     }
 }

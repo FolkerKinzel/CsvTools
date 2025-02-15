@@ -8,10 +8,10 @@
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <Version>2.0.0-beta.8</Version>
-    <FileVersion>2.0.0.228</FileVersion>
+    <Version>2.0.0-beta.9</Version>
+    <FileVersion>2.0.0.232</FileVersion>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0-beta.8</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0-beta.9</PackageReleaseNotes>
     <PackageTags>CSV</PackageTags>
     <Description>.NET library for reading and writing CSV files (RFC 4180)</Description>
     <Authors>Folker Kinzel</Authors>
