@@ -73,14 +73,14 @@ public static class CsvExtension
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
     /// </para>
     /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for 
+    /// <see cref="Encoding.UTF8" />.</param>
     /// <param name="format">
     /// <para>A format <see cref="string"/> to use for all items that implement 
     /// <see cref="IFormattable"/>.</para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for 
-    /// <see cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is 
@@ -92,7 +92,7 @@ public static class CsvExtension
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="Csv.GetExcelParameters"/>.
+    /// <see cref="Csv.GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -117,9 +117,9 @@ public static class CsvExtension
                                string filePath,
                                char delimiter = ',',
                                IFormatProvider? formatProvider = null,
-                               string? format = null,
-                               Encoding? textEncoding = null)
-        => Csv.Save(data, filePath, delimiter, formatProvider, format, textEncoding);
+                               Encoding? textEncoding = null,
+                               string? format = null)
+        => Csv.Save(data, filePath, delimiter, formatProvider, textEncoding, format);
 
     /// <summary>
     /// Writes the contents of <paramref name="data"/> as CSV.
@@ -152,7 +152,7 @@ public static class CsvExtension
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="Csv.GetExcelParameters"/>.
+    /// <see cref="Csv.GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 

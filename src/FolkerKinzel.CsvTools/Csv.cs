@@ -21,7 +21,7 @@ public static class Csv
     public const string NewLine = "\r\n";
 
     /// <summary>
-    /// Gets the appropriate parameters for exchanging CSV data with Excel.
+    /// Gets the appropriate arguments for exchanging CSV data with Excel.
     /// </summary>
     /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the delimiter character  
     /// and the <see cref="IFormatProvider"/> to use when exchanging CSV data with Excel.</returns>
@@ -42,7 +42,7 @@ public static class Csv
     /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DataTableExample.cs" />
     /// </example>
-    public static (char Delimiter, IFormatProvider FormatProvider) GetExcelParameters()
+    public static (char Delimiter, IFormatProvider FormatProvider) GetExcelArguments()
     {
         CultureInfo culture = CultureInfo.CurrentCulture;
 
@@ -315,7 +315,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// <see cref="GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -379,7 +379,7 @@ public static class Csv
     /// 
     /// <remarks>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// <see cref="GetExcelArguments"/>.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref name="columnNames" />
@@ -408,8 +408,8 @@ public static class Csv
     /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
+    /// <see cref="GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -440,8 +440,8 @@ public static class Csv
     /// the <see cref="TextWriter"/>.</returns>
     /// 
     /// <remarks>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
+    /// <see cref="GetExcelArguments"/>.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
@@ -606,14 +606,14 @@ public static class Csv
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
     /// </para>
     /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// <param name="format">
     /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
     /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
@@ -623,8 +623,8 @@ public static class Csv
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
+    /// <see cref="GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -639,8 +639,8 @@ public static class Csv
                             string filePath,
                             char delimiter = ',',
                             IFormatProvider? formatProvider = null,
-                            string? format = null,
-                            Encoding? textEncoding = null)
+                            Encoding? textEncoding = null,
+                            string? format = null)
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
         WriteIntl(data, streamWriter, delimiter, formatProvider, format);
@@ -653,18 +653,6 @@ public static class Csv
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
-    /// <param name="columnNames">
-    /// <para>
-    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
-    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
-    /// in the CSV file, or <c>null</c> to save the whole <see cref="DataTable"/> with its current column 
-    /// order. 
-    /// </para>
-    /// <para>
-    /// Each item in this collection must be a <see cref="DataColumn.ColumnName"/> in 
-    /// <paramref name="dataTable"/>.
-    /// </para>
-    /// </param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="formatProvider">
     /// <para>
@@ -677,14 +665,26 @@ public static class Csv
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
     /// </para>
     /// </param>
+    /// <param name="csvColumnNames">
+    /// <para>
+    /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
+    /// that allows to select the <see cref="DataColumn"/>s to export and to determine their order
+    /// in the CSV file, or <c>null</c> to save the whole <see cref="DataTable"/> using its current
+    /// column order. 
+    /// </para>
+    /// <para>
+    /// Each item in this collection MUST be a <see cref="DataColumn.ColumnName"/> in 
+    /// <paramref name="dataTable"/>.
+    /// </para>
+    /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// <param name="format">
     /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
     /// </para>
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
@@ -694,8 +694,8 @@ public static class Csv
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
+    /// <see cref="GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -706,7 +706,7 @@ public static class Csv
     /// valid file path.</para>
     /// <para>- or -</para>
     /// <para>
-    /// <paramref name="columnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
+    /// <paramref name="csvColumnNames"/> contains an item that is not a <see cref="DataColumn.ColumnName"/>
     /// in <paramref name="dataTable"/>.
     /// </para>
     /// </exception>
@@ -715,14 +715,14 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     public static void Save(DataTable dataTable,
                             string filePath,
-                            IEnumerable<string>? columnNames = null,
                             char delimiter = ',',
                             IFormatProvider? formatProvider = null,
-                            string? format = null,
-                            Encoding? textEncoding = null)
+                            IEnumerable<string>? csvColumnNames = null,
+                            Encoding? textEncoding = null,
+                            string? format = null)
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        WriteIntl(dataTable, streamWriter, columnNames, delimiter, formatProvider, format);
+        WriteIntl(dataTable, streamWriter, csvColumnNames, delimiter, formatProvider, format);
     }
 
     /// <summary>
@@ -767,8 +767,8 @@ public static class Csv
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
+    /// <see cref="GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -822,8 +822,8 @@ public static class Csv
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="GetExcelParameters"/>.
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
+    /// <see cref="GetExcelArguments"/>.
     /// </para>
     /// </remarks>
     /// 

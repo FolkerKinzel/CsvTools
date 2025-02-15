@@ -9,7 +9,7 @@
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
     <Version>2.0.0-beta.8</Version>
-    <FileVersion>2.0.0.226</FileVersion>
+    <FileVersion>2.0.0.228</FileVersion>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.0-beta.8</PackageReleaseNotes>
     <PackageTags>CSV</PackageTags>

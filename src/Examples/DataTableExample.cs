@@ -20,7 +20,7 @@ internal static class DataTableExample
         _ = table.Rows.Add(3, "Rachel", 25.8m, new DateOnly(2011, 8, 27));
 
         string[] csvColumns = ["name", "last_purchase", "sales"];
-        table.WriteCsv(filePath, csvColumns);
+        table.WriteCsv(filePath, csvColumnNames: csvColumns);
 
         Console.WriteLine(File.ReadAllText(filePath));
 
@@ -30,8 +30,8 @@ internal static class DataTableExample
         Console.WriteLine("Current culture: {0}", CultureInfo.CurrentCulture);
         Console.WriteLine();
         
-        (char delimiter, IFormatProvider formatProvider) = Csv.GetExcelParameters();
-        table.WriteCsv(filePath, csvColumns, delimiter, formatProvider);
+        (char delimiter, IFormatProvider formatProvider) = Csv.GetExcelArguments();
+        table.WriteCsv(filePath, delimiter, formatProvider, csvColumns);
 
         Console.WriteLine(File.ReadAllText(filePath));
     }

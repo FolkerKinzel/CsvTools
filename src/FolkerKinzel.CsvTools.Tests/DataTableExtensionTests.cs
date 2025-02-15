@@ -101,7 +101,7 @@ public class DataTableExtensionTests
         dataTable.Rows[2].Delete();
 
         string filePath = Path.Combine(TestContext.TestRunResultsDirectory!, "WriteCsvTest4.csv");
-        dataTable.WriteCsv(filePath, ["B"], formatProvider: CultureInfo.InvariantCulture);
+        dataTable.WriteCsv(filePath, formatProvider: CultureInfo.InvariantCulture, csvColumnNames: ["B"]);
 
         string csv = File.ReadAllText(filePath);
         Assert.AreEqual("""
