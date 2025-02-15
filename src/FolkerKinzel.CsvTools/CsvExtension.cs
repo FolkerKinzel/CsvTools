@@ -94,7 +94,7 @@ public static class CsvExtension
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="Csv.GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -155,7 +155,7 @@ public static class CsvExtension
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="Csv.GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 

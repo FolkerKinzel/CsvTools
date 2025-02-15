@@ -155,26 +155,4 @@ public static class CsvAnalyzer
             throw new ArgumentOutOfRangeException(nameof(header));
         }
     }
-
-    /// <summary>
-    /// Gets the appropriate parameters for exchanging CSV data with Excel.
-    /// </summary>
-    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the <see cref="IFormatProvider"/> 
-    /// and the delimiter character to use when exchanging CSV data with Excel.</returns>
-    /// <remarks>
-    /// <para>Excel formats numbers and dates depending on the culture in its "Regional Settings".
-    /// Also the CSV field delimiter character used by Excel depends on these settings.</para>
-    /// <para>
-    /// This method uses <see cref="CultureInfo.CurrentCulture"/> to retrieve the required 
-    /// informations. <see cref="CultureInfo.CurrentCulture"/> and the "Regional Settings"
-    /// in Excel have to match to exchange CSV data successfully.
-    /// </para>
-    /// </remarks>
-    public static (IFormatProvider FormatProvider, char Delimiter) GetExcelParameters()
-    {
-        CultureInfo culture = CultureInfo.CurrentCulture;
-
-        string listSeparator = culture.TextInfo.ListSeparator;
-        return (culture, listSeparator.Length != 1 ? ',' : listSeparator[0]);
-    }
 }

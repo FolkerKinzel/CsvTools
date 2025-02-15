@@ -20,6 +20,36 @@ public static class Csv
     /// <summary>The newline characters to use in CSV files ("\r\n").</summary>
     public const string NewLine = "\r\n";
 
+    /// <summary>
+    /// Gets the appropriate parameters for exchanging CSV data with Excel.
+    /// </summary>
+    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the <see cref="IFormatProvider"/> 
+    /// and the delimiter character to use when exchanging CSV data with Excel.</returns>
+    /// <remarks>
+    /// <para>Excel formats numbers and dates depending on the culture in its "Regional Settings".
+    /// Also the CSV field delimiter character used by Excel depends on these settings.</para>
+    /// <para>
+    /// This method uses <see cref="CultureInfo.CurrentCulture"/> to retrieve the required 
+    /// informations. <see cref="CultureInfo.CurrentCulture"/> and the "Regional Settings"
+    /// in Excel have to match to exchange CSV data successfully.
+    /// </para>
+    /// </remarks>
+    /// 
+    /// <example>
+    /// <note type="note">
+    /// In the following code examples - for easier readability - exception handling has been omitted.
+    /// </note>
+    /// 
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DataTableExample.cs" />
+    /// </example>
+    public static (IFormatProvider FormatProvider, char Delimiter) GetExcelParameters()
+    {
+        CultureInfo culture = CultureInfo.CurrentCulture;
+
+        string listSeparator = culture.TextInfo.ListSeparator;
+        return (culture, listSeparator.Length != 1 ? ',' : listSeparator[0]);
+    }
+
     /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
@@ -286,7 +316,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -351,7 +381,7 @@ public static class Csv
     /// 
     /// <remarks>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> or <paramref name="columnNames" />
@@ -382,7 +412,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -415,7 +445,7 @@ public static class Csv
     /// 
     /// <remarks>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="writer" /> is <c>null.</c></exception>
@@ -600,7 +630,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -672,7 +702,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -746,7 +776,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 
@@ -802,7 +832,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
-    /// <see cref="CsvAnalyzer.GetExcelParameters"/>.
+    /// <see cref="GetExcelParameters"/>.
     /// </para>
     /// </remarks>
     /// 

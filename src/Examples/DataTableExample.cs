@@ -30,8 +30,8 @@ internal static class DataTableExample
         Console.WriteLine("Current culture: {0}", CultureInfo.CurrentCulture);
         Console.WriteLine();
         
-        (IFormatProvider FormatProvider, char Delimiter) = CsvAnalyzer.GetExcelParameters();
-        table.WriteCsv(filePath, csvColumns, FormatProvider, delimiter: Delimiter);
+        (IFormatProvider formatProvider, char delimiter) = Csv.GetExcelParameters();
+        table.WriteCsv(filePath, csvColumns, formatProvider, delimiter: delimiter);
 
         Console.WriteLine(File.ReadAllText(filePath));
     }
