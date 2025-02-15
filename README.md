@@ -1,6 +1,7 @@
 # FolkerKinzel.CsvTools
 [![NuGet](https://img.shields.io/nuget/v/FolkerKinzel.CsvTools)](https://www.nuget.org/packages/FolkerKinzel.CsvTools/)
 [![GitHub](https://img.shields.io/github/license/FolkerKinzel/CsvTools)](https://github.com/FolkerKinzel/CsvTools/blob/master/LICENSE)
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://stand-with-ukraine.pp.ua)
 
 ## .NET library for reading and writing CSV files (RFC 4180)
 [Project Reference](https://folkerkinzel.github.io/CsvTools/reference/)
