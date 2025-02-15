@@ -21,7 +21,7 @@ public static class Csv
     public const string NewLine = "\r\n";
 
     /// <summary>
-    /// Gets the appropriate arguments for exchanging CSV data with Excel.
+    /// Gets the appropriate method arguments for exchanging CSV data with Excel.
     /// </summary>
     /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the delimiter character  
     /// and the <see cref="IFormatProvider"/> to use when exchanging CSV data with Excel.</returns>
