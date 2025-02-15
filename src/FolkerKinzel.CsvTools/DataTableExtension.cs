@@ -28,6 +28,8 @@ public static class DataTableExtension
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -47,8 +49,6 @@ public static class DataTableExtension
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
@@ -81,11 +81,11 @@ public static class DataTableExtension
     public static void WriteCsv(this DataTable dataTable,
                                 string filePath,
                                 IEnumerable<string>? columnNames = null,
+                                char delimiter = ',',
                                 IFormatProvider? formatProvider = null,
                                 string? format = null,
-                                Encoding? textEncoding = null,
-                                char delimiter = ',')
-        => Csv.Save(dataTable, filePath, columnNames, formatProvider, format, textEncoding, delimiter);
+                                Encoding? textEncoding = null)
+        => Csv.Save(dataTable, filePath, columnNames, delimiter, formatProvider, format, textEncoding);
 
     /// <summary>
     /// Writes the contents of the <see cref="DataTable"/> as CSV.
@@ -104,6 +104,8 @@ public static class DataTableExtension
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -121,8 +123,6 @@ public static class DataTableExtension
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
     /// 
     /// <remarks>
     /// <para>
@@ -148,8 +148,8 @@ public static class DataTableExtension
     public static void WriteCsv(this DataTable dataTable,
                                 TextWriter textWriter,
                                 IEnumerable<string>? columnNames = null,
+                                char delimiter = ',',
                                 IFormatProvider? formatProvider = null,
-                                string? format = null,
-                                char delimiter = ',')
-        => Csv.Write(dataTable, textWriter, columnNames, formatProvider, format, delimiter);
+                                string? format = null)
+        => Csv.Write(dataTable, textWriter, columnNames, delimiter, formatProvider, format);
 }

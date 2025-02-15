@@ -13,6 +13,8 @@ public static class CsvExtension
     /// <see cref="string"/> (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the
+    /// default value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -30,8 +32,6 @@ public static class CsvExtension
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the
-    /// default value.</param>
     /// 
     /// <returns>A CSV-<see cref="string"/> containing the contents of 
     /// <paramref name="data"/>.</returns>
@@ -52,16 +52,18 @@ public static class CsvExtension
     /// double quotes <c>"</c> or a line break character ('\r' or '\n').</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static string ToCsv(this IEnumerable<IEnumerable<object?>?> data,
+                               char delimiter = ',',
                                IFormatProvider? formatProvider = null,
-                               string? format = null,
-                               char delimiter = ',')
-        => Csv.AsString(data, formatProvider, format, delimiter);
+                               string? format = null)
+        => Csv.AsString(data, delimiter, formatProvider, format);
 
     /// <summary>
     /// Saves the contents of <paramref name="data"/> as a CSV file.
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change 
+    /// the default value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -81,8 +83,6 @@ public static class CsvExtension
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for 
     /// <see cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change 
-    /// the default value.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is 
@@ -117,17 +117,19 @@ public static class CsvExtension
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SaveCsv(this IEnumerable<IEnumerable<object?>?> data,
                                string filePath,
+                               char delimiter = ',',
                                IFormatProvider? formatProvider = null,
                                string? format = null,
-                               Encoding? textEncoding = null,
-                               char delimiter = ',')
-        => Csv.Save(data, filePath, formatProvider, format, textEncoding, delimiter);
+                               Encoding? textEncoding = null)
+        => Csv.Save(data, filePath, delimiter, formatProvider, format, textEncoding);
 
     /// <summary>
     /// Writes the contents of <paramref name="data"/> as CSV.
     /// </summary>
     /// <param name="data">The data to write.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the
+    /// default value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -145,8 +147,6 @@ public static class CsvExtension
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the
-    /// default value.</param>
     /// 
     /// <remarks>
     /// <para>
@@ -167,8 +167,8 @@ public static class CsvExtension
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteCsv(this IEnumerable<IEnumerable<object?>?> data,
                                 TextWriter textWriter,
+                                char delimiter = ',',
                                 IFormatProvider? formatProvider = null,
-                                string? format = null,
-                                char delimiter = ',')
-        => Csv.Write(data, textWriter, formatProvider, format, delimiter);
+                                string? format = null)
+        => Csv.Write(data, textWriter, delimiter, formatProvider, format);
 }

@@ -23,8 +23,8 @@ public static class Csv
     /// <summary>
     /// Gets the appropriate parameters for exchanging CSV data with Excel.
     /// </summary>
-    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the <see cref="IFormatProvider"/> 
-    /// and the delimiter character to use when exchanging CSV data with Excel.</returns>
+    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the delimiter character  
+    /// and the <see cref="IFormatProvider"/> to use when exchanging CSV data with Excel.</returns>
     /// <remarks>
     /// <para>Excel formats numbers and dates depending on the culture in its "Regional Settings".
     /// Also the CSV field delimiter character used by Excel depends on these settings.</para>
@@ -42,12 +42,12 @@ public static class Csv
     /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DataTableExample.cs" />
     /// </example>
-    public static (IFormatProvider FormatProvider, char Delimiter) GetExcelParameters()
+    public static (char Delimiter, IFormatProvider FormatProvider) GetExcelParameters()
     {
         CultureInfo culture = CultureInfo.CurrentCulture;
 
         string listSeparator = culture.TextInfo.ListSeparator;
-        return (culture, listSeparator.Length != 1 ? ',' : listSeparator[0]);
+        return (listSeparator.Length != 1 ? ',' : listSeparator[0], culture);
     }
 
     /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
@@ -216,7 +216,7 @@ public static class Csv
             AnalyzeFile(filePath, header, textEncoding, analyzedLines);
         result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
         return result.IsHeaderPresent
-            ? new(filePath, isHeaderPresent: true, result.Options, result.Delimiter, encoding)
+            ? new(filePath, isHeaderPresent: true, delimiter: result.Delimiter, options: result.Options, textEncoding: encoding)
             : new(filePath, result, encoding);
     }
 
@@ -224,8 +224,8 @@ public static class Csv
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
-    /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
     /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
     /// 
@@ -257,18 +257,18 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
                                      bool isHeaderPresent = true,
-                                     CsvOpts options = CsvOpts.Default,
                                      char delimiter = ',',
+                                     CsvOpts options = CsvOpts.Default,
                                      Encoding? textEncoding = null)
-        => new(filePath, isHeaderPresent, options, delimiter, textEncoding);
+        => new(filePath, isHeaderPresent, delimiter, options, textEncoding);
 
     /// <summary>Initializes a <see cref="CsvReader"/> instance to read CSV data.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
-    /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// <param name="options">Options for reading CSV.</param>
     /// 
     /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
     /// 
@@ -278,9 +278,9 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(TextReader reader,
                                      bool isHeaderPresent = true,
-                                     CsvOpts options = CsvOpts.Default,
-                                     char delimiter = ',')
-        => new(reader, isHeaderPresent, options, delimiter);
+                                     char delimiter = ',',
+                                     CsvOpts options = CsvOpts.Default)
+        => new(reader, isHeaderPresent, delimiter, options);
 
     /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> 
     /// instance to write data to it.</summary>
@@ -303,10 +303,10 @@ public static class Csv
     /// the column names are also unique when treated case-insensitive.
     /// </para>
     /// </param>
-    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to change the default
     /// value.</param>
+    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// 
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
@@ -346,9 +346,9 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
                                       IReadOnlyCollection<string?> columnNames,
-                                      Encoding? textEncoding = null,
-                                      char delimiter = ',')
-        => new(filePath, columnNames, CaseSensitive(columnNames), textEncoding, delimiter);
+                                      char delimiter = ',',
+                                      Encoding? textEncoding = null)
+        => new(filePath, columnNames, CaseSensitive(columnNames), delimiter, textEncoding);
 
     /// <summary>
     /// Initializes a new <see cref="CsvWriter" /> object with the column names for the header row 
@@ -400,10 +400,10 @@ public static class Csv
     /// instance to write data to it.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to change the default
     /// value.</param>
+    /// <param name="textEncoding">The text encoding to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// 
     /// <returns>A <see cref="CsvWriter"/> instance that allows you to write data as a CSV file.</returns>
     /// 
@@ -429,9 +429,9 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvWriter OpenWrite(string filePath,
                                       int columnsCount,
-                                      Encoding? textEncoding = null,
-                                      char delimiter = ',')
-        => new(filePath, columnsCount, textEncoding, delimiter);
+                                      char delimiter = ',',
+                                      Encoding? textEncoding = null)
+        => new(filePath, columnsCount, delimiter, textEncoding);
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data without a header row.
     /// </summary>
@@ -463,9 +463,9 @@ public static class Csv
     /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
+    /// <param name="delimiter">The field separator character.</param>
     /// <param name="options">Parsing options. (The flag <see cref="CsvOpts.DisableCaching"/>
     /// will be ignored.)</param>
-    /// <param name="delimiter">The field separator character.</param>
     /// 
     /// <returns>An array of <see cref="CsvRecord"/> objects containing the parsed data.</returns>
     /// 
@@ -481,14 +481,14 @@ public static class Csv
     /// on <paramref name="options"/>.</exception>
     public static CsvRecord[] Parse(string csv,
                                     bool isHeaderPresent = true,
-                                    CsvOpts options = CsvOpts.Default,
-                                    char delimiter = ',')
+                                    char delimiter = ',',
+                                    CsvOpts options = CsvOpts.Default)
     {
         _ArgumentNullException.ThrowIfNull(csv, nameof(csv));
 
         using var stringReader = new StringReader(csv);
         using var reader =
-            new CsvReader(stringReader, isHeaderPresent, options.Unset(CsvOpts.DisableCaching), delimiter);
+            new CsvReader(stringReader, isHeaderPresent, delimiter, options.Unset(CsvOpts.DisableCaching));
 
         return [.. reader];
     }
@@ -542,7 +542,7 @@ public static class Csv
 
         using var stringReader = new StringReader(csv);
         using CsvReader reader = result.IsHeaderPresent
-            ? new(stringReader, isHeaderPresent: true, result.Options, result.Delimiter)
+            ? new(stringReader, isHeaderPresent: true, delimiter: result.Delimiter, options: result.Options)
             : new(stringReader, result);
 
         return [.. reader];
@@ -553,6 +553,8 @@ public static class Csv
     /// (CSV, RFC 4180).
     /// </summary>
     /// <param name="data">The data to convert.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -570,8 +572,6 @@ public static class Csv
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
     /// 
     /// <returns>A CSV-<see cref="string"/> containing the contents of <paramref name="data"/>.</returns>
     /// 
@@ -584,12 +584,12 @@ public static class Csv
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
     /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
     public static string AsString(IEnumerable<IEnumerable<object?>?> data,
+                                  char delimiter = ',',
                                   IFormatProvider? formatProvider = null,
-                                  string? format = null,
-                                  char delimiter = ',')
+                                  string? format = null)
     {
         using var writer = new StringWriter();
-        WriteIntl(data, writer, formatProvider, format, delimiter);
+        WriteIntl(data, writer, delimiter, formatProvider, format);
 
         return writer.ToString();
     }
@@ -599,6 +599,8 @@ public static class Csv
     /// </summary>
     /// <param name="data">The data to save.</param>
     /// <param name="filePath">File path of the CSV file.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -618,8 +620,6 @@ public static class Csv
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
@@ -643,13 +643,13 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     public static void Save(IEnumerable<IEnumerable<object?>?> data,
                             string filePath,
+                            char delimiter = ',',
                             IFormatProvider? formatProvider = null,
                             string? format = null,
-                            Encoding? textEncoding = null,
-                            char delimiter = ',')
+                            Encoding? textEncoding = null)
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        WriteIntl(data, streamWriter, formatProvider, format, delimiter);
+        WriteIntl(data, streamWriter, delimiter, formatProvider, format);
     }
 
     /// <summary>
@@ -671,6 +671,8 @@ public static class Csv
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -690,8 +692,6 @@ public static class Csv
     /// </param>
     /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
     /// cref="Encoding.UTF8" />.</param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
     /// 
     /// <remarks>
     /// <para>Creates a new CSV file. If the target file already exists, it is truncated and overwritten.
@@ -723,13 +723,13 @@ public static class Csv
     public static void Save(DataTable dataTable,
                             string filePath,
                             IEnumerable<string>? columnNames = null,
+                            char delimiter = ',',
                             IFormatProvider? formatProvider = null,
                             string? format = null,
-                            Encoding? textEncoding = null,
-                            char delimiter = ',')
+                            Encoding? textEncoding = null)
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        WriteIntl(dataTable, streamWriter, columnNames, formatProvider, format, delimiter);
+        WriteIntl(dataTable, streamWriter, columnNames, delimiter, formatProvider, format);
     }
 
     /// <summary>
@@ -749,6 +749,8 @@ public static class Csv
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -766,8 +768,6 @@ public static class Csv
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
     /// 
     /// <remarks>
     /// <para>
@@ -792,12 +792,12 @@ public static class Csv
     public static void Write(DataTable dataTable,
                              TextWriter textWriter,
                              IEnumerable<string>? columnNames = null,
+                             char delimiter = ',',
                              IFormatProvider? formatProvider = null,
-                             string? format = null, 
-                             char delimiter = ',')
+                             string? format = null)
     {
         _ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
-        WriteIntl(dataTable, textWriter, columnNames, formatProvider, format, delimiter);
+        WriteIntl(dataTable, textWriter, columnNames, delimiter, formatProvider, format);
     }
 
     /// <summary>
@@ -805,6 +805,8 @@ public static class Csv
     /// </summary>
     /// <param name="data">The data to write.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
+    /// <param name="delimiter">The field separator character. It's not recommended to change the default
+    /// value.</param>
     /// <param name="formatProvider">
     /// <para>
     /// The provider to use to format the value.
@@ -822,8 +824,6 @@ public static class Csv
     /// <para>- or -</para>
     /// <para>A <c>null</c> reference to use the default format for each item.</para>
     /// </param>
-    /// <param name="delimiter">The field separator character. It's not recommended to change the default
-    /// value.</param>
     /// 
     /// <remarks>
     /// <para>
@@ -843,20 +843,20 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     public static void Write(IEnumerable<IEnumerable<object?>?> data,
                              TextWriter textWriter,
+                             char delimiter = ',',
                              IFormatProvider? formatProvider = null,
-                             string? format = null,
-                             char delimiter = ',')
+                             string? format = null)
     {
         _ArgumentNullException.ThrowIfNull(textWriter, nameof(textWriter));
-        WriteIntl(data, textWriter, formatProvider, format, delimiter);
+        WriteIntl(data, textWriter, delimiter, formatProvider, format);
     }
 
     private static void WriteIntl(DataTable dataTable,
                                   TextWriter textWriter,
                                   IEnumerable<string?>? columnNames,
+                                  char delimiter,
                                   IFormatProvider? formatProvider,
-                                  string? format,
-                                  char delimiter)
+                                  string? format)
     {
         _ArgumentNullException.ThrowIfNull(dataTable, nameof(dataTable));
 
@@ -884,9 +884,9 @@ public static class Csv
 
     private static void WriteIntl(IEnumerable<IEnumerable<object?>?> data,
                                   TextWriter textWriter,
+                                  char delimiter,
                                   IFormatProvider? formatProvider,
-                                  string? format,
-                                  char delimiter)
+                                  string? format)
     {
         _ArgumentNullException.ThrowIfNull(data, nameof(data));
 

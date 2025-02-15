@@ -49,19 +49,26 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="IOException">I/O error.</exception>
     internal CsvReader(string filePath,
                        CsvAnalyzerResult analyzerResult,
-                       Encoding? textEncoding = null)
+                       Encoding? textEncoding)
     {
         StreamReader streamReader = StreamHelper.InitStreamReader(filePath, textEncoding);
         this._reader = new CsvStringReader(streamReader, analyzerResult.Delimiter, analyzerResult.Options);
         _rowLength = analyzerResult.RowLength;
     }
 
+    internal CsvReader(TextReader reader,
+                       CsvAnalyzerResult result)
+    {
+        this._reader = new CsvStringReader(reader, result.Delimiter, result.Options);
+        _rowLength = result.RowLength;
+    }
+
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, otherwise 
     /// <c>false</c>.</param>
-    /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// <param name="options">Options for reading the CSV file.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file or <c>null</c> for 
     /// <see cref="Encoding.UTF8" />.</param>
     /// 
@@ -79,8 +86,8 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="IOException">I/O error.</exception>
     public CsvReader(string filePath,
                      bool isHeaderPresent = true,
-                     CsvOpts options = CsvOpts.Default,
                      char delimiter = ',',
+                     CsvOpts options = CsvOpts.Default,
                      Encoding? textEncoding = null)
     {
         _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
@@ -95,29 +102,22 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is read.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, otherwise 
     /// <c>false</c>.</param>
-    /// <param name="options">Options for reading CSV.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// <param name="options">Options for reading CSV.</param>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
     /// the double quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     public CsvReader(TextReader reader,
                      bool isHeaderPresent = true,
-                     CsvOpts options = CsvOpts.Default,
-                     char delimiter = ',')
+                     char delimiter = ',',
+                     CsvOpts options = CsvOpts.Default)
     {
         _ArgumentNullException.ThrowIfNull(reader, nameof(reader));
         _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 
         this._reader = new CsvStringReader(reader, delimiter, options);
         this._hasHeaderRow = isHeaderPresent;
-    }
-
-    internal CsvReader(TextReader reader,
-                       CsvAnalyzerResult result)
-    {
-        this._reader = new CsvStringReader(reader, result.Delimiter, result.Options);
-        _rowLength = result.RowLength;
     }
 
     /// <summary>
@@ -201,7 +201,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
         {
             if (_hasHeaderRow)
             {
-                string[] columnNames = row.Select(x => x.ToString()).ToArray();
+                string[] columnNames = [.. row.Select(x => x.ToString())];
 
                 _record = new CsvRecord(columnNames,
                                         Options.HasFlag(CsvOpts.CaseSensitiveKeys),

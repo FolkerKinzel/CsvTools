@@ -50,10 +50,10 @@ public sealed class CsvWriter : IDisposable
     /// </param>
     ///<param name="caseSensitive">If <c>true</c>, column names that differ only in upper and lower case are 
     ///also accepted, otherwise <c>false</c>.</param>
-    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to change the default
     /// value.</param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. If the file
     /// already exists, it is truncated and overwritten.</remarks>
@@ -77,14 +77,14 @@ public sealed class CsvWriter : IDisposable
     public CsvWriter(string filePath,
                      IEnumerable<string?> columnNames,
                      bool caseSensitive = false,
-                     Encoding? textEncoding = null,
-                     char delimiter = ',')
+                     char delimiter = ',',
+                     Encoding? textEncoding = null)
     {
         _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
         _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 
         this.Record = new CsvRecord(
-            columnNames.ToArray(),
+            [.. columnNames],
             caseSensitive,
             initArr: true,
             throwException: true);
@@ -102,10 +102,10 @@ public sealed class CsvWriter : IDisposable
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
-    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// <param name="delimiter">The field separator character. It's not recommended to change the default 
     /// value.</param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>The constructor creates a new file at the specified <paramref name="filePath"/>. If the file 
     /// already exists, it is truncated and overwritten.</remarks>
@@ -125,8 +125,8 @@ public sealed class CsvWriter : IDisposable
     /// <exception cref="IOException">I/O error.</exception>
     public CsvWriter(string filePath,
                      int columnsCount,
-                     Encoding? textEncoding = null,
-                     char delimiter = ',')
+                     char delimiter = ',',
+                     Encoding? textEncoding = null)
     {
         _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 
@@ -179,7 +179,7 @@ public sealed class CsvWriter : IDisposable
         _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 
         this.Record = new CsvRecord(
-            columnNames.ToArray(),
+            [.. columnNames],
             caseSensitive,
             initArr: true,
             throwException: true);

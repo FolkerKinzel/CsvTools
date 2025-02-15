@@ -36,7 +36,7 @@ internal static class DisableCachingExample
 
         // If you set the flag CsvOpts.DisableCaching and then try to cache the data,
         // you will get the wrong results:
-        using (CsvReader csv = Csv.OpenRead(filePath, 
+        using (CsvReader csv = Csv.OpenRead(filePath,
                                             options: CsvOpts.Default.Set(CsvOpts.DisableCaching)))
         {
             foreach (CsvRecord record in
