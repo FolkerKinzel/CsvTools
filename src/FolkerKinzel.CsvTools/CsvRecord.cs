@@ -14,15 +14,6 @@ namespace FolkerKinzel.CsvTools;
 /// column index.
 /// </remarks>
 /// 
-/// <example>
-/// <note type="note">
-/// In the following code examples - for easier readability - exception handling has been omitted.
-/// </note>
-/// <para>
-/// Saving a CSV file:
-/// </para>
-/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
-/// </example>
 public sealed class CsvRecord : IEnumerable<KeyValuePair<string, ReadOnlyMemory<char>>>
 {
     private readonly Dictionary<string, int> _lookupDictionary;
