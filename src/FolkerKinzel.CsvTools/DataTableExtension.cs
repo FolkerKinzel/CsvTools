@@ -10,9 +10,7 @@ namespace FolkerKinzel.CsvTools;
 public static class DataTableExtension
 {
     /// <summary>
-    /// Writes the content of the <see cref="DataTable"/> as a CSV file. The 
-    /// <see cref="DataColumn.ColumnName"/>s of <paramref name="dataTable"/> form the header row 
-    /// of this file. 
+    /// Writes the content of the <see cref="DataTable"/> as a CSV file with header.
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
@@ -28,6 +26,8 @@ public static class DataTableExtension
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
     /// </para>
     /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// <param name="csvColumnNames">
     /// <para>
     /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
@@ -40,8 +40,6 @@ public static class DataTableExtension
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
-    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// <param name="format">
     /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
     /// </para>
@@ -83,16 +81,16 @@ public static class DataTableExtension
     /// in <paramref name="dataTable"/>.
     /// </para>
     /// </exception>
-    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double quotes
-    /// <c>"</c> or a line break character ('\r' or  '\n').</exception>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either the double 
+    /// quotes <c>"</c> or a line break character ('\r' or  '\n').</exception>
     /// <exception cref="IOException">I/O error.</exception>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void WriteCsv(this DataTable dataTable,
                                 string filePath,
                                 char delimiter = ',',
                                 IFormatProvider? formatProvider = null,
-                                IEnumerable<string>? csvColumnNames = null,
                                 Encoding? textEncoding = null,
+                                IEnumerable<string>? csvColumnNames = null,
                                 string? format = null)
         => Csv.Save(dataTable, filePath, delimiter, formatProvider, textEncoding, csvColumnNames, format);
 

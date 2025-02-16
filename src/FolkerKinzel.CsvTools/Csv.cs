@@ -65,12 +65,13 @@ public static class Csv
                 TextEncodingConverter.GetEncoding(textInfo.ANSICodePage));
     }
 
-    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
+    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" /> to get the appropriate 
+    /// method arguments for parsing.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="fallbackEncoding">
     /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark 
-    /// (BOM), or <c>null</c> for <see cref="Encoding.UTF8"/>.
+    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding.
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
@@ -167,13 +168,13 @@ public static class Csv
                                                   int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
         => CsvAnalyzer.AnalyzeString(csv, header, analyzedLines);
 
-    /// <summary>Analyzes the CSV file referenced by <paramref name="filePath" />
-    /// first and then opens a <see cref="CsvReader"/> to read its content.
+    /// <summary>Analyzes the CSV file referenced by <paramref name="filePath" /> first and then opens 
+    /// a <see cref="CsvReader"/> to read its content.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="fallbackEncoding">
-    /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark (BOM), 
-    /// or <c>null</c> for <see cref="Encoding.UTF8"/>.
+    /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark 
+    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding.
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="disableCaching"><c>true</c> to set the <see cref="CsvOpts.DisableCaching"/> flag, 

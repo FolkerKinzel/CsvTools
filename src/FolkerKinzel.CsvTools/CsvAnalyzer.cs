@@ -4,19 +4,19 @@ using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools;
 
-/// <summary> Analyzes a CSV file.</summary>
+/// <summary> Analyzes a CSV file to get the appropriate method arguments for parsing.</summary>
 public static class CsvAnalyzer
 {
     /// <summary>Minimum number of lines in the CSV file to be analyzed.</summary>
     public const int AnalyzedLinesMinCount = 5;
 
-    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.</summary>
+    /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" /> to get the 
+    /// appropriate method arguments for parsing.</summary>
     /// 
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="textEncoding">
     /// <para>
-    /// The text encoding to be used to read the CSV file, or <c>null</c> for 
-    /// <see cref="Encoding.UTF8" />.
+    /// The text encoding to be used to read the CSV file, or <c>null</c> for <see cref="Encoding.UTF8" />.
     /// </para>
     /// <note type="tip">
     /// Use <see cref="Csv.AnalyzeFile(string, Encoding?, Header, int)"/> to also automatically 
@@ -34,7 +34,7 @@ public static class CsvAnalyzer
     /// <remarks>
     /// <para>
     /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the CSV file to find the appropriate 
-    /// parameters for reading the file. The result of the analysis is therefore always only an estimate, 
+    /// method arguments for reading the file. The result of the analysis is therefore always only an estimate, 
     /// the accuracy of which increases with the number of lines analyzed. The analysis is time-consuming 
     /// because the CSV file has to be accessed for reading.
     /// </para>
@@ -42,6 +42,10 @@ public static class CsvAnalyzer
     /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), 
     /// HASH (<c>'#'</c>, %x23), TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized 
     /// automatically.
+    /// </para>
+    /// <para>
+    /// Use <see cref="Csv.AnalyzeFile(string, Encoding?, Header, int)"/> to analyze the <paramref name="textEncoding"/>
+    /// too.
     /// </para>
     /// </remarks>
     /// 
@@ -80,7 +84,7 @@ public static class CsvAnalyzer
     }
 
     /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the 
-    /// appropriate parameters for parsing.</summary>
+    /// appropriate method arguments for parsing.</summary>
     /// 
     /// <param name="csv">The CSV-<see cref="string"/> to analyze.</param>
     /// 
@@ -96,8 +100,8 @@ public static class CsvAnalyzer
     /// <remarks>
     /// <para>
     /// <see cref="CsvAnalyzer" /> performs a statistical analysis on the <see cref="string"/>. The result 
-    /// of the analysis is therefore always only an estimate, 
-    /// the accuracy of which increases with the number of lines analyzed.
+    /// of the analysis is therefore always only an estimate, the accuracy of which increases with the number
+    /// of lines analyzed.
     /// </para>
     /// <para>
     /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), 
