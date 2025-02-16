@@ -113,7 +113,7 @@ public static class Csv
     }
 
     /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the 
-    /// appropriate parameters for parsing.</summary>
+    /// appropriate method arguments for parsing.</summary>
     /// 
     /// <param name="csv">The CSV-<see cref="string"/> to analyze.</param>
     /// 
@@ -232,10 +232,14 @@ public static class Csv
     /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
     /// 
     /// <remarks>
-    /// <note type="tip">
-    /// The optimal parameters can be determined automatically with <see cref="CsvAnalyzer"/> - or use
+    /// <para>
+    /// The method arguments can be determined automatically with <see cref="CsvAnalyzer"/> - or use
     /// <see cref="OpenReadAnalyzed(string, Header, bool, Encoding?, int)"/>.
-    /// </note>
+    /// </para>
+    /// <para>
+    /// When importing CSV data from Excel, the appropriate arguments can be determined 
+    /// with <see cref="Csv.GetExcelArguments"/>.
+    /// </para>
     /// </remarks>
     /// 
     /// <example>
@@ -266,11 +270,16 @@ public static class Csv
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
     /// <param name="delimiter">The field separator character.</param>
-    /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
+    /// <param name="isHeaderPresent"> <c>true</c> to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading CSV.</param>
     /// 
     /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
+    /// 
+    /// <remarks>
+    /// When importing CSV data from Excel, the appropriate arguments can be determined with 
+    /// <see cref="Csv.GetExcelArguments"/>.
+    /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="reader" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="delimiter"/> is either 
@@ -314,7 +323,7 @@ public static class Csv
     /// If the target file already exists, it is truncated and overwritten.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
     /// <see cref="GetExcelArguments"/>.
     /// </para>
     /// </remarks>
@@ -378,7 +387,7 @@ public static class Csv
     /// <paramref name="writer"/>.</returns>
     /// 
     /// <remarks>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
     /// <see cref="GetExcelArguments"/>.
     /// </remarks>
     /// 
@@ -467,8 +476,8 @@ public static class Csv
     /// 
     /// <remarks>
     /// <note type="tip">
-    /// The optimal parameters can be determined automatically with <see cref="CsvAnalyzer"/> - or use
-    /// <see cref="ParseAnalyzed(string, Header, int)"/>.
+    /// The optimal method arguments can be determined automatically with <see cref="CsvAnalyzer"/> - or 
+    /// use <see cref="ParseAnalyzed(string, Header, int)"/>.
     /// </note>
     /// </remarks>
     /// 

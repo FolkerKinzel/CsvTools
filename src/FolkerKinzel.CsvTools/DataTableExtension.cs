@@ -57,7 +57,7 @@ public static class DataTableExtension
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
     /// <see cref="Csv.GetExcelArguments"/>.
     /// </para>
     /// </remarks>
@@ -138,7 +138,7 @@ public static class DataTableExtension
     /// item implements <see cref="IFormattable"/>, otherwise <see cref="object.ToString"/>.
     /// </para>
     /// <para>
-    /// When exchanging CSV data with Excel, the appropriate parameters can be determined with 
+    /// When exchanging CSV data with Excel, the appropriate arguments can be determined with 
     /// <see cref="Csv.GetExcelArguments"/>.
     /// </para>
     /// </remarks>
