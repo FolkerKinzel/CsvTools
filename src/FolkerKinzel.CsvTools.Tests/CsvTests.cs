@@ -184,4 +184,25 @@ public class CsvTests
         var result = Csv.ParseAnalyzed("");
         Assert.AreEqual(0, result.Length);
     }
+
+    //[TestMethod]
+    //public void MyTest()
+    //{
+    //    var encoding = Encoding.GetEncoding("Latin1");
+    //    encoding = Encoding.UTF8;
+
+    //    int latin1CodePage = encoding.CodePage;
+    //    int codePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
+    //    int EbcdicCodePage = CultureInfo.CurrentCulture.TextInfo.EBCDICCodePage;
+    //    int macCodePage = CultureInfo.CurrentCulture.TextInfo.MacCodePage;
+    //    int oemCodePage = CultureInfo.CurrentCulture.TextInfo.OEMCodePage;
+
+    //    var enc2 = FolkerKinzel.Strings.TextEncodingConverter.GetEncoding(20273);
+
+    //    (char Delimiter, IFormatProvider FormatProvider) = Csv.GetExcelArguments();
+
+    //    using var reader = Csv.OpenRead("C:\\Users\\fkinz\\source\\repos\\FolkerKinzel.CsvTools\\src\\FolkerKinzel.CsvTools.Tests\\TestFiles\\UTF8.csv",
+    //        Delimiter, true, textEncoding: encoding );
+    //    CsvRecord[] res = [.. reader];
+    //}
 }
