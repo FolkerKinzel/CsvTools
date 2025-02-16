@@ -60,7 +60,7 @@ public class CsvTests
     [TestMethod]
     public void AnalyzeTest1()
     {
-        (CsvAnalyzerResult _, Encoding encoding) = Csv.AnalyzeFile(TestFiles.AnalyzerTestCsv, textEncoding: TextEncodingConverter.GetEncoding("iso-8859-1"));
+        (CsvAnalyzerResult _, Encoding encoding) = Csv.AnalyzeFile(TestFiles.AnalyzerTestCsv, fallbackEncoding: TextEncodingConverter.GetEncoding("iso-8859-1"));
         Assert.AreEqual("iso-8859-1", encoding.WebName, true, CultureInfo.InvariantCulture);
     }
 
@@ -185,24 +185,44 @@ public class CsvTests
         Assert.AreEqual(0, result.Length);
     }
 
-    //[TestMethod]
-    //public void MyTest()
-    //{
-    //    var encoding = Encoding.GetEncoding("Latin1");
-    //    encoding = Encoding.UTF8;
+    [TestMethod]
+    public void MyTest()
+    {
+        const string fileName = "C:\\Users\\fkinz\\source\\repos\\FolkerKinzel.CsvTools\\src\\FolkerKinzel.CsvTools.Tests\\TestFiles\\UTF8 (2).csv";
+        var encoding = Encoding.GetEncoding("Latin1");
+        encoding = Encoding.UTF8;
 
-    //    int latin1CodePage = encoding.CodePage;
-    //    int codePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
-    //    int EbcdicCodePage = CultureInfo.CurrentCulture.TextInfo.EBCDICCodePage;
-    //    int macCodePage = CultureInfo.CurrentCulture.TextInfo.MacCodePage;
-    //    int oemCodePage = CultureInfo.CurrentCulture.TextInfo.OEMCodePage;
+        int latin1CodePage = encoding.CodePage;
+        int ansiCodePage = CultureInfo.CurrentCulture.TextInfo.ANSICodePage;
+        int ebcdicCodePage = CultureInfo.CurrentCulture.TextInfo.EBCDICCodePage;
+        int macCodePage = CultureInfo.CurrentCulture.TextInfo.MacCodePage;
+        int oemCodePage = CultureInfo.CurrentCulture.TextInfo.OEMCodePage;
 
-    //    var enc2 = FolkerKinzel.Strings.TextEncodingConverter.GetEncoding(20273);
+        var enc2 = TextEncodingConverter.GetEncoding(20273);
 
-    //    (char Delimiter, IFormatProvider FormatProvider) = Csv.GetExcelArguments();
+        (char Delimiter, IFormatProvider FormatProvider) = Csv.GetExcelArguments();
 
-    //    using var reader = Csv.OpenRead("C:\\Users\\fkinz\\source\\repos\\FolkerKinzel.CsvTools\\src\\FolkerKinzel.CsvTools.Tests\\TestFiles\\UTF8.csv",
-    //        Delimiter, true, textEncoding: encoding );
-    //    CsvRecord[] res = [.. reader];
-    //}
+        var ansiEncoding = TextEncodingConverter.GetEncoding(ansiCodePage);
+        using CsvReader reader = Csv.OpenRead(fileName,
+            Delimiter, textEncoding: ansiEncoding, isHeaderPresent: true);
+        CsvRecord[] resAnsi = [.. reader];
+
+        var ebcdicEncoding = TextEncodingConverter.GetEncoding(ebcdicCodePage);
+        using CsvReader reader2 = Csv.OpenRead(fileName,
+            Delimiter, textEncoding: ebcdicEncoding, isHeaderPresent: true);
+        CsvRecord[] resEbcdic = [.. reader2];
+
+        var macEncoding = TextEncodingConverter.GetEncoding(macCodePage);
+        using CsvReader reader3 = Csv.OpenRead(fileName,
+           Delimiter, textEncoding: macEncoding, isHeaderPresent: true);
+        CsvRecord[] resMac = [.. reader3];
+
+        var oemEncoding = TextEncodingConverter.GetEncoding(oemCodePage);
+        using CsvReader reader4 = Csv.OpenRead(fileName,
+           Delimiter, textEncoding: oemEncoding, isHeaderPresent: true);
+        CsvRecord[] resOem = [.. reader4];
+
+        new string[][] { ["A", "B"],
+                         ["ÄÖÜäöüß€µ簾", "ÄÖÜäöüß€µ簾"]}.SaveCsv("ExportedAsUtf8.csv", ';', CultureInfo.CurrentCulture);
+    }
 }

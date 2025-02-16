@@ -19,7 +19,7 @@ public static class CsvAnalyzer
     /// <see cref="Encoding.UTF8" />.
     /// </para>
     /// <note type="tip">
-    /// Use <see cref="Csv.AnalyzeFile(string, Header, Encoding?, int)"/> to also automatically 
+    /// Use <see cref="Csv.AnalyzeFile(string, Encoding?, Header, int)"/> to also automatically 
     /// determine the <see cref="Encoding"/>.
     /// </note>
     /// </param>

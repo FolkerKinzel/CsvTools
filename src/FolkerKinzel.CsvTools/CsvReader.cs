@@ -66,11 +66,11 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <summary>Initializes a new <see cref="CsvReader" /> instance.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// <param name="textEncoding">The text encoding to be used to read the CSV file or <c>null</c> for 
+    /// <see cref="Encoding.UTF8" />.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, otherwise 
     /// <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
-    /// <param name="textEncoding">The text encoding to be used to read the CSV file or <c>null</c> for 
-    /// <see cref="Encoding.UTF8" />.</param>
     /// 
     /// <remarks>
     /// <note type="tip">
@@ -86,9 +86,9 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <exception cref="IOException">I/O error.</exception>
     public CsvReader(string filePath,
                      char delimiter = ',',
+                     Encoding? textEncoding = null,
                      bool isHeaderPresent = true,
-                     CsvOpts options = CsvOpts.Default,
-                     Encoding? textEncoding = null)
+                     CsvOpts options = CsvOpts.Default)
     {
         _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
 

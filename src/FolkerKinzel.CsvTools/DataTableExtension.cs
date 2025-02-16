@@ -94,7 +94,7 @@ public static class DataTableExtension
                                 IEnumerable<string>? csvColumnNames = null,
                                 Encoding? textEncoding = null,
                                 string? format = null)
-        => Csv.Save(dataTable, filePath, delimiter, formatProvider, csvColumnNames, textEncoding, format);
+        => Csv.Save(dataTable, filePath, delimiter, formatProvider, textEncoding, csvColumnNames, format);
 
     /// <summary>
     /// Writes the contents of the <see cref="DataTable"/> as CSV.

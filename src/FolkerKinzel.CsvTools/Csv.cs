@@ -23,15 +23,27 @@ public static class Csv
     /// <summary>
     /// Gets the appropriate method arguments for exchanging CSV data with Excel.
     /// </summary>
-    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the delimiter character  
-    /// and the <see cref="IFormatProvider"/> to use when exchanging CSV data with Excel.</returns>
+    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the delimiter character, 
+    /// the <see cref="IFormatProvider"/> and the <see cref="Encoding"/> to use when exchanging CSV 
+    /// data with Excel.</returns>
     /// <remarks>
     /// <para>Excel formats numbers and dates depending on the culture in its "Regional Settings".
-    /// Also the CSV field delimiter character used by Excel depends on these settings.</para>
+    /// Also the CSV field delimiter character used by Excel, and the <see cref="Encoding"/> that
+    /// Excel uses to export CSV depend on these settings.</para>
     /// <para>
     /// This method uses <see cref="CultureInfo.CurrentCulture"/> to retrieve the required 
     /// informations. <see cref="CultureInfo.CurrentCulture"/> and the "Regional Settings"
     /// in Excel have to match to exchange CSV data successfully.
+    /// </para>
+    /// <para>
+    /// When exporting CSV to Excel the <c>TextEncoding</c> argument doesn't need to be used because 
+    /// Excel accepts <see cref="Encoding.UTF8"/> as input (which is the default of this library).
+    /// </para>
+    /// <para>
+    /// When importing CSV from Excel the arguments retrieved with this method are a good guess 
+    /// (including <c>TextEncoding</c>).
+    /// To be on the safe side, <see cref="OpenReadAnalyzed(string, Encoding?, Header, bool, int)"/>
+    /// should be used with the <c>TextEncoding</c> argument as <c>fallbackEncoding</c>.
     /// </para>
     /// </remarks>
     /// 
@@ -42,28 +54,31 @@ public static class Csv
     /// 
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DataTableExample.cs" />
     /// </example>
-    public static (char Delimiter, IFormatProvider FormatProvider) GetExcelArguments()
+    public static
+        (char Delimiter, IFormatProvider FormatProvider, Encoding TextEncoding) GetExcelArguments()
     {
         CultureInfo culture = CultureInfo.CurrentCulture;
-
-        string listSeparator = culture.TextInfo.ListSeparator;
-        return (listSeparator.Length != 1 ? ',' : listSeparator[0], culture);
+        TextInfo textInfo = culture.TextInfo;
+        string listSeparator = textInfo.ListSeparator;
+        return (listSeparator.Length != 1 ? ',' : listSeparator[0], 
+                culture,
+                TextEncodingConverter.GetEncoding(textInfo.ANSICodePage));
     }
 
     /// <summary> Analyzes the CSV file referenced by <paramref name="filePath" />.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="header">A supposition that is made about the presence of a header row.</param>
-    /// <param name="textEncoding">
-    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the 
-    /// <see cref="Encoding"/> automatically from the byte order mark (BOM).
+    /// <param name="fallbackEncoding">
+    /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark 
+    /// (BOM), or <c>null</c> for <see cref="Encoding.UTF8"/>.
     /// </param>
+    /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
     /// <see cref="int.MaxValue">Int32.MaxValue</see> to analyze the entire file in any case.)</param>
     /// 
-    /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the results of the analysis.</returns>
+    /// <returns>A <see cref="ValueTuple{T1, T2, T3}"/> containing the results of the analysis.</returns>
     /// 
     /// <remarks>
     /// <para>
@@ -73,11 +88,9 @@ public static class Csv
     /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
-    /// If the argument of the <paramref name="textEncoding"/> parameter is <c>null</c>, this method 
-    /// also automatically 
-    /// determines the <see cref="Encoding"/> of the CSV file from the byte order mark (BOM).
-    /// <see cref="Encoding.UTF8"/> is used as fallback value if the <see cref="Encoding"/> cannot be 
-    /// determined automatically.
+    /// This method also tries to determine the <see cref="Encoding"/> of the CSV file from the
+    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="fallbackEncoding"/> is
+    /// used.
     /// </para>
     /// <para>
     /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), 
@@ -98,22 +111,25 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     public static (CsvAnalyzerResult AnalyzerResult, Encoding Encoding)
         AnalyzeFile(string filePath,
+                    Encoding? fallbackEncoding = null,
                     Header header = Header.ProbablyPresent,
-                    Encoding? textEncoding = null,
                     int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
-        if (textEncoding is null)
+        fallbackEncoding ??= Encoding.UTF8;
+
+        if (TryGetCodePageFromBom(filePath, out var codePage))
         {
-            _ = TextEncodingConverter.TryGetEncoding(GetCodePage(filePath), out Encoding? encoding);
-            textEncoding = encoding;
+            // Unicode encodings are always successful:
+            _ = TextEncodingConverter.TryGetEncoding(codePage, out fallbackEncoding);
         }
 
-        CsvAnalyzerResult results = CsvAnalyzer.AnalyzeFile(filePath, textEncoding, header, analyzedLines);
-        return (results, textEncoding!);
+        CsvAnalyzerResult results =
+            CsvAnalyzer.AnalyzeFile(filePath, fallbackEncoding, header, analyzedLines);
+        return (results, fallbackEncoding!);
     }
 
-    /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the 
-    /// appropriate method arguments for parsing.</summary>
+    /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the appropriate method
+    /// arguments for parsing.</summary>
     /// 
     /// <param name="csv">The CSV-<see cref="string"/> to analyze.</param>
     /// 
@@ -155,13 +171,13 @@ public static class Csv
     /// first and then opens a <see cref="CsvReader"/> to read its content.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
+    /// <param name="fallbackEncoding">
+    /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark (BOM), 
+    /// or <c>null</c> for <see cref="Encoding.UTF8"/>.
+    /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="disableCaching"><c>true</c> to set the <see cref="CsvOpts.DisableCaching"/> flag, 
     /// otherwise <c>false</c>.</param>
-    /// <param name="textEncoding">
-    /// The text encoding to be used to read the CSV file, or <c>null</c> to determine the 
-    /// <see cref="Encoding"/> automatically from the byte order mark (BOM).
-    /// </param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
     /// value is <see cref="CsvAnalyzer.AnalyzedLinesMinCount" />. If the file has fewer lines than 
     /// <paramref name="analyzedLines" />, it will be analyzed completely. (You can specify 
@@ -177,9 +193,9 @@ public static class Csv
     /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
-    /// This method also automatically determines the <see cref="Encoding"/> of the CSV file from the
-    /// byte order mark (BOM) if the argument of the <paramref name="textEncoding"/> parameter is <c>null</c>.
-    /// If the <see cref="Encoding"/> cannot be determined automatically, <see cref="Encoding.UTF8"/> is used.
+    /// This method also tries to determine the <see cref="Encoding"/> of the CSV file from the
+    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="fallbackEncoding"/> is
+    /// used.
     /// </para>
     /// <para>
     /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
@@ -207,34 +223,34 @@ public static class Csv
     /// file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static CsvReader OpenReadAnalyzed(string filePath,
+                                             Encoding? fallbackEncoding = null,
                                              Header header = Header.ProbablyPresent,
                                              bool disableCaching = false,
-                                             Encoding? textEncoding = null,
                                              int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         (CsvAnalyzerResult result, Encoding encoding) =
-            AnalyzeFile(filePath, header, textEncoding, analyzedLines);
+            AnalyzeFile(filePath, fallbackEncoding, header, analyzedLines);
         result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
         return result.IsHeaderPresent
-            ? new(filePath, result.Delimiter, true, result.Options, encoding)
+            ? new(filePath, result.Delimiter, encoding, true, result.Options)
             : new(filePath, result, encoding);
     }
 
     /// <summary>Opens the CSV file referenced with <paramref name="filePath"/> for reading.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
+    /// <param name="textEncoding">The text encoding to be used to read the CSV file
+    /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
     /// otherwise <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
-    /// <param name="textEncoding">The text encoding to be used to read the CSV file
-    /// or <c>null</c> for <see cref="Encoding.UTF8" />.</param>
     /// 
     /// <returns>A <see cref="CsvReader"/> that allows you to iterate through the CSV data.</returns>
     /// 
     /// <remarks>
     /// <para>
     /// The method arguments can be determined automatically with <see cref="CsvAnalyzer"/> - or use
-    /// <see cref="OpenReadAnalyzed(string, Header, bool, Encoding?, int)"/>.
+    /// <see cref="OpenReadAnalyzed(string, Encoding?, Header, bool, int)"/>.
     /// </para>
     /// <para>
     /// When importing CSV data from Excel, the appropriate arguments can be determined 
@@ -251,7 +267,6 @@ public static class Csv
     /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DisableCachingExample.cs" />
     /// </example>
     /// 
-    /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid
     /// file path.</exception>
@@ -261,10 +276,10 @@ public static class Csv
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static CsvReader OpenRead(string filePath,
                                      char delimiter = ',',
+                                     Encoding? textEncoding = null,
                                      bool isHeaderPresent = true,
-                                     CsvOpts options = CsvOpts.Default,
-                                     Encoding? textEncoding = null)
-        => new(filePath, delimiter, isHeaderPresent, options, textEncoding);
+                                     CsvOpts options = CsvOpts.Default)
+        => new(filePath, delimiter, textEncoding, isHeaderPresent, options);
 
     /// <summary>Initializes a <see cref="CsvReader"/> instance to read CSV data.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
@@ -674,6 +689,8 @@ public static class Csv
     /// A <c>null</c> reference for <see cref="CultureInfo.InvariantCulture"/>.
     /// </para>
     /// </param>
+    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
+    /// cref="Encoding.UTF8" />.</param>
     /// <param name="csvColumnNames">
     /// <para>
     /// A collection of <see cref="DataColumn.ColumnName"/>s from <paramref name="dataTable"/>
@@ -686,8 +703,6 @@ public static class Csv
     /// <paramref name="dataTable"/>.
     /// </para>
     /// </param>
-    /// <param name="textEncoding">The <see cref="Encoding"/> to be used or <c>null</c> for <see
-    /// cref="Encoding.UTF8" />.</param>
     /// <param name="format">
     /// <para>A format <see cref="string"/> to use for all items that implement <see cref="IFormattable"/>.
     /// </para>
@@ -726,8 +741,8 @@ public static class Csv
                             string filePath,
                             char delimiter = ',',
                             IFormatProvider? formatProvider = null,
-                            IEnumerable<string>? csvColumnNames = null,
                             Encoding? textEncoding = null,
+                            IEnumerable<string>? csvColumnNames = null,
                             string? format = null)
     {
         using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
@@ -922,7 +937,7 @@ public static class Csv
                           .Count();
     }
 
-    private static int GetCodePage(string filePath)
+    private static bool TryGetCodePageFromBom(string filePath, out int codePage)
     {
         const int BUF_LENGTH = 4;
 
@@ -938,11 +953,14 @@ public static class Csv
             int bytesRead = fs.Read(buf, 0, buf.Length);
             ReadOnlySpan<byte> span = buf;
 #endif
-            return TextEncodingConverter.GetCodePage(span.Slice(0, bytesRead), out _);
+            codePage = 
+                TextEncodingConverter.GetCodePage(span.Slice(0, bytesRead), out int bomLength);
+            return bomLength != 0 ;
         }
         catch
         {
-            return Encoding.UTF8.CodePage;
+            codePage = 0;
+            return false;
         }
     }
 }
