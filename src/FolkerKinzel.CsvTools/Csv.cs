@@ -6,15 +6,6 @@ using FolkerKinzel.CsvTools.Intls;
 namespace FolkerKinzel.CsvTools;
 
 /// <summary>Static class that provides methods for reading, writing and analyzing CSV data.</summary>
-/// <example>
-/// <note type="note">
-/// In the following code examples - for easier readability - exception handling has been omitted.
-/// </note>
-/// <para>
-/// Reading and writing a CSV file:
-/// </para>
-/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
-/// </example>
 public static class Csv
 {
     /// <summary>The newline characters to use in CSV files ("\r\n").</summary>
@@ -24,12 +15,12 @@ public static class Csv
     /// Gets the appropriate method arguments for exchanging CSV data with Excel.
     /// </summary>
     /// <returns>A <see cref="ValueTuple{T1, T2}"/> containing the delimiter character, 
-    /// the <see cref="IFormatProvider"/> and the <see cref="Encoding"/> to use when exchanging CSV 
-    /// data with Excel.</returns>
+    /// the <see cref="IFormatProvider"/> and the <see cref="Encoding"/> to use when exchanging 
+    /// CSV data with Excel.</returns>
     /// <remarks>
     /// <para>Excel formats numbers and dates depending on the culture in its "Regional Settings".
     /// Also the CSV field delimiter character used by Excel, and the <see cref="Encoding"/> that
-    /// Excel uses to export CSV depend on these settings.</para>
+    /// Excel uses to export CSV depends on these settings.</para>
     /// <para>
     /// This method uses <see cref="CultureInfo.CurrentCulture"/> to retrieve the required 
     /// informations. <see cref="CultureInfo.CurrentCulture"/> and the "Regional Settings"
@@ -71,7 +62,9 @@ public static class Csv
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="fallbackEncoding">
     /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark 
-    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding.
+    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding. Use 
+    /// <see cref="GetExcelArguments"/> to get the appropriate argument for this parameter when importing
+    /// CSV data from Excel.
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
@@ -174,7 +167,9 @@ public static class Csv
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="fallbackEncoding">
     /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark 
-    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding.
+    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding. Use 
+    /// <see cref="GetExcelArguments"/> to get the appropriate argument for this parameter when importing
+    /// CSV data from Excel.
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="disableCaching"><c>true</c> to set the <see cref="CsvOpts.DisableCaching"/> flag, 
@@ -672,9 +667,7 @@ public static class Csv
     }
 
     /// <summary>
-    /// Writes the content of a <see cref="DataTable"/> as a CSV file. The 
-    /// <see cref="DataColumn.ColumnName"/>s of <paramref name="dataTable"/> form  the header row 
-    /// of this file. 
+    /// Saves the content of a <see cref="DataTable"/> as a CSV file with header row. 
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> to save.</param>
     /// <param name="filePath">The file path of the CSV file to be written.</param>
@@ -751,7 +744,7 @@ public static class Csv
     }
 
     /// <summary>
-    /// Writes the contents of a <see cref="DataTable"/> as CSV.
+    /// Writes the contents of a <see cref="DataTable"/> as CSV with header row.
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> whose content is written.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>

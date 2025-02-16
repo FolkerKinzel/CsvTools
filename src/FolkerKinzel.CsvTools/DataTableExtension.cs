@@ -95,7 +95,7 @@ public static class DataTableExtension
         => Csv.Save(dataTable, filePath, delimiter, formatProvider, textEncoding, csvColumnNames, format);
 
     /// <summary>
-    /// Writes the contents of the <see cref="DataTable"/> as CSV.
+    /// Writes the content of the <see cref="DataTable"/> as CSV.
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> whose content is written.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>

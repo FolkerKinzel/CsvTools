@@ -16,16 +16,6 @@ namespace FolkerKinzel.CsvTools;
 /// iterate it twice, an <see cref="ObjectDisposedException"/> is thrown.
 /// </para>
 /// </remarks>
-/// <example>
-/// <note type="note">
-/// In the following code examples - for easier readability - exception handling
-/// has been omitted.
-/// </note>
-/// <para>
-/// Linq query on a CSV file:
-/// </para>
-/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\LinqOnCsvExample.cs" />
-/// </example>
 public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator<CsvRecord>
 {
     private readonly CsvStringReader _reader;
@@ -71,12 +61,6 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, otherwise 
     /// <c>false</c>.</param>
     /// <param name="options">Options for reading the CSV file.</param>
-    /// 
-    /// <remarks>
-    /// <note type="tip">
-    /// The optimal constructor parameters can be determined automatically with <see cref="CsvAnalyzer"/>.
-    /// </note>
-    /// </remarks>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
     /// <exception cref="ArgumentException"> <paramref name="filePath" /> is not a valid file path.

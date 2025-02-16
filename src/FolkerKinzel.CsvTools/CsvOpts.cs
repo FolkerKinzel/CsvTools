@@ -13,18 +13,6 @@ namespace FolkerKinzel.CsvTools;
 /// <seealso cref="CsvReader"/>
 /// <seealso cref="CsvOptsExtension"/>
 /// <seealso cref="Csv"/>
-/// <example>
-/// <para>
-/// Example that demonstrates that setting the flag <see cref="DisableCaching"
-/// /> leads to errors when an attempt is made to cache the results.
-/// set.
-/// </para>
-/// <note type="note">
-/// In the following code example - for easier readability - exception handling
-/// has been omitted.
-/// </note>
-/// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DisableCachingExample.cs" />
-/// </example>
 [Flags]
 public enum CsvOpts
 {
