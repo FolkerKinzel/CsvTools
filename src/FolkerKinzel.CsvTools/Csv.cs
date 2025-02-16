@@ -82,14 +82,14 @@ public static class Csv
     /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
-    /// This method also tries to determine the <see cref="Encoding"/> of the CSV file from the
-    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="fallbackEncoding"/> is
-    /// used.
-    /// </para>
-    /// <para>
     /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), 
     /// HASH (<c>'#'</c>, %x23), TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized 
     /// automatically.
+    /// </para>
+    /// <para>
+    /// This method also tries to determine the <see cref="Encoding"/> of the CSV file from the
+    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="fallbackEncoding"/> is
+    /// used.
     /// </para>
     /// </remarks>
     /// 
@@ -161,8 +161,7 @@ public static class Csv
                                                   int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
         => CsvAnalyzer.AnalyzeString(csv, header, analyzedLines);
 
-    /// <summary>Analyzes the CSV file referenced by <paramref name="filePath" /> first and then opens 
-    /// a <see cref="CsvReader"/> to read its content.
+    /// <summary>Opens a CSV file for reading after it had been analyzed.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="fallbackEncoding">
@@ -189,13 +188,13 @@ public static class Csv
     /// because the CSV file has to be accessed for reading.
     /// </para>
     /// <para>
+    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
+    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
+    /// </para>
+    /// <para>
     /// This method also tries to determine the <see cref="Encoding"/> of the CSV file from the
     /// byte order mark (BOM). If no byte order mark can be found, <paramref name="fallbackEncoding"/> is
     /// used.
-    /// </para>
-    /// <para>
-    /// The field delimiters COMMA (<c>','</c>, %x2C), SEMICOLON  (<c>';'</c>, %x3B), HASH (<c>'#'</c>, %x23),
-    /// TAB (<c>'\t'</c>, %x09), and SPACE (<c>' '</c>, %x20) are recognized automatically.
     /// </para>
     /// </remarks>
     /// 
@@ -232,7 +231,7 @@ public static class Csv
             : new(filePath, result, encoding);
     }
 
-    /// <summary>Opens the CSV file referenced with <paramref name="filePath"/> for reading.</summary>
+    /// <summary>Opens a CSV file for reading.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="textEncoding">The text encoding to be used to read the CSV file
@@ -277,7 +276,7 @@ public static class Csv
                                      CsvOpts options = CsvOpts.Default)
         => new(filePath, delimiter, textEncoding, isHeaderPresent, options);
 
-    /// <summary>Initializes a <see cref="CsvReader"/> instance to read CSV data.</summary>
+    /// <summary>Initializes a <see cref="CsvReader"/> instance.</summary>
     /// <param name="reader">The <see cref="TextReader" /> with which the CSV data is
     /// read.</param>
     /// <param name="delimiter">The field separator character.</param>
@@ -302,8 +301,7 @@ public static class Csv
                                      CsvOpts options = CsvOpts.Default)
         => new(reader, delimiter, isHeaderPresent, options);
 
-    /// <summary>Creates a new CSV file with header row and initializes a <see cref="CsvWriter"/> 
-    /// instance to write data to it.</summary>
+    /// <summary>Initializes a <see cref="CsvWriter"/> to write a CSV file with header row.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnNames">
     /// <para>
@@ -370,8 +368,7 @@ public static class Csv
         => new(filePath, columnNames, CaseSensitive(columnNames), delimiter, textEncoding);
 
     /// <summary>
-    /// Initializes a new <see cref="CsvWriter" /> object with the column names for the header row 
-    /// to be written.</summary>
+    /// Initializes a <see cref="CsvWriter"/> to write CSV with header row.</summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// 
     /// <param name="columnNames">
@@ -414,8 +411,7 @@ public static class Csv
                                       char delimiter = ',')
         => new(writer, columnNames, CaseSensitive(columnNames), delimiter);
 
-    /// <summary>Creates a new CSV file without a header row and initializes a <see cref="CsvWriter"/> 
-    /// instance to write data to it.</summary>
+    /// <summary>Initializes a <see cref="CsvWriter"/> to write a CSV file without header row.</summary>
     /// <param name="filePath">File path of the CSV file.</param>
     /// <param name="columnsCount">Number of columns in the CSV file.</param>
     /// <param name="delimiter">The field separator character.</param>
@@ -450,7 +446,7 @@ public static class Csv
                                       Encoding? textEncoding = null)
         => new(filePath, columnsCount, delimiter, textEncoding);
 
-    /// <summary>Initializes a new <see cref="CsvWriter" /> object to write CSV data without a header row.
+    /// <summary>Initializes a <see cref="CsvWriter"/> to write CSV without a header row.
     /// </summary>
     /// <param name="writer">The <see cref="TextWriter" /> used for writing.</param>
     /// <param name="columnsCount">Number of columns in the CSV.</param>
@@ -475,7 +471,7 @@ public static class Csv
     public static CsvWriter OpenWrite(TextWriter writer, int columnsCount, char delimiter = ',')
         => new(writer, columnsCount, delimiter);
 
-    /// <summary>Parses the specified CSV-<see cref="string"/> to make its content accessible.</summary>
+    /// <summary>Parses a CSV-<see cref="string"/> to make its content accessible.</summary>
     /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
     /// <param name="delimiter">The field separator character.</param>
     /// <param name="isHeaderPresent"> <c>true</c>, to interpret the first line as a header, 
@@ -509,7 +505,7 @@ public static class Csv
         return [.. reader];
     }
 
-    /// <summary>Analyzes the specified CSV-<see cref="string"/> first and then parses it content.
+    /// <summary>Parses a CSV-<see cref="string"/> after it had been analyzed.
     /// </summary>
     /// <param name="csv">The CSV-<see cref="string"/> to parse.</param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
@@ -744,7 +740,7 @@ public static class Csv
     }
 
     /// <summary>
-    /// Writes the contents of a <see cref="DataTable"/> as CSV with header row.
+    /// Writes the content of a <see cref="DataTable"/> as CSV with header row.
     /// </summary>
     /// <param name="dataTable">The <see cref="DataTable"/> whose content is written.</param>
     /// <param name="textWriter">The <see cref="TextWriter"/> to be used.</param>
