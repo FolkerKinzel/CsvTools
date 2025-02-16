@@ -256,9 +256,11 @@ public class CsvAnalyzerTests
     [TestMethod]
     public void GetExcelParametersTest1()
     {
-        (char delimiter, IFormatProvider formatProvider) = Csv.GetExcelArguments();
+        (char delimiter, IFormatProvider formatProvider, Encoding encoding) = Csv.GetExcelArguments();
 
         Assert.IsNotNull(formatProvider);
+        Assert.IsNotNull(encoding);
+
         Assert.AreNotEqual('\r', delimiter);
         Assert.AreNotEqual('\n', delimiter);
         Assert.AreNotEqual('\"', delimiter);

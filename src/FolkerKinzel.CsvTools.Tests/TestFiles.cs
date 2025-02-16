@@ -31,5 +31,6 @@ internal static class TestFiles
 
     internal static string AnalyzerTestCsv => Path.Combine(_testFileDirectory, "AnalyzerTest.csv");
 
+    internal static string AnsiCsv => Path.Combine(_testFileDirectory, "Ansi.csv");
 
 }
