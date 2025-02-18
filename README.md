@@ -20,6 +20,7 @@ FolkerKinzel.CsvTools allows you to do things easily and with just a few lines o
 - It makes the fields of the CSV file available as `ReadOnlyMemory<Char>` instances. This avoids the allocation of numerous temporary strings.
 - The `CsvOpts.DisableCaching` option allows reusing the same `CsvRecord` instance for each parsed row of the CSV file. This can avoid further allocations.
 
+(See [benchmark results](https://github.com/FolkerKinzel/CsvTools.Mappings/tree/master/src/Benchmarks/results) and the associated [benchmark code](https://github.com/FolkerKinzel/CsvTools.Mappings/tree/master/src/Benchmarks).)
 ### Code Examples
 - [Converting object data to CSV](https://github.com/FolkerKinzel/CsvTools/blob/master/src/Examples/CsvStringExample.cs)
 - [Serializing DataTable(s) as CSV](https://github.com/FolkerKinzel/CsvTools/blob/master/src/Examples/DataTableExample.cs)
