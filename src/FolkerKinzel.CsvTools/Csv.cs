@@ -34,7 +34,7 @@ public static class Csv
     /// When importing CSV from Excel the arguments retrieved with this method are a good guess 
     /// (including <c>TextEncoding</c>).
     /// To be on the safe side, <see cref="OpenReadAnalyzed(string, Encoding?, Header, bool, int)"/>
-    /// should be used with the <c>TextEncoding</c> argument as <c>fallbackEncoding</c>.
+    /// should be used with the <c>TextEncoding</c> argument as <c>defaultEncoding</c>.
     /// </para>
     /// </remarks>
     /// 
@@ -60,11 +60,10 @@ public static class Csv
     /// method arguments for parsing.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="fallbackEncoding">
-    /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark 
-    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding. Use 
-    /// <see cref="GetExcelArguments"/> to get the appropriate argument for this parameter when importing
-    /// CSV data from Excel.
+    /// <param name="defaultEncoding">
+    /// The text <see cref="Encoding"/> to be used if the CSV file has no byte order mark (BOM), or 
+    /// <c>null</c> to use <see cref="Encoding.UTF8"/> in this case. Use see cref="GetExcelArguments"/>
+    /// to get the appropriate argument for this parameter when importing CSV data from Excel.
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="analyzedLines">Maximum number of lines to analyze in the CSV file. The minimum 
@@ -88,7 +87,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// This method also tries to determine the <see cref="Encoding"/> of the CSV file from the
-    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="fallbackEncoding"/> is
+    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="defaultEncoding"/> is
     /// used.
     /// </para>
     /// </remarks>
@@ -105,21 +104,21 @@ public static class Csv
     /// <exception cref="IOException">I/O error.</exception>
     public static (CsvAnalyzerResult AnalyzerResult, Encoding Encoding)
         AnalyzeFile(string filePath,
-                    Encoding? fallbackEncoding = null,
+                    Encoding? defaultEncoding = null,
                     Header header = Header.ProbablyPresent,
                     int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
-        fallbackEncoding ??= Encoding.UTF8;
+        defaultEncoding ??= Encoding.UTF8;
 
         if (TryGetCodePageFromBom(filePath, out var codePage))
         {
             // Unicode encodings are always successful:
-            _ = TextEncodingConverter.TryGetEncoding(codePage, out fallbackEncoding);
+            _ = TextEncodingConverter.TryGetEncoding(codePage, out defaultEncoding);
         }
 
         CsvAnalyzerResult results =
-            CsvAnalyzer.AnalyzeFile(filePath, fallbackEncoding, header, analyzedLines);
-        return (results, fallbackEncoding!);
+            CsvAnalyzer.AnalyzeFile(filePath, defaultEncoding, header, analyzedLines);
+        return (results, defaultEncoding!);
     }
 
     /// <summary> Analyzes a <see cref="string"/> that contains CSV data to get the appropriate method
@@ -164,11 +163,10 @@ public static class Csv
     /// <summary>Opens a CSV file for reading after it had been analyzed.
     /// </summary>
     /// <param name="filePath">File path of the CSV file.</param>
-    /// <param name="fallbackEncoding">
-    /// The text <see cref="Encoding"/> to be used as a fallback if the CSV file has no byte order mark 
-    /// (BOM), or <c>null</c> to use <see cref="Encoding.UTF8"/> as fallback encoding. Use 
-    /// <see cref="GetExcelArguments"/> to get the appropriate argument for this parameter when importing
-    /// CSV data from Excel.
+    /// <param name="defaultEncoding">
+    /// The text <see cref="Encoding"/> to be used if the CSV file has no byte order mark (BOM), or 
+    /// <c>null</c> to use <see cref="Encoding.UTF8"/> in this case. Use <see cref="GetExcelArguments"/> 
+    /// to get the appropriate argument for this parameter when importing CSV data from Excel.
     /// </param>
     /// <param name="header">A supposition that is made about the presence of a header row.</param>
     /// <param name="disableCaching"><c>true</c> to set the <see cref="CsvOpts.DisableCaching"/> flag, 
@@ -193,7 +191,7 @@ public static class Csv
     /// </para>
     /// <para>
     /// This method also tries to determine the <see cref="Encoding"/> of the CSV file from the
-    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="fallbackEncoding"/> is
+    /// byte order mark (BOM). If no byte order mark can be found, <paramref name="defaultEncoding"/> is
     /// used.
     /// </para>
     /// </remarks>
@@ -218,13 +216,13 @@ public static class Csv
     /// file path.</exception>
     /// <exception cref="IOException">I/O error.</exception>
     public static CsvReader OpenReadAnalyzed(string filePath,
-                                             Encoding? fallbackEncoding = null,
+                                             Encoding? defaultEncoding = null,
                                              Header header = Header.ProbablyPresent,
                                              bool disableCaching = false,
                                              int analyzedLines = CsvAnalyzer.AnalyzedLinesMinCount)
     {
         (CsvAnalyzerResult result, Encoding encoding) =
-            AnalyzeFile(filePath, fallbackEncoding, header, analyzedLines);
+            AnalyzeFile(filePath, defaultEncoding, header, analyzedLines);
         result.Options = disableCaching ? result.Options | CsvOpts.DisableCaching : result.Options;
         return result.IsHeaderPresent
             ? new(filePath, result.Delimiter, encoding, true, result.Options)
