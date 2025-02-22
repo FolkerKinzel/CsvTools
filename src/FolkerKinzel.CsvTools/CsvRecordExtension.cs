@@ -2,6 +2,7 @@
 using System.Data;
 using System.Globalization;
 using FolkerKinzel.CsvTools.Intls;
+using FolkerKinzel.Helpers.Polyfills;
 
 namespace FolkerKinzel.CsvTools;
 

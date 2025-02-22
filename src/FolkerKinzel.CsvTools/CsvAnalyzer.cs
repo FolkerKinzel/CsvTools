@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
+using FolkerKinzel.Helpers;
+using FolkerKinzel.Helpers.Polyfills;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -68,12 +70,12 @@ public static class CsvAnalyzer
         analyzedLines = Normalize(analyzedLines);
         CsvAnalyzerResult result = new();
 
-        using (StreamReader reader1 = StreamHelper.InitStreamReader(filePath, textEncoding))
+        using (StreamReader reader1 = TextFile.OpenRead(filePath, textEncoding))
         {
             result.Delimiter = new DelimiterAnalyzer().GetFieldSeparator(reader1);
         }
 
-        using StreamReader reader2 = StreamHelper.InitStreamReader(filePath, textEncoding);
+        using StreamReader reader2 = TextFile.OpenRead(filePath, textEncoding);
         using var csvStringReader = new CsvStringReader(reader2, result.Delimiter, result.Options);
 
         CsvPropertiesAnalyzer.InitProperties(csvStringReader,

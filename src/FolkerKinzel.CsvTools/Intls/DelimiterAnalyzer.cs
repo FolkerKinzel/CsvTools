@@ -2,6 +2,14 @@
 
 internal ref struct DelimiterAnalyzer()
 {
+    internal static void Validate(char delimiter)
+    {
+        if (delimiter == '\"' || delimiter == '\r' || delimiter == '\n')
+        {
+            throw new ArgumentOutOfRangeException(nameof(delimiter));
+        }
+    }
+
     private const int EOF = -1;
     private const int MAX_LINES = 5;
 

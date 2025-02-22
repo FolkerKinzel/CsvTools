@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
+using FolkerKinzel.Helpers;
+using FolkerKinzel.Helpers.Polyfills;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -656,7 +658,7 @@ public static class Csv
                             Encoding? textEncoding = null,
                             string? format = null)
     {
-        using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
+        using StreamWriter streamWriter = TextFile.OpenWrite(filePath, textEncoding, Csv.NewLine, false);
         WriteIntl(data, streamWriter, delimiter, formatProvider, format);
     }
 
@@ -733,7 +735,7 @@ public static class Csv
                             IEnumerable<string>? csvColumnNames = null,
                             string? format = null)
     {
-        using StreamWriter streamWriter = StreamHelper.InitStreamWriter(filePath, textEncoding);
+        using StreamWriter streamWriter = TextFile.OpenWrite(filePath, textEncoding, Csv.NewLine, false);
         WriteIntl(dataTable, streamWriter, delimiter, formatProvider, csvColumnNames, format);
     }
 
@@ -927,22 +929,10 @@ public static class Csv
 
     private static bool TryGetCodePageFromBom(string filePath, out int codePage)
     {
-        const int BUF_LENGTH = 4;
-
         try
         {
-            using FileStream fs = File.OpenRead(filePath);
-
-#if NET8_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
-            Span<byte> span = stackalloc byte[BUF_LENGTH];
-            int bytesRead = fs.Read(span);
-#else
-            var buf = new byte[BUF_LENGTH];
-            int bytesRead = fs.Read(buf, 0, buf.Length);
-            ReadOnlySpan<byte> span = buf;
-#endif
             codePage = 
-                TextEncodingConverter.GetCodePage(span.Slice(0, bytesRead), out int bomLength);
+                TextEncodingConverter.GetCodePage(filePath, out int bomLength);
             return bomLength != 0 ;
         }
         catch

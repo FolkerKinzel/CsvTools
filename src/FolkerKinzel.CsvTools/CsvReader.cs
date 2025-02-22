@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
 using FolkerKinzel.CsvTools.Resources;
+using FolkerKinzel.Helpers;
+using FolkerKinzel.Helpers.Polyfills;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -41,8 +43,9 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
                        CsvAnalyzerResult analyzerResult,
                        Encoding? textEncoding)
     {
-        StreamReader streamReader = StreamHelper.InitStreamReader(filePath, textEncoding);
-        this._reader = new CsvStringReader(streamReader, analyzerResult.Delimiter, analyzerResult.Options);
+        this._reader = new CsvStringReader(TextFile.OpenRead(filePath, textEncoding),
+                                           analyzerResult.Delimiter,
+                                           analyzerResult.Options);
         _rowLength = analyzerResult.RowLength;
     }
 
@@ -74,9 +77,9 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
                      bool isHeaderPresent = true,
                      CsvOpts options = CsvOpts.Default)
     {
-        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+        DelimiterAnalyzer.Validate(delimiter);
 
-        StreamReader streamReader = StreamHelper.InitStreamReader(filePath, textEncoding);
+        StreamReader streamReader = TextFile.OpenRead(filePath, textEncoding);
 
         this._reader = new CsvStringReader(streamReader, delimiter, options);
         this._hasHeaderRow = isHeaderPresent;
@@ -98,7 +101,7 @@ public sealed class CsvReader : IDisposable, IEnumerable<CsvRecord>, IEnumerator
                      CsvOpts options = CsvOpts.Default)
     {
         _ArgumentNullException.ThrowIfNull(reader, nameof(reader));
-        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+        DelimiterAnalyzer.Validate(delimiter);
 
         this._reader = new CsvStringReader(reader, delimiter, options);
         this._hasHeaderRow = isHeaderPresent;

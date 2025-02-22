@@ -1,5 +1,7 @@
 using System.Text;
 using FolkerKinzel.CsvTools.Intls;
+using FolkerKinzel.Helpers;
+using FolkerKinzel.Helpers.Polyfills;
 
 namespace FolkerKinzel.CsvTools;
 
@@ -70,7 +72,7 @@ public sealed class CsvWriter : IDisposable
                      Encoding? textEncoding = null)
     {
         _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
-        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+        DelimiterAnalyzer.Validate(delimiter);
 
         this.Record = new CsvRecord(
             [.. columnNames],
@@ -78,13 +80,12 @@ public sealed class CsvWriter : IDisposable
             initArr: true,
             throwException: true);
 
-        // Don't change the order: _writer will not be disposed if an exception is thrown
-        // after it had been initialized.
-        _writer = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        _writer.NewLine = Csv.NewLine;
-
         _delimiter = delimiter;
         _reservedChars = CreateReservedChars(delimiter);
+
+        // Don't change the order: _writer will not be disposed if an exception is thrown
+        // after it had been initialized.
+        _writer = TextFile.OpenWrite(filePath, textEncoding, Csv.NewLine, false);
     }
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object to write a CSV file without a header row.
@@ -116,18 +117,17 @@ public sealed class CsvWriter : IDisposable
                      char delimiter = ',',
                      Encoding? textEncoding = null)
     {
-        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+        DelimiterAnalyzer.Validate(delimiter);
 
         Record = new CsvRecord(columnsCount);
-
-        // Don't change the order: _writer will not be disposed if an exception is thrown
-        // after it had been initialized.
-        this._writer = StreamHelper.InitStreamWriter(filePath, textEncoding);
-        _writer.NewLine = Csv.NewLine;
 
         _isHeaderRowWritten = true;
         _delimiter = delimiter;
         _reservedChars = CreateReservedChars(delimiter);
+
+        // Don't change the order: _writer will not be disposed if an exception is thrown
+        // after it had been initialized.
+        this._writer = TextFile.OpenWrite(filePath, textEncoding, Csv.NewLine, false);
     }
 
     /// <summary>Initializes a new <see cref="CsvWriter" /> object with the column names for the header
@@ -163,7 +163,7 @@ public sealed class CsvWriter : IDisposable
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
         _ArgumentNullException.ThrowIfNull(columnNames, nameof(columnNames));
-        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+        DelimiterAnalyzer.Validate(delimiter);
 
         this.Record = new CsvRecord(
             [.. columnNames],
@@ -200,7 +200,7 @@ public sealed class CsvWriter : IDisposable
                      char delimiter = ',')
     {
         _ArgumentNullException.ThrowIfNull(writer, nameof(writer));
-        _ArgumentOutOfRangeException.ValidateDelimiter(delimiter);
+        DelimiterAnalyzer.Validate(delimiter);
 
         Record = new CsvRecord(columnsCount);
 
