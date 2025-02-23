@@ -1,7 +1,6 @@
 [![GitHub](https://img.shields.io/github/license/FolkerKinzel/CsvTools)](https://github.com/FolkerKinzel/CsvTools/blob/master/LICENSE)
 
-# FolkerKinzel.CsvTools
-.NET library for reading and writing CSV files (RFC 4180)
+## .NET library for reading and writing CSV files (RFC 4180)
 
 Starting with version 2.0.0, mapping functionality and type converters 
 are in the separate package [FolkerKinzel.CsvTools.Mappings](https://www.nuget.org/packages/FolkerKinzel.CsvTools.Mappings/). This ensures that only what is really needed needs to be installed.
