@@ -16,7 +16,7 @@ FolkerKinzel.CsvTools allows you to do things easily and with just a few lines o
 - It makes the fields of the CSV file available as `ReadOnlyMemory<Char>` instances. This avoids the allocation of numerous temporary strings.
 - The `CsvOpts.DisableCaching` option allows reusing the same `CsvRecord` instance for each parsed row of the CSV file. This can avoid further allocations.
 
-[Project Reference and Release Notes](https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.1-beta.1)
+[Project Reference and Release Notes](https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.1)
 
 [See code examples on GitHub](https://github.com/FolkerKinzel/CsvTools)
 
