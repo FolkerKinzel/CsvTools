@@ -8,10 +8,10 @@
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <Version>2.0.1</Version>
-    <FileVersion>2.0.1.4</FileVersion>
+    <Version>2.0.2</Version>
+    <FileVersion>2.0.2.2</FileVersion>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.1</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.2</PackageReleaseNotes>
     <PackageTags>CSV</PackageTags>
     <Description>.NET library for reading and writing CSV files (RFC 4180)</Description>
     <Authors>Folker Kinzel</Authors>
@@ -76,10 +76,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FolkerKinzel.Strings" Version="9.4.0" />
+    <PackageReference Include="FolkerKinzel.Strings" Version="9.4.1" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.6.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Resources\Res.Designer.cs">
