@@ -188,7 +188,7 @@ public class CsvReaderTests
     [ExpectedException(typeof(NotSupportedException))]
     public void ResetTest1()
     {
-        using var reader = new CsvReader("Test");
+        using var reader = new CsvReader(new StringReader("Test"));
         ((IEnumerator)reader).Reset();
     }
 

@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net8.0;netstandard2.1;netstandard2.0;net462</TargetFrameworks>
-    <LangVersion>13.0</LangVersion>
+    <TargetFrameworks>net9.0;net8.0;net10.0;netstandard2.1;netstandard2.0;net462</TargetFrameworks>
+    <LangVersion>14.0</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <NeutralLanguage>en</NeutralLanguage>
     <!-- .nuget-Package: -->
     <PackageId>FolkerKinzel.CsvTools</PackageId>
     <Product>FolkerKinzel.CsvTools</Product>
-    <Version>2.0.2</Version>
-    <FileVersion>2.0.2.2</FileVersion>
+    <Version>2.0.3</Version>
+    <FileVersion>2.0.3.9</FileVersion>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.2</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/FolkerKinzel/CsvTools/releases/tag/v2.0.3</PackageReleaseNotes>
     <PackageTags>CSV</PackageTags>
     <Description>.NET library for reading and writing CSV files (RFC 4180)</Description>
     <Authors>Folker Kinzel</Authors>
@@ -76,7 +76,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FolkerKinzel.Strings" Version="9.4.1" />
+    <PackageReference Include="FolkerKinzel.Strings" Version="9.4.2" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
     <PackageReference Include="System.ValueTuple" Version="4.6.1" />
