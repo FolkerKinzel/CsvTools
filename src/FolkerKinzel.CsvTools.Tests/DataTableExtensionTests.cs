@@ -1,7 +1,6 @@
 ﻿using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Tests;
 
@@ -18,7 +17,7 @@ public class DataTableExtensionTests
         _ = dataTable.Columns.Add("A", typeof(int));
         _ = dataTable.Columns.Add("B", typeof(int));
 
-        _ = dataTable.Rows.Add(1,2);
+        _ = dataTable.Rows.Add(1, 2);
         _ = dataTable.Rows.Add(3);
         _ = dataTable.Rows.Add(4, 5);
         dataTable.AcceptChanges();

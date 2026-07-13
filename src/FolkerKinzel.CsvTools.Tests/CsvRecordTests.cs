@@ -1,23 +1,17 @@
-﻿using FolkerKinzel.CsvTools;
-using System;
+﻿using System.Collections;
 using System.Globalization;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Collections;
 
 namespace FolkerKinzel.CsvTools.Tests;
 
-[TestClass()]
+[TestClass]
 public class CsvRecordTests
 {
     [TestMethod]
-    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void CsvRecordTest1() 
+    public void CsvRecordTest1()
         => Assert.ThrowsExactly<ArgumentOutOfRangeException>(
             () => _ = new CsvRecord(-1));
 
-    [TestMethod()]
+    [TestMethod]
     public void FillClearTest()
     {
         var data = new ReadOnlyMemory<char>[] { "eins".AsMemory(), "zwei".AsMemory() };
@@ -38,58 +32,23 @@ public class CsvRecordTests
         Assert.AreEqual(2, rec.Count);
     }
 
-    
-
-    //[TestMethod]
-    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
-    //public void FillTest3()
-    //{
-    //    var rec = new CsvRecord(2);
-
-    //    rec.FillWith(["1".AsMemory(), "2".AsMemory(), "3".AsMemory()]);
-    //}
-
     [TestMethod]
-    //[ExpectedException(typeof(IndexOutOfRangeException))]
     public void ItemTest1()
     {
         var rec = new CsvRecord(1);
 
-        _ = Assert.ThrowsExactly<IndexOutOfRangeException>(
-            () => _ = rec[1]);
+        _ = Assert.ThrowsExactly<IndexOutOfRangeException>(() => _ = rec[1]);
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(IndexOutOfRangeException))]
     public void ItemTest2()
     {
         var rec = new CsvRecord(1);
 
-        _ = Assert.ThrowsExactly<IndexOutOfRangeException>(
-            () => rec[-1] = default);
+        _ = Assert.ThrowsExactly<IndexOutOfRangeException>(() => rec[-1] = default);
     }
 
-
-    //[TestMethod]
-    //[ExpectedException(typeof(ArgumentNullException))]
-    //public void FillTest4()
-    //{
-    //    var rec = new CsvRecord(2);
-
-    //    rec.Fill((IEnumerable<string?>?)null!);
-    //}
-
-    //[TestMethod]
-    //[ExpectedException(typeof(ArgumentNullException))]
-    //public void FillTest5()
-    //{
-    //    var rec = new CsvRecord(2);
-
-    //    rec.Fill((IEnumerable<ReadOnlyMemory<char>>?)null!);
-    //}
-
-
-    [TestMethod()]
+    [TestMethod]
     public void TryGetValueTest1a()
     {
         const string col1 = "col1";
@@ -107,14 +66,9 @@ public class CsvRecordTests
 
         Assert.IsFalse(rec.TryGetValue("bla", out ReadOnlyMemory<char> val3));
         Assert.IsTrue(val3.IsEmpty);
-
-        //Assert.IsFalse(rec.TryGetValue(-1, out ReadOnlyMemory<char> val4));
-        //Assert.IsTrue(val4.IsEmpty);
     }
 
-
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentNullException))]
+    [TestMethod]
     public void TryGetValueTest1b()
     {
         const string col1 = "col1";
@@ -125,29 +79,7 @@ public class CsvRecordTests
         _ = Assert.ThrowsExactly<ArgumentNullException>(() => rec.TryGetValue(null!, out _));
     }
 
-
-    //[TestMethod()]
-    //public void TryGetValueTest2()
-    //{
-    //    var rec = new CsvRecord(2);
-    //    rec.Values[0] = "1".AsMemory();
-    //    rec.Values[1] = "2".AsMemory();
-
-    //    Assert.IsTrue(rec.TryGetValue(0, out ReadOnlyMemory<char> val1));
-    //    Assert.AreEqual("1", val1.ToString());
-
-    //    Assert.IsTrue(rec.TryGetValue(1, out ReadOnlyMemory<char> val2));
-    //    Assert.AreEqual("2", val2.ToString());
-
-    //    Assert.IsFalse(rec.TryGetValue(2, out ReadOnlyMemory<char> val3));
-    //    Assert.IsTrue(val3.IsEmpty);
-
-    //    Assert.IsFalse(rec.TryGetValue(-1, out ReadOnlyMemory<char> val4));
-    //    Assert.IsTrue(val4.IsEmpty);
-    //}
-
-
-    [TestMethod()]
+    [TestMethod]
     public void GetEnumeratorTest1()
     {
         var rec = new CsvRecord(2);
@@ -166,7 +98,7 @@ public class CsvRecordTests
         Assert.AreEqual(enumerator2.GetType(), enumerator.GetType());
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void ToStringTest()
     {
         var rec = new CsvRecord(2);
@@ -179,7 +111,7 @@ public class CsvRecordTests
         Assert.AreNotEqual(0, s.Length);
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void ToDictionaryTest()
     {
         const string col1 = "col1";
@@ -201,7 +133,7 @@ public class CsvRecordTests
         }
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void ContainsColumnTest1()
     {
         const string col1 = "col1";
@@ -216,7 +148,6 @@ public class CsvRecordTests
 
 
     [TestMethod]
-    //[ExpectedException(typeof(ArgumentNullException))]
     public void ContainsColumnTest2()
     {
         var rec = new CsvRecord([], false, true, false);
@@ -224,8 +155,7 @@ public class CsvRecordTests
         _ = Assert.ThrowsExactly<ArgumentNullException>(() => rec.ContainsColumn(null!));
     }
 
-
-    [TestMethod()]
+    [TestMethod]
     public void IndexOfColumnTest()
     {
         const string col1 = "col1";
@@ -245,7 +175,7 @@ public class CsvRecordTests
     {
         var record = new CsvRecord(0);
         Assert.IsTrue(record.IsEmpty);
-        Assert.IsNotNull(record.ToString());    
+        Assert.IsNotNull(record.ToString());
     }
 
     [TestMethod]
@@ -259,6 +189,4 @@ public class CsvRecordTests
         Assert.IsFalse(record.IsEmpty);
         Assert.IsNotNull(record.ToString());
     }
-
-    
 }

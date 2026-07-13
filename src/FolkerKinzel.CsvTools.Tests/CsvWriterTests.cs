@@ -1,52 +1,44 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Linq;
-using System.IO;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace FolkerKinzel.CsvTools.Tests;
 
-[TestClass()]
+[TestClass]
 public class CsvWriterTests
 {
     [NotNull]
     public TestContext? TestContext { get; set; }
 
-    [TestMethod()]
+    [TestMethod]
     public void CsvWriterTest()
     {
         using CsvWriter writer = Csv.OpenWrite("Test", 0);
         Assert.IsNotNull(writer);
     }
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentNullException))]
+    [TestMethod]
     public void CsvWriterTest1()
         => Assert.ThrowsExactly<ArgumentNullException>(() => new CsvWriter((string?)null!, 0));
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentException))]
-    public void CsvWriterTest2() 
+    [TestMethod]
+    public void CsvWriterTest2()
         => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter("  ", 0));
 
-    [TestMethod()]
+    [TestMethod]
     public void CsvWriterTest3()
     {
         using CsvWriter writer = Csv.OpenWrite("Test", ["1", "2"]);
         Assert.IsNotNull(writer);
     }
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentException))]
+    [TestMethod]
     public void CsvWriterTest4()
         => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter("  ", ["1", "2"]));
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentException))]
+    [TestMethod]
     public void CsvWriterTest5()
         => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter("Test", ["1", "1"]));
 
-    [TestMethod()]
+    [TestMethod]
     public void CsvWriterTest6()
     {
         using var textWriter = new StringWriter();
@@ -55,21 +47,19 @@ public class CsvWriterTests
         Assert.IsNotNull(writer);
     }
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentException))]
+    [TestMethod]
     public void CsvWriterTest7()
     {
         using var textWriter = new StringWriter();
         _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter(textWriter, ["1", "1"]));
     }
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentNullException))]
+    [TestMethod]
     public void CsvWriterTest8()
         => _ = Assert.ThrowsExactly<ArgumentNullException>(
                 () => new CsvWriter((TextWriter?)null!, ["1", "2"]));
 
-    [TestMethod()]
+    [TestMethod]
     public void CsvWriterTest9()
     {
         using var textWriter = new StringWriter();
@@ -94,7 +84,6 @@ public class CsvWriterTests
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest11(char delimiter)
     {
         string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest11.csv");
@@ -117,7 +106,6 @@ public class CsvWriterTests
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest13(char delimiter)
     {
         string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest13.csv");
@@ -141,7 +129,6 @@ public class CsvWriterTests
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest15(char delimiter)
     {
         using var stringWriter = new StringWriter();
@@ -165,7 +152,6 @@ public class CsvWriterTests
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest17(char delimiter)
     {
         using var stringWriter = new StringWriter();
@@ -173,7 +159,7 @@ public class CsvWriterTests
             () => new CsvWriter(stringWriter, 2, delimiter: delimiter));
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void WriteRecordTest1()
     {
         string VALUE1 = "Ein \"schönes\" Wochenende;" + Environment.NewLine + Environment.NewLine + "Zeile 3";
@@ -194,7 +180,6 @@ public class CsvWriterTests
             writer.WriteRecord();
         }
 
-        //string csv = File.ReadAllText(FILENAME_STANDARD);
         using var reader = new CsvReader(FILENAME_STANDARD);
 
         Assert.AreEqual(VALUE1, reader.First()[Key1].ToString());
@@ -203,7 +188,7 @@ public class CsvWriterTests
     /// <summary>
     /// Write CSV without Header.
     /// </summary>
-    [TestMethod()]
+    [TestMethod]
     public void WriteRecordTest2()
     {
         string VALUE1 = "Ein \"schönes\" Wochenende;" + Environment.NewLine + Environment.NewLine + "Zeile 3";
@@ -226,8 +211,7 @@ public class CsvWriterTests
         Assert.AreEqual(VALUE1, reader.First().Values[0].ToString());
     }
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ObjectDisposedException))]
+    [TestMethod]
     public void WriteRecordTest3()
     {
         using var writer = new CsvWriter("File", 2);
@@ -236,7 +220,7 @@ public class CsvWriterTests
         _ = Assert.ThrowsExactly<ObjectDisposedException>(writer.WriteRecord);
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void DisposeTest()
     {
         TestContext.WriteLine($"{nameof(TestContext.DeploymentDirectory)}:         {TestContext.DeploymentDirectory}");
@@ -258,7 +242,6 @@ public class CsvWriterTests
         const string VALUE1 = "1234";
         const string VALUE2 = "4567";
         const string VALUE3 = "\"DemoString\" Some more demo string";
-        //string FILENAME_STANDARD = Path.Combine(TestContext.TestRunResultsDirectory!, @"NoHeader.csv");
 
         using var stringWriter = new StringWriter();
         using (var writer = new CsvWriter(stringWriter, 3, delimiter: '|'))
@@ -269,8 +252,6 @@ public class CsvWriterTests
 
             writer.WriteRecord();
         }
-
-        //const string csv = "1234|4567|\"DemoString\" Some more demo string|";
 
         using var stringReader = new StringReader(stringWriter.ToString());
         using var reader = new CsvReader(stringReader, delimiter: '|', isHeaderPresent: false);

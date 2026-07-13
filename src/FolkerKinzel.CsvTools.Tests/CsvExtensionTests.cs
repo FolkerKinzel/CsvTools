@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FolkerKinzel.CsvTools.Tests;
 
@@ -20,7 +19,7 @@ public class CsvExtensionTests
         using CsvReader reader = Csv.OpenRead(path);
         CsvRecord[] results = [.. reader];
 
-        Assert.AreEqual(0, results.Length);
+        Assert.IsEmpty(results);
     }
 
     [TestMethod]
@@ -33,7 +32,7 @@ public class CsvExtensionTests
         using CsvReader reader = Csv.OpenRead(path);
         CsvRecord[] results = [.. reader];
 
-        Assert.AreEqual(0, results.Length);
+        Assert.IsEmpty(results);
     }
 
     [TestMethod]
@@ -46,7 +45,7 @@ public class CsvExtensionTests
         using CsvReader reader = Csv.OpenRead(path, isHeaderPresent: false);
         CsvRecord[] results = [.. reader];
 
-        Assert.AreEqual(0, results.Length);
+        Assert.IsEmpty(results);
     }
 
     [TestMethod]

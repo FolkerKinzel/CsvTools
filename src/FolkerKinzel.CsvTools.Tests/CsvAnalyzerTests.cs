@@ -9,20 +9,20 @@ namespace FolkerKinzel.CsvTools.Tests;
 [TestClass()]
 public class CsvAnalyzerTests
 {
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentNullException))]
-    public void AnalyzeFileTest1() => Assert.ThrowsExactly<ArgumentNullException>(() => Csv.AnalyzeFile(null!));
+    [TestMethod]
+    public void AnalyzeFileTest1()
+        => Assert.ThrowsExactly<ArgumentNullException>(() => Csv.AnalyzeFile(null!));
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentException))]
-    public void AnalyzeFileTest2() => Assert.ThrowsExactly<ArgumentException>(() => Csv.AnalyzeFile("  "));
+    [TestMethod]
+    public void AnalyzeFileTest2()
+        => Assert.ThrowsExactly<ArgumentException>(() => Csv.AnalyzeFile("  "));
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void AnalyzeFileTest2b() 
-        => Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => Csv.AnalyzeFile("Test", header: (Header)4711));
+    [TestMethod]
+    public void AnalyzeFileTest2b()
+        => Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => Csv.AnalyzeFile("Test", header: (Header)4711));
 
-    [TestMethod()]
+    [TestMethod]
     public void AnalyzeFileTest3()
     {
         (CsvAnalyzerResult results, Encoding enc) = Csv.AnalyzeFile(TestFiles.AnalyzerTestCsv);
@@ -33,7 +33,8 @@ public class CsvAnalyzerTests
     [TestMethod]
     public void AnalyzeFileTest4()
     {
-        CsvAnalyzerResult result = CsvAnalyzer.AnalyzeFile(TestFiles.AnalyzerTestCsv, analyzedLines: -42);
+        CsvAnalyzerResult result = 
+            CsvAnalyzer.AnalyzeFile(TestFiles.AnalyzerTestCsv, analyzedLines: -42);
         AssertAnalyzerTestCsv(result);
     }
 
@@ -41,7 +42,7 @@ public class CsvAnalyzerTests
     {
         Assert.IsTrue(result.IsHeaderPresent);
         Assert.AreEqual(';', result.Delimiter);
-        CollectionAssert.AreEqual(result.ColumnNames?.ToArray(), new string?[] { "Eins", "eins", "zwei", "drei", null });
+        Assert.AreSequenceEqual(result.ColumnNames?.ToArray(), ["Eins", "eins", "zwei", "drei", null]);
         Assert.IsTrue(result.Options.HasFlag(CsvOpts.CaseSensitiveKeys));
         Assert.IsTrue(result.Options.HasFlag(CsvOpts.TrimColumns));
         Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnTooFewFields));
@@ -50,7 +51,7 @@ public class CsvAnalyzerTests
         Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnEmptyLines));
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void AnalyzeFileTest5()
     {
         CsvAnalyzerResult result = CsvAnalyzer.AnalyzeFile(TestFiles.GoogleCsv);
@@ -58,7 +59,7 @@ public class CsvAnalyzerTests
         Assert.IsTrue(result.IsHeaderPresent);
         Assert.AreEqual(',', result.Delimiter);
 
-        Assert.AreEqual(result.Options, CsvOpts.Default);
+        Assert.AreEqual(CsvOpts.Default, result.Options);
     }
 
     [TestMethod]
@@ -251,7 +252,7 @@ public class CsvAnalyzerTests
         CsvAnalyzerResult res = Csv.AnalyzeString(csv);
         Assert.AreEqual(';', res.Delimiter);
         Assert.IsTrue(res.IsHeaderPresent);
-        Assert.AreEqual(5, res.ColumnNames.Count);
+        Assert.HasCount(5, res.ColumnNames);
     }
 
     [TestMethod]

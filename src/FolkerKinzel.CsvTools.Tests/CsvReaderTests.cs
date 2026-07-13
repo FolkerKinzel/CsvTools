@@ -1,11 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Text;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
-using System.Collections;
+using System.Text;
 using FolkerKinzel.Strings;
 
 namespace FolkerKinzel.CsvTools.Tests;
@@ -16,7 +11,7 @@ public class CsvReaderTests
     [NotNull]
     public TestContext? TestContext { get; set; }
 
-    [TestMethod()]
+    [TestMethod]
     public void ReadTest1()
     {
         const string testCsv =
@@ -24,10 +19,10 @@ public class CsvReaderTests
             ",Spalte \"2\",";
 
         CsvRecord[] csv = Csv.Parse(testCsv, isHeaderPresent: false);
-        Assert.AreEqual(2, csv.Length);
+        Assert.HasCount(2, csv);
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void ReadTest2()
     {
         string outDir = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvFilesAnalyzed");
@@ -52,7 +47,6 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(ObjectDisposedException))]
     public void ReadTest3()
     {
         const string testCsv =
@@ -69,7 +63,6 @@ public class CsvReaderTests
 
 
     [TestMethod]
-    //[ExpectedException(typeof(ObjectDisposedException))]
     public void ReadTest4()
     {
         const string testCsv =
@@ -83,7 +76,7 @@ public class CsvReaderTests
         _ = Assert.ThrowsExactly<ObjectDisposedException>(() => csv.FirstOrDefault());
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void ReadTest5()
     {
         const string testCsv =
@@ -93,26 +86,22 @@ public class CsvReaderTests
         using var stringReader = new StringReader(testCsv);
         CsvRecord[] csv = Csv.Parse(testCsv, isHeaderPresent: false);
 
-        Assert.AreEqual(2, csv.Length);
+        Assert.HasCount(2, csv);
     }
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentNullException))]
-    public void CsvReaderTest3() 
+    [TestMethod]
+    public void CsvReaderTest3()
         => Assert.ThrowsExactly<ArgumentNullException>(() => new CsvReader((string?)null!));
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentException))]
+    [TestMethod]
     public void CsvReaderTest4()
         => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvReader("   "));
 
-    [TestMethod()]
-    //[ExpectedException(typeof(ArgumentNullException))]
+    [TestMethod]
     public void CsvReaderTest5()
         => Assert.ThrowsExactly<ArgumentNullException>(() => new CsvReader((StreamReader?)null!));
 
     [TestMethod]
-    //[ExpectedException(typeof(ObjectDisposedException))]
     public void CsvReaderTest6()
     {
         const string csv = """
@@ -138,7 +127,6 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(ObjectDisposedException))]
     public void CsvReaderTest7()
     {
         const string csv = """
@@ -169,11 +157,10 @@ public class CsvReaderTests
 
         using var csvReader = new CsvReader(new StringReader(csv));
 
-        Assert.AreEqual(4, csvReader.Count());
+        Assert.HasCount(4, csvReader);
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(NotSupportedException))]
     public void ResetTest1()
     {
         using var reader = new CsvReader(new StringReader("Test"));
@@ -195,7 +182,6 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(CsvFormatException))]
     public void TooMuchFieldsTest()
     {
         const string csv = """
@@ -206,7 +192,6 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(CsvFormatException))]
     public void EmptyLineTest1()
     {
         const string csv = """
@@ -228,11 +213,10 @@ public class CsvReaderTests
             """;
 
         CsvRecord[] result = Csv.Parse(csv, options: CsvOpts.Default.Unset(CsvOpts.ThrowOnEmptyLines));
-        Assert.AreEqual(2, result.Length);
+        Assert.HasCount(2, result);
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(CsvFormatException))]
     public void TooFewFieldsTest()
     {
         const string csv = """
@@ -243,7 +227,6 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(CsvFormatException))]
     public void FileTruncatedTest1()
     {
         const string csv = """

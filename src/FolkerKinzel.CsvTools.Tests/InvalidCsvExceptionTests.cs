@@ -3,13 +3,13 @@ using FolkerKinzel.CsvTools.Intls;
 
 namespace FolkerKinzel.CsvTools.Tests;
 
-[TestClass()]
+[TestClass]
 public class InvalidCsvExceptionTests
 {
     [NotNull]
     public TestContext? TestContext { get; set; }
 
-    [TestMethod()]
+    [TestMethod]
     public void InvalidCsvExceptionTest4()
     {
         string message = "Message";
@@ -29,7 +29,7 @@ public class InvalidCsvExceptionTests
         Assert.AreEqual(charIndex, e.CsvCharIndex);
     }
 
-    [TestMethod()]
+    [TestMethod]
     public void ToStringTest()
     {
         string message = "Message";
@@ -40,8 +40,6 @@ public class InvalidCsvExceptionTests
         var e = new CsvFormatException(message, CsvError.InvalidMasking, lineNumber, charIndex);
 
         string s = e.ToString();
-
-
         Assert.IsNotNull(s);
 
         TestContext.WriteLine(s);
