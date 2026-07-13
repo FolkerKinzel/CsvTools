@@ -25,11 +25,9 @@ public class CsvWriterTests
         => Assert.ThrowsExactly<ArgumentNullException>(() => new CsvWriter((string?)null!, 0));
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
-    public void CsvWriterTest2()
-    {
-        using var _ = new CsvWriter("  ", 0);
-    }
+    //[ExpectedException(typeof(ArgumentException))]
+    public void CsvWriterTest2() 
+        => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter("  ", 0));
 
     [TestMethod()]
     public void CsvWriterTest3()
@@ -39,18 +37,14 @@ public class CsvWriterTests
     }
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
+    //[ExpectedException(typeof(ArgumentException))]
     public void CsvWriterTest4()
-    {
-        using var _ = new CsvWriter("  ", ["1", "2"]);
-    }
+        => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter("  ", ["1", "2"]));
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
+    //[ExpectedException(typeof(ArgumentException))]
     public void CsvWriterTest5()
-    {
-        using var _ = new CsvWriter("Test", ["1", "1"]);
-    }
+        => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter("Test", ["1", "1"]));
 
     [TestMethod()]
     public void CsvWriterTest6()
@@ -62,19 +56,18 @@ public class CsvWriterTests
     }
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
+    //[ExpectedException(typeof(ArgumentException))]
     public void CsvWriterTest7()
     {
         using var textWriter = new StringWriter();
-        using var _ = new CsvWriter(textWriter, ["1", "1"]);
+        _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvWriter(textWriter, ["1", "1"]));
     }
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentNullException))]
+    //[ExpectedException(typeof(ArgumentNullException))]
     public void CsvWriterTest8()
-    {
-        using var _ = new CsvWriter((TextWriter?)null!, ["1", "2"]);
-    }
+        => _ = Assert.ThrowsExactly<ArgumentNullException>(
+                () => new CsvWriter((TextWriter?)null!, ["1", "2"]));
 
     [TestMethod()]
     public void CsvWriterTest9()
@@ -85,7 +78,7 @@ public class CsvWriterTests
         Assert.IsNotNull(writer);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(',')]
     [DataRow(';')]
     [DataRow('#')]
@@ -97,18 +90,18 @@ public class CsvWriterTests
         using var writer = new CsvWriter(fileName, [], delimiter: delimiter);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest11(char delimiter)
     {
         string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest11.csv");
-        using var writer = new CsvWriter(fileName, [], delimiter: delimiter);
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new CsvWriter(fileName, [], delimiter: delimiter));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(',')]
     [DataRow(';')]
     [DataRow('#')]
@@ -120,18 +113,19 @@ public class CsvWriterTests
         using var writer = new CsvWriter(fileName, 2, delimiter: delimiter);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest13(char delimiter)
     {
         string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest13.csv");
-        using var writer = new CsvWriter(fileName, 2, delimiter: delimiter);
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => new CsvWriter(fileName, 2, delimiter: delimiter));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(',')]
     [DataRow(';')]
     [DataRow('#')]
@@ -143,18 +137,19 @@ public class CsvWriterTests
         using var writer = new CsvWriter(stringWriter, [], delimiter: delimiter);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest15(char delimiter)
     {
         using var stringWriter = new StringWriter();
-        using var writer = new CsvWriter(stringWriter, [], delimiter: delimiter);
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => new CsvWriter(stringWriter, [], delimiter: delimiter));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(',')]
     [DataRow(';')]
     [DataRow('#')]
@@ -166,15 +161,16 @@ public class CsvWriterTests
         using var writer = new CsvWriter(stringWriter, 2, delimiter: delimiter);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void CsvWriterTest17(char delimiter)
     {
         using var stringWriter = new StringWriter();
-        using var writer = new CsvWriter(stringWriter, 2, delimiter: delimiter);
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => new CsvWriter(stringWriter, 2, delimiter: delimiter));
     }
 
     [TestMethod()]
@@ -231,13 +227,13 @@ public class CsvWriterTests
     }
 
     [TestMethod()]
-    [ExpectedException(typeof(ObjectDisposedException))]
+    //[ExpectedException(typeof(ObjectDisposedException))]
     public void WriteRecordTest3()
     {
         using var writer = new CsvWriter("File", 2);
 
         writer.Dispose();
-        writer.WriteRecord();
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(writer.WriteRecord);
     }
 
     [TestMethod()]

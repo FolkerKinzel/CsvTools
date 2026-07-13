@@ -42,14 +42,15 @@ public class CsvStringReaderTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(CsvFormatException))]
+    //[ExpectedException(typeof(CsvFormatException))]
     public void InvalidMaskingTest1()
     {
         const string csv = """
                     "1"bla,3
                     a,b
                     """;
-        _ = Csv.Parse(csv, isHeaderPresent: false);
+        _ = Assert.ThrowsExactly<CsvFormatException>(
+            () => Csv.Parse(csv, isHeaderPresent: false));
     }
 
     [TestMethod]

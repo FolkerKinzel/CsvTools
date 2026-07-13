@@ -65,7 +65,7 @@ public class CsvTests
         Assert.AreEqual("iso-8859-1", encoding.WebName, true, CultureInfo.InvariantCulture);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(',')]
     [DataRow(';')]
     [DataRow('#')]
@@ -76,7 +76,7 @@ public class CsvTests
         using CsvReader reader = Csv.OpenRead(TestFiles.AnalyzerTestCsv, delimiter: delimiter);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
@@ -84,10 +84,10 @@ public class CsvTests
     public void OpenReadTest2(char delimiter)
     {
         _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
-            () => Csv.OpenRead(TestFiles.AnalyzerTestCsv, delimiter: delimiter);
+            () => Csv.OpenRead(TestFiles.AnalyzerTestCsv, delimiter: delimiter));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(',')]
     [DataRow(';')]
     [DataRow('#')]
@@ -99,7 +99,7 @@ public class CsvTests
         using CsvReader reader = Csv.OpenRead(stringReader, delimiter: delimiter);
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
@@ -111,7 +111,7 @@ public class CsvTests
             () => Csv.OpenRead(stringReader, delimiter: delimiter));
     }
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow(',')]
     [DataRow(';')]
     [DataRow('#')]
@@ -119,7 +119,7 @@ public class CsvTests
     [DataRow(' ')]
     public void OpenReadTest5(char delimiter) => _ = Csv.Parse("Hi", delimiter: delimiter);
 
-    [DataTestMethod]
+    [TestMethod]
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
