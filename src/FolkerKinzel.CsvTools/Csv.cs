@@ -45,7 +45,7 @@ public static class Csv
     /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DataTableExample.cs" />
+    /// <code language="cs" source="..\Examples\DataTableExample.cs" />
     /// </example>
     public static
         (char Delimiter, IFormatProvider FormatProvider, Encoding TextEncoding) GetExcelArguments()
@@ -204,7 +204,7 @@ public static class Csv
     /// has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+    /// <code language="cs" source="..\Examples\CsvAnalyzerExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -259,7 +259,7 @@ public static class Csv
     /// has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DisableCachingExample.cs" />
+    /// <code language="cs" source="..\Examples\DisableCachingExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -342,7 +342,7 @@ public static class Csv
     /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
+    /// <code language="cs" source="..\Examples\CsvAnalyzerExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="filePath" /> is <c>null</c>.</exception>
@@ -535,7 +535,7 @@ public static class Csv
     /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvStringExample.cs" />
+    /// <code language="cs" source="..\Examples\CsvStringExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="csv" /> is <c>null</c>.</exception>

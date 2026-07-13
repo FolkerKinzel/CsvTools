@@ -67,7 +67,7 @@ public static class DataTableExtension
     /// <para>
     /// Simple DataTable serialization with CSV:
     /// </para>
-    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\DataTableExample.cs" />
+    /// <code language="cs" source="..\Examples\DataTableExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="dataTable" /> or 
