@@ -43,7 +43,7 @@ public static class CsvExtension
     /// </remarks>
     /// 
     /// <example>
-    /// <code language="cs" source="..\Examples\CsvStringExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvStringExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> is <c>null</c>.</exception>
@@ -102,7 +102,7 @@ public static class CsvExtension
     /// has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\Examples\LinqOnCsvExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\LinqOnCsvExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="data" /> or <paramref name="filePath"/> 

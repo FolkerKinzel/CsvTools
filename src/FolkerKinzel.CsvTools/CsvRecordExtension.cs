@@ -33,7 +33,7 @@ public static class CsvRecordExtension
     /// <para>
     /// Saving a CSV file:
     /// </para>
-    /// <code language="cs" source="..\Examples\CsvAnalyzerExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
     /// </example>
     public static Dictionary<string, ReadOnlyMemory<char>> ToDictionary(this CsvRecord record)
     {
@@ -284,7 +284,7 @@ public static class CsvRecordExtension
     /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\Examples\CsvAnalyzerExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
     /// </example>
     /// 
     /// <exception cref="ArgumentNullException"> <paramref name="record"/> is <c>null</c>.</exception>

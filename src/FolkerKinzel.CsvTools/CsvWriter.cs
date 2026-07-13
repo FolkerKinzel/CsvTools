@@ -240,7 +240,7 @@ public sealed class CsvWriter : IDisposable
     /// In the following code examples - for easier readability - exception handling has been omitted.
     /// </note>
     /// 
-    /// <code language="cs" source="..\Examples\CsvAnalyzerExample.cs" />
+    /// <code language="cs" source="..\..\..\FolkerKinzel.CsvTools\src\Examples\CsvAnalyzerExample.cs" />
     /// </example>
     /// 
     /// <exception cref="IOException">I/O error.</exception>
