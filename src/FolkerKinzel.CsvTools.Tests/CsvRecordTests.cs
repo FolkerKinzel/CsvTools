@@ -12,8 +12,10 @@ namespace FolkerKinzel.CsvTools.Tests;
 public class CsvRecordTests
 {
     [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void CsvRecordTest1() => _ = new CsvRecord(-1);
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void CsvRecordTest1() 
+        => Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => _ = new CsvRecord(-1));
 
     [TestMethod()]
     public void FillClearTest()
@@ -25,7 +27,9 @@ public class CsvRecordTests
 
         rec.FillWith(data);
 
-        CollectionAssert.AreEquivalent(data.Select(x => x.ToString()).ToArray(), rec.ToDictionary().Values.Select(x => x.ToString()).ToArray());
+        Assert.AreSequenceEqual([.. data.Select(x => x.ToString())],
+                                [.. rec.ToDictionary().Values.Select(x => x.ToString())],
+                                SequenceOrder.InAnyOrder);
 
         rec.Clear();
 
@@ -46,21 +50,23 @@ public class CsvRecordTests
     //}
 
     [TestMethod]
-    [ExpectedException(typeof(IndexOutOfRangeException))]
+    //[ExpectedException(typeof(IndexOutOfRangeException))]
     public void ItemTest1()
     {
         var rec = new CsvRecord(1);
 
-        _ = rec[1];
+        _ = Assert.ThrowsExactly<IndexOutOfRangeException>(
+            () => _ = rec[1]);
     }
 
     [TestMethod]
-    [ExpectedException(typeof(IndexOutOfRangeException))]
+    //[ExpectedException(typeof(IndexOutOfRangeException))]
     public void ItemTest2()
     {
         var rec = new CsvRecord(1);
 
-        rec[-1] = default;
+        _ = Assert.ThrowsExactly<IndexOutOfRangeException>(
+            () => rec[-1] = default);
     }
 
 
@@ -108,7 +114,7 @@ public class CsvRecordTests
 
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentNullException))]
+    //[ExpectedException(typeof(ArgumentNullException))]
     public void TryGetValueTest1b()
     {
         const string col1 = "col1";
@@ -116,7 +122,7 @@ public class CsvRecordTests
 
         var rec = new CsvRecord([col1, col2], false, true, false);
 
-        _ = rec.TryGetValue(null!, out ReadOnlyMemory<char> _);
+        _ = Assert.ThrowsExactly<ArgumentNullException>(() => rec.TryGetValue(null!, out _));
     }
 
 
@@ -210,12 +216,12 @@ public class CsvRecordTests
 
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
+    //[ExpectedException(typeof(ArgumentNullException))]
     public void ContainsColumnTest2()
     {
         var rec = new CsvRecord([], false, true, false);
 
-        _ = rec.ContainsColumn(null!);
+        _ = Assert.ThrowsExactly<ArgumentNullException>(() => rec.ContainsColumn(null!));
     }
 
 

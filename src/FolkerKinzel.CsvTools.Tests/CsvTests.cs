@@ -13,10 +13,11 @@ public class CsvTests
     public TestContext? TestContext { get; set; }
 
     [TestMethod]
-    [ExpectedException(typeof(IOException))]
+    //[ExpectedException(typeof(IOException))]
     public void OpenReadAnalyzedTest1()
     {
-        using CsvReader reader = Csv.OpenReadAnalyzed("DoesNotExist");
+        _ = Assert.ThrowsExactly<IOException>(
+            () => Csv.OpenReadAnalyzed("DoesNotExist"));
     }
 
     [TestMethod]
@@ -79,10 +80,11 @@ public class CsvTests
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void OpenReadTest2(char delimiter)
     {
-        using CsvReader reader = Csv.OpenRead(TestFiles.AnalyzerTestCsv, delimiter: delimiter);
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => Csv.OpenRead(TestFiles.AnalyzerTestCsv, delimiter: delimiter);
     }
 
     [DataTestMethod]
@@ -101,11 +103,12 @@ public class CsvTests
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
     public void OpenReadTest4(char delimiter)
     {
         using StringReader stringReader = new("Hi");
-        using CsvReader reader = Csv.OpenRead(stringReader, delimiter: delimiter);
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => Csv.OpenRead(stringReader, delimiter: delimiter));
     }
 
     [DataTestMethod]
@@ -120,8 +123,10 @@ public class CsvTests
     [DataRow('\"')]
     [DataRow('\r')]
     [DataRow('\n')]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void OpenReadTest6(char delimiter) => _ = Csv.Parse("Hi", delimiter: delimiter);
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void OpenReadTest6(char delimiter) 
+        => _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => Csv.Parse("Hi", delimiter: delimiter));
 
     [TestMethod]
     public void OpenWriteTest1()

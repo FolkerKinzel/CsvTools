@@ -20,11 +20,9 @@ public class CsvWriterTests
     }
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentNullException))]
+    //[ExpectedException(typeof(ArgumentNullException))]
     public void CsvWriterTest1()
-    {
-        using var _ = new CsvWriter((string?)null!, 0);
-    }
+        => Assert.ThrowsExactly<ArgumentNullException>(() => new CsvWriter((string?)null!, 0));
 
     [TestMethod()]
     [ExpectedException(typeof(ArgumentException))]

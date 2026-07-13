@@ -10,16 +10,17 @@ namespace FolkerKinzel.CsvTools.Tests;
 public class CsvAnalyzerTests
 {
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void AnalyzeFileTest1() => Csv.AnalyzeFile(null!);
+    //[ExpectedException(typeof(ArgumentNullException))]
+    public void AnalyzeFileTest1() => Assert.ThrowsExactly<ArgumentNullException>(() => Csv.AnalyzeFile(null!));
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
-    public void AnalyzeFileTest2() => Csv.AnalyzeFile("  ");
+    //[ExpectedException(typeof(ArgumentException))]
+    public void AnalyzeFileTest2() => Assert.ThrowsExactly<ArgumentException>(() => Csv.AnalyzeFile("  "));
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void AnalyzeFileTest2b() => Csv.AnalyzeFile("Test", header: (Header)4711);
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void AnalyzeFileTest2b() 
+        => Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => Csv.AnalyzeFile("Test", header: (Header)4711));
 
     [TestMethod()]
     public void AnalyzeFileTest3()

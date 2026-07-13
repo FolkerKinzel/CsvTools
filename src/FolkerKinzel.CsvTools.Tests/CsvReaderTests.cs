@@ -52,7 +52,7 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ObjectDisposedException))]
+    //[ExpectedException(typeof(ObjectDisposedException))]
     public void ReadTest3()
     {
         const string testCsv =
@@ -64,15 +64,12 @@ public class CsvReaderTests
 
         stringReader.Dispose();
 
-        foreach (CsvRecord _ in csv)
-        {
-
-        }
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(() => { foreach (CsvRecord _ in csv) { } });
     }
 
 
     [TestMethod]
-    [ExpectedException(typeof(ObjectDisposedException))]
+    //[ExpectedException(typeof(ObjectDisposedException))]
     public void ReadTest4()
     {
         const string testCsv =
@@ -83,7 +80,7 @@ public class CsvReaderTests
         using var csv = new CsvReader(stringReader, isHeaderPresent: false);
 
         _ = csv.FirstOrDefault();
-        _ = csv.FirstOrDefault();
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(() => csv.FirstOrDefault());
     }
 
     [TestMethod()]
@@ -100,28 +97,22 @@ public class CsvReaderTests
     }
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void CsvReaderTest3()
-    {
-        using var _ = new CsvReader((string?)null!);
-    }
+    //[ExpectedException(typeof(ArgumentNullException))]
+    public void CsvReaderTest3() 
+        => Assert.ThrowsExactly<ArgumentNullException>(() => new CsvReader((string?)null!));
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentException))]
+    //[ExpectedException(typeof(ArgumentException))]
     public void CsvReaderTest4()
-    {
-        using var _ = new CsvReader("   ");
-    }
+        => _ = Assert.ThrowsExactly<ArgumentException>(() => new CsvReader("   "));
 
     [TestMethod()]
-    [ExpectedException(typeof(ArgumentNullException))]
+    //[ExpectedException(typeof(ArgumentNullException))]
     public void CsvReaderTest5()
-    {
-        using var _ = new CsvReader((StreamReader?)null!);
-    }
+        => Assert.ThrowsExactly<ArgumentNullException>(() => new CsvReader((StreamReader?)null!));
 
     [TestMethod]
-    [ExpectedException(typeof(ObjectDisposedException))]
+    //[ExpectedException(typeof(ObjectDisposedException))]
     public void CsvReaderTest6()
     {
         const string csv = """
@@ -143,14 +134,11 @@ public class CsvReaderTests
 
         Assert.AreEqual(4, cnt);
 
-        foreach (CsvRecord _ in csvReader)
-        {
-            Assert.Fail();
-        }
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(() => { foreach (CsvRecord _ in csvReader) { } });
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ObjectDisposedException))]
+    //[ExpectedException(typeof(ObjectDisposedException))]
     public void CsvReaderTest7()
     {
         const string csv = """
@@ -163,9 +151,9 @@ public class CsvReaderTests
 
         using var csvReader = new CsvReader(new StringReader(csv));
 
-        Assert.AreEqual(4, csvReader.Count());
+        Assert.HasCount(4, csvReader);
 
-        _ = csvReader.Count();
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(() => csvReader.Count());
     }
 
     [TestMethod]
@@ -185,11 +173,11 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(NotSupportedException))]
+    //[ExpectedException(typeof(NotSupportedException))]
     public void ResetTest1()
     {
         using var reader = new CsvReader(new StringReader("Test"));
-        ((IEnumerator)reader).Reset();
+        _ = Assert.ThrowsExactly<NotSupportedException>(() => ((IEnumerator)reader).Reset());
     }
 
     [TestMethod]
@@ -207,18 +195,18 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(CsvFormatException))]
+    //[ExpectedException(typeof(CsvFormatException))]
     public void TooMuchFieldsTest()
     {
         const string csv = """
             a,b
             1,2,3
             """;
-        _ = Csv.Parse(csv);
+        _ = Assert.ThrowsExactly<CsvFormatException>(() => Csv.Parse(csv));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(CsvFormatException))]
+    //[ExpectedException(typeof(CsvFormatException))]
     public void EmptyLineTest1()
     {
         const string csv = """
@@ -226,7 +214,7 @@ public class CsvReaderTests
 
             1,2
             """;
-        _ = Csv.Parse(csv);
+        _ = Assert.ThrowsExactly<CsvFormatException>(() => Csv.Parse(csv));
     }
 
     [TestMethod]
@@ -244,25 +232,25 @@ public class CsvReaderTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(CsvFormatException))]
+    //[ExpectedException(typeof(CsvFormatException))]
     public void TooFewFieldsTest()
     {
         const string csv = """
             a,b,c
             1,2
             """;
-        _ = Csv.Parse(csv);
+        _ = Assert.ThrowsExactly<CsvFormatException>(() => Csv.Parse(csv));
     }
 
     [TestMethod]
-    [ExpectedException(typeof(CsvFormatException))]
+    //[ExpectedException(typeof(CsvFormatException))]
     public void FileTruncatedTest1()
     {
         const string csv = """
             a,b
             1,"2
             """;
-        _ = Csv.Parse(csv);
+        _ = Assert.ThrowsExactly<CsvFormatException>(() => Csv.Parse(csv));
     }
 
     [TestMethod]
@@ -272,7 +260,7 @@ public class CsvReaderTests
             a,b
             1,"2
             """;
-        Assert.AreEqual(1, Csv.ParseAnalyzed(csv).Length);
+        Assert.HasCount(1, Csv.ParseAnalyzed(csv));
     }
 
     [TestMethod]
@@ -285,6 +273,6 @@ public class CsvReaderTests
 
             """;
         CsvRecord[] result = Csv.ParseAnalyzed(csv);
-        Assert.AreEqual(1, result.Length);
+        Assert.HasCount(1, result);
     }
 }

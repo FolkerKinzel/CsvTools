@@ -7,29 +7,37 @@ namespace FolkerKinzel.CsvTools.Tests;
 public class CsvRecordExtensionTests
 {
     [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void FillWithTest1() => new CsvRecord(1).FillWith(Enumerable.Repeat("a", 2));
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void FillWithTest1() 
+        => _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new CsvRecord(1).FillWith(Enumerable.Repeat("a", 2)));
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void FillWithTest2() => ((CsvRecord)null!).FillWith(Enumerable.Repeat("a", 2));
+    //[ExpectedException(typeof(ArgumentNullException))]
+    public void FillWithTest2() 
+        => Assert.ThrowsExactly<ArgumentNullException>(() => ((CsvRecord)null!).FillWith(Enumerable.Repeat("a", 2)));
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void FillWithTest3() => new CsvRecord(1).FillWith(new string[] { "a", "a" });
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void FillWithTest3() 
+        => _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new CsvRecord(1).FillWith(new string[] { "a", "a" }));
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void FillWithTest4() => ((CsvRecord)null!).FillWith(new string[] { "a", "a" });
+    //[ExpectedException(typeof(ArgumentNullException))]
+    public void FillWithTest4() 
+        => Assert.ThrowsExactly<ArgumentNullException>(() => ((CsvRecord)null!).FillWith(new string[] { "a", "a" }));
 
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void FillWithTest5() => new CsvRecord(1).FillWith(new object[] { "a", -42}, CultureInfo.InvariantCulture);
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void FillWithTest5()
+        => _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => new CsvRecord(1).FillWith(["a", -42], CultureInfo.InvariantCulture));
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void FillWithTest6() => ((CsvRecord)null!).FillWith(new object[] { "a", -42 }, CultureInfo.InvariantCulture);
+    //[ExpectedException(typeof(ArgumentNullException))]
+    public void FillWithTest6() 
+        => Assert.ThrowsExactly<ArgumentNullException>(
+            () => ((CsvRecord)null!).FillWith(["a", -42], CultureInfo.InvariantCulture));
 
 
     [TestMethod()]
@@ -49,7 +57,9 @@ public class CsvRecordExtensionTests
 
         rec.FillWith(["sechs".AsMemory()], resetExcess: true);
 
-        CollectionAssert.AreEquivalent(new string?[] { "sechs", "" }, rec.ToDictionary().Values.Select(x => x.ToString()).ToArray());
+        Assert.AreSequenceEqual(new string?[] { "sechs", "" },
+                                [.. rec.ToDictionary().Values.Select(x => x.ToString())],
+                                SequenceOrder.InAnyOrder);
     }
 
     [TestMethod()]
@@ -61,15 +71,19 @@ public class CsvRecordExtensionTests
         Assert.AreEqual(2, rec.Count);
 
         rec.FillWith(data);
-        CollectionAssert.AreEqual(data, rec.Values.Select(x => x.ToString()).ToArray());
+        Assert.AreSequenceEqual(data, [.. rec.Values.Select(x => x.ToString())]);
 
         rec.FillWith(new string[] { "sieben" }, resetExcess: false);
 
-        CollectionAssert.AreEquivalent(new string[] { "sieben", "zwei" }, rec.Values.Select(x => x.ToString()).ToArray());
+        Assert.AreSequenceEqual(["sieben", "zwei"], 
+                                [.. rec.Values.Select(x => x.ToString())],
+                                SequenceOrder.InAnyOrder);
 
         rec.FillWith(new string[] { "sechs" }, resetExcess: true);
 
-        CollectionAssert.AreEquivalent(new string?[] { "sechs", "" }, rec.Values.Select(x => x.ToString()).ToArray());
+        Assert.AreSequenceEqual(new string?[] { "sechs", "" },
+                               [.. rec.Values.Select(x => x.ToString())],
+                               SequenceOrder.InAnyOrder);
     }
 
     [TestMethod()]
@@ -93,12 +107,16 @@ public class CsvRecordExtensionTests
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void FillWithTest10() => new CsvRecord(1).FillWith(new ReadOnlyMemory<char>[] { "a".AsMemory(), "a".AsMemory() });
+    //[ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void FillWithTest10() 
+        => Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => new CsvRecord(1).FillWith(["a".AsMemory(), "a".AsMemory()]));
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void FillWithTest11() => ((CsvRecord?)null!).FillWith(new ReadOnlyMemory<char>[] { "a".AsMemory(), "a".AsMemory() });
+    //[ExpectedException(typeof(ArgumentNullException))]
+    public void FillWithTest11() 
+        => Assert.ThrowsExactly<ArgumentNullException>(
+            () => ((CsvRecord?)null!).FillWith(["a".AsMemory(), "a".AsMemory()]));
 
     [TestMethod]
     public void ResetExcessTest1()
