@@ -21,8 +21,8 @@ public class CsvRecordTests
 
         rec.FillWith(data);
 
-        Assert.AreSequenceEqual([.. data.Select(x => x.ToString())],
-                                [.. rec.ToDictionary().Values.Select(x => x.ToString())],
+        Assert.AreSequenceEqual(data.Select(x => x.ToString()),
+                                rec.ToDictionary().Values.Select(x => x.ToString()),
                                 SequenceOrder.InAnyOrder);
 
         rec.Clear();
@@ -86,7 +86,9 @@ public class CsvRecordTests
         rec.Values[0] = "1".AsMemory();
         rec.Values[1] = "2".AsMemory();
 
-        Assert.AreEqual(3, rec.Select(x => int.Parse(x.Value!.ToString(), CultureInfo.InvariantCulture)).Sum());
+        Assert.AreEqual(3, 
+                       rec.Select(x => int.Parse(x.Value.ToString(), CultureInfo.InvariantCulture))
+                          .Sum());
     }
 
     [TestMethod]

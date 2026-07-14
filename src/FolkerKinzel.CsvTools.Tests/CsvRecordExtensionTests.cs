@@ -46,20 +46,20 @@ public class CsvRecordExtensionTests
         Assert.AreEqual(2, rec.Count);
 
         rec.FillWith(data);
-        Assert.AreSequenceEqual([.. data.Select(x => x.ToString())],
-                                [.. rec.ToDictionary().Values.Select(x => x.ToString())],
+        Assert.AreSequenceEqual(data.Select(x => x.ToString()),
+                                rec.ToDictionary().Values.Select(x => x.ToString()),
                                 SequenceOrder.InAnyOrder);
 
         rec.FillWith(["sieben".AsMemory()], resetExcess: false);
 
         Assert.AreSequenceEqual(new string?[] { "sieben", "zwei" },
-                                [.. rec.ToDictionary().Values.Select(x => x.ToString())],
+                                rec.ToDictionary().Values.Select(x => x.ToString()),
                                 SequenceOrder.InAnyOrder);
 
         rec.FillWith(["sechs".AsMemory()], resetExcess: true);
 
         Assert.AreSequenceEqual(new string?[] { "sechs", "" },
-                                [.. rec.ToDictionary().Values.Select(x => x.ToString())],
+                                rec.ToDictionary().Values.Select(x => x.ToString()),
                                 SequenceOrder.InAnyOrder);
     }
 
@@ -72,18 +72,18 @@ public class CsvRecordExtensionTests
         Assert.AreEqual(2, rec.Count);
 
         rec.FillWith(data);
-        Assert.AreSequenceEqual(data, [.. rec.Values.Select(x => x.ToString())]);
+        Assert.AreSequenceEqual(data, rec.Values.Select(x => x.ToString()));
 
-        rec.FillWith(new string[] { "sieben" }, resetExcess: false);
+        rec.FillWith(["sieben"], resetExcess: false);
 
         Assert.AreSequenceEqual(["sieben", "zwei"],
-                                [.. rec.Values.Select(x => x.ToString())],
+                                rec.Values.Select(x => x.ToString()),
                                 SequenceOrder.InAnyOrder);
 
-        rec.FillWith(new string[] { "sechs" }, resetExcess: true);
+        rec.FillWith(["sechs"], resetExcess: true);
 
-        Assert.AreSequenceEqual(new string?[] { "sechs", "" },
-                               [.. rec.Values.Select(x => x.ToString())],
+        Assert.AreSequenceEqual(["sechs", ""],
+                               rec.Values.Select(x => x.ToString()),
                                SequenceOrder.InAnyOrder);
     }
 
@@ -96,18 +96,18 @@ public class CsvRecordExtensionTests
         Assert.AreEqual(2, rec.Count);
 
         rec.FillWith(data);
-        Assert.AreSequenceEqual([.. data], [.. rec.Values.Select(x => x.ToString())]);
+        Assert.AreSequenceEqual(data, rec.Values.Select(x => x.ToString()));
 
         rec.FillWith(Enumerable.Repeat("sieben", 1), resetExcess: false);
 
         Assert.AreSequenceEqual(["sieben", "zwei"],
-                                [.. rec.Values.Select(x => x.ToString())],
+                                rec.Values.Select(x => x.ToString()),
                                 SequenceOrder.InAnyOrder);
 
         rec.FillWith(Enumerable.Repeat("sechs", 1), resetExcess: true);
 
-        Assert.AreSequenceEqual(new string?[] { "sechs", "" },
-                                [.. rec.Values.Select(x => x.ToString())],
+        Assert.AreSequenceEqual(["sechs", ""],
+                                rec.Values.Select(x => x.ToString()),
                                 SequenceOrder.InAnyOrder);
     }
 
@@ -125,7 +125,7 @@ public class CsvRecordExtensionTests
     public void ResetExcessTest1()
     {
         var rec = new CsvRecord(2);
-        rec.FillWith(new string[] { "a", "b" });
+        rec.FillWith(["a", "b"]);
         Assert.IsFalse(rec[1].IsEmpty);
 
         rec.FillWith([1], CultureInfo.InvariantCulture);

@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace FolkerKinzel.CsvTools.Tests;
+﻿namespace FolkerKinzel.CsvTools.Tests;
 
 internal static class TestFiles
 {

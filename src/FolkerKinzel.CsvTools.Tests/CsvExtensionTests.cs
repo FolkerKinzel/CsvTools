@@ -116,7 +116,8 @@ public class CsvExtensionTests
     public void ToCsvTest9()
     {
         using var stringWriter = new StringWriter();
-        new string[][] { ["a", "b", "c"] }.WriteCsv(stringWriter, formatProvider: CultureInfo.InvariantCulture);
+        new string[][] { ["a", "b", "c"] }.WriteCsv(stringWriter,
+                                           formatProvider: CultureInfo.InvariantCulture);
         string csv = stringWriter.ToString();
         Assert.IsNotNull(csv);
         Assert.AreEqual("a,b,c", csv);

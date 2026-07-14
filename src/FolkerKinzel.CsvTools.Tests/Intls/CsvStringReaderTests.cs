@@ -23,7 +23,7 @@ public class CsvStringReaderTests
 
         List<ReadOnlyMemory<char>>? list = reader.Read();
         Assert.IsNotNull(list);
-        Assert.AreEqual(1, list!.Count);
+        Assert.HasCount(1, list);
         string result = list[0].ToString();
         Assert.AreEqual(result, input);
     }
@@ -34,15 +34,14 @@ public class CsvStringReaderTests
         const string csv = " \"1\"\"2\"  ,3, ";
         CsvRecord[] result = Csv.Parse(csv, isHeaderPresent: false);
 
-        Assert.AreEqual(1, result.Length);
-        Assert.AreEqual(3, result[0].Count);
+        Assert.HasCount(1, result);
+        Assert.HasCount(3, result[0]);
         Assert.AreEqual("1\"2", result[0][0].ToString());
         Assert.AreEqual("3", result[0][1].ToString());
         Assert.AreEqual(" ", result[0][2].ToString());
     }
 
     [TestMethod]
-    //[ExpectedException(typeof(CsvFormatException))]
     public void InvalidMaskingTest1()
     {
         const string csv = """
@@ -57,10 +56,10 @@ public class CsvStringReaderTests
     public void MaskedFieldWithoutAllocationTest()
     {
         const string csv = "\"a,b\",c";
-        var result = Csv.Parse(csv, isHeaderPresent: false);
+        CsvRecord[] result = Csv.Parse(csv, isHeaderPresent: false);
 
-        Assert.AreEqual(1, result.Length);
-        Assert.AreEqual(2, result[0].Count);
+        Assert.HasCount(1, result);
+        Assert.HasCount(2, result[0]);
         Assert.AreEqual("a,b", result[0][0].ToString());
         Assert.AreEqual("c", result[0][1].ToString());
     }

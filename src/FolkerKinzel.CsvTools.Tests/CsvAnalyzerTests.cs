@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using FolkerKinzel.CsvTools.Tests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Text;
 
 namespace FolkerKinzel.CsvTools.Tests;
 
@@ -33,7 +29,7 @@ public class CsvAnalyzerTests
     [TestMethod]
     public void AnalyzeFileTest4()
     {
-        CsvAnalyzerResult result = 
+        CsvAnalyzerResult result =
             CsvAnalyzer.AnalyzeFile(TestFiles.AnalyzerTestCsv, analyzedLines: -42);
         AssertAnalyzerTestCsv(result);
     }
@@ -42,7 +38,7 @@ public class CsvAnalyzerTests
     {
         Assert.IsTrue(result.IsHeaderPresent);
         Assert.AreEqual(';', result.Delimiter);
-        Assert.AreSequenceEqual(result.ColumnNames?.ToArray(), ["Eins", "eins", "zwei", "drei", null]);
+        Assert.AreSequenceEqual(result.ColumnNames, ["Eins", "eins", "zwei", "drei", null]);
         Assert.IsTrue(result.Options.HasFlag(CsvOpts.CaseSensitiveKeys));
         Assert.IsTrue(result.Options.HasFlag(CsvOpts.TrimColumns));
         Assert.IsFalse(result.Options.HasFlag(CsvOpts.ThrowOnTooFewFields));
@@ -258,7 +254,8 @@ public class CsvAnalyzerTests
     [TestMethod]
     public void GetExcelParametersTest1()
     {
-        (char delimiter, IFormatProvider formatProvider, Encoding encoding) = Csv.GetExcelArguments();
+        (char delimiter, IFormatProvider formatProvider, Encoding encoding)
+            = Csv.GetExcelArguments();
 
         Assert.IsNotNull(formatProvider);
         Assert.IsNotNull(encoding);

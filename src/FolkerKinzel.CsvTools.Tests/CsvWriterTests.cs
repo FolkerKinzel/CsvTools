@@ -87,7 +87,8 @@ public class CsvWriterTests
     public void CsvWriterTest11(char delimiter)
     {
         string fileName = Path.Combine(TestContext.TestRunResultsDirectory!, "CsvWriterTest11.csv");
-        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => new CsvWriter(fileName, [], delimiter: delimiter));
+        _ = Assert.ThrowsExactly<ArgumentOutOfRangeException>(
+            () => new CsvWriter(fileName, [], delimiter: delimiter));
     }
 
     [TestMethod]
@@ -225,8 +226,6 @@ public class CsvWriterTests
     {
         TestContext.WriteLine($"{nameof(TestContext.DeploymentDirectory)}:         {TestContext.DeploymentDirectory}");
         TestContext.WriteLine("");
-        //TestContext.WriteLine($"{nameof(TestContext.TestDeploymentDir)}:           {TestContext.TestDeploymentDir}");
-        //TestContext.WriteLine("");
         TestContext.WriteLine($"{nameof(TestContext.ResultsDirectory)}:            {TestContext.ResultsDirectory}");
         TestContext.WriteLine("");
         TestContext.WriteLine($"{nameof(TestContext.TestResultsDirectory)}:        {TestContext.TestResultsDirectory}");

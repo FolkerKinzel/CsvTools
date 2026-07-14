@@ -123,7 +123,8 @@ public class CsvReaderTests
 
         Assert.AreEqual(4, cnt);
 
-        _ = Assert.ThrowsExactly<ObjectDisposedException>(() => { foreach (CsvRecord _ in csvReader) { } });
+        _ = Assert.ThrowsExactly<ObjectDisposedException>(
+            () => { foreach (CsvRecord _ in csvReader) { } });
     }
 
     [TestMethod]

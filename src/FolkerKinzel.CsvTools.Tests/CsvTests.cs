@@ -40,7 +40,7 @@ public class CsvTests
             Csv.OpenReadAnalyzed(TestFiles.AnalyzerTestCsv, header: Header.Absent, disableCaching: true);
         CsvRecord[] arr = [.. reader];
         Assert.HasCount(5, arr);
-        Assert.AreEqual(8, arr[0].Count);
+        Assert.HasCount(8, arr[0]);
         Assert.HasCount(1, arr.Distinct());
     }
 
@@ -51,7 +51,7 @@ public class CsvTests
         CsvRecord[] arr = [.. reader];
         Assert.HasCount(5, arr);
         Assert.HasCount(5, arr.Distinct());
-        Assert.AreEqual(8, arr[0].Count);
+        Assert.HasCount(8, arr[0]);
     }
 
     [TestMethod]
